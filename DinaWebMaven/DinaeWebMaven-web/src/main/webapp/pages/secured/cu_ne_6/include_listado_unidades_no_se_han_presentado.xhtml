@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+
+    <br />
+    <br />
+    <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}"  id="idDataTableUnidadesNoPresentanPropues" var="_unidad" styleClass="tabla"
+                 value="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.listadoUnidadesNoSeHanPresentado}" 
+                 paginatorPosition="bottom" rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 paginator="true"  rowIndexVar="idFila">
+
+      <p:column headerText="#{properties.value('cu_ne_6_lbl_numero')}">
+        <h:outputText value="#{idFila + 1}" />  
+      </p:column>
+
+      <p:column headerText="#{properties.value('cu_ne_6_lbl_unidad_policial')}">  
+        <h:outputText value="#{_unidad.nombre}" />  
+      </p:column>  
+
+      <f:facet name="footer">  
+        #{fn:length( cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.listadoUnidadesNoSeHanPresentado )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable> 
+
+  </body>
+</html>

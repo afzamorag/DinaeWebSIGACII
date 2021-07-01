@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <ui:composition>
+        <p:idleMonitor 
+            onidle="sessionTimeOutDialog.show();" 
+            timeout="#{session.maxInactiveInterval * 1000}" />
+        <p:dialog 
+            header="Sesión términada" 
+            widgetVar="sessionTimeOutDialog"
+            modal="true" 
+            closable="false" 
+            width="400" 
+            visible="false">
+            <h:outputText 
+                value="La sesión ha terminado, por favor haga click en el botón 'Login' para volver a acceder a la aplicación." />
+            <br /> <br />
+            <div 
+                class="centrado">
+                <h:form>
+                    <h:commandButton 
+                        id="confirmBackToLogin" 
+                        value="Login" 
+                        action="#{loginFaces.loginSessionTimeout()}" immediate="true" >
+                    </h:commandButton>
+                </h:form>
+            </div>
+        </p:dialog>
+    </ui:composition>
+</html>

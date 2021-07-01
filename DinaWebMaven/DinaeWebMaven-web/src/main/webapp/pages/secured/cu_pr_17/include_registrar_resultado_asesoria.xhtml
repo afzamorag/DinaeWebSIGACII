@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+  <h:body>
+    <div class="body">
+      <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+        <ui:define name="content">
+
+          <h:form id="idFormformRegistrarResultado" >
+
+            <div class="fixed-menu">
+              <div class="right-col">
+                <h2 style="font: verdana;">
+                  Registrar asesoría
+                </h2>
+              </div>
+            </div>
+
+
+            <br />
+            <h:panelGrid id="panelgridRegistrarResultado" columns="2" style="width: 100%" 
+                         rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                         columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+              <h:outputLabel value="#{properties.value('cu_pr_17_lbl_column_codigo_proyecto')}:" styleClass="gris negrilla"/>
+              <h:outputLabel value="#{cuPr17AgregarAsesoriaProyectoInvestigacionFaces.proyectoDTOSeleccionado.codigoProyecto}" 
+                             styleClass="gris" />
+
+              <h:outputLabel value="#{properties.value('cu_pr_17_lbl_titulo_proyecto')}" styleClass="gris negrilla"/>
+              <h:outputLabel value="#{cuPr17AgregarAsesoriaProyectoInvestigacionFaces.proyectoDTOSeleccionado.tituloPropuesto}" styleClass="gris"  />
+
+              <h:outputLabel value="#{properties.value('cu_pr_17_lbl_unidad_policial_proyecto')}" styleClass="gris negrilla"/>
+              <h:outputText value="#{cuPr17AgregarAsesoriaProyectoInvestigacionFaces.proyectoDTOSeleccionado.nombreUnidadPolicial}" styleClass="gris"  />
+
+              <h:outputLabel value="#{properties.value('cu_pr_17_lbl_modalidad_proyecto')}" styleClass="gris negrilla" for="selectModalidad"/>
+              <p:selectManyCheckbox required="true" styleClass="gris" id="selectModalidad" value="#{cuPr17AgregarAsesoriaProyectoInvestigacionFaces.asesoriaProyectoDTO.opcionesSeleccionadaModalidad}">  
+                <f:selectItem itemValue="V" itemLabel="Virtual" />  
+                <f:selectItem itemValue="P" itemLabel="Presencial" />  
+                <f:selectItem itemValue="T" itemLabel="Telefonica" />  
+                <f:selectItem itemValue="O" itemLabel="Otros" />  
+              </p:selectManyCheckbox>  
+
+              <h:outputLabel value="#{properties.value('cu_pr_17_lbl_resultado_asesoria_proyecto')}" styleClass="gris negrilla" for="editorResultadoEsperado"/>
+              <p:editor id="editorResultadoEsperado" required="true"
+                        value="#{cuPr17AgregarAsesoriaProyectoInvestigacionFaces.asesoriaProyectoDTO.resultadoAsesoria}" />
+            </h:panelGrid>
+            <br/>
+
+            <div class="centrado">
+              <p:commandButton value="#{properties.value('cu_pr_17_lbl_btn_guardar_resultado_asesoria')}" 
+                               action="#{cuPr17AgregarAsesoriaProyectoInvestigacionFaces.guardarAsesoria}" 
+                               update="@form" process="@this @form"/>
+            </div>
+            <br/>
+            <br/>
+            <p:dataTable var="_asesoria_proyecto" value="#{cuPr17AgregarAsesoriaProyectoInvestigacionFaces.listaAsesoriaProyectoDTO}"
+                         rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                         id="tablaProyectos"
+                         emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                         paginator="true" selectionMode="single"
+                         resizableColumns="true" rowIndexVar="idFila"
+                         paginatorPosition="bottom" 
+                         selection="#{cuPr17AgregarAsesoriaProyectoInvestigacionFaces.asesoriaProyectoDTOSeleccionModifica}"
+                         rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+              <p:ajax event="rowSelect" listener="#{cuPr17AgregarAsesoriaProyectoInvestigacionFaces.verDatalleAsesoria}" update="@form" />  
+              <p:ajax event="rowUnselect" listener="#{cuPr17AgregarAsesoriaProyectoInvestigacionFaces.noSeleccionAsesoria}"/> 
+
+              <p:column headerText="#{properties.value('cu_pr_17_lbl_column_fecha_registro_asesoria')}" width="140">
+                <h:outputText value="#{_asesoria_proyecto.fechaRegistro}" >
+                  <f:convertDateTime pattern="#{properties.value('general_formato_fecha_hora')}" locale="es_CO" />
+                </h:outputText>
+              </p:column>
+
+              <p:column headerText="#{properties.value('cu_pr_17_lbl_column_resultado_asesoria')}" >
+                <h:outputText value="#{_asesoria_proyecto.resultadoAsesoria}" escape="false" />
+              </p:column>
+
+              <p:column headerText="#{properties.value('cu_pr_17_lbl_column_modalidad')}" width="120" >
+                #{_asesoria_proyecto.modalidad}
+              </p:column>
+
+              <p:column headerText="#{properties.value('cu_pr_17_lbl_column_evaluador')}" width="100" >
+                #{_asesoria_proyecto.evaluador}
+              </p:column>
+              <f:facet name="footer">  
+                #{cuPr17AgregarAsesoriaProyectoInvestigacionFaces.listaAsesoriaProyectoDTO.numeroRegistro} #{properties.value('general_mensaje_footer_datatable_count')}
+              </f:facet>
+            </p:dataTable>
+            <br/>
+            <p:separator styleClass="separadorBorder" /> 
+            <div class="centrado">
+              <p:commandButton value="#{properties.value('cu_pr_17_lbl_btn_regresar')}" immediate="true"
+                               action="#{navigationFaces.redirectCuPr17AgregarAsesoriaProyectoInvestigacionRedirect}" />
+            </div>
+          </h:form>
+        </ui:define>
+
+      </ui:composition>
+    </div>
+  </h:body>
+</html>

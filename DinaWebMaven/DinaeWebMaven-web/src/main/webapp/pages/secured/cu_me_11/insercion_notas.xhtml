@@ -1,0 +1,313 @@
+<!DOCTYPE html> 
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"  
+    template="../../../templates/plantillaPrincipal.xhtml">
+    <ui:define name="content">
+        <p:panel 
+            id="main"
+            styleClass="ui-fluid"
+            header="#{bundle['insercionnotas.titulo.lbl']}">
+            <h:form 
+                id="frm_busqueda"
+                prependId="false"
+                rendered="#{!cuMe11InsercionNotas.showDetails}">
+                <p:panel
+                    id="pnlfind"
+                    rendered="#{cuMe11InsercionNotas.regco or cuMe11InsercionNotas.seaca}">
+                    <p:panelGrid
+                        id="pngBusqueda"
+                        columns="2"
+                        layout="grid" 
+                        columnClasses="ui-grid-col-2, ui-grid-col-10" 
+                        styleClass="ui-panelgrid-blank">
+                        <p:outputLabel          
+                            value="#{bundle['insercionnotas.escuela.lbl']}"
+                            rendered="#{cuMe11InsercionNotas.seaca}"/>
+                        <p:selectOneMenu
+                            id="lstEscuelas"                        
+                            value="#{cuMe11InsercionNotas.idEscuela}"
+                            filter="true"
+                            filterMatchMode="contains"
+                            rendered="#{cuMe11InsercionNotas.seaca}"> 
+                            <p:ajax                            
+                                update="lstProgramas" 
+                                listener="#{cuMe11InsercionNotas.findProgramasByEscuela()}"
+                                process="@this"/>
+                            <f:selectItem 
+                                itemLabel="SELECCIONE"/>
+                            <f:selectItems 
+                                value="#{appController.escuelas()}"
+                                var="escuela" 
+                                itemLabel="#{escuela.descripcionDependencia}" 
+                                itemValue="#{escuela.pk.consecutivo}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel          
+                            value="#{bundle['insercionnotas.programa.lbl']}"/>
+                        <p:selectOneMenu
+                            id="lstProgramas"                        
+                            value="#{cuMe11InsercionNotas.idPrograma}"
+                            filter="true"
+                            filterMatchMode="contains">                        
+                            <f:selectItem 
+                                itemLabel="SELECCIONE"/>
+                            <f:selectItems 
+                                value="#{cuMe11InsercionNotas.programas}"
+                                var="programa" 
+                                itemLabel="#{programa.programa}" 
+                                itemValue="#{programa.codPrograma}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel          
+                            value="#{bundle['insercionnotas.identificacionDocente.lbl']}"
+                            rendered="#{cuMe11InsercionNotas.regco or cuMe11InsercionNotas.seaca}"/>
+                        <p:inputText
+                            id="documentoDocente"
+                            value="#{cuMe11InsercionNotas.documentoDocente}"
+                            rendered="#{cuMe11InsercionNotas.regco or cuMe11InsercionNotas.seaca}"/>
+                    </p:panelGrid>
+                    <p:panelGrid
+                        id="pngButtons"
+                        columns="2"
+                        layout="grid" 
+                        columnClasses="ui-grid-col-2, ui-grid-col-10"
+                        styleClass="ui-panelgrid-blank"
+                        rendered="#{cuMe11InsercionNotas.regco or cuMe11InsercionNotas.seaca}">
+                        <p:commandButton 
+                            value="#{bundle['commons.btn.find']}"
+                            title="#{bundle['commons.btn.find']}"
+                            icon="ui-icon-find"
+                            actionListener="#{cuMe11InsercionNotas.findProgramacionDocente()}"                        
+                            update="dtAsignaturasDocente"
+                            style="border: none"/>
+                    </p:panelGrid>
+                </p:panel>
+                <p:dataTable 
+                    id="dtAsignaturasDocente"                    
+                    value="#{cuMe11InsercionNotas.lstProgramacionDocente}" 
+                    var="asignaturaDocente" 
+                    paginator="true" 
+                    paginatorPosition="bottom"
+                    rows="10" 
+                    selectionMode="single" 
+                    selection="#{cuMe11InsercionNotas.programacionDocenteSelected}" 
+                    rowKey="#{asignaturaDocente.idProgDocente}"
+                    style="font-size: xx-small; margin-top:10px"
+                    resizableColumns="true"                                          
+                    reflow="true"
+                    emptyMessage="#{bundle['commons.dt.emptymessage']}" >
+                    <f:facet name="header">
+                        Asignaturas por docente
+                    </f:facet>
+                    <p:ajax 
+                        event="rowSelect" 
+                        listener="#{cuMe11InsercionNotas.onRowSelect}"
+                        update=":main"/>
+                    <p:column
+                        headerText="Documento"
+                        style="text-align: center">
+                        <h:outputText
+                            value="#{asignaturaDocente.identificacion}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="Nombres">
+                        <h:outputText 
+                            value="#{asignaturaDocente.nombres} #{asignaturaDocente.apellidos}" />
+                    </p:column>
+                    <p:column 
+                        headerText="Escuela"
+                        style="text-align: center"
+                        filterBy="#{asignaturaDocente.escuela}"
+                        filterMatchMode="contains">
+                        <h:outputText 
+                            value="#{asignaturaDocente.siglaEscuela}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="Compañia"
+                        filterBy="#{asignaturaDocente.compania}"
+                        filterMatchMode="contains">
+                        <h:outputText 
+                            value="#{asignaturaDocente.compania}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="Programa"
+                        filterBy="#{asignaturaDocente.programa}"
+                        filterMatchMode="contains">
+                        <h:outputText 
+                            value="#{asignaturaDocente.programa}"/>
+                    </p:column> 
+                    <p:column 
+                        headerText="Curso"
+                        style="text-align: center">
+                        <h:outputText 
+                            value="#{asignaturaDocente.nroCurso}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="Sección"
+                        style="text-align: center">
+                        <h:outputText 
+                            value="#{asignaturaDocente.seccion}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="Asignatura"
+                        filterBy="#{asignaturaDocente.asignatura}"
+                        filterMatchMode="contains">
+                        <h:outputText 
+                            value="#{asignaturaDocente.asignatura}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="Fecha inicio"
+                        style="text-align: center">
+                        <h:outputText 
+                            value="#{asignaturaDocente.fechaInicio}">
+                            <f:convertDateTime
+                                type="date" 
+                                pattern="#{bundle['pattern.default.date']}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column 
+                        headerText="Fecha fin"
+                        style="text-align: center">
+                        <h:outputText 
+                            value="#{asignaturaDocente.fechaFin}">
+                            <f:convertDateTime
+                                type="date" 
+                                pattern="#{bundle['pattern.default.date']}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column 
+                        headerText="Vigente"
+                        style="text-align: center"
+                        filterBy="#{asignaturaDocente.vigente}"
+                        filterMatchMode="contains">
+                        <h:outputText 
+                            value="#{asignaturaDocente.vigente}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+            <h:form 
+                id="frm_detalles"
+                prependId="false"
+                rendered="#{cuMe11InsercionNotas.showDetails}">
+                <p:dataTable 
+                    id="dtAlumnosAsignaturas"                    
+                    value="#{cuMe11InsercionNotas.lstAlumnos}" 
+                    var="alumno" 
+                    paginator="true" 
+                    paginatorPosition="bottom"
+                    rows="50"                
+                    rowKey="#{alumno.codigoPrograma}"
+                    style="font-size: xx-small; margin-top:10px"
+                    resizableColumns="true"                                          
+                    reflow="true"
+                    editable="#{cuMe11InsercionNotas.editRowAlumn}" 
+                    editMode="cell"
+                    rowStyleClass="#{alumno.habilita eq 'SI' ? 'div-error-celda' : null}"> 
+                    <f:facet name="header">
+                        Alumnos asignatura
+                    </f:facet>
+                    <p:column 
+                        headerText="Identificación"
+                        style="text-align: center">
+                        <h:outputText 
+                            value="#{alumno.identificacion}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="Nombres"
+                        sortBy="#{alumno.nombres}">
+                        <h:outputText 
+                            value="#{alumno.nombres}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="Apellidos"
+                        sortBy="#{alumno.apellidos}">
+                        <h:outputText 
+                            value="#{alumno.apellidos}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="Parcial 1 30%"
+                        style="text-align: center">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText 
+                                    value="#{alumno.parcial1}" />
+                            </f:facet>
+                            <f:facet 
+                                name="input">
+                                <p:inputText 
+                                    value="#{alumno.parcial1}" />
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column 
+                        headerText="Parcial 2 30%"
+                        style="text-align: center">
+                        <p:cellEditor>
+                            <f:facet 
+                                name="output">
+                                <h:outputText 
+                                    value="#{alumno.parcial2}" />
+                            </f:facet>
+                            <f:facet 
+                                name="input">
+                                <p:inputText 
+                                    value="#{alumno.parcial2}" />
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column 
+                        headerText="Parcial 3 40%"
+                        style="text-align: center">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText 
+                                    value="#{alumno.parcial3}" />
+                            </f:facet>
+                            <f:facet 
+                                name="input">
+                                <p:inputText 
+                                    value="#{alumno.parcial3}" />
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column 
+                        headerText="Definitiva"
+                        style="text-align: center">
+                        <h:outputText 
+                            value="#{alumno.definitiva}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="Habilita"
+                        style="text-align: center">
+                        <h:outputText 
+                            value="#{alumno.habilita}"/>
+                    </p:column>
+                </p:dataTable>
+                <p:panelGrid
+                    id="pngButtonsDetail"
+                    columns="2"
+                    layout="grid" 
+                    columnClasses="ui-grid-col-2, ui-grid-col-2"
+                    styleClass="ui-panelgrid-blank"
+                    style="margin-top:10px">
+                    <p:commandButton 
+                        value="#{bundle['commons.btn.back']}"
+                        title="#{bundle['commons.btn.back']}"
+                        icon="ui-icon-back"
+                        actionListener="#{cuMe11InsercionNotas.onBack()}"                        
+                        update=":main"
+                        style="border: none"/>
+                    <p:commandButton 
+                        value="#{bundle['commons.btn.save']}"
+                        title="#{bundle['commons.btn.save']}"
+                        icon="ui-icon-save"
+                        actionListener="#{cuMe11InsercionNotas.save()}"                        
+                        update=":main"
+                        style="border: none"/>
+                </p:panelGrid>
+            </h:form>
+        </p:panel>
+    </ui:define>
+</ui:composition>

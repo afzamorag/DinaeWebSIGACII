@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"> 
+
+  <br />
+  <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+               columnClasses="panelGridColumnaValor_30_porciento,panelGridColumnaValor_70_porciento" id="pginclude_informacion_informe_proyecto">
+
+    <h:outputLabel  value="#{properties.value('cu_ne_2_lbl_tema_propuesta')}" styleClass="gris negrilla"/>
+    <h:outputLabel value="#{includeInformacionInformeProyectoGenericoFaces.proyectoSeleccionado.tema}" styleClass="gris"/>
+
+    <br /><h:outputLabel />  
+
+    <h:outputLabel  value="#{properties.value('cu_pr_7_lbl_subtitulo_titulo_pro')}" styleClass="gris negrilla"/>
+    <h:outputLabel value="#{includeInformacionInformeProyectoGenericoFaces.proyectoSeleccionado.tituloPropuesto}" styleClass="gris"/>
+
+    <br /><h:outputLabel />  
+
+    <h:outputLabel  value="#{properties.value('cu_pr_11_lbl_codigo_del_proyecto')}" styleClass="gris negrilla" rendered="#{cuPr1ProyectoFaces.esRegistroProyecto}" />
+    <h:outputLabel value="#{includeInformacionInformeProyectoGenericoFaces.proyectoSeleccionado.codigoProyecto}" styleClass="gris" rendered="#{cuPr1ProyectoFaces.esRegistroProyecto}" />
+
+    <h:outputLabel  value="#{properties.value('cu_pr_7_lbl_subtitulo_areaciencia')}" styleClass="gris negrilla"/>
+    <h:outputLabel value="#{includeInformacionInformeProyectoGenericoFaces.proyectoSeleccionado.linea.areaCienciaTecnologia.nombre}" styleClass="gris"/>
+
+    <h:outputLabel  value="#{properties.value('cu_pr_7_lbl_subtitulo_linea')}" styleClass="gris negrilla"/>
+    <h:outputLabel value="#{includeInformacionInformeProyectoGenericoFaces.proyectoSeleccionado.linea.nombre}" styleClass="gris"/>
+
+    <br /><h:outputLabel />  
+
+    <h:outputLabel  value="#{properties.value('cu_pr_7_lbl_subtitulo_fecha_ini')}" styleClass="gris negrilla" rendered="#{cuPr1ProyectoFaces.esRegistroProyecto}" />
+    <h:outputLabel value="#{includeInformacionInformeProyectoGenericoFaces.proyectoSeleccionado.fechaEstimadaInicio}" styleClass="gris" rendered="#{cuPr1ProyectoFaces.esRegistroProyecto}" >
+      <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+    </h:outputLabel> 
+
+    <h:outputLabel  value="#{properties.value('cu_pr_7_lbl_subtitulo_fecha_fin')}" styleClass="gris negrilla" rendered="#{cuPr1ProyectoFaces.esRegistroProyecto}" />
+    <h:outputLabel value="#{includeInformacionInformeProyectoGenericoFaces.proyectoSeleccionado.fechaEstimadaFinalizacion}" styleClass="gris" rendered="#{cuPr1ProyectoFaces.esRegistroProyecto}" >
+      <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+    </h:outputLabel> 
+
+    <br /><h:outputLabel />  
+    <h:outputLabel  value="Costo implementación proyecto" styleClass="gris negrilla" rendered="#{cuPr1ProyectoFaces.esRegistroProyecto and cuPr1ProyectoFaces.proyectoMigrado}" />
+    <h:panelGroup rendered="#{cuPr1ProyectoFaces.esRegistroProyecto and cuPr1ProyectoFaces.proyectoMigrado}">
+      <h:outputLabel  value="$" styleClass="gris" />
+      <h:outputLabel value="#{includeInformacionInformeProyectoGenericoFaces.proyectoSeleccionado.costoTotalProyectoMigrado}" styleClass="gris">
+        <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" />
+      </h:outputLabel>
+    </h:panelGroup>        
+
+    <h:outputLabel  value="#{properties.value('cu_pr_1_lbl_info_basica_subtitulo_fecha_apro_comite')}" styleClass="gris negrilla" rendered="#{cuPr1ProyectoFaces.esRegistroProyecto and cuPr1ProyectoFaces.proyectoNoMigrado}" />
+    <h:outputLabel value="#{includeInformacionInformeProyectoGenericoFaces.proyectoSeleccionado.fechaAprobacionComite}" styleClass="gris" rendered="#{cuPr1ProyectoFaces.esRegistroProyecto and cuPr1ProyectoFaces.proyectoNoMigrado}" >
+      <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+    </h:outputLabel>
+
+    <h:outputLabel  value="#{properties.value('cu_pr_1_lbl_info_basica_subtitulo_num_acta_aproba_com')}" styleClass="gris negrilla" rendered="#{cuPr1ProyectoFaces.esRegistroProyecto and cuPr1ProyectoFaces.proyectoNoMigrado}" />
+    <h:outputLabel value="#{includeInformacionInformeProyectoGenericoFaces.proyectoSeleccionado.nroActaAprobacionComite}" styleClass="gris" rendered="#{cuPr1ProyectoFaces.esRegistroProyecto and cuPr1ProyectoFaces.proyectoNoMigrado}" />
+
+  </h:panelGrid>
+
+</html>

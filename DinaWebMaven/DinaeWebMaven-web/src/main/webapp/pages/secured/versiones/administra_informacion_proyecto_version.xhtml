@@ -1,0 +1,171 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+
+      <ui:define name="content">
+
+        <div class="fixed-menu">
+          <div class="right-col">
+            <h2>
+              Detalle de proyecto - Versión: <h:outputLabel value="#{administracionProyectoVersionFaces.fechaVersion}">
+                <f:convertDateTime pattern="#{properties.value('general_formato_fecha_hora')}" locale="es_CO" />
+              </h:outputLabel> 
+            </h2>
+          </div>
+        </div>
+
+        <br />
+        <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                     columnClasses="panelGridColumnaValor_30_porciento,panelGridColumnaValor_70_porciento" id="pginclude_informacion_informe_proyecto">
+
+          <h:outputLabel  value="#{properties.value('cu_pr_7_lbl_subtitulo_titulo_pro')}" styleClass="green negrilla"/>
+          <h:outputLabel value="#{administracionProyectoVersionFaces.proyectoSeleccionado.tituloPropuesto}" styleClass="gris"/>
+
+          <h:outputLabel  value="#{properties.value('cu_pr_11_lbl_codigo_del_proyecto')}" styleClass="green negrilla"/>
+          <h:outputLabel value="#{administracionProyectoVersionFaces.proyectoSeleccionado.codigoProyecto}" styleClass="gris"/>
+        </h:panelGrid>
+
+        <br />
+
+        <div class="centrado">
+
+          <h:panelGroup rendered="#{not empty administracionProyectoVersionFaces.listaUnidadPolicialEjecutoras}">
+            <h:outputLabel styleClass="green negrilla" value="#{properties.value('cu_pre_1_lbl_unidades_ejecutoras')}"/>
+            <p:dataTable var="_unidadejecutora" paginator="false" 
+                         value="#{administracionProyectoVersionFaces.listaUnidadPolicialEjecutoras}"
+                         rowIndexVar="idFila" paginatorPosition="bottom" 
+                         rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                         emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                         rows="#{properties.value('general_mensaje_filas_datatable_pagina')}">  
+
+              <p:column headerText="#{properties.value('cu_pr_1_lbl_datatable_unidadpolicial')}">  
+                <h:outputLabel value="#{_unidadejecutora.unidadPolicial.nombre}" />  
+              </p:column> 
+
+              <p:column headerText="#{properties.value('cu_pr_1_lbl_datatable_rol')}">  
+                <h:outputLabel value="#{_unidadejecutora.rol.valor}" />  
+              </p:column> 
+
+            </p:dataTable>
+          </h:panelGroup>
+
+        </div>
+
+        <br />
+
+        <p:tabView id="tabViewProyectos" orientation="top" activeIndex="#{administracionProyectoVersionFaces.idTabSeleccionado}" >  
+
+          <p:ajax event="tabChange" listener="#{administracionProyectoVersionFaces.onTabChange}" update=":tabViewProyectos" />  
+
+          <p:tab id="idTabViewInformacionBasicoProyecto" title="#{properties.value('cu_pre_1_lbl_informacion_basica_proyecto')}">
+
+            <br />        
+
+            <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                         columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+              <h:outputLabel value="#{properties.value('cu_pr_6_lbl_codigo_proyecto')}" styleClass="gris negrilla" />
+              <h:outputLabel value="#{administracionProyectoVersionFaces.proyectoSeleccionado.codigoProyecto}" styleClass="gris" />
+
+              <h:outputLabel  value="Función del proyecto" styleClass="gris negrilla"/>
+              <h:outputLabel value="#{administracionProyectoVersionFaces.proyectoSeleccionado.funcionProyecto}" styleClass="gris"/>
+
+              <h:outputLabel value="#{properties.value('cu_pr_6_lbl_fecha_version_proyecto')}" styleClass="gris negrilla" />
+              <h:outputLabel value="#{administracionProyectoVersionFaces.proyectoSeleccionado.fechaActualizacion}" styleClass="gris" >
+                <f:convertDateTime pattern="#{properties.value('general_formato_fecha_hora')}" locale="es_CO" />
+              </h:outputLabel>
+
+            </h:panelGrid>
+
+            <ui:include src="version_include_informacion_informe_proyecto.xhtml" />
+            <ui:include src="version_include_informacion_totales_proyecto.xhtml" />
+
+            <br />
+
+            <h:outputLabel  value="Jefe de la Unidad" styleClass="green negrilla"/>
+            <p:dataTable var="_persona" 
+                         value="#{administracionProyectoVersionFaces.listaJefeFuncionariosSeleccionadoAprueba}" 
+                         rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                         rows="#{properties.value('general_mensaje_filas_datatable_pagina')}"
+                         paginator="false" rowIndexVar="idFila" 
+                         paginatorPosition="bottom"
+                         emptyMessage="#{properties.value('general_mensaje_no_records_found')}">
+
+              <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_grado')}">  
+                #{_persona.grado}
+              </p:column> 
+              <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_nom_y_apell')}">  
+                #{_persona.nombreCompleto}
+              </p:column>    
+              <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_unidadpoli')}" >
+                #{_persona.unidadPolicial.siglaFisica}
+              </p:column>
+              <p:column headerText="#{properties.value('cu_ne_7_lista_funcionario_cargo')}">  
+                #{_persona.cargo}
+              </p:column> 
+              <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_correo')}" >
+                #{_persona.correo}
+              </p:column>
+              <p:column headerText="Ciudad" >
+                #{_persona.ciudadReside}
+              </p:column>
+              <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_num_tel')}" >
+                #{_persona.telefono}
+              </p:column>
+            </p:dataTable>
+
+          </p:tab>
+
+          <p:tab id="idTabViewTalentoHumano" title="#{properties.value('cu_pre_1_lbl_talento_humano')}" >  
+            <h:panelGroup>
+              <ui:include src="version_include_consultar_talento_humano.xhtml" />
+            </h:panelGroup>
+          </p:tab>
+
+          <p:tab id="idTabViewPlanteamientoProyecto" title="#{properties.value('cu_pre_1_lbl_planteamiento_proyecto')}" >                          
+            <h:panelGroup>
+              <ui:include src="version_include_consultar_planteamiento_proyecto.xhtml" />
+            </h:panelGroup>
+          </p:tab>
+
+          <p:tab id="idTabViewOtrosParticipantes" title="#{properties.value('cu_pre_1_lbl_otros_participantes')}" >
+            <h:panelGroup>
+              <ui:include src="version_include_consultar_otro_participantes_proyecto.xhtml" />
+            </h:panelGroup>
+          </p:tab>
+
+          <p:tab id="idTabViewPresupuestoProyectoDetalleProyecto" title="#{properties.value('cu_pr_6_lbl_tab_presupuesto')}" >  
+            <h:panelGroup>
+              <h:panelGrid width="100%" columns="1" rendered="#{administracionProyectoVersionFaces.importPresupuestoPage != null}">
+                <ui:include src="#{administracionProyectoVersionFaces.importPresupuestoPage}" />
+              </h:panelGrid>
+            </h:panelGroup>
+          </p:tab>
+
+          <p:tab id="idTabViewVerIndicadores" title="7. Indicadores" >                        
+            <ui:include src="version_include_lista_indicadores_generales.xhtml" />
+            <br />
+            <ui:include src="version_include_lista_indicadores_otros.xhtml" />
+          </p:tab>
+
+          <p:tab id="idTabViewVerAsesoriasProyecto" title="8. Asesorias" >
+            <ui:include src="version_include_lista_asesorias_proyecto.xhtml" />                        
+          </p:tab>
+
+        </p:tabView>
+
+        <br />                
+
+      </ui:define>
+
+    </ui:composition>
+  </body>
+</html>

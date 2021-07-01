@@ -1,0 +1,264 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+  <h:body>
+    <div class="body">
+      <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+        <ui:define name="content">
+          <div class="fixed-menu">                        
+            <div class="right-col">
+              <h2 style="font: verdana;">
+                #{properties.value('cu_pr_08_lbl_titulo_consultar_trabajos_y_proyectos')}
+              </h2>
+            </div>
+          </div>
+
+          <div width="100%">
+            <h:form id="idcu_pr_08_form_consultar_trabajos_y_proyectos" >
+              <br />
+              <h:outputLabel value="#{properties.value('cu_pr_08_lbl_subtitulo_consultar_trabajos_y_proyectos')}" 
+                             styleClass="green negrilla"/>
+              <br />                           
+
+              <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar">
+
+                <h:outputLabel value="Tipo de consulta" styleClass="green negrilla" /> 
+                <p:selectOneRadio styleClass="gris" value="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada}">  
+                  <f:selectItem itemLabel="Proyectos" itemValue="PROYECTO" />
+                  <f:selectItem itemLabel="Trabajos de grados" itemValue="TRABAJO_GRADO" />
+                  <p:ajax update="@form" listener="#{cuPr08ConsultarTrabajosYProyectos.accionRadio}"/>
+                </p:selectOneRadio>
+
+                <h:outputLabel value="#{properties.value('cu_pr_08_lbl_unidad_policial')}" 
+                               styleClass="gris negrilla" />
+                <h:selectOneMenu styleClass="gris"  value="#{cuPr08ConsultarTrabajosYProyectos.idUnidadPolicial}" >  
+                  <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+                  <f:selectItems value="#{cuPr08ConsultarTrabajosYProyectos.listaItemsUnidadesPoliciales}" />
+                </h:selectOneMenu>
+
+              </h:panelGrid>
+
+              <h:panelGrid id="idcu_pr_08_pgrid_palabra_clave_y_tipo_proyecto" 
+                           columns="2" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                           columnClasses="panelGridColumnaValor_40_porciento,panelGridColumnaValor_60_porciento"                                                
+                           style="width: 100%">                                                                                                                        
+
+                <h:outputLabel value="#{properties.value('cu_pr_08_lbl_tipo_proyectos')}" styleClass="gris negrilla" 
+                               rendered="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'PROYECTO'}"/>
+                <p:selectManyCheckbox styleClass="gris" value="#{cuPr08ConsultarTrabajosYProyectos.tiposProyectoSeleccionados}" layout="pageDirection"
+                                      converter="javax.faces.Long"
+                                      rendered="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'PROYECTO'}" >
+                  <f:selectItems value="#{cuPr08ConsultarTrabajosYProyectos.listaItemsTiposDeProyecto}" />                                            
+                </p:selectManyCheckbox>
+
+                <h:outputLabel value="#{properties.value('cu_pr_08_lbl_estado_proyecto')}" styleClass="gris negrilla" 
+                               rendered="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'PROYECTO'}" />
+                <h:selectOneMenu styleClass="gris"  value="#{cuPr08ConsultarTrabajosYProyectos.idEstadoProyecto}" 
+                                 rendered="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'PROYECTO'}">  
+                  <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+                  <f:selectItems value="#{cuPr08ConsultarTrabajosYProyectos.listaItemsEstadoProyecto}" />
+                </h:selectOneMenu>
+
+
+                <h:outputLabel value="#{properties.value('cu_pr_08_lbl_codigo_proyecto')}" styleClass="gris negrilla" 
+                               rendered="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'PROYECTO'}" />
+                <p:inputText value="#{cuPr08ConsultarTrabajosYProyectos.codigoProyecto}" maxlength="20" size="20" 
+                             rendered="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'PROYECTO'}" />
+
+
+                <h:outputLabel  value="#{properties.value('cu_pr_08_lbl_palabra_clave')}" styleClass="gris negrilla" 
+                                rendered="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'PROYECTO' 
+                                            or cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'TRABAJO_GRADO'}"/>
+                <p:inputText id="idcu_pr_08_input_palabra_clave" value="#{cuPr08ConsultarTrabajosYProyectos.palabraClave}" maxlength="100" 
+                             rendered="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'PROYECTO' 
+                                         or cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'TRABAJO_GRADO'}"/>                                
+
+
+                <h:outputLabel value="#{properties.value('cu_pr_08_lbl_area_ciencia_tecnologia')}" styleClass="gris negrilla" 
+                               rendered="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'PROYECTO' 
+                                           or cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'TRABAJO_GRADO'}"/>
+                <h:selectOneMenu  styleClass="gris"                                             
+                                  value="#{cuPr08ConsultarTrabajosYProyectos.idAreaCienciaTecnologiaSeleccionada}" 
+                                  rendered="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'PROYECTO' 
+                                              or cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'TRABAJO_GRADO'}">  
+                  <f:selectItem itemLabel="--Select--" itemValue="" />  
+                  <f:selectItems value="#{cuPr08ConsultarTrabajosYProyectos.listaItemsAreaCienciaYTecnologia}" />  
+                  <p:ajax update="idcu_pr_08_select_linea_ciencia" listener="#{cuPr08ConsultarTrabajosYProyectos.handleAreaCienciaTecnologiaSeleccionadaChange}" />  
+                </h:selectOneMenu>
+
+                <h:outputLabel value="#{properties.value('cu_pr_08_lbl_linea_ciencia_tecnologia')}" styleClass="gris negrilla" 
+                               rendered="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'PROYECTO' 
+                                           or cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'TRABAJO_GRADO'}"/>
+                <h:selectOneMenu styleClass="gris"  id="idcu_pr_08_select_linea_ciencia" 
+                                 rendered="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'PROYECTO' 
+                                             or cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'TRABAJO_GRADO'}"
+                                 value="#{cuPr08ConsultarTrabajosYProyectos.idLineaSeleccionada}">  
+                  <f:selectItem itemLabel="--Select--" itemValue="" />  
+                  <f:selectItems value="#{cuPr08ConsultarTrabajosYProyectos.listaItemsLineaCienciaYTecnologia}"/>  
+                </h:selectOneMenu>    
+
+                <h:outputLabel value="#{properties.value('cu_pr_08_lbl_origen_proyecto')}" styleClass="gris negrilla" 
+                               rendered="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'PROYECTO'}" />
+                <h:selectOneMenu styleClass="gris"  value="#{cuPr08ConsultarTrabajosYProyectos.idOrigenProyecto}" 
+                                 rendered="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'PROYECTO'}" >  
+                  <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+                  <f:selectItems value="#{cuPr08ConsultarTrabajosYProyectos.listaItemsOrigenesProyecto}" />
+                </h:selectOneMenu>
+
+                <h:outputLabel value="#{properties.value('cu_pr_08_lbl_estado_implementacion')}" styleClass="gris negrilla" 
+                               rendered="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'PROYECTO'}" />
+                <h:selectOneMenu styleClass="gris"  value="#{cuPr08ConsultarTrabajosYProyectos.idEstadoImplementacion}"                                            
+                                 style="width: 100%"
+                                 rendered="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'PROYECTO'}">  
+                  <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+                  <f:selectItems value="#{cuPr08ConsultarTrabajosYProyectos.listaItemsEstadosImplementacion}" />
+                </h:selectOneMenu>
+
+                <h:outputLabel value="#{properties.value('cu_pr_08_lbl_nombre_programa')}" styleClass="gris negrilla"
+                               rendered="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'TRABAJO_GRADO'}" />
+                <h:selectOneMenu styleClass="gris"  value="#{cuPr08ConsultarTrabajosYProyectos.idNombreProgramaSeleccionado}" 
+                                 rendered="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'TRABAJO_GRADO'}">  
+                  <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+                  <f:selectItems value="#{cuPr08ConsultarTrabajosYProyectos.listaItemsNombreProgramas}" />
+                </h:selectOneMenu>
+
+
+                <h:outputLabel value="#{properties.value('cu_pr_08_lbl_fecha_presentacion_entre')}" styleClass="gris negrilla" 
+                               rendered="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'PROYECTO'}" />
+                <h:panelGroup rendered="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'PROYECTO'}">
+                  <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es" showOn="button" 
+                              yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" 
+                              showButtonPanel="true" navigator="true" 
+                              value="#{cuPr08ConsultarTrabajosYProyectos.fechaPresentacionInicial}" /> 
+
+                  <h:outputLabel value="#{properties.value('cu_pr_08_lbl_fecha_presentacion_y')}" styleClass="gris negrilla"/>
+
+                  <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es" showOn="button" 
+                              yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" 
+                              showButtonPanel="true" navigator="true"
+                              value="#{cuPr08ConsultarTrabajosYProyectos.fechaPresentacionFinal}" /> 
+                </h:panelGroup>
+
+
+                <h:outputLabel value="#{properties.value('cu_pr_08_lbl_grupo_investigacion')}" styleClass="gris negrilla" 
+                               rendered="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'PROYECTO' 
+                                           or cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'TRABAJO_GRADO'}" />
+                <h:selectOneMenu styleClass="gris"  value="#{cuPr08ConsultarTrabajosYProyectos.idGrupoInvestigacion}" 
+                                 rendered="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'PROYECTO' 
+                                             or cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'TRABAJO_GRADO'}">  
+                  <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+                  <f:selectItems value="#{cuPr08ConsultarTrabajosYProyectos.listaItemsGruposInvestigacion}" />
+                </h:selectOneMenu>
+
+
+                <h:outputLabel value="#{properties.value('cu_pr_08_lbl_semilleros')}" styleClass="gris negrilla" 
+                               rendered="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'PROYECTO' 
+                                           or cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'TRABAJO_GRADO'}"/>
+                <h:selectOneMenu styleClass="gris"  value="#{cuPr08ConsultarTrabajosYProyectos.idSemillero}" 
+                                 rendered="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'PROYECTO' 
+                                             or cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'TRABAJO_GRADO'}">  
+                  <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+                  <f:selectItems value="#{cuPr08ConsultarTrabajosYProyectos.listaItemsSemilleros}" />
+                </h:selectOneMenu>
+
+                <h:outputLabel value="#{properties.value('cu_pr_08_lbl_nombres_y_apellidos')}" styleClass="gris negrilla" 
+                               rendered="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'PROYECTO' 
+                                           or cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'TRABAJO_GRADO'}" />
+                <p:inputText value="#{cuPr08ConsultarTrabajosYProyectos.nombresYApellidos}"
+                             maxlength="20" size="30" 
+                             rendered="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'PROYECTO' 
+                                         or cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'TRABAJO_GRADO'}"/>
+
+                <h:outputLabel value="#{properties.value('cu_pr_08_lbl_convocatorias')}" styleClass="gris negrilla" 
+                               rendered="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'PROYECTO'}"/>
+                <h:selectOneMenu styleClass="gris"  value="#{cuPr08ConsultarTrabajosYProyectos.idConvocatoria}" 
+                                 rendered="#{cuPr08ConsultarTrabajosYProyectos.opcionFiltroBusquedaInicialSeleccionada eq 'PROYECTO'}">  
+                  <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+                  <f:selectItems value="#{cuPr08ConsultarTrabajosYProyectos.listaItemsConvocatorias}" />
+                </h:selectOneMenu>
+
+              </h:panelGrid>  
+
+              <br />
+              <div class="centrado">
+                <p:commandButton value="#{properties.value('cu_pr_08_lbl_btn_buscar')}"                                                  
+                                 action="#{cuPr08ConsultarTrabajosYProyectos.buscarTrabajoOProyecto}" 
+                                 update="@form"/>
+
+                <p:commandButton value="#{properties.value('cu_pr_4_lbl_btn_limpiar')}"                                                  
+                                 action="#{cuPr08ConsultarTrabajosYProyectos.initReturnCU}" 
+                                 update="@form" immediate="true"/>
+
+              </div>
+              <br/>
+
+              <p:dataTable var="_proyecto" value="#{cuPr08ConsultarTrabajosYProyectos.listaProyectosEncontrados}"
+                           rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                           id="idcu_pr_08_datatable_proyectos_encontrados"
+                           emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                           style="width: 100%;" paginator="true"
+                           selectionMode="single"
+                           selection="#{cuPr08ConsultarTrabajosYProyectos.proyectoSeleccionado}"
+                           resizableColumns="true" rowIndexVar="idFila"
+                           paginatorPosition="bottom" 
+                           rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+                <p:ajax event="rowSelect" listener="#{cuPr08ConsultarTrabajosYProyectos.verDatalleProyectoInvestigacion}" />  
+                <p:ajax event="rowUnselect" listener="#{cuPr08ConsultarTrabajosYProyectos.noSeleccionProyecto}" /> 
+
+                <p:column width="25" headerText="#{properties.value('cu_pr_08_lbl_column_numero')}" >
+                  <h:outputText value="#{idFila + 1}" />
+                </p:column>
+
+                <p:column width="170" headerText="#{properties.value('cu_pr_08_lbl_codigo')}">
+                  <h:outputText value="#{_proyecto.codigoProyecto}" />
+                </p:column>
+
+                <p:column headerText="#{properties.value('cu_pr_08_lbl_column_titulo')}">
+                  <h:outputText value="#{_proyecto.tituloPropuesto}" />
+                </p:column>
+
+                <p:column width="90" headerText="#{properties.value('cu_pr_08_lbl_column_fecha_presentacion')}">
+                  <h:outputText value="#{_proyecto.fechaRegistro}" >
+                    <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" type="date"/>
+                  </h:outputText>
+                </p:column>
+
+                <p:column width="100" headerText="#{properties.value('cu_pr_08_lbl_column_unidad_policial')}">
+                  <h:outputText value="#{_proyecto.siglaFisica}" />
+                </p:column>
+
+                <f:facet name="footer">
+                  #{cuPr08ConsultarTrabajosYProyectos.listaProyectosEncontrados.numeroRegistro} #{properties.value('general_mensaje_footer_datatable_count')}
+                </f:facet>    
+
+              </p:dataTable>
+
+              <br />
+              <h:panelGrid columns="3">
+
+                <p:commandLink ajax="false" immediate="true" value="Imprimir listado" rendered="#{cuPr08ConsultarTrabajosYProyectos.listaProyectosEncontrados.numeroRegistro > 0}">
+                  <p:fileDownload value="#{cuPr08ConsultarTrabajosYProyectos.generarReporte}" />
+                </p:commandLink>
+
+                <h:outputLabel value=" | " styleClass="green"/>
+
+                <p:commandLink ajax="false" immediate="true" value="Imprimir listado total" rendered="#{cuPr08ConsultarTrabajosYProyectos.listaProyectosEncontrados.numeroRegistro > 0}">
+                  <p:fileDownload value="#{cuPr08ConsultarTrabajosYProyectos.generarReporteTotal}" />
+                </p:commandLink>
+
+              </h:panelGrid>
+
+
+            </h:form>
+          </div>
+        </ui:define>
+      </ui:composition>
+    </div>
+  </h:body>
+</html>

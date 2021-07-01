@@ -1,0 +1,202 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <h:form id="formActividadesARealizar" >
+    <br />
+    <h:panelGrid id="panelgridActividadesARealizar" columns="2" style="width: 100%" 
+                 rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_40_porciento,panelGridColumnaValor_60_porciento">
+
+      <h:outputLabel value="#{properties.value('cu_pr_21_lbl_actividad_a_realizar')}" 
+                     styleClass="gris negrilla" for="textAreaActividad"/>
+      <h:panelGroup>
+        <p:inputTextarea value="#{cuPr21RegistrarPlanDeTrabajo.actividadesPlanImplementacion.actividad}"
+                         id="textAreaActividad" styleClass="textareaMaximo"
+                         maxlength="200" counter="contadorActividadARealizar"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         required="true" autoResize="false">
+          <f:validateLength minimum="1"  maximum="200" />
+        </p:inputTextarea>
+        <h:outputText id="contadorActividadARealizar" styleClass="gris" />
+      </h:panelGroup>
+
+      <h:outputLabel value="#{properties.value('cu_pr_21_lbl_objetivo_de_la_actividad')}" 
+                     styleClass="gris negrilla" for="textAreaObjetivoActividad"/>
+      <h:panelGroup>
+        <p:inputTextarea value="#{cuPr21RegistrarPlanDeTrabajo.actividadesPlanImplementacion.objetivo}"
+                         id="textAreaObjetivoActividad" styleClass="textareaMaximo"
+                         maxlength="200" counter="contadorObjetivoActividad"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         required="true" autoResize="false">
+          <f:validateLength minimum="1"  maximum="200" />
+        </p:inputTextarea>
+        <h:outputText id="contadorObjetivoActividad" styleClass="gris" />
+      </h:panelGroup>
+
+      <h:outputLabel value="#{properties.value('cu_pr_21_lbl_estrategia_de_la_actividad')}" 
+                     styleClass="gris negrilla" for="textAreaEstrategiaActividad"/>
+      <h:panelGroup>
+        <p:inputTextarea value="#{cuPr21RegistrarPlanDeTrabajo.actividadesPlanImplementacion.estrategia}"
+                         id="textAreaEstrategiaActividad" styleClass="textareaMaximo"
+                         maxlength="200" counter="contadorEstrategiaActividad"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         required="true" autoResize="false">
+          <f:validateLength minimum="1"  maximum="200" />
+        </p:inputTextarea>
+        <h:outputText id="contadorEstrategiaActividad" styleClass="gris" />
+      </h:panelGroup>
+
+      <h:outputLabel value="#{properties.value('cu_pr_21_lbl_fecha_inicio_actividad')}" 
+                     styleClass="gris negrilla" for="calendarFechaInicio" />
+      <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es" showOn="button" 
+                  yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" 
+                  showButtonPanel="true" navigator="true" requiredMessage="Ingrese la fecha inicial"  
+                  value="#{cuPr21RegistrarPlanDeTrabajo.actividadesPlanImplementacion.fechaInicio}" 
+                  id="calendarFechaInicio" required="true" />
+
+
+      <h:outputLabel value="#{properties.value('cu_pr_21_lbl_fecha_fin_actividad')}" 
+                     styleClass="gris negrilla" for="calendarFechaFin" />
+      <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es" showOn="button" 
+                  yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" 
+                  showButtonPanel="true" navigator="true" requiredMessage="Ingrese la fecha inicial"  
+                  value="#{cuPr21RegistrarPlanDeTrabajo.actividadesPlanImplementacion.fechaFin}" 
+                  id="calendarFechaFin" required="true" />
+
+      <h:outputLabel value="#{properties.value('cu_pr_21_lbl_impacto_actividad')}" 
+                     styleClass="gris negrilla" for="textAreaImpactoActividad"/>
+      <h:panelGroup>
+        <p:inputTextarea value="#{cuPr21RegistrarPlanDeTrabajo.actividadesPlanImplementacion.impactoInstitucional}"
+                         id="textAreaImpactoActividad" styleClass="textareaMaximo"
+                         maxlength="500" counter="contadorImpactoActividad"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         required="true" autoResize="false">
+          <f:validateLength minimum="1"  maximum="500" />
+        </p:inputTextarea>
+        <h:outputText id="contadorImpactoActividad" styleClass="gris" />
+      </h:panelGroup>
+
+      <h:outputLabel value="#{properties.value('cu_pr_21_lbl_difusion_actividad')}" 
+                     styleClass="gris negrilla" for="textAreaDifusionActividad"/>
+      <h:panelGroup>
+        <p:inputTextarea value="#{cuPr21RegistrarPlanDeTrabajo.actividadesPlanImplementacion.difusion}"
+                         id="textAreaDifusionActividad" styleClass="textareaMaximo"
+                         maxlength="200" counter="contadorDifusionActividad"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         required="true" autoResize="false">
+          <f:validateLength minimum="1"  maximum="200" />
+        </p:inputTextarea>
+        <h:outputText id="contadorDifusionActividad" styleClass="gris" />
+      </h:panelGroup>
+
+      <h:outputLabel value="#{properties.value('cu_pr_21_lbl_soporte_a_entregar')}" 
+                     styleClass="gris negrilla" for="textAreaSoporteAEntregar"/>
+      <h:panelGroup>
+        <p:inputTextarea value="#{cuPr21RegistrarPlanDeTrabajo.actividadesPlanImplementacion.soporteEntregar}"
+                         id="textAreaSoporteAEntregar" styleClass="textareaMaximo"
+                         maxlength="200" counter="contadorSoporteAEntregar"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         required="true" autoResize="false">
+          <f:validateLength minimum="1"  maximum="200" />
+        </p:inputTextarea>
+        <h:outputText id="contadorSoporteAEntregar" styleClass="gris" />
+      </h:panelGroup>        
+
+      <h:outputLabel value="#{properties.value('cu_pr_21_lbl_responsable_actividad')}" 
+                     styleClass="gris negrilla" for="selectResponsableActividad" />
+
+      <h:panelGrid columns="1" style="width: 100%">   
+
+        <h:panelGroup id="panelgridResponsables">   
+
+          <h:selectOneMenu value="#{cuPr21RegistrarPlanDeTrabajo.responsableActividad}" 
+                           id="selectResponsableActividad" styleClass="gris">  
+            <f:selectItem itemLabel="-- Seleccione --" itemValue="" />
+            <f:selectItems value="#{cuPr21RegistrarPlanDeTrabajo.listaItemsResponsables}" />                
+          </h:selectOneMenu>
+
+          <h:outputLabel value="   " />
+
+          <p:commandButton value="#{properties.value('cu_pr_21_lbl_btn_seleccionar_responsable')}" 
+                           action="#{cuPr21RegistrarPlanDeTrabajo.asignarResponsableAActividad}" 
+                           update="@form selectResponsableActividad tablaResponsablesSeleccionados tablaActividades"/>
+        </h:panelGroup>
+
+        <p:dataTable var="responsable" value="#{cuPr21RegistrarPlanDeTrabajo.actividadesPlanImplementacion.responsableActividaImplementacionList}"
+                     rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                     id="tablaResponsablesSeleccionados"
+                     emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                     resizableColumns="false" rowIndexVar="idFila"
+                     rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+          <p:column headerText="#{properties.value('cu_pr_21_lbl_column_numero')}" width="35">
+            <h:outputText value="#{idFila + 1}" />
+          </p:column>
+
+          <p:column headerText="#{properties.value('cu_pr_2_lbl_subtitulo_autor_cc_comentario')}" width="110" >
+            <h:outputText value="#{responsable.investigadorProyecto.identificacion}" />
+          </p:column>
+
+          <p:column headerText="#{properties.value('cu_pr_21_lbl_column_responsable')}" >
+            <h:outputText value="#{responsable.investigadorProyecto.nombreCompleto}" />
+          </p:column>
+
+        </p:dataTable>
+      </h:panelGrid>
+
+    </h:panelGrid>
+    <br/>
+    <br/>
+    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+    <div class="centrado">
+      <p:commandButton value="#{properties.value('cu_pr_21_lbl_btn_agregar_actividad')}" 
+                       action="#{cuPr21RegistrarPlanDeTrabajo.agregarActividadAPlan}" 
+                       rendered="#{!cuPr21RegistrarPlanDeTrabajo.editandoActividadesPlanImplementacion}"
+                       update="@form"/>
+      <p:commandButton value="#{properties.value('cu_pr_3_lbl_btn_actualizar_funcionario')}" 
+                       rendered="#{cuPr21RegistrarPlanDeTrabajo.editandoActividadesPlanImplementacion}"
+                       action="#{cuPr21RegistrarPlanDeTrabajo.agregarActividadAPlan}"                              
+                       update="@form"/>
+      <p:commandButton value="#{properties.value('cu_pr_3_lbl_btn_cancela_modi_funcionario')}" 
+                       rendered="#{cuPr21RegistrarPlanDeTrabajo.editandoActividadesPlanImplementacion}"
+                       ajax="false" update="@form"
+                       action="#{cuPr21RegistrarPlanDeTrabajo.cancelarEditarActividadImpl}" />
+    </div>
+    <br/>
+
+    <ui:include src="include_lista_actividades_plan_implementacion.xhtml"/>
+
+    <br/>
+    <div class="centrado">
+      <p:commandButton value="Regresar" immediate="true"
+                       action="#{cuPr21RegistrarPlanDeTrabajo.regresar}" 
+                       update="@form"/>
+    </div>
+
+  </h:form>
+
+  <p:confirmDialog widgetVar="varConfirmEliminarActividadImpl" header="#{properties.value('cu_pr_3_lbl_titulo_confirmacion_publicar')}" 
+                   message="Está seguro que desea eliminar la actividad ?" > 
+
+    <h:form id="idForm_varConfirmEliminarActividadImpl">
+
+      <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmEliminarActividadImpl">
+        <div class="centrado">
+          <p:commandButton actionListener="#{cuPr21RegistrarPlanDeTrabajo.eliminarActividad}" 
+                           value="#{properties.value('cu_pr_3_lbl_btn_confirma_si_publicar')}" immediate="true"
+                           oncomplete="varConfirmEliminarActividadImpl.hide();"
+                           update=":tabView:formActividadesARealizar:tablaActividades" />  
+          <p:commandButton value="#{properties.value('cu_pr_3_lbl_btn_confirma_no_publicar')}" 
+                           onclick="varConfirmEliminarActividadImpl.hide();" type="button" />       
+        </div>
+      </p:outputPanel>
+
+    </h:form>
+  </p:confirmDialog>
+
+</html>

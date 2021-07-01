@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+  <body>
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+      <ui:define name="content">
+
+        <div class="fixed-menu">
+
+          <div class="right-col">
+            <h2>
+              Información semilleros de investigación
+            </h2>
+          </div>
+        </div>                
+        <br />
+        <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                     columnClasses="panelGridColumnaValor_30_porciento,panelGridColumnaValor_70_porciento">
+
+          <h:outputLabel  value="#{properties.value('cu_iv_3_lbl_subtitulo_nombreunidadpoli')}" styleClass="green negrilla"/>
+          <h:outputLabel value="#{cuIv4ConsultarDetalleSemilleroFaces.unidadPolicial.nombre}" styleClass="gris"/>
+
+        </h:panelGrid>
+
+        <br /><br />
+
+        <p:tabView id="tabViewDetalleSemilleroInvestigacion" orientation="top" activeIndex="#{cuIv4ConsultarDetalleSemilleroFaces.tabIndex}" >  
+
+          <p:ajax event="tabChange" update="tabViewDetalleSemilleroInvestigacion" listener="#{cuIv4ConsultarDetalleSemilleroFaces.onTabChange}"  />  
+
+          <p:tab id="detallesBasicosSemillero" title="#{properties.value('cu_iv_3_lbl_tab_informa_basica_semillero')}">
+            <ui:include src="detallesBasicosSemilleroInvestigacion.xhtml" />
+          </p:tab>
+
+          <p:tab id="detallesTalentoHumanoSemillero" title="#{properties.value('cu_iv_3_lbl_tab_talento_humano')}">
+            <ui:include src="detallesTalentoHumanSemilleroInvestigacion.xhtml" />
+          </p:tab>
+
+          <p:tab id="detallesInvestigacionesSemillero" title="#{properties.value('cu_iv_3_lbl_investigadores')}">
+            <ui:include src="detallesInvestigacionesSemillero.xhtml" />
+          </p:tab>
+
+          <p:tab id="detallesEventosSemillero" title="#{properties.value('cu_iv_3_lbl_eventos')}">
+            <ui:include src="detallesEventosSemilleroInvestigacion.xhtml" />
+          </p:tab>
+
+          <p:tab id="detallesEstimulosSemilleros" title="5. Otros">
+            <ui:include src="detallesOtrosEstimulosIncentivosSemillero.xhtml" />
+          </p:tab>            
+
+        </p:tabView>
+        <br /><br />
+
+        <p:separator styleClass="separadorBorder" /> 
+        <div class="centrado">
+
+          <p:commandButton value="#{properties.value('cu_pr_3_lbl_btn_regresar')}" id="idBtnRegresarBusquedaSemillero"
+                           action="#{cuIv4ConsultarDetalleSemilleroFaces.regresar}"
+                           immediate="true" />
+
+        </div>
+
+      </ui:define>
+    </ui:composition>
+  </body>
+</html>

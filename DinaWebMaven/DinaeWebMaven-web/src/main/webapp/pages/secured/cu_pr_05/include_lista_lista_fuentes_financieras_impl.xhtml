@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+  <p:dataTable var="fuente" paginator="true" style="width: 100%"
+               value="#{presupuestoImplemetacionProyectoFaces.listaFuentesFinancierasModel}"
+               rowIndexVar="idFila" paginatorPosition="bottom" id="tablaFuentesFinancieras"
+               rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+               emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+               rows="#{properties.value('general_mensaje_filas_datatable_pagina')}"
+               resizableColumns="true"
+               selection="#{presupuestoImplemetacionProyectoFaces.fuenteProyectoDTO}" 
+               selectionMode="single">
+
+    <p:ajax event="rowSelect" listener="#{presupuestoImplemetacionProyectoFaces.cargarDatosFuenteProyecto}" 
+            update=":tabView:formAgregarFuenteFinanciera" />  
+    <p:ajax event="rowUnselect" listener="#{presupuestoImplemetacionProyectoFaces.noSeleccionFuenteProyecto}" 
+            update="tablaFuentesFinancieras"/>  
+
+    <p:column width="30" headerText="#{properties.value('cu_pr_5_lbl_column_numero')}" style="color: white">
+      <h:outputLabel value="#{idFila + 1}" styleClass="gris"/>
+    </p:column>
+    <p:column headerText="#{properties.value('cu_pr_5_lbl_column_nombre_fuente')}" style="color: white">
+      <h:outputLabel value="#{fuente.nombreFuente}" styleClass="alineadoIzquierda gris"/>
+    </p:column>
+    <p:column width="100" headerText="#{properties.value('cu_pr_5_lbl_column_tipo_fuente')}" style="color: white">
+      <h:outputLabel value="#{fuente.valorTipoFuente}" styleClass="gris"/>
+    </p:column>
+    <p:column width="100" headerText="#{properties.value('cu_pr_19_lbl_tabla_acciones')}" style="color: white">
+
+      <div class="centrado">
+        <p:commandLink value="#{properties.value('cu_pr_10_lbl_tab3_btn_eliminar')}" 
+                       immediate="true" rendered="#{fuente.muestraLink and !presupuestoImplemetacionProyectoFaces.soloConsulta}"
+                       oncomplete="PF('varConfirmEliminarFuenteFinanciera').show()">  
+          <f:setPropertyActionListener value="#{fuente}" target="#{presupuestoImplemetacionProyectoFaces.fuenteProyectoDTO}" />  
+        </p:commandLink>
+      </div>
+
+    </p:column>
+    <f:facet name="footer">  
+      #{fn:length( presupuestoImplemetacionProyectoFaces.listaFuentesProyecto  )} #{properties.value('general_mensaje_footer_datatable_count')}
+    </f:facet>
+  </p:dataTable>
+</html>

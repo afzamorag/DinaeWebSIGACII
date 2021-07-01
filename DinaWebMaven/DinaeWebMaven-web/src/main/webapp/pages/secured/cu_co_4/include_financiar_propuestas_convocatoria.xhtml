@@ -1,0 +1,171 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+      <ui:define name="content">
+
+        <h:form id="idForm_include_financiar_propuestas_convocatoria">
+
+          <div class="fixed-menu">
+            <div class="right-col">
+              <h2>
+                #{properties.value('cu_co_4_lbl_titulo_financiar_proyecto')}
+              </h2>
+            </div>
+          </div>
+
+          <br />
+          <br />
+          <h:outputText value="#{properties.value('cu_co_4_lbl_subtitulo_seleccion_prop_financiar')}:" styleClass="gris negrilla"/>
+          <br />
+          <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}"  
+                       id="idDataTablePropuestas" var="_propuesta" paginatorPosition="bottom" 
+                       rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true" 
+                       value="#{cuCo4EvaluarPropuestaConvocatoriaFaces.listaPropuestaConvocatoriasAfinanciar}" 
+                       rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                       resizableColumns="true"
+                       rowIndexVar="idFila">
+
+            <p:column width="15" headerText="#{properties.value('cu_co_4_datatable_num')}">  
+              #{idFila + 1}
+            </p:column> 
+
+            <p:column width="120" headerText="#{properties.value('cu_co_4_subtitulo_unidad_policial')}">  
+              #{_propuesta.unidadPolicialDTO.nombre}
+            </p:column> 
+
+            <p:column headerText="#{properties.value('cu_co_4_datatable_titulo')}">  
+              #{_propuesta.tituloPropuesto}
+            </p:column> 
+
+
+            <p:column width="100" headerText="#{properties.value('cu_co_4_lbl_datatable_presupuesto_soli')}">  
+              <h:outputLabel value="#{_propuesta.presupuestoSolicitado}">
+                <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" maxFractionDigits="0" />
+              </h:outputLabel>                            
+            </p:column> 
+
+            <p:column width="80" headerText="#{properties.value('cu_co_4_lbl_datatable_calificacion')}">  
+              #{_propuesta.sumaValorCriterioIngresado}%
+            </p:column> 
+
+            <p:column width="110" headerText="#{properties.value('cu_co_4_lbl_datatable_estado')}">  
+              <h:selectOneMenu styleClass="gris" id="idListaSelectItemEstado"
+                               value="#{_propuesta.estadoTemporalFinancia}" >  
+                <f:selectItem itemLabel="--Select--" itemValue="" />  
+                <f:selectItems value="#{cuCo4EvaluarPropuestaConvocatoriaFaces.listaItemItemEstadoPropuestaFinancia}" var="_item" />
+                <p:ajax update="idDataTablePropuestas" listener="#{cuCo4EvaluarPropuestaConvocatoriaFaces.handleEstadoTemporalFinanciaSeleccionadaChange}" />  
+
+              </h:selectOneMenu>
+            </p:column> 
+
+            <p:column width="120" headerText="#{properties.value('cu_co_4_lbl_datatable_presupuesto_apro')}">  
+              <p:inputText id="id_valor_financiar_dt" value="#{_propuesta.valorFinanciar}" onkeypress="return soloNumerosInpuText(event);"
+                           maxlength="12" size="12" required="true"
+                           rendered="#{cuCo4EvaluarPropuestaConvocatoriaFaces.mostrarCampoValorFinancia(_propuesta.estadoTemporalFinancia)}">
+                <p:ajax event="blur" update="id_valor_financiar_dt" />
+                <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" maxFractionDigits="0" />
+              </p:inputText>
+            </p:column>
+
+            <p:column width="90" headerText="#{properties.value('cu_co_4_lbl_datatable_add_comentario')}">  
+              <p:commandButton value="Consultar Agregar"
+                               action="#{cuCo4EvaluarPropuestaConvocatoriaFaces.agregaComentariosDesdeFinanciarPropuesta( _propuesta )}" 
+                               immediate="true" />
+            </p:column> 
+
+            <f:facet name="footer">  
+              #{fn:length( cuCo4EvaluarPropuestaConvocatoriaFaces.listaPropuestaConvocatoriasAfinanciar )} #{properties.value('general_mensaje_footer_datatable_count')}                            
+            </f:facet>
+
+          </p:dataTable>
+
+          <br />
+
+          <h:panelGrid columns="2" style="width: 100%" columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+            <p:commandLink value="#{properties.value('cu_ne_6_lbl_agregar_modificar_compromiso')}"
+                           action="#{cuCo4EvaluarPropuestaConvocatoriaFaces.agregarCompromiso}" />
+
+            <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}"  id="idDataTableCompromisos" var="_compromiso" 
+                         value="#{cuCo4EvaluarPropuestaConvocatoriaFaces.listaCompromisoPeriodo}" 
+                         rowIndexVar="idFila" resizableColumns="true"
+                         styleClass="tabla" paginatorPosition="bottom" 
+                         rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                         rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true" >
+
+              <p:column width="30" headerText="#{properties.value('cu_pr_23_lbl_numero')}">  
+                <h:outputLabel value="#{idFila + 1}" />  
+              </p:column>  
+
+              <p:column headerText="#{properties.value('cu_pr_23_lbl_nombre_compromiso')}">  
+                <h:outputLabel value="#{_compromiso.nombreCompromisoNumeroIncrementa}" />  
+              </p:column> 
+
+              <p:column width="100" headerText="#{properties.value('cu_pr_23_lbl_fecha_limite')}">
+                <h:outputLabel value="#{_compromiso.fecha}">
+                  <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+                </h:outputLabel>    
+              </p:column>
+
+              <f:facet name="footer">  
+                #{fn:length( cuCo4EvaluarPropuestaConvocatoriaFaces.listaCompromisoPeriodo )} #{properties.value('general_mensaje_footer_datatable_count')}
+              </f:facet>
+
+            </p:dataTable> 
+
+          </h:panelGrid>
+
+          <br />
+          <p:separator styleClass="separadorBorder" /> 
+          <div class="centrado">
+
+            <p:commandButton value="#{properties.value('cu_co_4_btn_regresar_evaluar')}"
+                             action="#{navigationFaces.redirectCuCo4EvaluarPropuestaConvocatoriaRedirect}" 
+                             immediate="true" />
+
+            <p:commandButton value="#{properties.value('cu_co_4_btn_agregar_guardar_propuestas')}"
+                             action="#{cuCo4EvaluarPropuestaConvocatoriaFaces.guardarPropuestasRevisadas}" 
+                             update=":idForm_include_financiar_propuestas_convocatoria" />
+
+            <p:commandButton value="#{properties.value('cu_co_4_btn_agregar_publicar_propuestas')}"
+                             onclick="varConfirmPublicarFinanciacion.show();" />
+
+          </div>
+          <br />
+          <br />
+        </h:form>
+
+        <p:confirmDialog widgetVar="varConfirmPublicarFinanciacion" header="#{properties.value('cu_co_4_lbl_titulo_confirmacion_publicar_financiar')}" 
+                         message="#{properties.value('cu_co_4_lbl_titulo_confirmacion_mensaje_confirma_financiar')}" > 
+
+          <h:form id="idForm_varConfirmPublicarFinanciacion">
+
+            <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmPublicarFinanciacion">
+              <div class="centrado">
+                <p:commandButton actionListener="#{cuCo4EvaluarPropuestaConvocatoriaFaces.publicarPropuestasRevisadas}" 
+                                 value="#{properties.value('cu_co_4_lbl_btn_si_publicar_financiar')}" immediate="true"
+                                 oncomplete="varConfirmPublicarFinanciacion.hide();"
+                                 update=":idForm_include_financiar_propuestas_convocatoria" />  
+                <p:commandButton value="#{properties.value('cu_co_4_lbl_btn_no_publicar_financiar')}" 
+                                 onclick="varConfirmPublicarFinanciacion.hide();" type="button" />       
+              </div>
+            </p:outputPanel>
+
+          </h:form>
+        </p:confirmDialog>
+
+      </ui:define>
+
+    </ui:composition>
+
+  </body>
+</html>

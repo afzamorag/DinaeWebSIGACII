@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <h:form id="formDetallesTalentoHumanoSemilleroInvestigacion" >
+
+
+    <p:dataTable id="idDataTableDatosHumanoSemillero" var="_recurso"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 value="#{cuIv4ConsultarDetalleSemilleroFaces.listaRecursoHumanoSemillero}" 
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rowIndexVar="idFila" paginatorPosition="bottom"
+                 resizableColumns="true"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true">
+
+      <p:column headerText="Relación con el semillero" width="100" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_recurso.valorTipoRelacionSemillero}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column headerText="Grado" width="50" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_recurso.cargo}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column headerText="Nombres y apellidos" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_recurso.nombres}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column headerText="Estado" width="70" style="color: white; font-size: 13px" >  
+        <h:outputLabel value="#{(_recurso.estado == 'A') ? 'ACTIVO' : 'INACTIVO'}" styleClass="gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column headerText="Fecha de ingreso" style="color: white; font-size: 13px" width="70">  
+        <h:outputLabel value="#{_recurso.fechaRegistro}" styleClass="gris" style="font-size: 13px"> 
+          <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+        </h:outputLabel>  
+      </p:column>
+
+      <p:column headerText="Inactivación" style="color: white; font-size: 13px" width="70">  
+        <h:outputLabel value="#{_recurso.fechaInactiva}" styleClass="gris" style="font-size: 13px"> 
+          <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+        </h:outputLabel>  
+      </p:column>            
+
+      <p:column headerText="Correo electrónico" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_recurso.correoElectronico}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>            
+
+      <p:column headerText="Número telefónico" style="color: white; font-size: 13px" width="70">  
+        <h:outputLabel value="#{_recurso.telefono}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <f:facet name="footer">  
+        #{fn:length( cuIv4ConsultarDetalleSemilleroFaces.listaRecursoHumanoSemillero )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable>        
+  </h:form>
+</html>

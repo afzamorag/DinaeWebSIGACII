@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <h:body>
+    <div class="body">
+      <h:form id="idReseniaInvestigacion">
+        <h:panelGrid columns="2" width="100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                     columnClasses="panelGridColumnaValor_30_porciento,panelGridColumnaValor_70_porciento">                    
+
+          <h:panelGrid columns="2">
+            <h:outputLabel value="*" style="color: red; font-weight: bold" />
+            <h:outputLabel value="#{properties.value('cu_pr_10_lbl_tab4_resumen')}: " styleClass="gris negrilla" />
+          </h:panelGrid>
+          <h:panelGroup>
+            <p:inputTextarea value="#{cuPr10RegistroInformeFinal.reseniaInvestigacion.resumenPalabras}"  
+                             id="idResumenPalabras"
+                             maxlength="4000" counter="contadorResumenPalabras" 
+                             counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                             styleClass="textareaMaximo" cols="100" rows="3" autoResize="false">
+              <f:validateLength minimum="0"  maximum="4000" />
+            </p:inputTextarea>
+            <h:outputText id="contadorResumenPalabras" styleClass="gris" />
+          </h:panelGroup>                    
+
+          <h:panelGrid columns="2">
+            <h:outputLabel value="*" style="color: red; font-weight: bold" />
+            <h:outputLabel value="#{properties.value('cu_pr_10_lbl_tab4_palabras_clave')}: " styleClass="gris negrilla" /> 
+          </h:panelGrid>
+          <h:panelGroup>
+            <p:inputTextarea value="#{cuPr10RegistroInformeFinal.reseniaInvestigacion.palabrasClave}"  
+                             id="idPalabrasClave"
+                             maxlength="512" counter="contadorPalabrasClave" 
+                             counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                             styleClass="textareaMaximo" cols="100" rows="3" autoResize="false">
+              <f:validateLength minimum="0"  maximum="512" />
+            </p:inputTextarea>
+            <h:outputText id="contadorPalabrasClave" styleClass="gris" />
+          </h:panelGroup>                    
+
+          <h:panelGrid columns="2">
+            <h:outputLabel value="*" style="color: red; font-weight: bold" />
+            <h:outputLabel value="#{properties.value('cu_pr_10_lbl_tab4_abstract')}: " styleClass="gris negrilla" />
+          </h:panelGrid>
+          <h:panelGroup>
+            <p:inputTextarea value="#{cuPr10RegistroInformeFinal.reseniaInvestigacion.abstract1}"  
+                             id="idAbstract"
+                             maxlength="512" counter="contadorAbstract"                                          
+                             counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                             styleClass="textareaMaximo" cols="100" rows="3" autoResize="false">
+              <f:validateLength minimum="0"  maximum="512" />
+            </p:inputTextarea>
+            <h:outputText id="contadorAbstract" styleClass="gris" />
+          </h:panelGroup>                    
+
+          <h:panelGrid columns="2">
+            <h:outputLabel value="*" style="color: red; font-weight: bold" />
+            <h:outputLabel value="#{properties.value('cu_pr_10_lbl_tab4_keywords')}: " styleClass="gris negrilla" />
+          </h:panelGrid>
+          <h:panelGroup>
+            <p:inputTextarea value="#{cuPr10RegistroInformeFinal.reseniaInvestigacion.keywords}"  
+                             id="idKeywords"
+                             maxlength="512" counter="contKeywords" 
+                             counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                             styleClass="textareaMaximo" cols="100" rows="3" autoResize="false">
+              <f:validateLength minimum="0"  maximum="512" />
+            </p:inputTextarea>
+            <h:outputText id="contKeywords" styleClass="gris" />
+          </h:panelGroup>                    
+
+          <h:panelGrid columns="2">
+            <h:outputLabel value="*" style="color: red; font-weight: bold" />
+            <h:outputLabel value="#{properties.value('cu_pr_10_lbl_tab4_conclusion')}: " styleClass="gris negrilla" />
+          </h:panelGrid>
+          <h:panelGroup>
+            <p:inputTextarea value="#{cuPr10RegistroInformeFinal.reseniaInvestigacion.conclusion}"  
+                             id="idConclusion"
+                             maxlength="512" counter="contadorConclusion" 
+                             counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                             styleClass="textareaMaximo" cols="100" rows="3" autoResize="false">
+              <f:validateLength minimum="0"  maximum="512" />
+            </p:inputTextarea>
+            <h:outputText id="contadorConclusion" styleClass="gris" />
+          </h:panelGroup>                    
+
+          <h:panelGrid columns="2">
+            <h:outputLabel value="*" style="color: red; font-weight: bold" />
+            <h:outputLabel value="#{properties.value('cu_pr_10_lbl_tab4_recomendaciones')}: " styleClass="gris negrilla" />
+          </h:panelGrid>
+          <h:panelGroup>
+            <p:inputTextarea value="#{cuPr10RegistroInformeFinal.reseniaInvestigacion.recomendaciones}"  
+                             id="idRecomendaciones"
+                             maxlength="512" counter="contadorRecomendaciones" 
+                             counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                             styleClass="textareaMaximo" cols="100" rows="3" autoResize="false">
+              <f:validateLength minimum="0"  maximum="512" />
+            </p:inputTextarea>
+            <h:outputText id="contadorRecomendaciones" styleClass="gris" />
+          </h:panelGroup>    
+        </h:panelGrid>
+
+        <br />
+        <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+        <br />  
+
+        <p:separator styleClass="separadorBorder" /> 
+        <div class="centrado">
+
+          <p:commandButton value="#{properties.value('cu_pr_3_lbl_btn_regresar')}" id="idBtnRegresarProyecto"
+                           action="#{cuPr10RegistroInformeFinal.regresarCuPr19()}" immediate="true"/>
+
+          <p:commandButton value="#{properties.value('cu_pr_10_lbl_btn_guardar')}"
+                           action="#{cuPr10RegistroInformeFinal.guardar(3)}" id="btnGuardarReseniaInvestigacion"
+                           update="@form"/>
+
+        </div>
+
+      </h:form>
+    </div>
+  </h:body>
+</html>
+

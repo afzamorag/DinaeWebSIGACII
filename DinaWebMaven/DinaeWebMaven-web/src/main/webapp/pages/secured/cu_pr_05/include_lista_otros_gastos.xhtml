@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+  <p:dataTable var="otro" value="#{registrarPresupuesto.listaOtrosGastosProyectoModel}"
+               rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+               id="tablaOtrosGastosProyectos" selectionMode="single"
+               emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+               selection="#{registrarPresupuesto.otrosGastosProyectoDTO}"
+               style="width: 100%;" paginator="true"
+               resizableColumns="true" rowIndexVar="idFila"
+               paginatorPosition="bottom"
+               rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+    <p:ajax event="rowSelect" listener="#{registrarPresupuesto.cargarDatosOtrosGastosProyecto}"   
+            update=":tabView:formOtrosGastosProyecto"/>  
+    <p:ajax event="rowUnselect" listener="#{registrarPresupuesto.noSeleccionOtrosGastosProyecto}" 
+            update=":tabView:formOtrosGastosProyecto:tablaOtrosGastosProyectos"/>
+
+    <p:column headerText="#{properties.value('cu_pr_5_lbl_column_numero')}" width="25" style="color: white">
+      <h:outputText value="#{idFila + 1}" styleClass="gris" />
+    </p:column>
+    <p:column headerText="#{properties.value('cu_pr_5_lbl_tipo_rubro')}" style="color: white">
+      <h:outputText value="#{registrarPresupuesto.tomarValorConstante(otro.idTipoRubro)}" styleClass="alineadoIzquierda gris" />
+    </p:column>
+    <p:column headerText="#{properties.value('cu_pr_5_lbl_valor')}" width="90" style="color: white">
+      <h:outputText value="#{otro.valor}" styleClass="alineadoDerecha gris" >                                                  
+        <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" />
+      </h:outputText>    
+    </p:column>
+    <p:column headerText="#{properties.value('cu_pr_5_lbl_tipo')}" width="75" style="color: white">
+      <h:outputText value="#{registrarPresupuesto.tomarValorConstante(otro.idTipoEspecieEfectivo)}" styleClass="gris" />
+    </p:column>
+    <p:column headerText="#{properties.value('cu_pr_5_lbl_fuente')}" width="100" style="color: white">
+      <h:outputText value="#{otro.nombreFuente}" styleClass="gris" />
+    </p:column>
+    <p:column width="60" headerText="#{properties.value('cu_pr_19_lbl_tabla_acciones')}" style="color: white">
+
+      <div class="centrado">
+        <p:commandLink value="#{properties.value('cu_pr_10_lbl_tab3_btn_eliminar')}" 
+                       immediate="true" rendered="#{!registrarPresupuesto.soloConsulta}"
+                       oncomplete="PF('varConfirmEliminarGastos').show()">  
+          <f:setPropertyActionListener value="#{otro}" target="#{registrarPresupuesto.otrosGastosProyectoDTO}" />  
+        </p:commandLink>
+      </div>
+
+    </p:column>
+    <f:facet name="footer">  
+      #{fn:length( registrarPresupuesto.listaOtrosGastosProyectoDTO )} #{properties.value('general_mensaje_footer_datatable_count')}
+    </f:facet>
+  </p:dataTable>
+
+</html>
+

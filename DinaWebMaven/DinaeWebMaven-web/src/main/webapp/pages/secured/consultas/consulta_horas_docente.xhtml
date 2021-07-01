@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    template="/templates/plantillaPrincipal.xhtml">
+    <ui:define
+        name="content">
+        <p:panel 
+            id="main"
+            styleClass="ui-fluid">
+            <h:form
+                id="frmlist"
+                prependId="false"
+                rendered="#{horasDocenteController.renderForm and horasDocenteController.renderGeneral}">
+                <h:outputText
+                    styleClass="gris negrilla"
+                    value="#{bundle['horasDocente.titulo.lbl']}"/>
+                <p:separator />
+                <p:panel 
+                    id="pnlsearch"
+                    styleClass="ui-fluid"
+                    rendered="#{!horasDocenteController.renderComponent}">
+                    <p:panelGrid 
+                        columns="2"
+                        layout="grid"
+                        columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2"
+                        styleClass="ui-panelgrid-blank">
+                        <h:outputLabel 
+                            value="#{bundle['horasDocente.fechainicial.lbl']}" 
+                            styleClass="gris negrilla"/>
+                        <p:calendar 
+                            pattern="#{bundle['pattern.default.date']}" 
+                            locale="es" 
+                            style="text-align: center"
+                            id="dateFechaInicioConsulta"                               
+                            navigator="true" 
+                            disabled="#{!horasDocenteController.renderGeneral}"
+                            value="#{horasDocenteController.fechaInicioConsulta}">
+                        </p:calendar>
+                        <h:outputLabel 
+                            value="#{bundle['horasDocente.fechafinal.lbl']}"
+                            styleClass="gris negrilla"/>
+                        <p:calendar 
+                            pattern="#{bundle['pattern.default.date']}" 
+                            locale="es" 
+                            style="text-align: center"
+                            id="dateFechaFinConsulta"                                
+                            navigator="true" 
+                            disabled="#{!horasDocenteController.renderGeneral}"
+                            value="#{horasDocenteController.fechaFinConsulta}">
+                        </p:calendar>    
+                        <h:outputLabel 
+                            value="#{bundle['horasDocente.fecharegistro.lbl']}"
+                            styleClass="gris negrilla"/>
+                        <p:calendar 
+                            pattern="#{bundle['pattern.default.date']}" 
+                            locale="es" 
+                            style="text-align: center"
+                            id="dateFechaCreaConsulta"                                
+                            navigator="true" 
+                            disabled="#{!horasDocenteController.renderGeneral}"
+                            value="#{horasDocenteController.fechaCreaConsulta}">
+                        </p:calendar> 
+                    </p:panelGrid>
+                    <p:panelGrid 
+                        columns="2"
+                        layout="grid"
+                        columnClasses="ui-grid-col-2,ui-grid-col-2"                     
+                        style="margin-top: 10px"
+                        styleClass="ui-panelgrid-blank">
+                        <p:commandButton 
+                            id="btnBuscar"
+                            value="#{properties.value('general_lbl_btn_buscar')}" 
+                            actionListener="#{horasDocenteController.findGeneral()}" 
+                            style="border: none"
+                            icon="ui-icon-search"
+                            update=":main"/> 
+                    </p:panelGrid>
+                </p:panel>
+                <p:dataTable 
+                    id="dtListGeneral"
+                    value="#{horasDocenteController.listGeneral}"
+                    var="var"                    
+                    rows="10"
+                    reflow="true"                    
+                    style="font-size: smaller" 
+                    rendered="#{!horasDocenteController.renderComponent}">
+                    <p:column 
+                        headerText="#{bundle['horasDocente.fechainicial.lbl']}"                        
+                        style="width: 15%; text-align: center">
+                        <h:outputText 
+                            value="#{horasDocenteController.fechaInicioConsulta}">
+                            <f:convertDateTime 
+                                type="date" 
+                                pattern="#{bundle['pattern.default.date']}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['horasDocente.fechafinal.lbl']}"
+                        style="width: 15%; text-align: center">
+                        <h:outputText 
+                            value="#{horasDocenteController.fechaFinConsulta}">
+                            <f:convertDateTime 
+                                type="date" 
+                                pattern="#{bundle['pattern.default.date']}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['horasDocente.fecharegistro.lbl']}"
+                        style="width: 15%; text-align: center">
+                        <h:outputText 
+                            value="#{horasDocenteController.fechaCreaConsulta}">
+                            <f:convertDateTime 
+                                type="date" 
+                                pattern="#{bundle['pattern.default.date']}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['proceso']}"
+                        style="width: 15%; text-align: center">
+                        <h:outputText 
+                            value="#{var.proceso == 'F' ? 'FORMACIÓN' : 'CAPACITACIÓN'}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['commons.lbl.opciones']}"
+                        style="width: 40%; text-align: center">
+                        <p:commandLink 
+                            id="rep2" 
+                            update=":main" 
+                            action="#{horasDocenteController.findAllListByFecha()}" 
+                            style="margin-right:20px;">
+                            <h:outputText 
+                                value="Reporte General" />
+                        </p:commandLink>
+                        <p:commandLink 
+                            id="rep1" 
+                            update=":main" 
+                            action="#{horasDocenteController.findListByFecha()}" 
+                            style="margin-right:20px;">
+                            <h:outputText 
+                                value="Reporte Agrupado" />
+                        </p:commandLink>                        
+                    </p:column>
+                </p:dataTable> 
+                <p:dataTable 
+                    id="dtList"
+                    value="#{horasDocenteController.list}"
+                    var="record"
+                    paginator="true"
+                    paginatorPosition="bottom"
+                    rows="100"
+                    reflow="true"
+                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                    rowsPerPageTemplate="10,50,100"
+                    style="font-size: smaller" 
+                    rendered="#{horasDocenteController.renderComponent}"
+                    selectionMode="single"
+                    selection="#{horasDocenteController.horasDocenteSigacSelected}"
+                    rowKey="#{record.id}">
+                    <f:facet
+                        name="header">
+                        #{bundle['horasDocente.titulo.tbl']}
+                    </f:facet>  
+                    <p:ajax 
+                        event="rowSelect" 
+                        listener="#{horasDocenteController.onRowSelect}" 
+                        update=":main" />
+                    <p:column 
+                        headerText="#{bundle['identificacion']}"
+                        sortBy="#{record.identificacion}"
+                        filterMatchMode="contains"
+                        filterBy="#{record.identificacion}"
+                        style="width: 10%">
+                        <h:outputText 
+                            value="#{record.identificacion}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['nombres']}"
+                        sortBy="#{record.nombres}"                        
+                        style="width: 30%">
+                        <h:outputText 
+                            value="#{record.nombres}"/>
+                    </p:column> 
+                    <p:column 
+                        headerText="#{bundle['escuela']}"
+                        sortBy="#{record.escuela}"
+                        filterMatchMode="contains"
+                        filterBy="#{record.escuela}"                        
+                        style="width: 20%">
+                        <h:outputText 
+                            value="#{record.escuela}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['proceso']}"
+                        sortBy="#{record.proceso}"
+                        filterMatchMode="contains"
+                        filterBy="#{record.proceso}"                        
+                        style="width: 20%">
+                        <h:outputText 
+                            value="#{record.proceso == 'C' ? 'CAPACITACIÓN' : 'FORMACIÓN'}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['horasDocente.titulo.lbl']}"                        
+                        style="width: 10%">
+                        <h:outputText 
+                            value="#{record.horasDictadas}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['horasDoncente.preliquidacion.lbl']}"                                                                       
+                        style="width: 10%">
+                        <h:outputText 
+                            value="#{record.horasLiquidadas}"/>
+                    </p:column>
+                </p:dataTable>
+                <p:panelGrid 
+                    columns="2"
+                    layout="grid"
+                    columnClasses="ui-grid-col-2,ui-grid-col-2"                     
+                    style="margin-top: 10px"
+                    styleClass="ui-panelgrid-blank">
+                    <p:commandButton 
+                        id="btnVolver"
+                        value="#{bundle['commons.btn.back']}" 
+                        actionListener="#{horasDocenteController.onBack()}" 
+                        style="border: none"
+                        icon="ui-icon-arrowreturnthick-1-w"
+                        update="@form :dtList"                            
+                        rendered="#{horasDocenteController.renderComponent}"/>
+                    <p:commandButton                         
+                        ajax="false" 
+                        value="#{bundle['commons.btn.report']}"                    
+                        style="border: none"
+                        icon="ui-icon-document" 
+                        rendered="#{horasDocenteController.renderComponent}">
+                        <p:dataExporter 
+                            type="csv" 
+                            target="dtList" 
+                            fileName="#{bundle['horasDoncente.reporte.title']}_#{appController.sysdate}" 
+                            pageOnly="false" />
+                    </p:commandButton> 
+                </p:panelGrid>
+            </h:form>
+            <h:form
+                id="frmlistAll"
+                prependId="false"
+                rendered="#{horasDocenteController.renderForm and !horasDocenteController.renderGeneral}">
+                <p:dataTable 
+                    id="dtListDetailsAll"
+                    value="#{horasDocenteController.listAll}"
+                    var="recordDetail"
+                    paginator="true"
+                    paginatorPosition="bottom"
+                    rows="100"
+                    reflow="true"
+                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                    rowsPerPageTemplate="10,50,100"
+                    style="font-size: smaller; margin-top: 10px">
+                    <p:column 
+                        headerText="#{bundle['escuela']}"                                                                      
+                        style="width: 5%">
+                        <h:outputText 
+                            value="#{recordDetail.escuela}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['identificacion']}"                                                                      
+                        style="width: 8%">
+                        <h:outputText 
+                            value="#{recordDetail.identificacion}"/>
+                    </p:column>                    
+                    <p:column 
+                        headerText="#{bundle['nombres']}"                                                                      
+                        style="width: 19%">
+                        <h:outputText 
+                            value="#{recordDetail.nombres}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['proceso']}"                                                                      
+                        style="width: 9%">
+                        <h:outputText 
+                            value="#{recordDetail.proceso == 'C' ? 'CAPACITACIÓN' : 'FORMACIÓN'}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['horasDocente.asignatura.lbl']}"                                                                      
+                        style="width: 27%">
+                        <h:outputText 
+                            value="#{recordDetail.eventoAsignatura}"/>
+                    </p:column>                    
+                    <p:column 
+                        headerText="#{bundle['horasDocente.curso.lbl']}"                                                                      
+                        style="width: 5%; text-align: center">
+                        <h:outputText 
+                            value="#{recordDetail.curso}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['horasDocente.seccion.lbl']}"                                                                      
+                        style="width: 6%; text-align: center">
+                        <h:outputText 
+                            value="#{recordDetail.seccion}"/>
+                    </p:column>                    
+                    <p:column 
+                        headerText="#{bundle['horasDocente.fechaimparte.lbl']}"                                                                      
+                        style="width: 8%; text-align: center">
+                        <h:outputText 
+                            value="#{recordDetail.fechaImparte}">
+                            <f:convertDateTime 
+                                type="date" 
+                                pattern="#{bundle['pattern.default.date']}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['horasDocente.fecharegistro.lbl']}"                                                                      
+                        style="width: 8%; text-align: center">
+                        <h:outputText 
+                            value="#{recordDetail.fechaCrea}">
+                            <f:convertDateTime 
+                                type="date" 
+                                pattern="#{bundle['pattern.default.date']}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['horasDocente.horas.lbl']}"                                                                      
+                        style="width: 5%; text-align: center">
+                        <h:outputText 
+                            value="#{recordDetail.horasDictadas}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['horasDocente.horas.lbl']}"                                                                      
+                        style="width: 5%; text-align: center">
+                        <h:outputText 
+                            value="#{recordDetail.modalidad}"/>
+                    </p:column>
+                </p:dataTable>
+                <p:panelGrid 
+                    columns="2"
+                    layout="grid"
+                    columnClasses="ui-grid-col-2, ui-grid-col-2"                     
+                    style="margin-top: 10px"
+                    styleClass="ui-panelgrid-blank">
+                    <p:commandButton 
+                        id="btnVolverGeneal"
+                        value="#{bundle['commons.btn.back']}" 
+                        actionListener="#{horasDocenteController.onBackGeneral()}" 
+                        style="border: none"
+                        icon="ui-icon-arrowreturnthick-1-w"
+                        update=":main"/> 
+                    <p:commandButton                         
+                        ajax="false" 
+                        value="#{bundle['commons.btn.report']}"                    
+                        style="border: none"
+                        icon="ui-icon-document"                         >
+                        <p:dataExporter 
+                            type="csv" 
+                            target="dtListDetailsAll" 
+                            fileName="#{bundle['horasDoncente.reporte.title']}_#{appController.sysdate}" 
+                            pageOnly="false" />
+                    </p:commandButton> 
+                </p:panelGrid>
+            </h:form>
+            <h:form
+                id="frmdetails"
+                prependId="false"
+                rendered="#{!horasDocenteController.renderForm}">
+                <p:panel 
+                    id="pnldetalledocente"
+                    styleClass="ui-fluid">
+                    <h:outputText
+                        styleClass="gris negrilla"
+                        value="#{bundle['horasDocente.titulo.lbl']}"/>
+                    <p:separator/>
+                    <p:panelGrid 
+                        columns="2"
+                        layout="grid"
+                        columnClasses="ui-grid-col-2,ui-grid-col-4"                     
+                        style="margin-top: 10px"
+                        styleClass="ui-panelgrid-blank">
+                        <p:outputLabel
+                            value="#{bundle['escuela']}"
+                            styleClass="gris negrilla"/>
+                        <p:outputLabel
+                            value="#{horasDocenteController.horasDocenteSigacSelected.escuela}"/>
+                        <p:outputLabel
+                            value="#{bundle['nombres']}"
+                            styleClass="gris negrilla"/>
+                        <p:outputLabel
+                            value="#{horasDocenteController.horasDocenteSigacSelected.nombres}"/>
+                        <p:outputLabel
+                            value="#{bundle['identificacion']}"
+                            styleClass="gris negrilla"/>
+                        <p:outputLabel
+                            value="#{horasDocenteController.horasDocenteSigacSelected.identificacion}"/>
+                    </p:panelGrid>
+                </p:panel>
+                <p:dataTable 
+                    id="dtListDetails"
+                    value="#{horasDocenteController.listDetail}"
+                    var="recordDetail"
+                    paginator="true"
+                    paginatorPosition="bottom"
+                    rows="100"
+                    reflow="true"
+                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                    rowsPerPageTemplate="10,50,100"
+                    style="font-size: x-small; margin-top: 10px">
+                    <p:column 
+                        headerText="#{bundle['proceso']}"                                                                      
+                        style="width: 10%">
+                        <h:outputText 
+                            value="#{recordDetail.proceso == 'C' ? 'CAPACITACIÓN' : 'FORMACIÓN'}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['horasDocente.asignatura.lbl']}"                                                                      
+                        style="width: 43%">
+                        <h:outputText 
+                            value="#{recordDetail.eventoAsignatura}"/>
+                    </p:column>                    
+                    <p:column 
+                        headerText="#{bundle['horasDocente.curso.lbl']}"                                                                      
+                        style="width: 5%; text-align: center">
+                        <h:outputText 
+                            value="#{recordDetail.curso}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['horasDocente.seccion.lbl']}"                                                                      
+                        style="width: 8%; text-align: center">
+                        <h:outputText 
+                            value="#{recordDetail.seccion}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['horasDocente.semana.lbl']}"                                                                      
+                        style="width: 8%; text-align: center">
+                        <h:outputText 
+                            value="#{recordDetail.semana}"/>                  
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['horasDocente.fechaimparte.lbl']}"                                                                      
+                        style="width: 10%; text-align: center">
+                        <h:outputText 
+                            value="#{recordDetail.fechaImparte}">
+                            <f:convertDateTime 
+                                type="date" 
+                                pattern="#{bundle['pattern.default.date']}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['horasDocente.fecharegistro.lbl']}"                                                                      
+                        style="width: 10%; text-align: center">
+                        <h:outputText 
+                            value="#{recordDetail.fechaCrea}">
+                            <f:convertDateTime 
+                                type="date" 
+                                pattern="#{bundle['pattern.default.date']}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['horasDocente.horas.lbl']}"                                                                      
+                        style="width: 5%; text-align: center">
+                        <h:outputText 
+                            value="#{recordDetail.horasDictadas}"/>
+                    </p:column>
+                </p:dataTable> 
+                <p:panelGrid 
+                    columns="2"
+                    layout="grid"
+                    columnClasses="ui-grid-col-2,ui-grid-col-2"                     
+                    style="margin-top: 10px"
+                    styleClass="ui-panelgrid-blank">
+                    <p:commandButton 
+                        id="btnVolverDetalle"
+                        value="#{bundle['commons.btn.back']}" 
+                        actionListener="#{horasDocenteController.onBackDetail()}" 
+                        style="border: none"
+                        icon="ui-icon-arrowreturnthick-1-w"
+                        update=":main"/> 
+                    <p:commandButton                         
+                        ajax="false" 
+                        value="#{bundle['commons.btn.report']}"                    
+                        style="border: none"
+                        icon="ui-icon-document">
+                        <p:dataExporter 
+                            type="csv" 
+                            target="dtListDetails" 
+                            fileName="#{bundle['horasDoncente.reporte.title']}_#{appController.sysdate}_#{horasDocenteController.horasDocenteSigacSelected.identificacion}" 
+                            pageOnly="false" />
+                    </p:commandButton> 
+                </p:panelGrid>
+            </h:form>
+        </p:panel>
+    </ui:define>
+</ui:composition>

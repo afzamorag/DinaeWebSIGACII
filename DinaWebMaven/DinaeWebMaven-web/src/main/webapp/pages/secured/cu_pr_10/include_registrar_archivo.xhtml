@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <h:body>
+    <h:form id="idFormularioRegistroArchivo">
+      <h:panelGrid columns="2" style="width:100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                   columnClasses="panelGridColumnaValor_30_porciento,panelGridColumnaValor_70_porciento">
+        <h:panelGrid columns="2">
+          <h:outputLabel value="*" style="color: red; font-weight: bold" />
+          <h:outputLabel value="#{properties.value('cu_pr_10_lbl_tab2_archivo')}: " styleClass="gris negrilla" style="text-align: right" />
+        </h:panelGrid>
+        <h:panelGroup id="panelGroupLinkArchivoInformeFinal">
+          <p:commandLink ajax="false" immediate="true" id="idCommanLinkDescargaArchivo" 
+                         rendered="#{cuPr10RegistroInformeFinal.mostrarEnlaceDescarga}">
+            <h:outputLabel value="#{cuPr10RegistroInformeFinal.informeAvance.nombreArchivo}" />
+            <p:fileDownload value="#{cuPr10RegistroInformeFinal.downloadContentProperty}" />
+          </p:commandLink>
+          <h:outputLabel id="idNombreArchivoCargado" styleClass="green" rendered="#{!cuPr10RegistroInformeFinal.mostrarEnlaceDescarga}" 
+                         value="#{cuPr10RegistroInformeFinal.nombreArchivoInformeFinalProyecto}" />
+
+          <p:fileUpload dragDropSupport="true" fileUploadListener="#{cuPr10RegistroInformeFinal.handleFileUpload}"
+                        fileLimit="1" update="panelGroupLinkArchivoInformeFinal idCommanLinkDescargaArchivo idNombreArchivoCargado"
+                        label="#{properties.value('cu_pr_4_lbl_examinar')}" multiple="false"
+                        fileLimitMessage="#{properties.value('cu_pr_4_lbl_mensaje_maximo_numero_archivo')}"
+                        uploadLabel="#{properties.value('cu_pr_4_lbl_subiendo')}" 
+                        invalidFileMessage="#{properties.value('cu_pr_4_lbl_archivo_invalido')}"
+                        invalidSizeMessage="#{properties.value('cu_pr_4_lbl_tamanio_invalido_archivo')}" 
+                        mode="advanced" auto="false" cancelLabel="#{properties.value('cu_pr_4_lbl_cancelar')}"  />
+        </h:panelGroup>
+        <h:panelGrid columns="2">
+          <h:outputLabel value="*" style="color: red; font-weight: bold" />
+          <h:outputLabel value="#{properties.value('cu_pr_10_lbl_tab2_desc')}: " styleClass="gris negrilla" style="text-align: right" />
+        </h:panelGrid>
+        <h:panelGroup>
+          <p:inputTextarea value="#{cuPr10RegistroInformeFinal.informeAvance.tipoContenidoArchivo}"  
+                           id="descripcionArchivo"
+                           maxlength="200" counter="contadorDesc"
+                           cols="100" rows="3" autoResize="false"
+                           counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                           styleClass="textareaMaximo">
+            <f:validateLength minimum="1"  maximum="200" />
+          </p:inputTextarea>
+          <h:outputText id="contadorDesc" styleClass="gris" />
+        </h:panelGroup>
+      </h:panelGrid>
+      <br />
+      <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />    
+      <br />
+      <p:separator styleClass="separadorBorder" /> 
+      <div class="centrado">
+
+        <p:commandButton value="#{properties.value('cu_pr_3_lbl_btn_regresar')}" id="idBtnRegresarProyecto"
+                         action="#{cuPr10RegistroInformeFinal.regresarCuPr19()}" immediate="true"/>
+
+        <p:commandButton value="#{properties.value('cu_pr_10_lbl_btn_guardar')}"
+                         action="#{cuPr10RegistroInformeFinal.guardar(1)}" id="btnGuardarArchivo"
+                         update="@form"/>
+
+      </div>
+    </h:form>
+  </h:body>
+</html>

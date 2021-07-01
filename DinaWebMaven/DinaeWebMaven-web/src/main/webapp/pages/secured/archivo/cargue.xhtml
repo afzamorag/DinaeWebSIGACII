@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+      <ui:define name="content">
+
+        <h:form >
+
+          <div class="fixed-menu">                        
+            <div class="right-col">
+              <h2>
+                Cargue de archivos
+              </h2>
+            </div>
+          </div>
+
+          <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                       columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+            <h:outputLabel styleClass="gris negrilla" value="Archivos" />                        
+            <p:fileUpload dragDropSupport="true" 
+                          fileUploadListener="#{cargueArchivoFaces.handleFileUpload}"                                      
+                          multiple="true"
+                          mode="advanced" auto="false" />
+          </h:panelGrid>
+
+
+        </h:form>
+
+      </ui:define>
+    </ui:composition>
+
+  </body>
+</html>

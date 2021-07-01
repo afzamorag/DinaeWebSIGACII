@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+  <h:form id="formIncludeAgregarIndicadores" >
+
+    <h:outputLabel value="#{properties.value('cu_pr_1_lbl_otros_indicadores')}" styleClass="green negrilla" />
+
+    <h:panelGroup>
+      <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                   columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaLabel_70_porciento">
+
+        <h:outputLabel for="idcu_pr_1_lbl_datatable_nombre_del_indicador" value="#{properties.value('cu_pr_1_lbl_datatable_nombre_del_indicador')}" styleClass="gris negrilla" />
+        <p:inputText size="55" maxlength="100" required="true" id="idcu_pr_1_lbl_datatable_nombre_del_indicador" 
+                     value="#{cuPr21RegistrarPlanDeTrabajo.indicadoresPlanTrabajoSeleccionado.nombreIndicador}" />
+
+      </h:panelGrid>    
+      <br /><br />
+
+      <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                   columnClasses="panelGridColumnaLabel_10_porciento,panelGridColumnaLabel_90_porciento">
+
+        <h:outputLabel value="" />
+        <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                     columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaLabel_70_porciento">
+
+          <h:outputLabel for="idcu_pr_1_lbl_nombre_del_numerador" value="#{properties.value('cu_pr_1_lbl_nombre_del_numerador')}" styleClass="gris negrilla" />
+          <p:inputText size="40" maxlength="50" required="true" id="idcu_pr_1_lbl_nombre_del_numerador" 
+                       value="#{cuPr21RegistrarPlanDeTrabajo.indicadoresPlanTrabajoSeleccionado.nombreNumerador}" />
+
+          <h:outputLabel value="" />
+          <h:outputLabel value="___________________________________" />
+
+          <h:outputLabel for="idcu_pr_1_lbl_nombre_del_denominador" value="#{properties.value('cu_pr_1_lbl_nombre_del_denominador')}" styleClass="gris negrilla" />
+          <p:inputText size="40" maxlength="50" required="true" id="idcu_pr_1_lbl_nombre_del_denominador" 
+                       value="#{cuPr21RegistrarPlanDeTrabajo.indicadoresPlanTrabajoSeleccionado.nombreDenominador}" />
+
+        </h:panelGrid>
+
+      </h:panelGrid>
+
+      <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+      <div class="centrado">
+
+        <p:commandButton value="#{properties.value('cu_pr_1_lbl_btn_agregar_indicador')}" id="idBtnRegresarProyecto"
+                         action="#{cuPr21RegistrarPlanDeTrabajo.guardarIndicadoresPlanTrabajo}"
+                         update="@form" />
+      </div>
+    </h:panelGroup>
+
+    <br />
+
+    <ui:include src="include_lista_indicadores_plan_trabajo_otros.xhtml"/>
+
+    <br />
+    <br />
+    <p:separator styleClass="separadorBorder" /> 
+
+    <div class="centrado">
+
+      <p:commandButton value="Regresar" immediate="true"
+                       action="#{cuPr21RegistrarPlanDeTrabajo.regresar}" 
+                       update="@form"/>
+
+    </div>
+
+  </h:form>
+
+  <p:confirmDialog widgetVar="varConfirmEliminarOtroIndicadorPlanTrabajo" header="#{properties.value('cu_pr_1_lbl_titulo_confirmacion_eliminar_titulo_indica')}" 
+                   message="#{properties.value('cu_pr_1_lbl_titulo_confirmacion_mensaje_eliminar_indicador')}" > 
+
+    <h:form id="idForm_varConfirmEliminarOtroIndicadorPlanTrabajo">
+
+      <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmEliminarOtroIndicadorPlanTrabajo">
+        <div class="centrado">
+          <p:commandButton actionListener="#{cuPr21RegistrarPlanDeTrabajo.eliminarIndicadorOtro}" 
+                           value="#{properties.value('cu_pr_1_lbl_btn_confirma_si_publicar_indica')}" immediate="true"
+                           oncomplete="varConfirmEliminarOtroIndicadorPlanTrabajo.hide();"
+                           update=":tabView:formIncludeAgregarIndicadores:dtcargarListaIndicadoresProyectoOtros" />  
+          <p:commandButton value="#{properties.value('cu_pr_1_lbl_btn_confirma_no_publicar_indica')}" 
+                           onclick="varConfirmEliminarOtroIndicadorPlanTrabajo.hide();" type="button" />       
+        </div>
+      </p:outputPanel>
+
+    </h:form>
+  </p:confirmDialog>
+
+</html>

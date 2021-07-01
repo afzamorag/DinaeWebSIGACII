@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    <p:panel>
+        <h:form
+            id="frmConvocatoria"
+            prependId="false">
+            <p:growl 
+                id="msgs" 
+                showDetail="true"/>
+            <h:outputText 
+                value="#{bundle['siedueventoescuela.convocatoria.title']}: #{sieduEventoEscuelaController.selected.eveeCapa.carrera.descripcion}"
+                styleClass="negrilla"/>
+            <p:separator />           
+            <p:panel
+                rendered="#{sieduEventoEscuelaController.renderButtom}">
+                <p:panelGrid
+                    id="pnlListConvocatoria"
+                    layout="grid" 
+                    columns="4"
+                    columnClasses="ui-grid-col-1, ui-grid-col-5, ui-grid-col-2, ui-grid-col-4" 
+                    styleClass="ui-panelgrid-blank"> 
+                    <p:outputLabel                        
+                        value="#{bundle['unidad']}"
+                        for="listaUnidadConvoca"/>
+                    <h:panelGroup>
+                        <p:selectOneMenu
+                            id="listaUnidadConvoca"
+                            value="#{sieduConvocatoriaEventoController.selected.coneUdeUdepe}"
+                            converter="unidadDependenciaConverter"
+                            filter="true"
+                            filterMatchMode="contains"
+                            required="true">                      
+                            <f:selectItem 
+                                noSelectionOption="true"/>
+                            <f:selectItems 
+                                value="#{sieduConvocatoriaEventoController.unidades()}" 
+                                var="unidadConvoca" 
+                                itemLabel="#{unidadConvoca.unidad.descripcionDependencia}" 
+                                itemValue="#{unidadConvoca.unidad}"/>            
+                        </p:selectOneMenu>
+                        <p:message
+                            for="listaUnidadConvoca"/>
+                    </h:panelGroup>
+                    <p:outputLabel                        
+                        value="#{bundle['tipo.documento']}"
+                        for="listaTipoDocumentoConvoca"/>
+                    <h:panelGroup>
+                        <p:selectOneMenu
+                            id="listaTipoDocumentoConvoca"
+                            value="#{sieduConvocatoriaEventoController.selected.tipoDocumento}" 
+                            converter="dominioConverter"
+                            filter="true"
+                            filterMatchMode="contains"
+                            required="true">                      
+                            <f:selectItem 
+                                noSelectionOption="true"/>
+                            <f:selectItems 
+                                value="#{sieduConvocatoriaEventoController.lstDocuments}" 
+                                var="tipoDocumentoConvoca" 
+                                itemLabel="#{tipoDocumentoConvoca.nombre}" 
+                                itemValue="#{tipoDocumentoConvoca}"/>
+                        </p:selectOneMenu>
+                        <p:message
+                            for="listaTipoDocumentoConvoca"/>
+                    </h:panelGroup>
+                    <p:outputLabel                        
+                        value="#{bundle['numero.documento']}"
+                        for="nroDocumentoConvoca"/>
+                    <h:panelGroup>
+                        <p:inputText 
+                            id="nroDocumentoConvoca" 
+                            value="#{sieduConvocatoriaEventoController.selected.coneNroComu}"
+                            required="true"/>
+                        <p:message
+                            for="nroDocumentoConvoca"/>
+                    </h:panelGroup>
+                    <p:outputLabel
+                        id="lblnroConvoca"
+                        value="#{bundle['siedueventoescuelaconvocados.total']}"
+                        for="nroConvoca"/>
+                    <h:panelGroup>
+                        <p:inputText 
+                            id="nroConvoca" 
+                            value="#{sieduConvocatoriaEventoController.selected.coneNroConvocados}"
+                            required="true">
+                            <p:ajax
+                                event="blur"
+                                process="@this"
+                                update="nroConvocamsg nroConvoca lblnroConvoca"/>
+                            <f:validateLongRange
+                                minimum="1"/>
+                        </p:inputText>
+                        <p:message
+                            id="nroConvocamsg"
+                            for="nroConvoca"/>
+                    </h:panelGroup>
+                </p:panelGrid>
+                <f:facet
+                    name="footer">
+                    <p:panelGrid
+                        columns="1"
+                        layout="grid" 
+                        columnClasses="ui-grid-col-2" 
+                        styleClass="ui-panelgrid-blank">                            
+                        <p:commandButton 
+                            id="btnCreateConvoca"
+                            value="#{bundle['commons.btn.add']}"
+                            title="#{bundle['commons.btn.add']}"
+                            icon="ui-icon-plus"
+                            actionListener="#{sieduConvocatoriaEventoController.onSave()}"
+                            update=":tvDatos:frmConvocatoria :tvDatos:dtListConvocatoria"
+                            style="border: none"/>             
+                    </p:panelGrid>
+                </f:facet>
+            </p:panel>
+            <p:separator /> 
+            <p:dataTable 
+                id="dtListConvocatoria"
+                value="#{sieduConvocatoriaEventoController.list}"
+                var="record"
+                paginator="true" 
+                paginatorPosition="bottom"
+                rows="10"               
+                rowKey="#{record.coneCone}"
+                reflow="true"                
+                style="text-align: justify; font-size: smaller">               
+                <p:column 
+                    headerText="#{bundle['unidad']}"
+                    sortBy="#{record.coneUdeUdepe}">
+                    <h:outputText 
+                        value="#{record.coneUdeUdepe.descripcionDependencia}"/>
+                </p:column>
+                <p:column 
+                    headerText="#{bundle['tipo.documento']}"
+                    sortBy="#{record.tipoDocumento.nombre}"
+                    style="text-align: center; width: 20%">
+                    <h:outputText 
+                        value="#{record.tipoDocumento.nombre}"/>
+                </p:column>        
+                <p:column  
+                    headerText="#{bundle['numero.documento']}" 
+                    sortBy="#{record.coneNroComu}"
+                    style="text-align: center; width: 15%">
+                    <h:outputText value="#{record.coneNroComu}"/>
+                </p:column>      
+                <p:column 
+                    headerText="#{bundle['siedueventoescuelaconvocados.total']}"
+                    style="text-align: center; width: 10%">                    
+                    <h:outputText value="#{record.coneNroConvocados}"/>                        
+                </p:column>
+                <p:column 
+                    headerText="#{bundle['siedueventoescuelaconvocados.presentados']}"
+                    style="text-align: center; width: 10%">                  
+                    <h:outputText 
+                        value="#{record.coneNroPresentados}"/>                        
+                </p:column>                      
+                <p:column 
+                    headerText="#{bundle['commons.lbl.delete']}"
+                    rendered="#{sieduEventoEscuelaController.renderButtom}"
+                    style="text-align: center; width: 10%">
+                    <h:panelGroup>
+                        <p:commandLink 
+                            value="#{bundle['commons.btn.remove']}" 
+                            title="#{bundle['commons.btn.remove']}" 
+                            actionListener="#{sieduConvocatoriaEventoController.onRemove(record)}"
+                            immediate="true"
+                            update=":tvDatos:dtListConvocatoria">
+                            <f:setPropertyActionListener 
+                                value="#{record}" 
+                                target="#{sieduConvocatoriaEventoController.selected}"/>
+                            <p:confirm 
+                                header="#{bundle['commons.cfmdlg.header']}" 
+                                message="#{bundle['commons.cfmdlg.remove.message']}" 
+                                icon="ui-icon-alert" />
+                        </p:commandLink>
+                    </h:panelGroup>
+                </p:column>
+            </p:dataTable> 
+        </h:form>        
+    </p:panel> 
+</ui:composition>

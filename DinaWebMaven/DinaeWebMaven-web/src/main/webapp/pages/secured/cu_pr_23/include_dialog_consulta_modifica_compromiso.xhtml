@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+
+    <p:dialog id="dialogInclude_dialog_actualiza_modifica_compromiso" header="#{properties.value('cu_pr_23_lbl_compromiso')}" 
+              widgetVar="wv_dialogInclude_dialog_actualiza_modifica_compromiso" resizable="false" width="420" height="200"
+              modal="true">  
+
+      <h:form id="idFormInclude_dialog_actualiza_modifica_compromiso">
+        <p:messages id="messages" autoUpdate="true" showDetail="true" showSummary="false" closable="true" globalOnly="true" /> 
+
+        <p:outputPanel id="pgroupdialogInclude_dialog_actualiza_modifica_compromiso">
+          <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                       columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento"> 
+
+            <h:outputLabel value="#{properties.value('cu_pr_23_lbl_nombre_compromiso')}" />  
+            <h:outputLabel value="#{cuPr23GestionarCompromisoProyectos.hitoCompromisoSeleccionado.nombreCompromisoNumeroIncrementa}" /> 
+
+            <h:outputLabel value="#{properties.value('cu_pr_23_lbl_fecha_limite')}" for="idfecha" />  
+            <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es"
+                        yearRange="#{properties.value('general_calendar_rango_anio_fecha')}"  
+                        mindate="#{cuPr23GestionarCompromisoProyectos.hitoCompromisoSeleccionado.fecha}"
+                        showButtonPanel="true" navigator="true" required="true"
+                        id="idfecha" value="#{cuPr23GestionarCompromisoProyectos.hitoCompromisoSeleccionado.fecha}" showOn="button" />  
+
+          </h:panelGrid>  
+
+          <br />
+          <br />
+          <p:separator styleClass="separadorBorder" /> 
+          <div class="centrado">
+
+            <p:commandButton id="idBtnGuardarCompromiso" value="#{properties.value('cu_ne_6_lbl_publiar')}" 
+                             update=":idform_gestiona_compromisos_proyecto:idDataTableCompromisos"   
+                             action="#{cuPr23GestionarCompromisoProyectos.actualizarCompromiso}" 
+                             oncomplete="wv_dialogInclude_dialog_actualiza_modifica_compromiso.hide();" />  
+
+            <p:commandButton value="#{properties.value('cu_pr_23_lbl_cancelar_compromiso')}" immediate="true"
+                             action="#{cuPr23GestionarCompromisoProyectos.cancelarNuevoCompromiso}"   
+                             oncomplete="wv_dialogInclude_dialog_actualiza_modifica_compromiso.hide();" />
+
+          </div>
+          <br />
+
+        </p:outputPanel>
+      </h:form>
+    </p:dialog> 
+
+  </body>
+</html>

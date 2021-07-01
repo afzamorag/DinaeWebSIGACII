@@ -1,0 +1,1 @@
+@C:\dev\repository\sigac\DinaWebMaven\db\scripts\INSTALADOR.sql

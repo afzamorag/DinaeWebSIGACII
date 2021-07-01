@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+               var="_historial" 
+               value="#{cuPr1ProyectoFaces.listaHistorialEstadoProyectosMigradosDTO}" 
+               paginatorPosition="bottom" styleClass="tabla" rowIndexVar="idFila"
+               rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+               resizableColumns="true"
+               rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true"  >
+
+    <p:column width="10" headerText="#{properties.value('cu_pr_1_lbl_datatable_num')}"> 
+      #{idFila + 1}
+    </p:column>  
+
+    <p:column width="120" headerText="#{properties.value('cu_ne_6_lbl_estado')}">  
+      #{_historial.descripcionEstado}
+    </p:column>
+
+    <p:column width="120" headerText="#{properties.value('cu_pr_13_lbl_column_fecha_proyecto')}">  
+      <h:outputLabel value="#{_historial.fecha}" >
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+      </h:outputLabel>
+    </p:column> 
+
+    <p:column  headerText="Observación"> 
+      #{_historial.observacion}
+    </p:column>
+
+    <f:facet name="footer">  
+      #{fn:length( cuPr1ProyectoFaces.listaHistorialEstadoProyectosMigradosDTO )} #{properties.value('general_mensaje_footer_datatable_count')}
+    </f:facet>
+
+  </p:dataTable> 
+
+</html>

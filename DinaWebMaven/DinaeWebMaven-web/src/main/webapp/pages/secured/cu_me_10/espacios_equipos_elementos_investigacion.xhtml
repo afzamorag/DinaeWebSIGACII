@@ -1,0 +1,279 @@
+<!DOCTYPE html> 
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"  
+    template="../../../templates/plantillaPrincipal.xhtml">
+    <ui:define name="content">
+        <p:panel 
+            id="main"
+            styleClass="ui-fluid"
+            header="#{properties.value('cu_me_10_lbl_titulo_cu')}">
+
+            <h:form id="idform_equipos_elementos">
+                <p:panelGrid id="pgBusqueda"
+                             columns="2"
+                             layout="grid"
+                             columnClasses="ui-grid-col-2,ui-grid-col-6"
+                             styleClass="ui-panelgrid-blank">
+                    <p:outputLabel for="cu_me_10_lbl_unidad" value="#{properties.value('cu_me_10_lbl_unidad')}:" styleClass="gris negrilla"/>
+                    <p:selectOneMenu rendered="true" 
+                                     id="cu_me_10_lbl_unidad"
+                                     value="#{cuMe10EspacioElemento.unidad}"
+                                     required="true"
+                                     filter="true"
+                                     filterMatchMode="contains"                                     
+                                     converter="unidadDependenciaConverter"> 
+                        <f:selectItem itemLabel="--Seleccione unidad--" itemValue=""/>
+                        <f:selectItems value="#{appController.unidades()}" var="unidadConvoca" itemLabel="#{unidadConvoca.descripcionDependencia}" 
+                                       itemValue="#{unidadConvoca}"/> 
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="cu_me_10_lbl_tipo_elemento" value="#{properties.value('cu_me_10_lbl_tipo_elemento')}:" styleClass="gris negrilla"/>
+                    <p:selectOneMenu rendered="true" 
+                                     id="cu_me_10_lbl_tipo_elemento"
+                                     converter="tipoElementoConverter"
+                                     value="#{cuMe10EspacioElemento.tipoElemento}"
+                                     required="false">  
+                        <f:selectItem itemLabel="--Seleccione tipo elemento--" itemValue="" />  
+                        <f:selectItems value="#{cuMe10EspacioElemento.tiposElementos}" var="tipoElemento" itemLabel="#{tipoElemento.descripcion}" 
+                                       itemValue="#{tipoElemento}"/> 
+                    </p:selectOneMenu>
+                </p:panelGrid>
+
+                <p:panel>
+                    <p:panelGrid
+                        columns="6"
+                        layout="grid"
+                        id="pnlbtnsfind"
+                        columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+                        styleClass="ui-panelgrid-blank">
+
+                        <p:commandButton value="#{properties.value('cu_me_10_lbl_buscar')}" style="border:none"
+                                         actionListener="#{cuMe10EspacioElemento.buscar()}" 
+                                         update="idDataTableRegistros, messages, pnlbtnsfind" />  
+                        <p:commandButton value="#{properties.value('cu_me_10_lbl_nuevo')}" oncomplete="PF('editarForm').show()" style="border:none" rendered="#{cuMe10EspacioElemento.busco}"
+                                         update="editarForm" actionListener="#{cuMe10EspacioElemento.nuevo()}" />  
+
+                    </p:panelGrid>
+                </p:panel>
+
+                <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                             id="idDataTableRegistros" 
+                             var="registro" 
+                             value="#{cuMe10EspacioElemento.elementos}" 
+                             rowIndexVar="idFila" rows="15" 
+                             paginator="true" 
+                             rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                             resizableColumns="true" 
+                             rowKey="#{registro.idElemento}"
+                             paginatorPosition="bottom" 
+                             rendered="true"
+                             selection="#{cuMe10EspacioElemento.elementoSeleccionado}"                             
+                             styleClass="tabla"
+                             style="margin-top:10px">
+                    <f:facet name="header">                        
+                        #{properties.value('cu_me_10_lbl_titulo_cu')}
+                    </f:facet>
+
+                    <p:column headerText="#{properties.value('cu_me_10_lbl_tipo_elemento')}">
+                        <h:outputText value="#{registro.tipoElemento.descripcion}" />
+                    </p:column>
+
+                    <p:column headerText="#{properties.value('cu_me_10_lbl_subtipo')}">
+                        <h:outputText value="#{registro.subtipoElemento.descripcion}" />
+                    </p:column>
+
+                    <p:column headerText="#{properties.value('cu_me_10_lbl_descripcion')}">
+                        <h:outputText value="#{registro.descripcion}" />
+                    </p:column>
+
+                    <p:column headerText="#{properties.value('cu_me_10_lbl_serial')}">
+                        <h:outputText value="#{registro.serial}" />
+                    </p:column>
+
+                    <p:column headerText="#{properties.value('cu_me_10_lbl_valor')}">
+                        <h:outputText value="#{registro.valor}" />
+                    </p:column>
+
+                    <p:column headerText="#{properties.value('cu_me_10_lbl_fecha_expiracion')}">
+                        <h:outputText value="#{registro.fechaExpiracion}" />
+                    </p:column>
+
+                    <p:column headerText="#{properties.value('cu_me_10_lbl_fabricante')}">
+                        <h:outputText value="#{registro.fabricante}" />
+                    </p:column>
+
+                    <p:column headerText="#{properties.value('cu_me_10_lbl_tipo_investigacion')}">
+                        <h:outputText value="#{registro.tipoInvestigacion.nombre}" />
+                    </p:column>
+
+                    <p:column headerText="#{properties.value('cu_me_10_lbl_estado')}">
+                        <h:outputText value="#{registro.estado}" />
+                    </p:column>
+                    <p:column headerText="#{properties.value('cu_me_10_lbl_opciones')}">
+                        <p:commandButton value="#{properties.value('cu_me_01_lbl_eliminar')}" oncomplete="PF('confirmEliminar').show()" 
+                                         immediate="true"  style="border: none"> 
+                            <f:setPropertyActionListener value="#{registro}" target="#{cuMe10EspacioElemento.elementoSeleccionado}" /> 
+                        </p:commandButton>                        
+                        <p:commandButton value="Ver" oncomplete="PF('editarForm').show()" update="editarForm"
+                                         immediate="true" action="#{cuMe10EspacioElemento.editar( registro )}" style="border: none"  /> 
+                    </p:column>
+                </p:dataTable>
+
+            </h:form>
+
+        </p:panel>
+
+        <p:dialog id="editarForm" header="#{properties.value('cu_me_10_lbl_titulo_cu')}" widgetVar="editarForm" 
+                  fitViewport="true" responsive="true" showHeader="true" modal="true">
+
+            <h:form>
+                <p:panel id="mainDialog"
+                         styleClass="ui-fluid">
+                    <p:panelGrid 
+                        id="pgEdition"
+                        columns="1" 
+                        layout="grid"
+                        styleClass="table">
+                        <f:facet name="header">                        
+                            #{properties.value('cu_me_10_lbl_unidad')}
+                        </f:facet>                        
+                        <p:selectOneMenu rendered="true" 
+                                         id="cu_me_10_lbl_unidad"
+                                         converter="unidadDependenciaConverter"
+                                         value="#{cuMe10EspacioElemento.elementoSeleccionado.unidad}"
+                                         required="false"
+                                         disabled="#{cuMe10EspacioElemento.editando==0}">  
+                            <f:selectItem itemLabel="--Seleccione unidad--" itemValue="" />  
+                            <f:selectItems value="#{appController.unidades()}" 
+                                           var="unidad" 
+                                           itemLabel="#{unidad.descripcionDependencia}" 
+                                           itemValue="#{unidad}"/> 
+                        </p:selectOneMenu>     
+                    </p:panelGrid>
+                    <p:panelGrid
+                        id="pgEdition2"
+                        styleClass="table"
+                        columns="4"
+                        layout="grid">
+                        <f:facet name="header">                        
+                            Elemento
+                        </f:facet> 
+                        <p:outputLabel for="cu_me_10_lbl_descripcion" value="#{properties.value('cu_me_10_lbl_descripcion')}:" styleClass="gris negrilla"/>
+                        <p:inputText value="#{cuMe10EspacioElemento.elementoSeleccionado.descripcion}" id="cu_me_10_lbl_descripcion" 
+                                     disabled="#{cuMe10EspacioElemento.editando==0}" required="true" maxlength="200" styleClass="gris" />
+
+                        <p:outputLabel for="cu_me_10_lbl_serial" value="#{properties.value('cu_me_10_lbl_serial')}:" styleClass="gris negrilla"/>
+                        <p:inputText value="#{cuMe10EspacioElemento.elementoSeleccionado.serial}" id="cu_me_10_lbl_serial" 
+                                     disabled="#{cuMe10EspacioElemento.editando==0}" required="false" maxlength="30" styleClass="gris" />
+
+                        <p:outputLabel for="cu_me_10_lbl_fabricante" value="#{properties.value('cu_me_10_lbl_fabricante')}:" styleClass="gris negrilla"/>
+                        <p:inputText value="#{cuMe10EspacioElemento.elementoSeleccionado.fabricante}" id="cu_me_10_lbl_fabricante" 
+                                     disabled="#{cuMe10EspacioElemento.editando==0}" required="true" maxlength="200" styleClass="gris" />
+
+
+                        <p:outputLabel for="cu_me_10_lbl_tipo_elemento" value="#{properties.value('cu_me_10_lbl_tipo_elemento')}:" styleClass="gris negrilla"/>
+                        <p:selectOneMenu rendered="true"
+                                         disabled="#{cuMe10EspacioElemento.editando==0}"
+                                         id="cu_me_10_lbl_tipo_elemento" 
+                                         converter="tipoElementoConverter" 
+                                         value="#{cuMe10EspacioElemento.elementoSeleccionado.tipoElemento}"
+                                         required="true" >  
+                            <f:selectItems value="#{cuMe10EspacioElemento.tiposElementos}" 
+                                           var="tipo" 
+                                           itemLabel="#{tipo.descripcion}" 
+                                           itemValue="#{tipo}"  />  
+                            <p:ajax listener="#{cuMe10EspacioElemento.findSubtipos}" event="change" update="cu_me_10_lbl_subtipo" process="cu_me_10_lbl_tipo_elemento"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel for="cu_me_10_lbl_subtipo" value="#{properties.value('cu_me_10_lbl_subtipo')}:" styleClass="gris negrilla"/>
+                        <p:selectOneMenu rendered="true"
+                                         disabled="#{cuMe10EspacioElemento.editando==0}" 
+                                         id="cu_me_10_lbl_subtipo" 
+                                         converter="subtipoElementoConverter"
+                                         value="#{cuMe10EspacioElemento.elementoSeleccionado.subtipoElemento}" 
+                                         required="true" >  
+                            <f:selectItems value="#{cuMe10EspacioElemento.subtipos}" 
+                                           var="subtipo" 
+                                           itemLabel="#{subtipo.descripcion}" 
+                                           itemValue="#{subtipo}"  />
+                        </p:selectOneMenu>
+                        <p:outputLabel for="cu_me_10_lbl_valor" value="#{properties.value('cu_me_10_lbl_valor')}:" styleClass="gris negrilla"/>
+                        <p:inputText value="#{cuMe10EspacioElemento.elementoSeleccionado.valor}" id="cu_me_10_lbl_valor" 
+                                     disabled="#{cuMe10EspacioElemento.editando==0}" required="true" styleClass="gris" />
+                        <p:outputLabel for="cu_me_10_lbl_tipo_investigacion" value="#{properties.value('cu_me_10_lbl_tipo_investigacion')}:" styleClass="gris negrilla"/>
+                        <p:selectOneMenu rendered="true"
+                                         converter="dominioConverter"
+                                         disabled="#{cuMe10EspacioElemento.editando==0}"
+                                         id="cu_me_10_lbl_tipo_investigacion"
+                                         value="#{cuMe10EspacioElemento.elementoSeleccionado.tipoInvestigacion}" 
+                                         required="true" >  
+                            <f:selectItem itemLabel="--Seleccione--" 
+                                          itemValue="" />  
+                            <f:selectItems value="#{cuMe10EspacioElemento.tiposInvestigacion}" 
+                                           var="tipo" 
+                                           itemValue="#{tipo}" 
+                                           itemLabel="#{tipo.nombre}"/>    
+                        </p:selectOneMenu>
+                        <p:outputLabel for="cu_me_10_lbl_fecha_expiracion" value="#{properties.value('cu_me_10_lbl_fecha_expiracion')}:" 
+                                       styleClass="gris negrilla" />
+                        <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es"
+                                    navigator="true" value="#{cuMe10EspacioElemento.elementoSeleccionado.fechaExpiracion}" 
+                                    id="cu_me_10_lbl_fecha_expiracion" required="true" disabled="#{cuMe10EspacioElemento.editando==0}">
+                        </p:calendar>
+                        <p:outputLabel for="cu_me_10_lbl_estado" value="#{properties.value('cu_me_10_lbl_estado')}:" styleClass="gris negrilla"/>
+                        <p:selectOneMenu rendered="true"
+                                         disabled="#{cuMe10EspacioElemento.editando==0}"
+                                         id="cu_me_10_lbl_estado" 
+                                         value="#{cuMe10EspacioElemento.elementoSeleccionado.estado}"
+                                         required="true" >  
+                            <f:selectItems value="#{cuMe10EspacioElemento.estados}" />    
+                        </p:selectOneMenu>
+                        <p:spacer/>
+                        <p:spacer/>
+                    </p:panelGrid>
+
+
+                    <p:panelGrid
+                        columns="6"
+                        layout="grid" 
+                        columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+                        styleClass="ui-panelgrid-blank">
+
+                        <p:commandButton value="#{properties.value('cu_me_02_lbl_guardar')}" update="messages, idform_equipos_elementos" process="@form" style="border:none"
+                                         actionListener="#{cuMe10EspacioElemento.guardar()}" oncomplete="PF('editarForm').hide();"  />  
+                        <p:commandButton value="#{properties.value('cu_me_02_lbl_editar')}" update="mainDialog" immediate="true" process="@this" style="border:none" disabled="#{cuMe10EspacioElemento.editando!=0}"
+                                         actionListener="#{cuMe10EspacioElemento.editar()}" ajax="true"/>                         
+                        <p:commandButton value="#{properties.value('cu_me_02_lbl_volver')}" onclick="PF('editarForm').hide();" style="border:none"
+                                         type="button"   />                 
+
+                    </p:panelGrid>
+                </p:panel>
+            </h:form>
+
+        </p:dialog>
+        <p:confirmDialog widgetVar="confirmEliminar" header="#{properties.value('cu_me_01_titulo_alerta')}" appendTo="main"
+                         message="#{properties.value('cu_me_01_lbl_confirmacion_eliminar')}" > 
+            <h:form id="idFormEliminar">
+                <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmEliminarFuenteFinanciera">
+                    <p:panelGrid
+                        columns="2"
+                        layout="grid" 
+                        columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+                        styleClass="ui-panelgrid-blank">
+                        <p:commandButton actionListener="#{cuMe10EspacioElemento.eliminar}" style="border:none"
+                                         value="#{properties.value('cu_pr_7_lbl_btn_confirma_si')}" immediate="true"
+                                         oncomplete="PF('confirmEliminar').hide();"
+                                         update="messages, idform_equipos_elementos" />  
+                        <p:commandButton value="#{properties.value('cu_pr_7_lbl_btn_confirma_no')}" style="border:none"
+                                         onclick="PF('confirmEliminar').hide();" type="button" />       
+                    </p:panelGrid>
+                </p:outputPanel>
+            </h:form>
+        </p:confirmDialog>
+
+
+    </ui:define>
+</ui:composition>

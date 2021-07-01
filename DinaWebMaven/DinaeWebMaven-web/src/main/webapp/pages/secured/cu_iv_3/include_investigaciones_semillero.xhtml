@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <h:form id="forminclude_investigaciones_semillero" >
+
+    <br />
+    <h:outputLabel value="Investigaciones vinculadas al semillero" styleClass="green negrilla" />
+    <br />
+    <p:dataTable id="idDataTableDatosInvestigacionesVinculadas" var="_proy"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 value="#{cuIv3GestionarSemillerosInvestigacionFaces.listaSemillerosProyecto}" 
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rowIndexVar="idFila" paginatorPosition="bottom" 
+                 resizableColumns="true"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true">
+
+      <p:column headerText="N°" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_proy.proyecto.codigoProyecto}" styleClass="alineadoIzquierda gris" style="font-size: 13px" />  
+      </p:column>
+
+      <p:column headerText="Titulo de la investigación" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_proy.proyecto.tituloPropuesto}" styleClass="alineadoIzquierda gris" style="font-size: 13px" />  
+      </p:column>
+
+      <p:column headerText="Aporte a la investigación" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_proy.aporteInvestigacion}" styleClass="alineadoIzquierda gris" style="font-size: 13px" />  
+      </p:column>
+
+      <p:column headerText="Fecha de finalización" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_proy.proyecto.fechaEstimadaFinalizacion}" styleClass="alineadoIzquierda gris" style="font-size: 13px" >
+          <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+        </h:outputLabel>
+      </p:column>
+
+      <p:column headerText="Cronograma de trabajo" style="color: white; font-size: 13px">  
+        <p:commandLink value="Cronograma de trabajo" 
+                       immediate="true" style="font-size: 13px"
+                       action="#{cuIv3GestionarSemillerosInvestigacionFaces.irCronogramaTrabajoSemillero}">  
+          <f:setPropertyActionListener value="#{_proy}" target="#{cuIv3GestionarSemillerosInvestigacionFaces.entidadOrigen}" />
+        </p:commandLink>
+      </p:column>
+
+      <f:facet name="footer">  
+        #{fn:length(cuIv3GestionarSemillerosInvestigacionFaces.listaSemillerosProyecto)} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable>
+    <br />
+    <br />       
+    <h:outputLabel value="Implementaciones Investigaciones vinculadas al semillero" styleClass="green negrilla" />
+    <br />
+    <p:dataTable id="idDataTableDatosImplementacionesVinculadas" var="_impl"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 value="#{cuIv3GestionarSemillerosInvestigacionFaces.listaSemillerosImplementacion}" 
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rowIndexVar="idFila" paginatorPosition="bottom" 
+                 resizableColumns="true"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true">
+
+      <p:column headerText="N°" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{idFila + 1}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column headerText="Titulo de la investigación" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_impl.implementacionesProyecto.proyecto.tituloPropuesto}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column headerText="Aporte a la investigación" style="color: white; font-size: 13px">  
+        <h:outputLabel value="" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column headerText="Cronograma de trabajo" style="color: white; font-size: 13px">  
+        <p:commandLink value="Cronograma de trabajo" 
+                       immediate="true" style="font-size: 13px"
+                       action="#{cuIv3GestionarSemillerosInvestigacionFaces.irCronogramaTrabajoSemillero}">  
+          <f:setPropertyActionListener value="#{_impl}" target="#{cuIv3GestionarSemillerosInvestigacionFaces.entidadOrigen}" />
+        </p:commandLink>
+      </p:column>
+
+      <f:facet name="footer">  
+        #{fn:length( cuIv3GestionarSemillerosInvestigacionFaces.listaSemillerosImplementacion )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable>
+    <br />
+    <br />
+
+    <h:outputLabel value="Trabajo independiente" styleClass="green negrilla" />
+    <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+      <h:outputLabel value="Trabajo independiente" styleClass="gris negrilla" />
+      <p:selectOneRadio id="idcu_iv_3_lbl_tab_infobasica_pertenece_red_semill"
+                        value="#{cuIv3GestionarSemillerosInvestigacionFaces.trabajoIndependiente}">  
+        <f:selectItem itemLabel="Sí" itemValue="S" />  
+        <f:selectItem itemLabel="No" itemValue="N" />       
+        <p:ajax update="idcu_iv_3_lbl_tab_infobasica_pertenece_red_semill panelGridAsterisco marcaObligatoriedad panelTextAreaTemaTituloExt panelTextAreaTemaTitulo textAreaTemaTitulo linkInvestigacionIndependiente"
+                listener="#{cuIv3GestionarSemillerosInvestigacionFaces.habilitarCampoTemaTituloTrabajo}"/>
+      </p:selectOneRadio>  
+
+
+      <h:panelGrid columns="2" id="panelGridAsterisco">
+        <h:outputLabel value="#{cuIv3GestionarSemillerosInvestigacionFaces.trabajoIndependiente == 'N'?'':'*'}" style="color: red; font-weight: bold" id="marcaObligatoriedad"/>
+        <h:outputLabel value="Tema o titulo del trabajo de investigación que se esta desarrollando" styleClass="gris negrilla" />            
+      </h:panelGrid>
+      <h:panelGrid columns="2" style="width: 100%" id="panelTextAreaTemaTituloExt" styleClass="centrado"
+                   columnClasses="panelGridColumnaValor_70_porciento, panelGridColumnaLabel_30_porciento">
+
+        <h:panelGrid columns="1" style="width: 100%" id="panelTextAreaTemaTitulo" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                     columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+          <p:inputTextarea id="textAreaTemaTitulo"  maxlength="4000" counter="contador_idcu_iv_3_lbl_tab_infobasica_obj_general" 
+                           autoResize="false" cols="100" rows="3" disabled="#{cuIv3GestionarSemillerosInvestigacionFaces.trabajoIndependiente == 'N' }"
+                           value="#{cuIv3GestionarSemillerosInvestigacionFaces.temaTituloTrabajo}"
+                           counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                           binding="#{cuIv3GestionarSemillerosInvestigacionFaces.temaTituloTrabajoTextArea}"
+                           styleClass="textareaMaximo">
+            <f:validateLength minimum="1"  maximum="4000" />
+          </p:inputTextarea>
+          <h:outputText id="contador_idcu_iv_3_lbl_tab_infobasica_obj_general" styleClass="alineadoIzquierda gris" />
+        </h:panelGrid>
+
+
+        <p:commandLink value="Cronograma de trabajo" id="linkInvestigacionIndependiente"
+                       disabled="#{cuIv3GestionarSemillerosInvestigacionFaces.trabajoIndependiente == 'N' }"
+                       immediate="true" style="font-size: 13px"
+                       action="#{cuIv3GestionarSemillerosInvestigacionFaces.irCronogramaTrabajoSemillero}">       
+          <f:setPropertyActionListener value="#{cuIv3GestionarSemillerosInvestigacionFaces.semilleroImplementacionSeleccionado}" 
+                                       target="#{cuIv3GestionarSemillerosInvestigacionFaces.entidadOrigen}" />
+        </p:commandLink>
+
+      </h:panelGrid>
+
+    </h:panelGrid>
+
+    <br />
+    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+    <div class="centrado">
+
+      <p:commandButton value="#{properties.value('cu_iv_3_lbl_btn_guardainfobasica')}"
+                       action="#{cuIv3GestionarSemillerosInvestigacionFaces.guardarInvestigacionesSemillero}"
+                       ajax="false"
+                       update="@form" />
+    </div>
+
+  </h:form>
+</html>

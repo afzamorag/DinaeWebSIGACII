@@ -1,0 +1,142 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <h:form id="formPersonalImplementacion" >
+    <br />
+    <h:panelGrid id="panelgridDatosGenerales" columns="2" style="width: 100%" 
+                 rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_40_porciento,panelGridColumnaValor_60_porciento">
+
+      <h:outputLabel value="#{properties.value('cu_pr_21_lbl_numero_identificacion')}" 
+                     styleClass="gris negrilla" for="inputNumeroIdentificacion"/>
+      <h:panelGroup>
+        <p:inputText id="inputNumeroIdentificacion" required="true"
+                     value="#{cuPr21RegistrarPlanDeTrabajo.numeroIdentificacionPersonaBusqueda}"
+                     maxlength="20" size="20" />
+        <p:commandButton id="botonBuscarPersonal" value="#{properties.value('cu_pr_21_lbl_btn_buscar_personal')}" 
+                         action="#{cuPr21RegistrarPlanDeTrabajo.buscarPersonalDeImplementacion}"
+                         update="@form"/>
+      </h:panelGroup>
+
+      <h:outputLabel value="#{properties.value('cu_pr_21_lbl_grado')}" styleClass="gris negrilla" rendered="#{cuPr21RegistrarPlanDeTrabajo.mostrarDatosPersonalImpl}"/>
+      <h:outputLabel styleClass="gris" value="#{cuPr21RegistrarPlanDeTrabajo.gradoPersonaBusqueda}" rendered="#{cuPr21RegistrarPlanDeTrabajo.mostrarDatosPersonalImpl}"/>
+
+      <h:outputLabel value="#{properties.value('cu_pr_21_lbl_nombres_y_apellidos')}" styleClass="gris negrilla" rendered="#{cuPr21RegistrarPlanDeTrabajo.mostrarDatosPersonalImpl}"/>
+      <h:outputLabel id="outputNombresYApellidos" styleClass="gris" value="#{cuPr21RegistrarPlanDeTrabajo.nombresYApellidosPersonaBusqueda}" rendered="#{cuPr21RegistrarPlanDeTrabajo.mostrarDatosPersonalImpl}"/>
+
+      <h:outputLabel value="#{properties.value('cu_pr_21_lbl_correo_electronico')}" styleClass="gris negrilla" rendered="#{cuPr21RegistrarPlanDeTrabajo.mostrarDatosPersonalImpl}"/>
+      <h:outputLabel id="outputCorreoElectronico" styleClass="gris" value="#{cuPr21RegistrarPlanDeTrabajo.correoElectronicoPersonaBusqueda}" rendered="#{cuPr21RegistrarPlanDeTrabajo.mostrarDatosPersonalImpl}"/>
+
+      <h:outputLabel value="Horas totales de implementación" styleClass="gris negrilla" for="idhorastotalesimpl" rendered="#{cuPr21RegistrarPlanDeTrabajo.mostrarDatosPersonalImpl}" />
+      <h:panelGrid>
+        <p:inputText id="idhorastotalesimpl"  maxlength="5" onkeypress="return soloNumerosInpuText(event);" 
+                     rendered="#{cuPr21RegistrarPlanDeTrabajo.mostrarDatosPersonalImpl}"
+                     value="#{cuPr21RegistrarPlanDeTrabajo.horasTotalesImplementacionPersonaBusqueda}" 
+                     styleClass="textMaximo" required="true" size="10"  >
+          <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" maxFractionDigits="0" />
+        </p:inputText>
+      </h:panelGrid>
+
+      <h:outputLabel for="idValorTHoraPersonaImpl"  value="#{properties.value('cu_pr_3_lbl_sub_titulo_valor_hora')}" styleClass="gris negrilla" rendered="#{cuPr21RegistrarPlanDeTrabajo.mostrarDatosPersonalImpl}"/>
+      <h:panelGrid>
+        <p:inputText id="idValorTHoraPersonaImpl"  maxlength="10" onkeypress="return soloNumerosInpuText(event);" 
+                     rendered="#{cuPr21RegistrarPlanDeTrabajo.mostrarDatosPersonalImpl}"
+                     value="#{cuPr21RegistrarPlanDeTrabajo.valorHoraPersonaImpl}" 
+                     styleClass="textMaximo" required="true" size="10"  >
+          <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" maxFractionDigits="0" />
+        </p:inputText>
+      </h:panelGrid>            
+
+    </h:panelGrid>
+    <br/>
+    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+    <br/>
+    <div class="centrado">
+      <p:commandButton value="#{properties.value('cu_pr_21_lbl_btn_agregar_personal')}" 
+                       actionListener="#{cuPr21RegistrarPlanDeTrabajo.agregarPersonalDeImplementacion}" 
+                       update="@form :tabView" disabled="#{!cuPr21RegistrarPlanDeTrabajo.mostrarDatosPersonalImpl}"/>
+    </div>
+    <br/>
+
+    <ui:include src="include_lista_investigador_proyecto.xhtml"/>
+
+  </h:form>
+  <h:form id="formSemilleroImplementacion" >
+    <br/>
+    <p:separator styleClass="separadorBorder" /> 
+    <br/>
+    <h:panelGrid id="panelgridVinculacionSemilleros" columns="2" style="width: 100%" 
+                 rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_40_porciento,panelGridColumnaValor_60_porciento">
+      <h:outputLabel value="#{properties.value('cu_pr_21_lbl_semilleros_investiigacion')}" 
+                     styleClass="gris negrilla" for="selectCiudadIdentificacion"    />
+      <h:selectOneMenu value="#{cuPr21RegistrarPlanDeTrabajo.semilleroInvestigacion}" 
+                       id="selectCiudadIdentificacion" styleClass="gris" >  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{cuPr21RegistrarPlanDeTrabajo.listaItemsSemilleros}" />
+      </h:selectOneMenu>
+    </h:panelGrid>
+    <br/>
+    <div class="centrado">
+      <p:commandButton value="#{properties.value('cu_pr_21_lbl_btn_vincular_semillero')}" 
+                       actionListener="#{cuPr21RegistrarPlanDeTrabajo.vincularSemillero}" 
+                       update="@form"/>
+      <br/>
+      <br/>
+
+      <ui:include src="include_lista_semilleros_vinculados.xhtml"/>
+
+    </div>
+    <br/>
+    <div class="centrado">
+      <p:commandButton value="Regresar" immediate="true"
+                       action="#{cuPr21RegistrarPlanDeTrabajo.regresar}" 
+                       update="@form"/>
+    </div>
+  </h:form>
+
+  <p:confirmDialog widgetVar="varConfirmEliminarPersonalImpl" header="#{properties.value('cu_pr_3_lbl_titulo_confirmacion_publicar')}" 
+                   message="Está seguro que desea eliminar la persona seleccionada ?" > 
+
+    <h:form id="idForm_varConfirmEliminarPersonalImpl">
+
+      <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmEliminarPersonalImpl">
+        <div class="centrado">
+          <p:commandButton actionListener="#{cuPr21RegistrarPlanDeTrabajo.eliminarInvestigador}" 
+                           value="#{properties.value('cu_pr_3_lbl_btn_confirma_si_publicar')}" immediate="true"
+                           oncomplete="varConfirmEliminarPersonalImpl.hide();"
+                           update=":tabView:formPersonalImplementacion:tablaPersonalImplementacion" />  
+          <p:commandButton value="#{properties.value('cu_pr_3_lbl_btn_confirma_no_publicar')}" 
+                           onclick="varConfirmEliminarPersonalImpl.hide();" type="button" />       
+        </div>
+      </p:outputPanel>
+
+    </h:form>
+  </p:confirmDialog>
+
+
+  <p:confirmDialog widgetVar="varConfirmEliminarSemilleroImpl" header="#{properties.value('cu_pr_3_lbl_titulo_confirmacion_publicar')}" 
+                   message="Está seguro que desea eliminar la Semillero ?" > 
+
+    <h:form id="idForm_varConfirmEliminarSemilleroImpl">
+
+      <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmEliminarSemilleroImpl">
+        <div class="centrado">
+          <p:commandButton actionListener="#{cuPr21RegistrarPlanDeTrabajo.eliminarSemillero}" 
+                           value="#{properties.value('cu_pr_3_lbl_btn_confirma_si_publicar')}" immediate="true"
+                           oncomplete="varConfirmEliminarSemilleroImpl.hide();"
+                           update=":tabView:formSemilleroImplementacion:tablaSemillerosVinculados" />  
+          <p:commandButton value="#{properties.value('cu_pr_3_lbl_btn_confirma_no_publicar')}" 
+                           onclick="varConfirmEliminarSemilleroImpl.hide();" type="button" />       
+        </div>
+      </p:outputPanel>
+
+    </h:form>
+  </p:confirmDialog>
+
+</html>

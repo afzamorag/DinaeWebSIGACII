@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <body>
+        <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+
+            <ui:define name="content">
+                <p:panel 
+                    id="main"
+                    styleClass="ui-fluid">
+
+                    <h:form id="idForm_administra_consular_proyectos_vigentes_asignados">
+                        <div class="fixed-menu">
+                            <div class="right-col">
+                                <h2>
+                                    #{properties.value('cu_pr_20_lbl_titulo')}
+                                </h2>
+                            </div>
+                        </div>
+
+                        <div width="100%">
+                            <p:dataTable var="impl" paginator="true" 
+                                         style="font-size: small; margin-top: 10px"
+                                         value="#{cuPr20GestionImplementacionesVigentesAsignadasFaces.implemtacionesProyectos}"
+                                         rowIndexVar="idFila" paginatorPosition="bottom" 
+                                         rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                                         emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                                         rows="#{properties.value('general_mensaje_filas_datatable_pagina')}">  
+
+                                <p:column resizable="true" headerText="#{properties.value('cu_pr_19_lbl_tabla_num')}" width="10" >  
+                                    <h:outputLabel value="#{idFila + 1}" />  
+                                </p:column> 
+
+                                <p:column resizable="true" headerText="#{properties.value('cu_pr_19_lbl_tabla_codigo')}" width="120" >  
+                                    <h:outputLabel value="#{impl.codigoProyecto}" />  
+                                </p:column> 
+
+                                <p:column resizable="true" headerText="#{properties.value('cu_pr_19_lbl_tabla_titulo_proyecto')}" >  
+                                    <h:outputLabel value="#{impl.tituloProyecto}" />  
+                                </p:column> 
+                                <p:column resizable="true" headerText="#{properties.value('cu_pr_19_lbl_tabla_fecha_actualiza')}" width="120">  
+                                    <h:outputLabel value="#{impl.fechaActualizacion}"> 
+                                        <f:convertDateTime pattern="#{properties.value('general_formato_fecha_hora')}" locale="es_CO" />
+                                    </h:outputLabel>   
+                                </p:column> 
+
+                                <p:column resizable="true" headerText="#{properties.value('cu_pr_19_lbl_tabla_compromisos')}">  
+                                    <h:panelGroup>
+                                        <p:dataTable var="comp" 
+                                                     style="width: 100%"
+                                                     value="#{impl.compromisosImplProyecto}"                                         
+                                                     rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                                                     emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                                                     rows="#{properties.value('general_mensaje_filas_datatable_pagina')}"> 
+
+                                            <p:column headerText="#{properties.value('cu_pr_19_lbl_tabla_compromisos_compromiso')}" style="color:white">                                             
+
+                                                <h:outputLabel rendered="#{!cuPr20GestionImplementacionesVigentesAsignadasFaces.isMostrarLinkCompromiso( comp )}"
+                                                               value="#{comp.descripcionTipoCompromiso}" style="color:#8b8b89" />  
+
+                                                <p:commandLink rendered="#{cuPr20GestionImplementacionesVigentesAsignadasFaces.isMostrarLinkCompromiso( comp )}" 
+                                                               value="#{comp.descripcionTipoCompromiso}" action="#{cuPr20GestionImplementacionesVigentesAsignadasFaces.navegarCU( impl , comp.idCompromisoImplementacion)}"/>                                                                                     
+                                            </p:column> 
+
+                                            <p:column headerText="#{properties.value('cu_pr_19_lbl_tabla_compromisos_estado')}" style="color:white">  
+                                                <h:outputLabel value="#{comp.descripcionEstadoCompromisoImpl}" style="color:#8b8b89" />  
+                                            </p:column> 
+
+                                            <p:column resizable="true" headerText="#{properties.value('cu_pr_19_lbl_tabla_compromisos_fecha_limite')}" style="color:white">  
+                                                <h:outputLabel value="#{comp.fecha}" style="color:#8b8b89">
+                                                    <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+                                                </h:outputLabel>  
+                                            </p:column> 
+
+                                            <p:column resizable="true" headerText="#{properties.value('cu_pr_19_lbl_tabla_compromisos_comentarios')}" style="color:white">  
+                                                <p:commandLink value="#{properties.value('cu_pr_19_lbl_link_ver_comentarios')}" 
+                                                               action="#{cuPr20GestionImplementacionesVigentesAsignadasFaces.verComentariosCompromisoProyecto( comp )}"   />  
+                                            </p:column> 
+                                        </p:dataTable>
+                                        <h:panelGrid columns="1">
+
+                                            <p:commandLink immediate="true" action="#{cuPr6ConsultarDetalleProyectoInvestigacion.initReturnCU_Desde_CU_PR_20( impl.idProyecto )}" value="#{properties.value('cu_pr_19_lbl_link_ver_proyecto')}" />  
+
+                                        </h:panelGrid>
+
+                                    </h:panelGroup>
+
+                                </p:column> 
+
+                            </p:dataTable>
+                        </div>
+
+                    </h:form>
+                </p:panel>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

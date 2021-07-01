@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+  <h:form id="formOtrosGastosProyecto">
+    <br />
+    <h:panelGrid id="panelOtrosGastos" columns="2" style="width: 100%" 
+                 rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_tipo_rubro')}"  
+                       styleClass="gris negrilla" />
+      </h:panelGrid>
+      <h:selectOneMenu value="#{presupuestoImplemetacionProyectoFaces.idTipoRubroOtrosGastos}" styleClass="gris"
+                       id="selectTipoRubro">  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{presupuestoImplemetacionProyectoFaces.listaTipoRubroOtrosGastos}" />                
+      </h:selectOneMenu>
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_tipo')}" 
+                       styleClass="gris negrilla" />
+      </h:panelGrid>
+      <h:selectOneMenu value="#{presupuestoImplemetacionProyectoFaces.idTipoOtrosGastos}" styleClass="gris"
+                       id="selectTipo">  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{presupuestoImplemetacionProyectoFaces.listaTipoOtrosGastos}" />                
+      </h:selectOneMenu>
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_valor')}" 
+                       styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:inputText value="#{presupuestoImplemetacionProyectoFaces.valorOtrosGastos}"
+                   maxlength="12" id="inputValorOtrosGastos" onkeypress="return soloNumerosInpuText(event);">  
+        <p:ajax event="blur" update="inputValorOtrosGastos" />
+        <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" maxFractionDigits="2" />
+
+      </h:inputText>
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_fuente_evento')}" 
+                       styleClass="gris negrilla" for="selectFuenteViaje"/>
+      </h:panelGrid>
+      <h:selectOneMenu value="#{presupuestoImplemetacionProyectoFaces.idFuenteOtrosGastos}" styleClass="gris"
+                       id="selectFuenteOtrosGastos">  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{presupuestoImplemetacionProyectoFaces.listaFuentesProyectoItems}"/>
+      </h:selectOneMenu>
+    </h:panelGrid>
+    <br/>
+    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+    <div class="centrado">
+      <p:commandButton value="#{properties.value('cu_pr_24_lbl_btn_agregar_comentario_retroalimentacion')}" 
+                       rendered="#{!presupuestoImplemetacionProyectoFaces.esModificaOtrosGastosProyecto}"
+                       actionListener="#{presupuestoImplemetacionProyectoFaces.guardarTabOtrosGastosProyecto}" 
+                        process="@form"
+                       update="@form"/>
+
+      <p:commandButton value="#{properties.value('cu_iv_3_lbl_datatable_btn_modificar')}" 
+                       rendered="#{presupuestoImplemetacionProyectoFaces.esModificaOtrosGastosProyecto}"
+                       actionListener="#{presupuestoImplemetacionProyectoFaces.guardarTabOtrosGastosProyecto}" 
+                        process="@form"
+                       update="@form"/>
+      
+      <p:commandButton value="#{properties.value('cu_tr_01_lbl_cancelar')}" 
+                       rendered="#{presupuestoImplemetacionProyectoFaces.esModificaOtrosGastosProyecto}"
+                       actionListener="#{presupuestoImplemetacionProyectoFaces.cancelarModificarOtrosGastosProyecto}" 
+                       process="@this"
+                       update="@form">
+      </p:commandButton>
+    </div>
+    <br/>
+    <div class="centrado">
+      <p:dataTable var="otro" value="#{presupuestoImplemetacionProyectoFaces.listaOtrosGastosProyectoModel}"
+                   rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                   id="tablaOtrosGastosProyectos" selectionMode="single"
+                   emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                   selection="#{presupuestoImplemetacionProyectoFaces.otrosGastosProyectoDTO}"
+                   style="width: 100%;" paginator="true"
+                   resizableColumns="true" rowIndexVar="idFila"
+                   paginatorPosition="bottom"
+                   rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+        <p:ajax event="rowSelect" listener="#{presupuestoImplemetacionProyectoFaces.cargarDatosOtrosGastosProyecto}"   
+                update="@form"/>  
+        <p:ajax event="rowUnselect" listener="#{presupuestoImplemetacionProyectoFaces.noSeleccionOtrosGastosProyecto}" 
+                update="@form:tablaOtrosGastosProyectos"/>
+
+        <p:column headerText="#{properties.value('cu_pr_13_lbl_column_numero')}" width="25" style="color: white">
+          <h:outputText value="#{idFila + 1}" styleClass="gris" />
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_tipo_rubro')}" style="color: white">
+          <h:outputText value="#{presupuestoImplemetacionProyectoFaces.tomarValorConstante(otro.idTipoRubro)}" styleClass="alineadoIzquierda gris" />
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_valor')}" width="90" style="color: white">
+          <h:outputText value="#{otro.valor}" styleClass="alineadoDerecha gris" >                                                  
+            <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" />
+          </h:outputText>    
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_tipo')}" width="75" style="color: white">
+          <h:outputText value="#{presupuestoImplemetacionProyectoFaces.tomarValorConstante(otro.idTipoEspecieEfectivo)}" styleClass="gris" />
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_fuente_evento')}" width="100" style="color: white">
+          <h:outputText value="#{otro.nombreFuente}" styleClass="gris" />
+        </p:column>
+        <p:column width="60" headerText="#{properties.value('cu_pr_19_lbl_tabla_acciones')}" style="color: white">
+
+          <div class="centrado">
+            <p:commandLink value="#{properties.value('cu_tr_01_lbl_btn_eliminar')}" 
+                           immediate="true"
+                           oncomplete="PF('varConfirmEliminarGastos').show()">  
+              <f:setPropertyActionListener value="#{otro}" target="#{presupuestoImplemetacionProyectoFaces.otrosGastosProyectoDTO}" />  
+            </p:commandLink>
+          </div>
+
+        </p:column>
+        <f:facet name="footer">  
+          #{fn:length( presupuestoImplemetacionProyectoFaces.listaOtrosGastosProyectoDTO )} #{properties.value('general_mensaje_footer_datatable_count')}
+        </f:facet>
+      </p:dataTable>
+    </div>
+    <p:confirmDialog widgetVar="varConfirmEliminarGastos" header="#{properties.value('cu_tr_01_lbl_titulo_confirmacion_titulo')}" 
+                     message="#{properties.value('cu_pr_5_lbl_titulo_confirmacion_mensaje_eliminar_gasto')}" > 
+
+      <h:form id="idFormEliminarViaje">
+
+        <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmEliminarGastos">
+          <div class="centrado">
+            <p:commandButton actionListener="#{presupuestoImplemetacionProyectoFaces.eliminarOtrosGastos}" 
+                             value="#{properties.value('cu_tr_01_lbl_btn_confirma_si')}" immediate="true"
+                             oncomplete="varConfirmEliminarGastos.hide();"
+                             update=":tabView:formOtrosGastosProyecto:tablaOtrosGastosProyectos" />  
+            <p:commandButton value="#{properties.value('cu_tr_01_lbl_btn_confirma_no')}" 
+                             onclick="varConfirmEliminarGastos.hide();" type="button" />       
+          </div>
+        </p:outputPanel>
+
+      </h:form>
+    </p:confirmDialog>
+  </h:form>
+</html>
+

@@ -1,0 +1,145 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+    <div class="body">
+
+      <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+        <ui:define name="content">
+
+          <h:form id="idForm_cu_pr_23_gestiona_compromiso">
+
+            <div class="fixed-menu">
+
+              <div class="right-col">
+                <h2>
+                  #{properties.value('cu_pr_23_lbl_compromisos_desarrollo')}
+                </h2>
+              </div>
+            </div>
+
+            <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                         columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+              <h:outputLabel value="#{cuPr23GestionarCompromisoProyectos.labelTipoProyecto}" styleClass="gris negrilla" />
+              <h:selectOneMenu required="true" value="#{cuPr23GestionarCompromisoProyectos.idTipoProyectoItemSeleccionado}"
+                               disabled="#{cuPr23GestionarCompromisoProyectos.desHabilitaProyectoInstitucional}">  
+                <f:selectItem itemLabel="--Select--" itemValue="" />  
+                <f:selectItems value="#{cuPr23GestionarCompromisoProyectos.listaTipoProyectoItem}" />  
+              </h:selectOneMenu>
+
+              <h:outputLabel rendered="#{cuPr23GestionarCompromisoProyectos.esCompromiso}" styleClass="gris negrilla"
+                             value="#{properties.value('cu_pr_23_lbl_compromiso_compromiso')}" />
+              <h:selectOneMenu rendered="#{cuPr23GestionarCompromisoProyectos.esCompromiso}" required="true" 
+                               value="#{cuPr23GestionarCompromisoProyectos.idPeriodoItemSeleccionado}">  
+                <f:selectItem itemLabel="--Select--" itemValue="" />  
+                <f:selectItems value="#{cuPr23GestionarCompromisoProyectos.listaCompromisoItem}" />  
+              </h:selectOneMenu>
+
+              <h:outputLabel value="#{properties.value('cu_pr_23_lbl_anio_compromiso')}" styleClass="gris negrilla"/>
+              <h:selectOneMenu required="true" value="#{cuPr23GestionarCompromisoProyectos.idPeriodoItemSeleccionado}"
+                               disabled="true">  
+                <f:selectItem itemLabel="--Select--" itemValue="" />  
+                <f:selectItems value="#{cuPr23GestionarCompromisoProyectos.listaAnioPeriodoItem}" />  
+              </h:selectOneMenu>
+
+
+              <h:outputLabel value="#{properties.value('cu_pr_23_lbl_descripcion_periodo')}" styleClass="gris negrilla"/>
+              <h:outputLabel styleClass="gris" value="#{cuPr23GestionarCompromisoProyectos.descripcionPeriodo}" /> 
+
+            </h:panelGrid>
+            <br />
+
+            <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}"  
+                         id="idDataTableCompromisos" var="_compromiso" 
+                         value="#{cuPr23GestionarCompromisoProyectos.listaHitosCompromisosModel}" 
+                         rowIndexVar="idFila" rows="15" paginator="true" 
+                         rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                         resizableColumns="true"
+                         paginatorPosition="bottom" selection="#{cuPr23GestionarCompromisoProyectos.hitoCompromisoSeleccionado}" 
+                         selectionMode="single" styleClass="tabla" >
+
+              <p:ajax event="rowSelect" listener="#{cuPr23GestionarCompromisoProyectos.hitoCompromisoSeleccion}" 
+                      oncomplete="wv_dlgAdministraCompromiso.show();" 
+                      update=":idForm_cu_pr_23_administra_add_mod_compromiso:pgroupdialogAdministraCompromiso" />  
+              <p:ajax event="rowUnselect" listener="#{cuPr23GestionarCompromisoProyectos.noSeleccionHitoCompromiso}" 
+                      update="idDataTableCompromisos"/>  
+
+              <p:column width="30" headerText="#{properties.value('cu_pr_23_lbl_numero')}">  
+                #{idFila + 1}
+              </p:column>  
+
+              <p:column headerText="#{properties.value('cu_pr_23_lbl_nombre_compromiso')}">  
+                #{_compromiso.nombreCompromisoNumeroIncrementa}
+              </p:column> 
+
+              <p:column width="100" headerText="#{properties.value('cu_pr_23_lbl_fecha_limite')}">
+                <h:outputText value="#{_compromiso.fecha}">
+                  <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+                </h:outputText>    
+              </p:column>
+
+              <p:column width="100" headerText="#{properties.value('cu_pr_19_lbl_tabla_acciones')}" style="color: white">
+
+                <div class="centrado">
+                  <p:commandLink value="#{properties.value('cu_pr_10_lbl_tab3_btn_eliminar')}" 
+                                 immediate="true"
+                                 oncomplete="PF('varConfirmarEliminarCompromisoPeriodo').show()">  
+                    <f:setPropertyActionListener value="#{_compromiso}" target="#{cuPr23GestionarCompromisoProyectos.hitoCompromisoSeleccionado}" />  
+                  </p:commandLink>
+                </div>
+
+              </p:column>
+
+              <f:facet name="footer">  
+                <p:commandLink value="#{properties.value('cu_pr_23_lbl_agregar_nuevo_compromiso')}" immediate="true"
+                               action="#{cuPr23GestionarCompromisoProyectos.agregarNuevoCompromiso}"
+                               oncomplete="wv_dlgAdministraCompromiso.show();" update=":idForm_cu_pr_23_administra_add_mod_compromiso:pgroupdialogAdministraCompromiso"  /> 
+              </f:facet> 
+            </p:dataTable>
+
+
+            <br />
+            <br />
+            <p:separator styleClass="separadorBorder" /> 
+            <div class="centrado">
+              <p:commandButton value="#{properties.value('cu_pr_23_lbl_regresar_compromiso')}" 
+                               action="#{cuPr23GestionarCompromisoProyectos.regresar}" 
+                               immediate="true" styleClass="button" />
+            </div>
+            <br />
+            <br />
+
+            <p:confirmDialog widgetVar="varConfirmarEliminarCompromisoPeriodo" header="#{properties.value('cu_pr_2_lbl_titulo_confirmacion_titulo')}" 
+                             message="Sr usuario, desea eliminar compromiso seleccionado?" > 
+
+              <h:form id="formEliminarCompromisoPeriodo">
+
+                <p:outputPanel id="panelEliminarCompromisoPeriodo">
+                  <div class="centrado">
+                    <p:commandButton actionListener="#{cuPr23GestionarCompromisoProyectos.eliminarCompromisoPeriodo}" 
+                                     value="#{properties.value('cu_pr_7_lbl_btn_confirma_si')}" immediate="true"
+                                     oncomplete="varConfirmarEliminarCompromisoPeriodo.hide();"
+                                     update=":idForm_cu_pr_23_gestiona_compromiso:idDataTableCompromisos" />  
+                    <p:commandButton value="#{properties.value('cu_pr_7_lbl_btn_confirma_no')}" 
+                                     onclick="varConfirmarEliminarCompromisoPeriodo.hide();" type="button" />       
+                  </div>
+                </p:outputPanel>
+
+              </h:form>
+            </p:confirmDialog>
+
+          </h:form>
+
+          <ui:include src="include_dialog_adiciona_modifica_compromiso.xhtml" />
+
+        </ui:define>
+      </ui:composition>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"> 
+
+  <h:form id="formConsultaEvaluacionProyecto" >  
+
+    <h:panelGroup rendered="#{cuPr6ConsultarDetalleProyectoInvestigacion.esProyectoMigrado}">
+
+      <h:outputLabel  value="Evaluadores" styleClass="green negrilla" />
+      <br />
+      <p:dataTable var="_evaluador"
+                   value="#{cuPr1ProyectoFaces.listaEvaluadoresProyectoMigrados}" 
+                   rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                   rows="#{properties.value('general_mensaje_filas_datatable_pagina')}"
+                   paginator="true"
+                   paginatorPosition="bottom"                         
+                   emptyMessage="#{properties.value('general_mensaje_no_records_found')}">
+
+
+        <p:column headerText="#{properties.value('cu_pr_2_lbl_subtitulo_autor_cc_comentario')}">  
+          #{_evaluador.identificacion}
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_nom_y_apell')}">  
+          #{_evaluador.nombreCompleto}
+        </p:column>                
+        <p:column headerText="Clase de Evaluador" width="70" >
+          #{_evaluador.claseEvaluadorDescripcion}
+        </p:column>
+
+        <f:facet name="footer">  
+          #{fn:length( cuPr1ProyectoFaces.listaEvaluadoresProyectoMigrados )} #{properties.value('general_mensaje_footer_datatable_count')}
+        </f:facet>
+      </p:dataTable>
+
+    </h:panelGroup>
+    <br/>
+    <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" style="width: 100%;"
+                 id="idDataTableCriterios" var="_criterio" paginatorPosition="bottom" 
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true" 
+                 value="#{cuPr6ConsultarDetalleProyectoInvestigacion.evaluacionProyectoList}" 
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 resizableColumns="true"
+                 rowIndexVar="idFila">
+
+      <p:column width="30" headerText="#{properties.value('general_lbl_numero_tabla')}" style="text-align: center">  
+        #{idFila + 1}
+      </p:column> 
+
+      <p:column headerText="#{properties.value('cu_pr_12_lbl_popup_table_aspectos')}" width="400">  
+        #{_criterio.criterioEvaluacion.nombreCriterio}
+      </p:column> 
+
+      <p:column width="100" headerText="Valor Criterio">  
+        <h:outputText value="#{_criterio.valorCriterio}">
+          <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_decimal')}" />
+        </h:outputText>
+      </p:column>
+
+      <p:column width="100" headerText="Nota">  
+        <h:outputText value="#{_criterio.nota}" >
+          <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_decimal')}" />
+        </h:outputText>
+      </p:column>
+
+      <p:column width="100" headerText="Valor cualitativo" style="text-align: center">  
+        #{cuPr6ConsultarDetalleProyectoInvestigacion.calcularCualificacion(_criterio.nota)}
+      </p:column> 
+
+      <p:columnGroup type="footer">  
+        <p:row>  
+          <p:column colspan="3" footerText="Total" style="text-align:right; color:white; font-weight: bold"  />  
+          <p:column style="color:white; font-weight: bold" footerText="#{cuPr6ConsultarDetalleProyectoInvestigacion.calificacionTotal}" />  
+          <p:column style="color:white; font-weight: bold" footerText="#{cuPr6ConsultarDetalleProyectoInvestigacion.cualificacionTotal}" />
+        </p:row>  
+      </p:columnGroup>                                  
+    </p:dataTable>   
+
+  </h:form>
+
+</html>

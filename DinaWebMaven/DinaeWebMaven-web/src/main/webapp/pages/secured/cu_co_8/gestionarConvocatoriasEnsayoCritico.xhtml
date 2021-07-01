@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+    <div class="body">
+
+      <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+        <ui:define name="content">
+
+          <h:form id="idFormGestionarConvocatoriasEnsayoCriticoCuCo8">
+
+            <div class="fixed-menu">
+              <!--VENTANA DE LISTA DE CONVOCATORIA-->
+              <div class="right-col">
+                <h2>
+                  #{properties.value('cu_co_7_lbl_titulo_convocatorias')}
+                </h2>
+                <ui:include src="listadoConvocatoriasEnsayoCritico.xhtml" /> 
+              </div>
+            </div>
+          </h:form>
+
+
+        </ui:define>
+      </ui:composition>
+    </div>
+  </body>
+</html>

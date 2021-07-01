@@ -1,0 +1,152 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+  <h:body>
+    <div class="body">
+      <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+        <ui:define name="content">
+          <div class="fixed-menu">                        
+            <div class="right-col">
+              <h2 style="font: verdana;">
+                #{properties.value('cu_pr_09_lbl_titulo_consultar_proyectos_de_investigacion')}
+              </h2>
+            </div>
+          </div>                    
+          <div width="100%">
+            <h:form id="idcu_pr_09_form_consultar_trabajos_y_proyectos" >
+              <br />
+              <h:panelGroup id="idcu_pr_09_pgroup_consultar_trabajos_de_grado_y_proyectos">
+                <h:panelGrid id="idcu_pr_09_pgrid_consultar_trabajos_de_grado_y_proyectos" columns="1" style="width: 100%" 
+                             rowClasses="filaParPanelGridPar,filaParPanelGridImPar">
+
+                  <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" id="pgformularioDetalleIndicador"
+                               columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaLabel_70_porciento">
+
+                    <h:outputLabel value="#{properties.value('cu_pr_09_lbl_palabra_clave')}" styleClass="gris negrilla" for="idcu_pr_09_input_palabra_clave"/>                                            
+                    <p:inputText id="idcu_pr_09_input_palabra_clave"
+                                 value="#{cuPr09ConsultarProyectosDeInvestigacion.palabraClave}"
+                                 maxlength="50" size="50" />
+
+                    <h:outputLabel value="#{properties.value('cu_pr_09_lbl_area_ciencia_tecnologia')}" styleClass="gris negrilla"/>
+                    <h:selectOneMenu id="idListaSelectItemArea" styleClass="gris"
+                                     value="#{cuPr09ConsultarProyectosDeInvestigacion.idAreaCienciaTecnologiaSeleccionada}">  
+                      <f:selectItem itemLabel="--Select--" itemValue="" />  
+                      <f:selectItems value="#{cuPr09ConsultarProyectosDeInvestigacion.listaItemsAreaCienciaYTecnologia}" />  
+                      <p:ajax update="idcu_pr_09_select_linea_ciencia" listener="#{cuPr09ConsultarProyectosDeInvestigacion.handleAreaCienciaTecnologiaSeleccionadaChange}" />  
+                    </h:selectOneMenu>
+
+                    <h:outputLabel value="#{properties.value('cu_pr_09_lbl_linea_ciencia_tecnologia')}" styleClass="gris negrilla" for="idcu_pr_09_select_linea_ciencia"/>
+                    <h:selectOneMenu id="idcu_pr_09_select_linea_ciencia"   styleClass="gris"                          
+                                     value="#{cuPr09ConsultarProyectosDeInvestigacion.idLineaSeleccionada}">  
+                      <f:selectItem itemLabel="--Select--" itemValue="" />  
+                      <f:selectItems value="#{cuPr09ConsultarProyectosDeInvestigacion.listaItemsLineaCienciaYTecnologia}"/>  
+                    </h:selectOneMenu>
+
+                    <h:outputLabel value="#{properties.value('cu_pr_09_lbl_estado_implementacion')}" styleClass="gris negrilla" for="idcu_pr_01_select_stado_implementacion"/>
+                    <h:selectOneMenu value="#{cuPr09ConsultarProyectosDeInvestigacion.idEstadoImplementacion}" 
+                                     id="idcu_pr_01_select_stado_implementacion" styleClass="gris">  
+                      <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+                      <f:selectItems value="#{cuPr09ConsultarProyectosDeInvestigacion.listaItemsEstadosImplementacion}" />
+                    </h:selectOneMenu>
+
+                  </h:panelGrid>
+
+                  <h:panelGrid id="idcu_pr_09_pgrid_fecha_presentacion" 
+                               columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaLabel_70_porciento"
+                               columns="4" rowClasses="filaParPanelGridPar,filaParPanelGridImPar">
+
+                    <h:outputLabel value="#{properties.value('cu_pr_09_lbl_fecha_presentacion_entre')}" 
+                                   styleClass="gris negrilla" 
+                                   for="idcu_pr_09_calendar_fecha_presentacion_nicial"/>                                            
+
+                    <p:calendar id="idcu_pr_09_calendar_fecha_presentacion_nicial" 
+                                showOn="button" 
+                                navigator="true"
+                                readonlyInput="false" 
+                                pattern="#{properties.value('general_formato_fecha')}"
+                                locale="es"
+                                showButtonPanel="true"
+                                styleClass="gris"
+                                value="#{cuPr09ConsultarProyectosDeInvestigacion.fechaPresentacionInicial}"/>
+                    <h:outputLabel value="#{properties.value('cu_pr_09_lbl_fecha_presentacion_y')}" 
+                                   styleClass="gris negrilla" for="idcu_pr_09_calendar_fecha_presentacion_final"/>
+                    <p:calendar id="idcu_pr_09_calendar_fecha_presentacion_final" 
+                                showOn="button" 
+                                navigator="true"
+                                readonlyInput="false" 
+                                pattern="#{properties.value('general_formato_fecha')}"
+                                locale="es"
+                                showButtonPanel="true"
+                                styleClass="gris"
+                                value="#{cuPr09ConsultarProyectosDeInvestigacion.fechaPresentacionFinal}"/>
+
+                  </h:panelGrid>
+
+                </h:panelGrid>
+              </h:panelGroup>
+              <br/>                                
+
+              <div class="centrado">
+                <p:commandButton value="#{properties.value('cu_pr_09_lbl_btn_buscar')}" 
+                                 action="#{cuPr09ConsultarProyectosDeInvestigacion.buscarTrabajoOProyecto}" 
+                                 update="@form"/>
+
+                <p:commandButton value="#{properties.value('cu_pr_09_lbl_btn_limpiar')}" 
+                                 action="#{cuPr09ConsultarProyectosDeInvestigacion.limpiarCampos}" 
+                                 update="@form"/>
+              </div>
+              <br/>
+
+              <p:dataTable var="_proyecto" value="#{cuPr09ConsultarProyectosDeInvestigacion.listaProyectosEncontradosModel}"
+                           rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                           id="idcu_pr_09_datatable_proyectos_encontrados"
+                           emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                           paginator="true" selectionMode="single"
+                           selection="#{cuPr09ConsultarProyectosDeInvestigacion.propuestaSeleccionada}"
+                           resizableColumns="true" rowIndexVar="idFila" 
+                           paginatorPosition="bottom" 
+                           rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+                <p:ajax event="rowSelect" listener="#{cuPr09ConsultarProyectosDeInvestigacion.verDatalleProyectoInvestigacion}" update="@form"/>  
+                <p:ajax event="rowUnselect" listener="#{cuPr09ConsultarProyectosDeInvestigacion.noSeleccionPropuesta}" /> 
+
+                <p:column width="70" headerText="#{properties.value('cu_pr_09_lbl_column_fecha')}">
+                  <h:outputText value="#{_proyecto.fechaRegistro}" >
+                    <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" type="date"/>
+                  </h:outputText>
+                </p:column>
+
+                <p:column width="60" headerText="#{properties.value('cu_pr_09_lbl_column_unidad_policial')}">
+                  #{_proyecto.siglaFisica}
+                </p:column>
+
+                <p:column width="120" headerText="#{properties.value('cu_pr_09_lbl_column_area')}" style="width: 25%">
+                  #{_proyecto.nombreArea}
+                </p:column>
+
+                <p:column width="120" headerText="#{properties.value('cu_pr_25_lbl_datatable_codigo_proyec')}" >
+                  #{_proyecto.codigoProyecto}
+                </p:column>
+
+                <p:column headerText="#{properties.value('cu_pr_09_lbl_column_titulo')}" >
+                  #{_proyecto.tituloPropuesto}
+                </p:column>
+
+                <f:facet name="footer">
+                  #{cuPr09ConsultarProyectosDeInvestigacion.listaProyectosEncontradosModel.numeroRegistro} #{properties.value('general_mensaje_footer_datatable_count')}
+                </f:facet>
+
+              </p:dataTable>
+            </h:form>
+          </div>
+        </ui:define>
+      </ui:composition>
+    </div>
+  </h:body>
+</html>

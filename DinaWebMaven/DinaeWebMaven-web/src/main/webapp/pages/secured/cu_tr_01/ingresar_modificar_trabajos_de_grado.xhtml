@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"      
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+  <head>
+    <title>Ingresar -Modificar Trabajos de Grado</title>        
+  </head>
+  <body>
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+
+      <ui:define name="content">                
+        <div class="fixed-menu">
+          <div class="right-col">
+            <h2>
+              <h:outputLabel value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.lblTitulo}"/>
+            </h2>                        
+          </div>
+        </div>
+        <br /><br />  
+        <div class="centrado">
+
+          <h:panelGrid columns="2"                                 
+                       columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">                        
+            <h:outputLabel value="#{properties.value('cu_tr_01_lbl_nombre_escuela')}" 
+                           styleClass="gris negrilla"/>
+            <h:outputText value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.nombreEscuela}" 
+                          styleClass="gris negrilla"/>
+
+          </h:panelGrid>                   
+
+        </div>
+        <br /><br />                
+
+        <!--Inicio Pestañas -->
+        <p:tabView id="tabViewTrabajosDeGrado" orientation="top" activeIndex="#{cuTr01IngresarModificarTrabajoDeGradoFaces.idTabSeleccionado}" >  
+
+          <p:ajax event="tabChange" listener="#{cuTr01IngresarModificarTrabajoDeGradoFaces.onTabChange}" 
+                  update=":#{p:component('idcu_tr_01_pgroup_include_accion_botones_abajo_talento_humano')},
+                  :#{p:component('idcu_tr_01_pgroup_include_accion_botones_abajo_otras_instituciones')},
+                  :#{p:component('idcu_tr_01_pgroup_include_accion_botones_abajo_info_basica')},
+                  :#{p:component('idcu_tr_01_pgroup_include_accion_botones_abajo_evaluacion')},
+                  :#{p:component('idcu_tr_01_pgroup_include_accion_botones_abajo_documentacion')},
+                  :#{p:component('idcu_tr_01_pgroup_include_accion_botones_abajo_asesorias')}"/>  
+
+          <p:tab id="idTabViewInformacionBasicaTrabajoDeGrado" title="#{properties.value('cu_tr_01_lbl_informacion_basica_trabajo_de_grado')}">
+            <h:panelGroup rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura or cuTr01IngresarModificarTrabajoDeGradoFaces.modoInvestigadorPrincipal}">
+              <ui:include src="/pages/secured/cu_tr_01/include_consulta_agregar_informacion_basica_trabajo_de_grado.xhtml"></ui:include>
+            </h:panelGroup>
+            <h:panelGroup rendered="#{!(cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura or cuTr01IngresarModificarTrabajoDeGradoFaces.modoInvestigadorPrincipal)}">
+              <ui:include src="/pages/secured/cu_tr_01/include_agregar_informacion_basica_trabajo_de_grado.xhtml"></ui:include>
+            </h:panelGroup>
+          </p:tab>
+
+          <p:tab id="idTabViewTalentoHumanoTrabajoDeGrado" title="#{properties.value('cu_tr_01_lbl_talento_humano')}" >
+            <h:outputLabel styleClass="green negrilla" value="#{properties.value('cu_tr_01_lbl_necesario_adicionar_info_basica_proyecto')}" 
+                           rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.esNuevoTrabajoDeGrado}" /> 
+
+            <h:panelGroup rendered="#{!cuTr01IngresarModificarTrabajoDeGradoFaces.esNuevoTrabajoDeGrado}">
+
+              <h:panelGroup rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura or cuTr01IngresarModificarTrabajoDeGradoFaces.modoInvestigadorPrincipal}">
+                <ui:include src="/pages/secured/cu_tr_01/include_consulta_agregar_talento_humano_trabajo_de_grado.xhtml" />
+              </h:panelGroup>
+              <h:panelGroup rendered="#{!(cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura or cuTr01IngresarModificarTrabajoDeGradoFaces.modoInvestigadorPrincipal)}">
+                <ui:include src="/pages/secured/cu_tr_01/include_agregar_talento_humano_trabajo_de_grado.xhtml" />
+              </h:panelGroup>
+
+            </h:panelGroup>
+          </p:tab>
+
+          <p:tab id="idTabViewDocumentacionTrabajoDeGrado" title="#{properties.value('cu_tr_01_lbl_documentacion_trabajo_de_grado')}" >
+            <h:outputLabel styleClass="green negrilla" value="#{properties.value('cu_tr_01_lbl_necesario_adicionar_info_basica_proyecto')}" 
+                           rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.esNuevoTrabajoDeGrado}" />
+
+            <h:panelGroup rendered="#{!cuTr01IngresarModificarTrabajoDeGradoFaces.esNuevoTrabajoDeGrado}">    
+
+              <ui:include src="/pages/secured/cu_tr_01/include_agregar_documentacion_trabajo_de_grado.xhtml" />                            
+
+            </h:panelGroup>
+          </p:tab>
+
+          <p:tab id="idTabViewEvaluacionTrabajoDeGrado" title="#{properties.value('cu_tr_01_lbl_evaluacion_trabajo_de_grado')}" >
+            <h:outputLabel styleClass="green negrilla" value="#{properties.value('cu_tr_01_lbl_necesario_adicionar_info_basica_proyecto')}" 
+                           rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.esNuevoTrabajoDeGrado}" /> 
+
+            <h:panelGroup rendered="#{!cuTr01IngresarModificarTrabajoDeGradoFaces.esNuevoTrabajoDeGrado}">      
+
+              <h:panelGroup rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura or cuTr01IngresarModificarTrabajoDeGradoFaces.modoInvestigadorPrincipal}">
+                <ui:include src="/pages/secured/cu_tr_01/include_consulta_agregar_evaluacion_trabajo_de_grado.xhtml" />
+              </h:panelGroup>
+              <h:panelGroup rendered="#{!(cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura or cuTr01IngresarModificarTrabajoDeGradoFaces.modoInvestigadorPrincipal)}">
+                <ui:include src="/pages/secured/cu_tr_01/include_agregar_evaluacion_trabajo_de_grado.xhtml" />
+              </h:panelGroup>                            
+
+            </h:panelGroup>
+          </p:tab>
+
+          <p:tab id="idTabViewAsesoriasTrabajoDeGrado" title="#{properties.value('cu_tr_01_lbl_asesorias_trabajo_de_grado')}" >
+            <h:outputLabel styleClass="green negrilla" value="#{properties.value('cu_tr_01_lbl_necesario_adicionar_info_basica_proyecto')}" 
+                           rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.esNuevoTrabajoDeGrado}" /> 
+
+            <h:panelGroup rendered="#{!cuTr01IngresarModificarTrabajoDeGradoFaces.esNuevoTrabajoDeGrado}">    
+
+              <h:panelGroup rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura or cuTr01IngresarModificarTrabajoDeGradoFaces.modoInvestigadorPrincipal}">
+                <ui:include src="/pages/secured/cu_tr_01/include_consulta_agregar_asesorias_trabajo_de_grado.xhtml" />
+              </h:panelGroup>
+              <h:panelGroup rendered="#{!(cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura or cuTr01IngresarModificarTrabajoDeGradoFaces.modoInvestigadorPrincipal)}">
+                <ui:include src="/pages/secured/cu_tr_01/include_agregar_asesorias_trabajo_de_grado.xhtml" />
+              </h:panelGroup>
+
+            </h:panelGroup>
+          </p:tab>
+
+          <p:tab id="idTabViewOtrasInstitucionesTrabajoDeGrado" title="#{properties.value('cu_tr_01_lbl_otras_instituciones_trabajo_de_grado')}" >
+            <h:outputLabel styleClass="green negrilla" value="#{properties.value('cu_tr_01_lbl_necesario_adicionar_info_basica_proyecto')}" 
+                           rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.esNuevoTrabajoDeGrado}" /> 
+
+            <h:panelGroup rendered="#{!cuTr01IngresarModificarTrabajoDeGradoFaces.esNuevoTrabajoDeGrado}">    
+
+              <h:panelGroup rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura or cuTr01IngresarModificarTrabajoDeGradoFaces.modoInvestigadorPrincipal}">
+                <ui:include src="/pages/secured/cu_tr_01/include_consulta_agregar_otras_instituciones_trabajo_de_grado.xhtml" />
+              </h:panelGroup>
+              <h:panelGroup rendered="#{!(cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura or cuTr01IngresarModificarTrabajoDeGradoFaces.modoInvestigadorPrincipal)}">
+                <ui:include src="/pages/secured/cu_tr_01/include_agregar_otras_instituciones_trabajo_de_grado.xhtml" />
+              </h:panelGroup>
+
+            </h:panelGroup>
+          </p:tab>
+
+        </p:tabView>
+        <!--Fin Pestañas -->
+
+
+      </ui:define>
+    </ui:composition>
+  </body>
+</html>

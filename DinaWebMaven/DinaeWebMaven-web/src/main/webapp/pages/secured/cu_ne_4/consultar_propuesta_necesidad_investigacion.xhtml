@@ -1,0 +1,18 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+  <body>
+
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+      <ui:define name="content">
+        <!--VENTANA CONSULTA DE PROPUESTA-->
+        <h:panelGroup id="idPanelGroupListaPropuestaNecesidad">
+          <h:panelGroup >
+            <ui:include src="include_busqueda_propuesta_necesidad.xhtml"/>
+          </h:panelGroup>
+        </h:panelGroup>
+      </ui:define>
+    </ui:composition>
+  </body>
+</html>

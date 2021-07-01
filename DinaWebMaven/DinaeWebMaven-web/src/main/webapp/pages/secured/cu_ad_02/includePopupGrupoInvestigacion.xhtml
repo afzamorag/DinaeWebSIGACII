@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <h:form id="formGrupoInv">
+    <br />
+    <h:panelGrid id="panelgridAdminParamSistemaGrupoInv" columns="2" style="width: 100%" 
+                 rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_40_porciento,panelGridColumnaValor_60_porciento">
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="Código del grupo" for="inputCodGrupoParam" styleClass="gris negrilla" />
+      </h:panelGrid>            
+      <h:inputText value="#{cuAd02AdministrarParametrosSistemaFaces.codigoGrupo}" id="inputCodGrupoParam" styleClass="gris"
+                   />
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="Nombre del grupo" for="inputNomGrupoParam" styleClass="gris negrilla"/>
+      </h:panelGrid>            
+      <h:inputText value="#{cuAd02AdministrarParametrosSistemaFaces.nombreGrupo}" id="inputNomGrupoParam" styleClass="gris" 
+                   size="60"/>
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="Fecha de registro en GrupLAC" for="calendarFechaRegParam" styleClass="gris negrilla" />
+      </h:panelGrid>            
+      <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es" style="text-align: left"
+                  yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                  navigator="true" value="#{cuAd02AdministrarParametrosSistemaFaces.fechaRegistro}" 
+                  id="calendarFechaRegParam" showOn="button" styleClass="gris" />             
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="Estado" for="selectEstadoParam" styleClass="gris negrilla" />
+      </h:panelGrid>            
+      <h:selectOneMenu value="#{cuAd02AdministrarParametrosSistemaFaces.estadoGrupo}" id="selectEstadoParam" styleClass="gris">
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="" />
+        <f:selectItem itemLabel="ACTIVO" itemValue="ACTIVO" />
+        <f:selectItem itemLabel="INACTIVO" itemValue="INACTIVO" />
+      </h:selectOneMenu>
+
+
+      <f:facet name="footer">
+        <div class="centrado">
+          <br />
+          <p:commandButton value="#{properties.value('general_lbl_btn_guardar')}" 
+                           rendered="#{!cuAd02AdministrarParametrosSistemaFaces.modificarGrupo}" id="btnGuardarGrupoInvParam"
+                           actionListener="#{cuAd02AdministrarParametrosSistemaFaces.guardarModificarGrupoInvestigacion}" 
+                           process="@form"
+                           update=":formAdminParamSistema:tablaParametrosSistemaTipo"
+                           oncomplete="postAction(xhr, status, args)"/>
+
+          <p:commandButton value="#{properties.value('general_lbl_btn_modificar')}" 
+                           rendered="#{cuAd02AdministrarParametrosSistemaFaces.modificarGrupo}"
+                           actionListener="#{cuAd02AdministrarParametrosSistemaFaces.guardarModificarGrupoInvestigacion}" 
+                           process="@form"
+                           update=":formAdminParamSistema:tablaParametrosSistemaTipo"
+                           oncomplete="postAction(xhr, status, args)" />
+
+          <p:commandButton value="#{properties.value('general_lbl_btn_cancelar')}" 
+                           rendered="#{cuAd02AdministrarParametrosSistemaFaces.modificarGrupo}"
+                           action="#{cuAd02AdministrarParametrosSistemaFaces.inicializarDatosGrupoInvestigacion}" 
+                           update=":formAdminParamSistema:formPopup"
+                           oncomplete="PF('formCreateUpdateParams').hide();"/>
+
+
+        </div>                
+      </f:facet>
+
+    </h:panelGrid>
+
+  </h:form>
+</html>

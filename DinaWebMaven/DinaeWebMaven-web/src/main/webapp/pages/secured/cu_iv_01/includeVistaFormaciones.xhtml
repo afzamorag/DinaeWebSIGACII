@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+  <br/>
+
+  <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_nivel_formacion')}" styleClass="green negrilla" />
+  <p:dataTable id="idDataTableNivelFormacion" var="_nivel"
+               emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+               value="#{cuIv01GestionarInvestigadoresFaces.listaVistaFormacion}" 
+               rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+               rowIndexVar="idFila" paginatorPosition="bottom" 
+               rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true">
+
+    <p:column headerText="#{properties.value('cu_pr_3_lbl_sub_titulo_titulo_obtenido')}">  
+      <h:outputLabel value="#{_nivel.titulo}" />  
+    </p:column>  
+    <p:column headerText="#{properties.value('cu_pr_3_lbl_sub_titulo_nivel_academ')}">  
+      <h:outputLabel value="#{_nivel.nivelAcademico}" />  
+    </p:column>         
+    <p:column headerText="#{properties.value('cu_pr_3_lbl_sub_titulo_fecha_finaliza')}" >
+      <h:outputLabel value="#{_nivel.fechaTermino}" >
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+      </h:outputLabel>
+    </p:column>
+    <f:facet name="footer">  
+      #{fn:length( cuIv01GestionarInvestigadoresFaces.listaVistaFormacion )} #{properties.value('general_mensaje_footer_datatable_count')}
+    </f:facet>
+  </p:dataTable>
+</html>
+

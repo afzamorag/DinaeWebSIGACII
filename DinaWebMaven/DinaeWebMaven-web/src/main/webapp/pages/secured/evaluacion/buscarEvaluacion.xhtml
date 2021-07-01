@@ -1,0 +1,371 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    template="/templates/plantillaPrincipal.xhtml">
+
+    <ui:define name="content">
+        <p:panel 
+            id="main"
+            styleClass="ui-fluid">
+            <h:form
+                id="frmList"
+                prependId="false">
+                <h:outputText 
+                    value="#{bundle['evaluacion.titulo']}"/>
+                <p:separator />
+                <p:panel>
+                    <p:panelGrid
+                        id="pgFiltro"
+                        layout="grid" 
+                        columns="4"
+                        columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" 
+                        styleClass="ui-panelgrid-blank">
+                        <!-- vigencia -->
+                        <p:outputLabel
+                            for="somVigencia"
+                            value="#{bundle['evaluacion.vigencia']}"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu 
+                                id="somVigencia" 
+                                value="#{evaluacionController.filtroEvaluaciones.vigencia}"
+                                required="false">
+                                <f:selectItem 
+                                    value="#{appController.noSelection}"/>
+                                <f:selectItems 
+                                    value="#{evaluacionController.vigencias}" 
+                                    var="vigencia" 
+                                    itemLabel="#{vigencia.vigencia}" 
+                                    itemValue="#{vigencia.vigencia}" />
+                            </p:selectOneMenu>              
+                            <p:message
+                                for="somVigencia"/>
+                        </h:panelGroup>
+                        <!-- nombre evaluación -->
+                        <p:outputLabel
+                            for="somNombreEval"
+                            value="#{bundle['evaluacion.nombreEvaluacion']}"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu 
+                                id="somNombreEval" 
+                                value="#{evaluacionController.filtroEvaluaciones.evaluacion}" 
+                                required="false" >
+                                <f:selectItem 
+                                    value="#{appController.noSelectionOption}"/>
+                                <f:selectItems 
+                                    value="#{evaluacionController.evaluacionesFilter}" 
+                                    var="evaluacion"
+                                    itemLabel="#{evaluacion.evalDescri}" 
+                                    itemValue="#{evaluacion.id}"/>
+                            </p:selectOneMenu>              
+                            <p:message for="somNombreEval"/>
+                        </h:panelGroup>
+                        <!-- proceso -->
+                        <p:outputLabel
+                            for="somProceso"
+                            value="#{bundle['evaluacion.proceso']}"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu 
+                                id="somProceso" 
+                                value="#{evaluacionController.filtroEvaluaciones.proceso}"
+                                required="false">
+                                <f:selectItem 
+                                    value="#{appController.noSelectionOption}"/>
+                                <f:selectItems 
+                                    value="#{evaluacionController.procesos}" 
+                                    var="proceso" 
+                                    itemLabel="#{proceso.nombre}" 
+                                    itemValue="#{proceso.id}" />
+                            </p:selectOneMenu>              
+                            <p:message
+                                for="somProceso"/>
+                        </h:panelGroup>
+                        <!-- modalidad -->
+                        <p:outputLabel
+                            for="somModalidad"
+                            value="#{bundle['evaluacion.modalidad']}"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu 
+                                id="somModalidad" 
+                                value="#{evaluacionController.filtroEvaluaciones.modalidad}" required="false">
+                                <f:selectItem 
+                                    value="#{appController.noSelectionOption}"/>
+                                <f:selectItems 
+                                    value="#{evaluacionController.modalidades}" 
+                                    var="modalidad" 
+                                    itemLabel="#{modalidad.nombre}" 
+                                    itemValue="#{modalidad.id}" />
+                            </p:selectOneMenu>              
+                            <p:message
+                                for="somModalidad"/>
+                        </h:panelGroup>
+                        <!-- nivel académico -->
+                        <p:outputLabel
+                            for="somNivelAcademico"
+                            value="#{bundle['evaluacion.nivelAcademico']}"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu 
+                                id="somNivelAcademico" 
+                                value="#{evaluacionController.filtroEvaluaciones.nivelAcademico}"
+                                required="false">
+                                <p:ajax process="@this" update="somProgramaAcademico" listener="#{evaluacionController.cargarProgramasAcademicosPorNivel()}" />
+                                <f:selectItem 
+                                    value="#{appController.noSelectionOption}"/>
+                                <f:selectItems 
+                                    value="#{evaluacionController.nivelesAcademicos}" 
+                                    var="nivelAcademico" 
+                                    itemLabel="#{nivelAcademico.descripcion}" 
+                                    itemValue="#{nivelAcademico.idNivelAcademico}" />
+                            </p:selectOneMenu>              
+                            <p:message
+                                for="somNivelAcademico"/>
+                        </h:panelGroup>
+                        <p:outputLabel
+                            for="somProgramaAcademico"
+                            value="#{bundle['evaluacion.programaAcademico']}"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu 
+                                id="somProgramaAcademico" converter="carreraPKConverter" 
+                                value="#{evaluacionController.filtroEvaluaciones.eventoProgramaAcademico}" 
+                                required="false"
+                                filter="true"
+                                filterMatchMode="contains">
+                                <f:selectItem 
+                                    value="#{appController.noSelection}"/>
+                                <f:selectItems 
+                                    value="#{evaluacionController.programasAcademicosFiltro}" 
+                                    var="programa" 
+                                    itemLabel="#{programa.descripcion}" 
+                                    itemValue="#{programa.carrerasPK}"/>
+                            </p:selectOneMenu>              
+                            <p:message
+                                for="somProgramaAcademico"/>
+                        </h:panelGroup>
+                        <!-- población nivel -->
+                        <p:outputLabel
+                            for="smmPoblacionNivel"
+                            value="#{bundle['evaluacion.poblacionNivel']}"/>
+                        <h:panelGroup>
+                            <p:selectManyMenu 
+                                id="smmPoblacionNivel" 
+                                value="#{evaluacionController.filtroEvaluaciones.ploblacionNivel}"         
+                                required="false" converter="categoriaPKConverter" showCheckbox="true" scrollHeight="100" >
+                                <p:ajax  process="@this" update="smmPoblacionGrado" listener="#{evaluacionController.cargarGradosPorCategorias()}"/>
+                                <f:selectItems 
+                                    value="#{evaluacionController.categorias}"   
+                                    var="nivel" 
+                                    itemLabel="#{nivel.descripcion}" 
+                                    itemValue="#{nivel.id}"/>
+                            </p:selectManyMenu>              
+                            <p:message for="smmPoblacionNivel"/>
+                        </h:panelGroup>
+                        <!-- población grado -->
+                        <p:outputLabel
+                            for="smmPoblacionGrado"
+                            value="#{bundle['evaluacion.poblacionGrado']}"/>
+                        <h:panelGroup>
+                            <p:selectManyMenu 
+                                id="smmPoblacionGrado" 
+                                value="#{evaluacionController.filtroEvaluaciones.ploblacionGrado}" 
+                                required="false" converter="gradoPKConverter" showCheckbox="true" scrollHeight="100" >
+                                <f:selectItems 
+                                    value="#{evaluacionController.gradosFiltro}" 
+                                    var="grado" 
+                                    itemLabel="#{grado.descripcion}" 
+                                    itemValue="#{grado.id}"/>
+                            </p:selectManyMenu>              
+                            <p:message for="smmPoblacionGrado"/>
+                        </h:panelGroup>
+                    </p:panelGrid>
+                    <f:facet
+                        name="footer">
+                        <p:panelGrid
+                            columns="4"
+                            layout="grid" 
+                            columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+                            styleClass="ui-panelgrid-blank">
+                            <p:commandButton 
+                                id="btnSearch" 
+                                value="#{bundle['commons.btn.find']}"
+                                title="#{bundle['commons.btn.find']}"
+                                icon="ui-icon-search" 
+                                actionListener="#{evaluacionController.buscarEvaluaciones()}"
+                                process="@this pgFiltro" 
+                                update="dtList"/>
+                            <p:commandButton 
+                                id="btnAdd" 
+                                rendered="#{evaluacionController.validaRol}"
+                                value="#{bundle['evaluacion.btn.add.eval']}"
+                                title="#{bundle['evaluacion.btn.add.eval']}"
+                                icon="ui-icon-document" 
+                                action="#{evaluacionController.agregarEvaluacion()}" />
+                        </p:panelGrid>
+                    </f:facet>
+                </p:panel>
+                <p:panel 
+                    header="#{bundle['evaluacion.titulo']}">
+                    <p:dataTable 
+                        id="dtList"
+                        value="#{evaluacionController.evaluaciones}"
+                        var="record"
+                        paginator="true" 
+                        rows="10"
+                        paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                        rowsPerPageTemplate="10,50,100" reflow="true">
+                        <p:column 
+                            headerText="#{bundle['commons.lbl.opciones']}" 
+                            style="text-align: center">
+                            <h:panelGroup>
+                                <p:commandLink 
+                                    value="#{bundle['evaluacion.link.view.detail']}" 
+                                    title="#{bundle['evaluacion.link.view.detail']}" 
+                                    action="#{evaluacionController.verDetalle()}" 
+                                    rendered="#{((record.estadoEvaluacion == 'PENDIENTE' or record.estadoEvaluacion == 'ACTIVA') and record.aplicada == 'N') or (record.estadoEvaluacion == 'ACTIVA' and record.aplicada == 'S') or (record.estadoEvaluacion == 'INACTIVA')}">
+                                    <f:setPropertyActionListener 
+                                        value="#{record}" 
+                                        target="#{evaluacionController.selected}" />
+                                </p:commandLink>
+                                &nbsp;&nbsp;
+                                <p:commandLink 
+                                    value="#{bundle['commons.btn.edit']}" 
+                                    title="#{bundle['commons.btn.edit']}" 
+                                    action="#{evaluacionController.editarEvaluacion()}" 
+                                    rendered="#{(record.estadoEvaluacion == 'PENDIENTE' or record.estadoEvaluacion == 'ACTIVA') and record.aplicada == 'N'}">
+                                    <f:setPropertyActionListener 
+                                        value="#{record}" 
+                                        target="#{evaluacionController.selected}" />
+                                </p:commandLink>
+                                &nbsp;&nbsp;
+                                <p:commandLink 
+                                    value="#{bundle['commons.btn.remove']}" 
+                                    title="#{bundle['commons.btn.remove']}" 
+                                    action="#{evaluacionController.eliminarEvaluacion()}" 
+                                    update="dtList" 
+                                    rendered="#{(record.estadoEvaluacion == 'PENDIENTE' or record.estadoEvaluacion == 'ACTIVA') and record.aplicada == 'N'}">
+                                    <f:setPropertyActionListener 
+                                        value="#{record}" 
+                                        target="#{evaluacionController.selected}" />
+                                    <!--p:confirm 
+                                        header="{bundle['commons.cfmdlg.header']}" 
+                                        message="{bundle['commons.cfmdlg.remove.message']}" 
+                                        icon="ui-icon-alert" /-->
+                                </p:commandLink>
+                                &nbsp;&nbsp;
+                                <p:commandLink 
+                                    value="#{bundle['commons.btn.generate']}" 
+                                    title="#{bundle['commons.btn.generate']}" 
+                                    ajax="false" 
+                                    rendered="#{((record.estadoEvaluacion == 'PENDIENTE' or record.estadoEvaluacion == 'ACTIVA') and record.aplicada == 'N') or (record.estadoEvaluacion == 'ACTIVA' and record.aplicada == 'S') or (record.estadoEvaluacion == 'INACTIVA')}">
+                                    <f:setPropertyActionListener 
+                                        value="#{record}" 
+                                        target="#{evaluacionController.selected}" />
+                                    <p:fileDownload 
+                                        value="#{evaluacionController.reportePDF}" />
+                                </p:commandLink>
+                                &nbsp;&nbsp;
+                                <p:commandLink 
+                                    value="#{bundle['evaluacion.link.new.version']}" 
+                                    title="#{bundle['evaluacion.link.new.version']}" 
+                                    action="#{evaluacionController.nuevaVersionEvaluacion()}" 
+                                    rendered="#{evaluacionController.validaRol and record.estadoEvaluacion == 'ACTIVA' and record.aplicada == 'S'}">
+                                    <f:setPropertyActionListener 
+                                        value="#{record}" 
+                                        target="#{evaluacionController.selected}" />
+                                </p:commandLink>
+                            </h:panelGroup>
+                        </p:column>
+                        <p:column 
+                            headerText="#{bundle['evaluacion.vigencia']}"
+                            sortBy="#{record.pae.vigencia}"
+                            filterBy="#{record.pae.vigencia}" 
+                            filterMatchMode="contains">
+                            <h:outputText 
+                                value="#{record.pae.vigencia}"/>
+                        </p:column>
+                        <p:column 
+                            headerText="#{bundle['evaluacion.proceso']}"
+                            sortBy="#{record.proceso.nombre}" 
+                            filterBy="#{record.proceso.nombre}" 
+                            filterMatchMode="contains">
+                            <h:outputText 
+                                value="#{record.proceso.nombre}"/>
+                        </p:column>
+                        <p:column 
+                            headerText="#{bundle['evaluacion.nivelAcademico']}"
+                            sortBy="#{record.evento.carrera.nivelAcademico.descripcion}"
+                            filterBy="#{record.evento.carrera.nivelAcademico.descripcion}" 
+                            filterMatchMode="contains">
+                            <h:outputText 
+                                value="#{record.evento.carrera.nivelAcademico.descripcion}"/>
+                        </p:column>
+                        <p:column 
+                            headerText="#{bundle['evaluacion.programaAcademico']}"
+                            sortBy="#{record.evento.carrera.descripcion}"
+                            filterBy="#{record.evento.carrera.descripcion}" 
+                            filterMatchMode="contains">
+                            <h:outputText 
+                                value="#{record.evento.carrera.descripcion}"/>
+                        </p:column>
+                        <p:column 
+                            headerText="#{bundle['evaluacion.modalidad']}"
+                            sortBy="#{record.modalidad.nombre}"
+                            filterBy="#{record.modalidad.nombre}" 
+                            filterMatchMode="contains">
+                            <h:outputText 
+                                value="#{record.modalidad.nombre}"/>
+                        </p:column>
+                        <p:column 
+                            headerText="#{bundle['evaluacion.poblacionGrado']}" 
+                            sortBy="#{record.evalGrados[0].grado.descripcion}"
+                            filterBy="#{record.evalGrados[0].grado.descripcion}" 
+                            filterMatchMode="contains">
+                            <ui:repeat value="#{record.evalGrados}" var="gradoEval">
+                                <h:outputText value="#{gradoEval.grado.descripcion}"/><br/>
+                            </ui:repeat>
+                        </p:column>
+                        <p:column 
+                            headerText="#{bundle['evaluacion.poblacionNivel']}" 
+                            sortBy="#{record.evalGrados[0].grado.categoria.descripcion}"
+                            filterBy="#{record.evalGrados[0].grado.categoria.descripcion}" 
+                            filterMatchMode="contains">
+                            <ui:repeat 
+                                value="#{record.evalGrados}" 
+                                var="gradoEval">
+                                <h:outputText 
+                                    value="#{gradoEval.grado.categoria.descripcion}" /><br/>
+                            </ui:repeat>
+                        </p:column>
+                        <p:column 
+                            headerText="#{bundle['evaluacion.nombreEvaluacion']}"
+                            sortBy="#{record.evalDescri}"
+                            filterBy="#{record.evalDescri}" 
+                            filterMatchMode="contains">
+                            <h:outputText 
+                                value="#{record.evalDescri}"/>
+                        </p:column>
+                        <p:column 
+                            headerText="#{bundle['evaluacion.fechaVersion']}"
+                            sortBy="#{record.evalFecha}"
+                            filterBy="#{record.evalFecha}" 
+                            filterMatchMode="contains">
+                            <h:outputText 
+                                value="#{record.evalFecha}"/>
+                        </p:column>
+                        <p:column 
+                            headerText="#{bundle['evaluacion.estado']}"
+                            sortBy="#{record.estadoEvaluacion}"
+                            filterBy="#{record.estadoEvaluacion}" 
+                            filterMatchMode="contains">
+                            <h:outputText 
+                                value="#{record.estadoEvaluacion}"/>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+        </p:panel>
+    </ui:define>
+</ui:composition>

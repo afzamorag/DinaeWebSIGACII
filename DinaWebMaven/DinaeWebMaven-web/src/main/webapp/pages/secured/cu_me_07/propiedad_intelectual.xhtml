@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    template="/templates/plantillaPrincipal.xhtml">
+    <ui:define
+        name="content">
+        <p:panel 
+            id="main"
+            styleClass="ui-fluid">
+            <h:form
+                id="frmlist"
+                prependId="false"
+                rendered="#{!cuMe7PropiedadIntelectual.details}">
+                <p:panel
+                    id="pnlbtns">
+                    <f:facet
+                        name="header">
+                        Propiedad intelectual
+                    </f:facet>
+                    <p:panelGrid
+                        id="pngfilter"
+                        columns="2"
+                        layout="grid" 
+                        columnClasses="ui-grid-col-2,ui-grid-col-10" 
+                        styleClass="ui-panelgrid-blank">
+                        <p:outputLabel 
+                            for="cu_me_07_lbl_grupo" 
+                            value="#{properties.value('cu_me_07_lbl_grupo')}:"/>
+                        <p:selectOneMenu 
+                            rendered="true" 
+                            id="cu_me_07_lbl_grupo" 
+                            converter="grupoInvestigacionConverter"
+                            value="#{cuMe7PropiedadIntelectual.grupo}" 
+                            required="false">
+                            <f:selectItem 
+                                itemLabel=" SELECCIONE " 
+                                itemValue=""/>
+                            <f:selectItems 
+                                value="#{cuMe7PropiedadIntelectual.grupos}" 
+                                var="grupo" 
+                                itemLabel="#{grupo.descripcion}" 
+                                itemValue="#{grupo}"/> 
+                        </p:selectOneMenu>                        
+                        <p:outputLabel 
+                            for="cu_me_07_lbl_tipo_produccion" 
+                            value="#{properties.value('cu_me_07_lbl_tipo_produccion')}:"/>
+                        <p:selectOneMenu 
+                            rendered="true" 
+                            id="cu_me_07_lbl_tipo_produccion" 
+                            converter="dominioConverter"
+                            value="#{cuMe7PropiedadIntelectual.tipoProduccion}" 
+                            required="false">
+                            <f:selectItem 
+                                itemLabel=" SELECCIONE " 
+                                itemValue=""/>
+                            <f:selectItems 
+                                value="#{cuMe7PropiedadIntelectual.tiposProduccion}" 
+                                var="tipo" 
+                                itemLabel="#{tipo.nombre}" 
+                                itemValue="#{tipo}"/> 
+                        </p:selectOneMenu>
+                        <p:outputLabel 
+                            for="cu_me_07_lbl_identificacion" 
+                            value="#{properties.value('cu_me_07_lbl_identificacion')}:"/>
+                        <p:inputText 
+                            value="#{cuMe7PropiedadIntelectual.identificacion}" 
+                            id="cu_me_07_lbl_identificacion" 
+                            required="false" 
+                            maxlength="50"/>
+                    </p:panelGrid>
+                    <p:panelGrid
+                        id="pngbtns"
+                        columns="2"
+                        layout="grid" 
+                        columnClasses="ui-grid-col-2,ui-grid-col-2" 
+                        styleClass="ui-panelgrid-blank">
+                        <p:commandButton 
+                            value="#{properties.value('cu_me_07_lbl_buscar')}" 
+                            style="border:none"  
+                            actionListener="#{cuMe7PropiedadIntelectual.buscar()}"
+                            update="pngbtns idDataTableRegistros"
+                            title="#{bundle['commons.btn.find']}"
+                            icon="ui-icon-search"/>
+                        <p:commandButton 
+                            value="#{properties.value('cu_me_07_lbl_nuevo')}"                                              
+                            style="border:none"
+                            update="main" 
+                            actionListener="#{cuMe7PropiedadIntelectual.nuevo()}"
+                            rendered="#{cuMe7PropiedadIntelectual.renderButton}"/>
+                    </p:panelGrid>
+                </p:panel>
+                <p:dataTable 
+                    id="idDataTableRegistros"
+                    value="#{cuMe7PropiedadIntelectual.propiedades}" 
+                    var="registro"
+                    rowKey="#{registro.idPin}"
+                    paginator="true" 
+                    rows="10"
+                    rendered="true"
+                    selection="#{cuMe7PropiedadIntelectual.propiedadSeleccionada}"
+                    selectionMode="single"
+                    reflow="true"
+                    emptyMessage="#{bundle['commons.dt.emptymessage']}" 
+                    paginatorPosition="bottom" 
+                    style="text-align: center">
+                    <p:ajax 
+                        event="rowSelect"
+                        listener="#{cuMe7PropiedadIntelectual.onRowSelect}"                  
+                        update=":main" />
+                    <f:facet
+                        name="header">
+                        LISTADO GENERAL PROPIEDADES
+                    </f:facet>
+                    <p:column 
+                        headerText="#{properties.value('cu_me_07_lbl_tipo_produccion')}">
+                        <h:outputText 
+                            value="#{registro.tipo.nombre}" />
+                    </p:column>
+                    <p:column 
+                        headerText="#{properties.value('cu_me_07_lbl_descripcion')}">
+                        <h:outputText 
+                            value="#{registro.descripcion}" />
+                    </p:column>
+                    <p:column 
+                        headerText="#{properties.value('cu_me_07_lbl_ubicacion')}">
+                        <h:outputText 
+                            value="#{registro.entidad.entiNombre}" />
+                    </p:column>
+                    <p:column 
+                        headerText="#{properties.value('cu_me_07_lbl_fecha')}"
+                        style="text-align: center">
+                        <h:outputText 
+                            value="#{registro.fechaPublica}">
+                            <f:convertDateTime 
+                                type="date" 
+                                pattern="#{bundle['pattern.default.date']}"/>
+                        </h:outputText>
+                    </p:column>
+                    <!--p:column 
+                        headerText="#{properties.value('cu_me_07_lbl_opciones')}"
+                        style="text-align: center">                        
+                        <p:commandLink
+                            value="Eliminar"                                     
+                            immediate="true" 
+                            action="#{cuMe7PropiedadIntelectual.eliminar()}"
+                            update="idDataTableRegistros">
+                            <f:setPropertyActionListener 
+                                value="#{registro}" 
+                                target="#{cuMe7PropiedadIntelectual.propiedadSeleccionada}"/>
+                            <p:confirm 
+                                header="#{bundle['commons.cfmdlg.header']}" 
+                                message="#{bundle['commons.cfmdlg.remove.message']}" 
+                                icon="ui-icon-alert" />
+                        </p:commandLink>
+                        &#160;&#160;
+                        <p:commandLink 
+                            value="Ver"                                               
+                            update="main"
+                            immediate="true" 
+                            action="#{cuMe7PropiedadIntelectual.editar( registro )}">
+                        </p:commandLink>                     
+                    </p:column-->
+                </p:dataTable>
+            </h:form>
+            <h:form
+                id="frmDetail"
+                prependId="false"
+                rendered="#{cuMe7PropiedadIntelectual.details}">
+                <p:panel
+                    id="pnlDetails"
+                    rendered="#{!cuMe7PropiedadIntelectual.edit}">
+                    <f:facet
+                        name="header">
+                        Propiedad intelectual
+                    </f:facet>
+                    <p:panelGrid 
+                        id="pnlgdetalles"
+                        columns="4"
+                        layout="grid" 
+                        columnClasses="ui-grid-col-2,ui-grid-col-3, ui-grid-col-2, ui-grid-col-5" 
+                        styleClass="ui-panelgrid-blank"
+                        style="margin-top: 20px">                
+                        <p:outputLabel 
+                            for="cu_me_07_lbl_tipo_produccion_save" 
+                            value="#{properties.value('cu_me_07_lbl_tipo_produccion')}:"/>                       
+                        <h:panelGroup>
+                            <p:selectOneMenu                                  
+                                id="cu_me_07_lbl_tipo_produccion_save" 
+                                converter="dominioConverter"
+                                value="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.tipo}" 
+                                required="true"
+                                rendered="#{!cuMe7PropiedadIntelectual.edit}">  
+                                <f:selectItem 
+                                    itemLabel=" SELECCIONE "/>
+                                <f:selectItems 
+                                    value="#{cuMe7PropiedadIntelectual.tiposProduccion}" 
+                                    var="tipo" 
+                                    itemLabel="#{tipo.nombre}" 
+                                    itemValue="#{tipo}"/>
+                                <p:ajax                                     
+                                    update="pnlgdetalles"
+                                    listener="#{cuMe7PropiedadIntelectual.onTipoPropiedadChange()}"/>
+                            </p:selectOneMenu>
+                            <p:message
+                                for="cu_me_07_lbl_tipo_produccion_save"/>
+                        </h:panelGroup> 
+                        <p:outputLabel 
+                            for="cu_me_07_lbl_descripcion" 
+                            value="#{properties.value('cu_me_07_lbl_descripcion')}:"/>
+                        <h:panelGroup>
+                            <p:inputText 
+                                value="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.descripcion}" 
+                                id="cu_me_07_lbl_descripcion"                                 
+                                required="true" 
+                                maxlength="500"
+                                rendered="#{!cuMe7PropiedadIntelectual.edit}"/>
+                            <p:message
+                                for="cu_me_07_lbl_descripcion"/>
+                        </h:panelGroup>
+                        <p:outputLabel 
+                            for="cu_me_07_lbl_fecha_otorgamiento" 
+                            value="#{properties.value('cu_me_07_lbl_fecha_otorgamiento')}:"
+                            rendered="#{cuMe7PropiedadIntelectual.renderFechaOtorga}"/>
+                        <p:calendar 
+                            id="cu_me_07_lbl_fecha_otorgamiento" 
+                            value="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.fechaOtorgamiento}"
+                            pattern="#{properties.value('general_formato_fecha')}" 
+                            rendered="#{cuMe7PropiedadIntelectual.renderFechaOtorga}"
+                            readonlyInput="true"
+                            locale="es" 
+                            showButtonPanel="true" 
+                            navigator="true"
+                            required="false"
+                            maxdate="#{cuMe7PropiedadIntelectual.maxFecha}">
+                        </p:calendar> 
+                    </p:panelGrid>
+                    <p:panelGrid 
+                        id="pnlgdetalles_1"
+                        columns="4"
+                        layout="grid" 
+                        columnClasses="ui-grid-col-2,ui-grid-col-3, ui-grid-col-2, ui-grid-col-5" 
+                        styleClass="ui-panelgrid-blank">
+                        <p:outputLabel 
+                            for="cu_me_07_lbl_produccion_externa" 
+                            value="#{properties.value('cu_me_07_lbl_produccion_externa')}:"/>                     
+                        <h:panelGroup>                                              
+                            <p:selectOneMenu                                                              
+                                id="cu_me_07_lbl_produccion_externa"
+                                value="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.esExterna}" 
+                                required="true"
+                                rendered="#{!cuMe7PropiedadIntelectual.edit}">
+                                <p:ajax                                         
+                                    update="pnlgdetalles_1" 
+                                    listener="#{cuMe7PropiedadIntelectual.cargarEntidadesUnidades()}"/>
+                                <f:selectItem 
+                                    itemLabel=" SELECCIONE " 
+                                    itemValue=""/>
+                                <f:selectItems 
+                                    value="#{cuMe7PropiedadIntelectual.produccionExterna}"/>
+                            </p:selectOneMenu>
+                            <p:message
+                                for="cu_me_07_lbl_produccion_externa"/>
+                        </h:panelGroup> 
+                        <p:outputLabel 
+                            for="cu_me_07_lbl_ubicacion" 
+                            value="#{properties.value('cu_me_07_lbl_ubicacion')}:"/>                        
+                        <h:panelGroup>
+                            <p:selectOneMenu 
+                                rendered="#{cuMe7PropiedadIntelectual.renderList}"                                              
+                                id="cu_me_07_lbl_ubicacion" 
+                                filter="true"
+                                converter="entidadConverter"
+                                value="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.entidad}"
+                                filterMatchMode="contains"> 
+                                <f:selectItem 
+                                    itemLabel=" SELECCIONE " 
+                                    itemValue=""/>
+                                <f:selectItems 
+                                    value="#{cuMe7PropiedadIntelectual.entidades}" 
+                                    var="entidad" 
+                                    itemLabel="#{entidad.entiNombre}" 
+                                    itemValue="#{entidad}"/>
+                            </p:selectOneMenu>
+                            <p:selectOneMenu
+                                rendered="#{!cuMe7PropiedadIntelectual.renderList}"                             
+                                value="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.unidad}"
+                                filter="true"
+                                converter="unidadDependenciaConverter"
+                                filterMatchMode="contains"
+                                id="lstunidad">
+                                <f:selectItem 
+                                    itemLabel=" SELECCIONE " 
+                                    itemValue=""/>
+                                <f:selectItems 
+                                    value="#{cuMe7PropiedadIntelectual.unidades}" 
+                                    var="unidad" 
+                                    itemLabel="#{unidad.descripcionDependencia}" 
+                                    itemValue="#{unidad}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                    </p:panelGrid>
+                    <p:panelGrid
+                        id="pnlgdetalles_2"
+                        columns="4"
+                        layout="grid" 
+                        columnClasses="ui-grid-col-2,ui-grid-col-3, ui-grid-col-2, ui-grid-col-5" 
+                        styleClass="ui-panelgrid-blank"> 
+                        <p:outputLabel 
+                            for="cu_me_07_lbl_fecha_publicacion" 
+                            value="#{properties.value('cu_me_07_lbl_fecha_publicacion')}:"/>
+                        <h:panelGroup>
+                            <p:calendar 
+                                id="cu_me_07_lbl_fecha_publicacion" 
+                                value="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.fechaPublica}"
+                                pattern="#{properties.value('general_formato_fecha')}" 
+                                readonlyInput="true"
+                                locale="es" 
+                                showButtonPanel="true" 
+                                navigator="true" 
+                                required="true"
+                                maxdate="#{cuMe7PropiedadIntelectual.maxFecha}"
+                                rendered="#{!cuMe7PropiedadIntelectual.edit}">
+                            </p:calendar>
+                            <p:message
+                                for="cu_me_07_lbl_fecha_publicacion"/>
+                        </h:panelGroup>
+                        <p:outputLabel 
+                            for="cu_me_07_lbl_grupo_save" 
+                            value="#{properties.value('cu_me_07_lbl_grupo')}:"/>                        
+                        <h:panelGroup>                          
+                            <p:selectOneMenu                                                               
+                                id="cu_me_07_lbl_grupo_save" 
+                                converter="grupoInvestigacionConverter"
+                                value="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.grupoInvestigacion}" 
+                                required="false"
+                                rendered="#{!cuMe7PropiedadIntelectual.edit}">
+                                <f:selectItem 
+                                    itemLabel=" SELECCIONE " 
+                                    itemValue=""/>
+                                <f:selectItems 
+                                    value="#{cuMe7PropiedadIntelectual.grupos}"  
+                                    var="grupo" 
+                                    itemLabel="#{grupo.descripcion}" 
+                                    itemValue="#{grupo}"/>
+                            </p:selectOneMenu>  
+                            <p:message
+                                for="cu_me_07_lbl_grupo_save"/>
+                        </h:panelGroup>
+                    </p:panelGrid>
+                    <p:panelGrid 
+                        columns="2" 
+                        id="pnlgregistro"
+                        layout="grid" 
+                        columnClasses="ui-grid-col-2,ui-grid-col-3" 
+                        styleClass="ui-panelgrid-blank">
+                        <p:outputLabel 
+                            for="cu_me_07_lbl_registrado" 
+                            value="#{properties.value('cu_me_07_lbl_registrado')}:"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu                                                                     
+                                id="cu_me_07_lbl_registrado"
+                                value="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.registrado}" 
+                                required="true"
+                                rendered="#{!cuMe7PropiedadIntelectual.edit}">
+                                <p:ajax
+                                    listener="#{cuMe7PropiedadIntelectual.onRegistroChange()}"
+                                    update="pnlgregistro_1"/>
+                                <f:selectItem 
+                                    itemLabel=" SELECCIONE " 
+                                    itemValue=""/>
+                                <f:selectItems 
+                                    value="#{cuMe7PropiedadIntelectual.registrado}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                    </p:panelGrid>
+                    <p:panelGrid 
+                        columns="4" 
+                        id="pnlgregistro_1"
+                        layout="grid" 
+                        columnClasses="ui-grid-col-2,ui-grid-col-3, ui-grid-col-2, ui-grid-col-5" 
+                        styleClass="ui-panelgrid-blank">
+                        <p:outputLabel                             
+                            value="#{properties.value('cu_me_07_lbl_fecha_registro')}:"
+                            rendered="#{cuMe7PropiedadIntelectual.renderCamposRegistro}"/>                       
+                        <p:calendar 
+                            value="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.fechaRegistro}" 
+                            id="cu_me_07_lbl_fecha_registro"
+                            pattern="#{properties.value('general_formato_fecha')}" 
+                            readonlyInput="true"
+                            locale="es" 
+                            showButtonPanel="true" 
+                            navigator="true" 
+                            required="false"
+                            maxdate="#{cuMe7PropiedadIntelectual.maxFecha}"
+                            rendered="#{cuMe7PropiedadIntelectual.renderCamposRegistro}">
+                        </p:calendar>                       
+                        <p:outputLabel                            
+                            value="#{properties.value('cu_me_07_lbl_numero_registro')}:"
+                            rendered="#{cuMe7PropiedadIntelectual.renderCamposRegistro}"/>                       
+                        <p:inputText 
+                            value="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.nroRegistro}" 
+                            id="cu_me_07_lbl_numero_registro"                                 
+                            required="false" 
+                            maxlength="50"
+                            rendered="#{cuMe7PropiedadIntelectual.renderCamposRegistro}"/>                       
+                    </p:panelGrid>
+                    <p:panelGrid
+                        id="pnlgdIssnIsbn"
+                        columns="2"
+                        layout="grid" 
+                        columnClasses="ui-grid-col-2, ui-grid-col-3" 
+                        styleClass="ui-panelgrid-blank">
+                        <p:outputLabel 
+                            for="cu_me_07_lbl_isbn" 
+                            value="#{properties.value('cu_me_07_lbl_isbn')}:"/>
+                        <h:panelGroup>                                              
+                            <p:selectOneMenu 
+                                rendered="true"                                
+                                id="cu_me_07_lbl_isbn"
+                                value="#{cuMe7PropiedadIntelectual.isIsbn}"
+                                required="true">
+                                <f:selectItem 
+                                    itemLabel=" SELECCIONE " 
+                                    itemValue=""/>
+                                <f:selectItems 
+                                    value="#{cuMe7PropiedadIntelectual.issn}"/>
+                                <p:ajax                                     
+                                    update="pnlgdIssnIsbn"
+                                    listener="#{cuMe7PropiedadIntelectual.onIsbnChange()}"/>
+                            </p:selectOneMenu>
+                            <p:message
+                                for="cu_me_07_lbl_isbn"/>
+                        </h:panelGroup>
+                        <p:outputLabel
+                            value="#{bundle['propiedadIntelectual.isbnnumero.lbl']}"
+                            rendered="#{cuMe7PropiedadIntelectual.renderCampoNumeroIsbn}"/>
+                        <p:inputText                                
+                            value="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.isbn}"
+                            maxlength="50"
+                            rendered="#{cuMe7PropiedadIntelectual.renderCampoNumeroIsbn}"/>                 
+                        <p:outputLabel 
+                            for="cu_me_07_lbl_numero_issn" 
+                            value="#{properties.value('cu_me_07_lbl_issn')}:"/>
+                        <h:panelGroup>                                              
+                            <p:selectOneMenu 
+                                rendered="#{!cuMe7PropiedadIntelectual.edit}"                               
+                                id="cu_me_07_lbl_numero_issn"
+                                value="#{cuMe7PropiedadIntelectual.isIssn}"
+                                required="true">
+                                <f:selectItem 
+                                    itemLabel=" SELECCIONE " 
+                                    itemValue=""/>
+                                <f:selectItems 
+                                    value="#{cuMe7PropiedadIntelectual.issn}"/>
+                                <p:ajax                                   
+                                    update="pnlgdIssnIsbn"
+                                    listener="#{cuMe7PropiedadIntelectual.onIssnChange()}"/>
+                            </p:selectOneMenu>
+                            <p:message
+                                for="cu_me_07_lbl_numero_issn"/>
+                        </h:panelGroup>
+                        <p:outputLabel
+                            value="#{bundle['propiedadIntelectual.issnnumero.lbl']}"
+                            rendered="#{cuMe7PropiedadIntelectual.renderCampoNumeroIssn}"/>
+                        <p:inputText 
+                            value="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.issn}"                                                                                             
+                            maxlength="50"
+                            rendered="#{cuMe7PropiedadIntelectual.renderCampoNumeroIssn}"/>                               
+                    </p:panelGrid>
+                    <p:panelGrid 
+                        id="pnlUpload"
+                        columns="3"
+                        layout="grid" 
+                        columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-5" 
+                        styleClass="ui-panelgrid-blank">
+                        <p:outputLabel 
+                            for="cu_me_07_lbl_archivo_anexo" 
+                            value="#{bundle['propiedadIntelectual.archivoanexo.lbl']}"/> 
+                        <p:fileUpload 
+                            id="cu_me_07_lbl_archivo_anexo"
+                            fileUploadListener="#{cuMe7PropiedadIntelectual.handleFileUpload}" 
+                            mode="advanced"
+                            auto="true" 
+                            required="true"                                            
+                            allowTypes="/(\.|\/)(pdf)$/" 
+                            update="documentonombre"
+                            value="#{bundle['commons.btn.upload']}"                            
+                            style="border: none"
+                            rendered="#{!cuMe7PropiedadIntelectual.edit}"/>           
+                        <h:outputText                            
+                            id="documentonombre"
+                            value="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.pinNombreArchivo}"
+                            rendered="#{!cuMe7PropiedadIntelectual.edit}"/>                        
+                    </p:panelGrid>
+                    <p:panelGrid 
+                        id="pnlgFuncionarios"
+                        columns="3" 
+                        layout="grid" 
+                        columnClasses="ui-grid-col-2,ui-grid-col-5, ui-grid-col-2"                         
+                        style="margin-top: 10px"
+                        styleClass="ui-panelgrid-blank">
+                        <f:facet
+                            name="header">
+                            Funcionarios que participan
+                        </f:facet>
+                        <p:outputLabel 
+                            for="cu_me_07_lbl_identificacion_funcionario" 
+                            value="#{properties.value('cu_me_07_lbl_identificacion')}:"/>
+                        <p:inputText 
+                            value="#{cuMe7PropiedadIntelectual.documentoFuncionario}" 
+                            id="cu_me_07_lbl_identificacion_funcionario" 
+                            disabled="#{cuMe7PropiedadIntelectual.editando==0}" 
+                            required="false" 
+                            maxlength="30"/>
+                        <p:commandButton 
+                            value="#{properties.value('cu_me_02_lbl_agregar')}" 
+                            immediate="false"
+                            actionListener="#{cuMe7PropiedadIntelectual.agregarFuncionario()}" 
+                            update="idDataTableFuncionarios, cu_me_07_lbl_identificacion_funcionario" 
+                            process="@this, cu_me_07_lbl_identificacion_funcionario"
+                            style="border: none"/>
+                    </p:panelGrid>
+                    <p:panelGrid
+                        id="pnlgEntidades"
+                        columns="3" 
+                        layout="grid" 
+                        columnClasses="ui-grid-col-2,ui-grid-col-5, ui-grid-col-2" 
+                        styleClass="ui-panelgrid-blank"
+                        style="margin-top: 10px">
+                        <f:facet
+                            name="header">
+                            Entidades que participan
+                        </f:facet>
+                        <p:outputLabel 
+                            for="cu_me_07_lbl_entidades_participa" 
+                            value="#{properties.value('cu_me_07_lbl_entidad')}:"/>
+                        <p:selectOneMenu 
+                            rendered="true" 
+                            id="cu_me_07_lbl_entidades_participa" 
+                            converter="entidadConverter"
+                            value="#{cuMe7PropiedadIntelectual.entidadGuardar}" 
+                            required="false">
+                            <f:selectItem 
+                                itemLabel=" SELECCIONE " 
+                                itemValue=""/>
+                            <f:selectItems 
+                                value="#{cuMe7PropiedadIntelectual.entidades}" 
+                                var="entidadParti" 
+                                itemLabel="#{entidadParti.entiNombre}" 
+                                itemValue="#{entidadParti}"/>
+                        </p:selectOneMenu> 
+                        <p:commandButton 
+                            value="#{properties.value('cu_me_02_lbl_agregar')}" 
+                            immediate="false"
+                            actionListener="#{cuMe7PropiedadIntelectual.agregarEntidad()}" 
+                            update="idDataTableEntidadPartici" 
+                            process="@this, cu_me_07_lbl_entidades_participa"
+                            style="border: none"/>
+                    </p:panelGrid>
+                </p:panel>
+                <p:panel
+                    id="pnlNewEdit"
+                    rendered="#{cuMe7PropiedadIntelectual.edit}">
+                    <f:facet
+                        name="header">
+                        Detalles propiedad intelectual
+                    </f:facet>
+                    <p:panelGrid                         
+                        columns="4"
+                        layout="grid" 
+                        columnClasses="ui-grid-col-2,ui-grid-col-4, ui-grid-col-2, ui-grid-col-4" 
+                        styleClass="ui-panelgrid-blank">
+                        <p:outputLabel                             
+                            value="#{properties.value('cu_me_07_lbl_tipo_produccion')}:"/>
+                        <h:outputText
+                            value="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.tipo.nombre}"/>
+                        <p:outputLabel 
+                            value="#{properties.value('cu_me_07_lbl_descripcion')}:"/>
+                        <h:outputText
+                            value="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.descripcion}"/>
+                        <p:outputLabel                             
+                            value="#{properties.value('cu_me_07_lbl_fecha_otorgamiento')}:"/>
+                        <h:outputText
+                            value="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.fechaOtorgamiento}">
+                            <f:convertDateTime
+                                pattern="#{properties.value('general_formato_fecha')}"/>
+                        </h:outputText>
+                        <p:outputLabel 
+                            value="#{properties.value('cu_me_07_lbl_produccion_externa')}:"/>                     
+                        <h:outputText
+                            value="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.esExterna=='N'?'NO':'SI'}"/>
+                        <p:outputLabel                             
+                            value="#{properties.value('cu_me_07_lbl_ubicacion')}:"/>
+                        <h:outputText
+                            rendered ="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.entidad != null}"
+                            value="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.entidad.entiNombre}"/>
+                        <h:outputText
+                            rendered ="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.unidad != null}"                            
+                            value="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.unidad.descripcionDependencia}"/>
+                        <p:outputLabel                             
+                            value="#{properties.value('cu_me_07_lbl_fecha_publicacion')}:"/>
+                        <h:outputText                            
+                            value="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.fechaPublica == null? 'N/A':cuMe7PropiedadIntelectual.propiedadSeleccionada.fechaPublica}">
+                            <f:convertDateTime
+                                pattern="#{properties.value('general_formato_fecha')}"/>
+                        </h:outputText>
+                        <p:outputLabel                           
+                            value="#{properties.value('cu_me_07_lbl_grupo')}:"/>
+                        <h:outputText                     
+                            value="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.grupoInvestigacion == null ? 'N/A': cuMe7PropiedadIntelectual.propiedadSeleccionada.grupoInvestigacion.descripcion}"/> 
+                        <p:outputLabel                         
+                            value="#{properties.value('cu_me_07_lbl_registrado')}:"/>
+                        <h:outputText                            
+                            value="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.registrado == 'S' ? 'SI':'NO'}"/>
+                        <p:outputLabel
+                            rendered="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.registrado == 'S'}"
+                            value="#{properties.value('cu_me_07_lbl_fecha_registro')}:"/>
+                        <h:outputText
+                            rendered="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.registrado == 'S'}"                            
+                            value="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.fechaRegistro}">
+                            <f:convertDateTime
+                                pattern="#{properties.value('general_formato_fecha')}"/>
+                        </h:outputText>
+                        <p:outputLabel
+                            rendered="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.registrado == 'S'}"
+                            value="#{properties.value('cu_me_07_lbl_numero_registro')}:"/>
+                        <h:outputText
+                            rendered="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.registrado == 'S'}"
+                            value="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.nroRegistro}"/>
+                        <p:outputLabel
+                            value="#{bundle['propiedadIntelectual.isbnnumero.lbl']}"
+                            rendered="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.isbn != null}"/>
+                        <h:outputText
+                            value="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.isbn}"                                
+                            rendered="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.isbn != null}"/>
+                        <p:outputLabel
+                            value="#{bundle['propiedadIntelectual.issnnumero.lbl']}"
+                            rendered="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.issn != null}"/>                            
+                        <h:outputText
+                            value="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.issn}"                                                                                                                             
+                            rendered="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.issn != null}"/>
+                        <p:outputLabel                             
+                            value="#{bundle['propiedadIntelectual.archivoanexo.lbl']}"/>
+                        <p:commandLink 
+                            ajax="false"                            
+                            onclick="PrimeFaces.monitorDownload(start, stop);" 
+                            title="#{bundle['commons.btn.download']}">
+                            <h:outputText                                            
+                                value="#{cuMe7PropiedadIntelectual.propiedadSeleccionada.pinNombreArchivo}"/>
+                            <p:fileDownload 
+                                value="#{cuMe7PropiedadIntelectual.archivo}"/>
+                        </p:commandLink>
+                    </p:panelGrid> 
+                </p:panel>
+                <p:dataTable                          
+                    id="idDataTableFuncionarios" 
+                    var="funcionario" 
+                    value="#{cuMe7PropiedadIntelectual.propParticipantes}" 
+                    rows="10"
+                    paginator="true"                                  
+                    rowKey="#{funcionario.persona.persPers}"
+                    paginatorPosition="bottom" 
+                    rendered="#{!cuMe7PropiedadIntelectual.edit}"                    
+                    reflow="true"
+                    style="text-align: center; margin-top: 10px"
+                    emptyMessage="#{bundle['commons.dt.emptymessage']}">
+                    <f:facet
+                        name="header">
+                        #{properties.value('cu_me_07_lbl_funcionario')}
+                    </f:facet>                                
+                    <p:column 
+                        headerText="#{bundle['identificacion']}">
+                        <h:outputText 
+                            value="#{funcionario.persona.persNroid}" />
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['grado']}">
+                        <h:outputText 
+                            value="#{funcionario.persona.persGrado}" />
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['nombres']}">
+                        <h:outputText 
+                            value="#{funcionario.persona.persNombres} #{funcionario.persona.persApellidos}" />
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['unidad']}">
+                        <h:outputText 
+                            value="#{funcionario.persona.unidad.descripcionDependencia}" />
+                    </p:column>
+                    <p:column 
+                        headerText="#{properties.value('cu_me_lbl_opciones')}">
+                        <h:panelGroup>
+                            <p:commandLink 
+                                value="#{properties.value('cu_me_01_lbl_eliminar')}" 
+                                immediate="true" 
+                                style="border:none" 
+                                action="#{cuMe7PropiedadIntelectual.eliminarFuncionario()}"
+                                update="idDataTableFuncionarios, messages">
+                                <f:setPropertyActionListener 
+                                    value="#{funcionario}" 
+                                    target="#{cuMe7PropiedadIntelectual.funcionarioSeleccionado}" /> 
+                                <p:confirm 
+                                    header="#{bundle['commons.cfmdlg.header']}" 
+                                    message="#{bundle['commons.cfmdlg.remove.message']}" 
+                                    icon="ui-icon-alert" />
+                            </p:commandLink>
+                        </h:panelGroup>
+                    </p:column>
+                </p:dataTable>
+                <p:dataTable 
+                    id="idDataTableEntidadPartici" 
+                    var="entidadPartici" 
+                    value="#{cuMe7PropiedadIntelectual.propEntidades}" 
+                    rows="10"
+                    paginator="true"                                  
+                    rowKey="#{entidadPartici.entidad.entiEnti}"
+                    paginatorPosition="bottom" 
+                    rendered="#{!cuMe7PropiedadIntelectual.edit}"                    
+                    reflow="true"
+                    style="text-align: center; margin-top: 20px"
+                    emptyMessage="#{bundle['commons.dt.emptymessage']}">
+                    <f:facet
+                        name="header">
+                        #{properties.value('cu_me_07_lbl_entidades')}
+                    </f:facet>
+                    <p:column 
+                        headerText="#{bundle['entidad']}">
+                        <h:outputText 
+                            value="#{entidadPartici.entidad.entiNombre}" />
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['correo']}">
+                        <h:outputText 
+                            value="#{entidadPartici.entidad.entiEmail}" />
+                    </p:column>
+                    <p:column 
+                        headerText="#{properties.value('cu_me_lbl_opciones')}">
+                        <h:panelGroup>
+                            <p:commandLink 
+                                value="#{properties.value('cu_me_01_lbl_eliminar')}" 
+                                immediate="true" process="@this" 
+                                style="border:none" 
+                                action="#{cuMe7PropiedadIntelectual.eliminarEntidad()}"
+                                update="idDataTableEntidadPartici, messages">
+                                <f:setPropertyActionListener 
+                                    value="#{entidadPartici}" 
+                                    target="#{cuMe7PropiedadIntelectual.entidadParticipaSeleccionado}" /> 
+                                <p:confirm 
+                                    header="#{bundle['commons.cfmdlg.header']}" 
+                                    message="#{bundle['commons.cfmdlg.remove.message']}" 
+                                    icon="ui-icon-alert" />
+                            </p:commandLink>
+                        </h:panelGroup>
+                    </p:column>
+                </p:dataTable>
+                <p:dataTable                          
+                    id="idDataTableFuncionarios_details" 
+                    var="funcionario" 
+                    value="#{cuMe7PropiedadIntelectual.propParticipantes}" 
+                    rows="10"
+                    paginator="true"                                  
+                    rowKey="#{funcionario.persona.persPers}"
+                    paginatorPosition="bottom" 
+                    rendered="#{cuMe7PropiedadIntelectual.edit}"                                                                                    
+                    reflow="true"
+                    style="text-align: center; margin-top: 10px"
+                    emptyMessage="#{bundle['commons.dt.emptymessage']}">
+                    <f:facet
+                        name="header">
+                        #{properties.value('cu_me_07_lbl_funcionario')}
+                    </f:facet>                                
+                    <p:column 
+                        headerText="#{bundle['identificacion']}">
+                        <h:outputText 
+                            value="#{funcionario.persona.persNroid}" />
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['grado']}">
+                        <h:outputText 
+                            value="#{funcionario.persona.persGrado}" />
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['nombres']}">
+                        <h:outputText 
+                            value="#{funcionario.persona.persNombres} #{funcionario.persona.persApellidos}" />
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['unidad']}">
+                        <h:outputText 
+                            value="#{funcionario.persona.unidad.descripcionDependencia}" />
+                    </p:column>                                    
+                </p:dataTable>
+                <p:dataTable 
+                    id="idDataTableEntidadPartici_details" 
+                    var="entidadPartici" 
+                    value="#{cuMe7PropiedadIntelectual.propEntidades}" 
+                    rows="10"
+                    paginator="true"                                  
+                    rowKey="#{entidadPartici.entidad.entiEnti}"
+                    paginatorPosition="bottom" 
+                    rendered="#{cuMe7PropiedadIntelectual.edit}"
+                    selection="#{cuMe7PropiedadIntelectual.entidadParticipaSeleccionado}"                                     
+                    reflow="true"
+                    style="text-align: center; margin-top: 20px"
+                    emptyMessage="#{bundle['commons.dt.emptymessage']}">
+                    <f:facet
+                        name="header">
+                        #{properties.value('cu_me_07_lbl_entidades')}
+                    </f:facet>
+                    <p:column 
+                        headerText="#{bundle['entidad']}">
+                        <h:outputText 
+                            value="#{entidadPartici.entidad.entiNombre}" />
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['correo']}">
+                        <h:outputText 
+                            value="#{entidadPartici.entidad.entiEmail}" />
+                    </p:column>                                    
+                </p:dataTable>
+                <p:panelGrid
+                    id="pnlbtnsDetails"
+                    columns="4"
+                    layout="grid" 
+                    columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2"                     
+                    style="text-align: center; margin-top: 20px"
+                    styleClass="ui-panelgrid-blank">
+                    <p:commandButton 
+                        value="#{properties.value('cu_me_02_lbl_guardar')}" 
+                        update="messages, frmlist, frmDetail" 
+                        process="@form" 
+                        style="border:none"
+                        actionListener="#{cuMe7PropiedadIntelectual.guardar()}"
+                        rendered="#{!cuMe7PropiedadIntelectual.edit}"/>  
+                    <p:commandButton 
+                        value="#{properties.value('cu_me_02_lbl_editar')}" 
+                        update="frmDetail" 
+                        process="@this" 
+                        style="border:none"
+                        actionListener="#{cuMe7PropiedadIntelectual.editar()}"
+                        rendered="#{cuMe7PropiedadIntelectual.isVicin}"/>  
+                    <p:commandButton 
+                        value="#{properties.value('cu_me_02_lbl_volver')}" 
+                        update="main" 
+                        actionListener="#{cuMe7PropiedadIntelectual.onBack()}"                                          
+                        style="border:none"
+                        immediate="true" />
+                    <p:commandButton 
+                        value="#{bundle['commons.btn.remove']}"                                     
+                        immediate="true" 
+                        action="#{cuMe7PropiedadIntelectual.eliminar()}"
+                        update="idDataTableRegistros"
+                        rendered="#{cuMe7PropiedadIntelectual.isVicin}"
+                        style="border:none"/>
+                </p:panelGrid> 
+            </h:form>
+        </p:panel>
+    </ui:define>
+</ui:composition>

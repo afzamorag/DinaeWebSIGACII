@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+  <h:form id="formInformacionBasica" >
+    <h:outputLabel value="Investigador" styleClass="green negrilla"/>
+    <br />
+    <br />
+    <h:panelGrid id="panelgridInformacionBasica" columns="4" style="width: 100%" 
+                 rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_25_porciento,panelGridColumnaLabel_25_porciento,panelGridColumnaLabel_25_porciento,panelGridColumnaLabel_25_porciento">
+
+      <h:outputLabel value="Grado: " styleClass="gris negrilla" for="outputGradoInvestigador"
+                     rendered="#{cuIv02ConsultarInvestigadores.esInvestigadorSIATH}"/>
+      <h:outputText id="outputGradoInvestigador" rendered="#{cuIv02ConsultarInvestigadores.esInvestigadorSIATH}"
+                    value="#{cuIv02ConsultarInvestigadores.nombreGradoInvestigador}" styleClass="gris" />
+
+      <h:outputLabel value="Nombres y apellidos: " styleClass="gris negrilla" for="outputNombreInvestigador"/>
+      <h:outputText id="outputNombreInvestigador" 
+                    value="#{cuIv02ConsultarInvestigadores.nombreInvestigador}" styleClass="gris" />
+
+      <h:outputLabel value="Correo investigador: " 
+                     styleClass="gris negrilla" for="outputCorreoInvestigador"/>
+      <h:outputText id="outputCorreoInvestigador" styleClass="gris" 
+                    value="#{cuIv02ConsultarInvestigadores.emailInvestigador}"/>
+
+      <h:outputLabel value="Cargo: " rendered="#{cuIv02ConsultarInvestigadores.esInvestigadorSIATH}"
+                     styleClass="gris negrilla" for="outputCargoInvestigador"/>
+      <h:outputText id="outputCargoInvestigador" rendered="#{cuIv02ConsultarInvestigadores.esInvestigadorSIATH}"
+                    value="#{cuIv02ConsultarInvestigadores.cargoInvestigador}" styleClass="gris" />
+
+      <h:outputLabel value="Dirección: " 
+                     styleClass="gris negrilla" for="outputDireccionInvestigador"/>
+      <h:outputText id="outputDireccionInvestigador" styleClass="gris" 
+                    value="#{cuIv02ConsultarInvestigadores.direccionInvestigador}"/>
+
+      <h:outputLabel value="Ciudad: " 
+                     styleClass="gris negrilla" for="outputCiudadInvestigador"/>
+      <h:outputText id="outputCiudadInvestigador" styleClass="gris" 
+                    value="#{cuIv02ConsultarInvestigadores.nombreCiudadInvestigador}"/>
+
+      <h:outputLabel value="Departamento: " 
+                     styleClass="gris negrilla" for="outputDeptoInvestigador"/>
+      <h:outputText id="outputDeptoInvestigador" styleClass="gris" 
+                    value="#{cuIv02ConsultarInvestigadores.nombreDeptoInvestigador}"/>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_profesor_policial')}" styleClass="gris negrilla" rendered="#{cuIv02ConsultarInvestigadores.esInvestigadorSIATH}" />
+      <h:outputText styleClass="gris" value="#{cuIv02ConsultarInvestigadores.profesorPolicialSIAT eq 'Y' ? 'Sí' : 'No'}" rendered="#{cuIv02ConsultarInvestigadores.esInvestigadorSIATH}" />
+
+    </h:panelGrid>
+    <br />
+    <p:separator/>
+    <br />
+    <h:panelGrid id="panelgridInformacionBasica2" columns="2" style="width: 100%" 
+                 rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+      <h:outputLabel value="Tiempo en la institución: " 
+                     styleClass="gris negrilla" for="outputTiempoInvestigador"
+                     rendered="#{cuIv02ConsultarInvestigadores.esInvestigadorSIATH}"/>
+      <h:outputLabel styleClass="gris" rendered="#{cuIv02ConsultarInvestigadores.esInvestigadorSIATH}" value="#{cuIv02ConsultarInvestigadores.aniosInstitucionInvestigador}" />                
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_profesor_policial')}" styleClass="gris negrilla" />
+      <h:outputLabel value="#{cuIv02ConsultarInvestigadores.investigadorSeleccionado.profesorPolicial eq 'Y' ? 'Sí' : 'No'}" styleClass="gris" />                                    
+
+      <h:outputLabel value="Tipo de vinculación: " 
+                     styleClass="gris negrilla" for="outputTipoVinculacion"/>
+      <h:outputText id="outputTipoVinculacion" styleClass="gris" 
+                    value="#{cuIv02ConsultarInvestigadores.tipoVinculacionInvestigador}"/>
+
+      <h:outputLabel value="Funciones del investigador: " 
+                     styleClass="gris negrilla" for="outputFuncionInvestigador"/>
+      <h:outputText id="outputFuncionInvestigador" styleClass="gris" 
+                    value="#{cuIv02ConsultarInvestigadores.funcionesInvestigador}"/>
+    </h:panelGrid>
+    <br />
+    <br/>
+    <p:dataTable var="formacion" value="#{cuIv02ConsultarInvestigadores.listaFormacionesInvestigador}"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                 id="tablaFormacion"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                 style="width: 100%;" paginator="true"
+                 resizableColumns="true" rowIndexVar="idFila"
+                 paginatorPosition="bottom" 
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+      <p:column headerText="#{properties.value('cu_iv_01_lbl_column_numero')}" width="25">
+        <h:outputText value="#{idFila + 1}" />
+      </p:column>
+      <p:column headerText="Título obtenido" >
+        <h:outputText value="#{formacion.tituloObtenido}" />
+      </p:column>
+      <p:column headerText="Nivel académico" width="100" >
+        <h:outputText value="#{formacion.nivelFormacion.valor}" />
+      </p:column>
+      <p:column headerText="Área de saber" width="150" >
+        <h:outputText value="#{formacion.areaSaber.valor}" />
+      </p:column>
+      <p:column headerText="Fecha de finalización" width="100" >
+        <h:outputText value="#{formacion.fechaFinalizacion}" >
+          <f:convertDateTime pattern="dd/MM/yyyy" type="date"/>
+        </h:outputText>
+      </p:column>
+      <f:facet name="footer">  
+        #{fn:length( cuIv02ConsultarInvestigadores.listaFormacionesInvestigador)} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+    </p:dataTable>
+    <br />
+    <p:commandLink ajax="false" immediate="true" value="Imprimir formato">
+      <p:fileDownload value="#{cuIv02ConsultarInvestigadores.generarReporteDetalle}" />
+    </p:commandLink>
+  </h:form>
+</html>
+

@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <br/>
+  <p:dataTable var="_actividadplan" value="#{cuPr15_1_2_AvanceImplemenacionFaces.listaActividadesPlanImplementacion}"
+               rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+               id="tablaActividades" style="width: 100%; text-align: center;font-size: small;"
+               emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+               paginator="true" paginatorPosition="bottom" 
+               resizableColumns="true" rowIndexVar="idFila"
+               selectionMode="single"
+               disabledSelection="#{cuPr15_1_2_AvanceImplemenacionFaces.accesoSoloConsulta}"
+               selection="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesPlanImplementacionSeleccionado}" 
+               rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+    <p:ajax event="rowSelect" listener="#{cuPr15_1_2_AvanceImplemenacionFaces.seleccionarActividadImpl}" update=":form_informacion_general_implementacion:tabViewAvanceImplementacion:idnformaciondelaactividad:" />  
+    <p:ajax event="rowUnselect" listener="#{cuPr15_1_2_AvanceImplemenacionFaces.noSeleccionarActividadImpl}" />  
+
+    <p:column headerText="#{properties.value('cu_pr_21_lbl_column_numero')}" width="25">
+      #{idFila + 1}
+    </p:column>
+    <p:column headerText="#{properties.value('cu_pr_21_lbl_column_actividad')}" >
+      #{_actividadplan.actividad}
+    </p:column>
+    <p:column headerText="#{properties.value('cu_pr_21_lbl_column_objetivo_actividad')}" >
+      #{_actividadplan.objetivo}
+    </p:column>
+
+    <p:column headerText="#{properties.value('cu_pr_21_lbl_column_fecha_inicio_actividad')}" 
+              width="70">
+      <h:outputLabel value="#{_actividadplan.fechaInicio}" >
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+      </h:outputLabel>
+    </p:column>
+    <p:column headerText="#{properties.value('cu_pr_21_lbl_column_fecha_fin_actividad')}" 
+              width="70">
+      <h:outputLabel value="#{_actividadplan.fechaFin}" >
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+      </h:outputLabel>
+    </p:column>
+
+    <p:column headerText="#{properties.value('cu_pr_21_lbl_column_soporte_actividad')}" >
+      #{_actividadplan.soporteEntregar}
+    </p:column>
+
+    <p:column headerText="#{cuPr15_1_2_AvanceImplemenacionFaces.compromisoInformeAvance ? properties.value('cu_ne_6_lbl_estado') : 'Estado Informe avance'}" width="100">
+      #{_actividadplan.descripcionEstado}
+    </p:column>
+
+    <p:column headerText="#{cuPr15_1_2_AvanceImplemenacionFaces.compromisoInformeAvance ? 'Porcentaje' : 'Porcentaje Informe avance'}" width="70">
+      #{_actividadplan.porcentaje}%
+    </p:column>
+
+    <p:column rendered="#{cuPr15_1_2_AvanceImplemenacionFaces.compromisoInformeFinal}" headerText="#{properties.value('cu_ne_6_lbl_estado')}" width="100">
+      #{_actividadplan.descripcionEstadoInformeFinal}
+    </p:column>
+
+    <p:column rendered="#{cuPr15_1_2_AvanceImplemenacionFaces.compromisoInformeFinal}" headerText="Porcentaje" width="70">
+      #{_actividadplan.porcentajeInformeFinal}%
+    </p:column>
+
+    <f:facet name="footer">  
+      #{cuPr15_1_2_AvanceImplemenacionFaces.listaActividadesPlanImplementacion.numeroRegistro} #{properties.value('general_mensaje_footer_datatable_count')}
+    </f:facet>
+
+  </p:dataTable>
+
+  <br />
+  <h:panelGroup id="idnformaciondelaactividad">
+
+    <h:outputLabel rendered="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesPlanImplementacionSeleccionado != null}" 
+                   value="Información de la actividad" styleClass="green negrilla" />
+    <h:panelGrid rendered="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesPlanImplementacionSeleccionado != null}"
+                 columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaLabel_70_porciento">
+
+      <h:outputLabel value="Actividad" styleClass="gris negrilla" />
+      <h:outputLabel value="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesPlanImplementacionSeleccionado.actividad}" styleClass="gris" />
+
+      <h:outputLabel value="Objetivo" styleClass="gris negrilla" />
+      <h:outputLabel value="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesPlanImplementacionSeleccionado.objetivo}" styleClass="gris" />
+
+      <h:outputLabel value="Estrategia" styleClass="gris negrilla" />
+      <h:outputLabel value="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesPlanImplementacionSeleccionado.estrategia}" styleClass="gris" />
+
+      <h:outputLabel value="Impacto institucional" styleClass="gris negrilla" />
+      <h:outputLabel value="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesPlanImplementacionSeleccionado.impactoInstitucional}" styleClass="gris" />
+
+      <h:outputLabel value="Difusión" styleClass="gris negrilla" />
+      <h:outputLabel value="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesPlanImplementacionSeleccionado.difusion}" styleClass="gris" />
+
+      <h:outputLabel value="Soporte a entregar" styleClass="gris negrilla" />
+      <h:outputLabel value="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesPlanImplementacionSeleccionado.soporteEntregar}" styleClass="gris" />
+
+      <h:outputLabel value="Fecha de inicio programada" styleClass="gris negrilla" />
+      <h:outputText value="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesPlanImplementacionSeleccionado.fechaInicio}" styleClass="gris" >
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+      </h:outputText>    
+
+      <h:outputLabel value="Fecha de fin  programada" styleClass="gris negrilla" />
+      <h:outputText value="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesPlanImplementacionSeleccionado.fechaFin}" styleClass="gris">
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+      </h:outputText>
+
+    </h:panelGrid>
+
+    <br /><br />
+    <h:outputLabel rendered="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesPlanImplementacionSeleccionado != null}" 
+                   value="Información de la realización de la actividad:" styleClass="green negrilla" />
+
+    <h:panelGrid rendered="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesPlanImplementacionSeleccionado != null 
+                             and !cuPr15_1_2_AvanceImplemenacionFaces.soloLecturaActividadesPlanImplementacion}"
+                 columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaLabel_70_porciento">
+
+      <h:outputLabel rendered="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesPlanImplementacionSeleccionado != null}" 
+                     value="Estado de la actividad" styleClass="gris negrilla" />
+      <p:selectOneRadio styleClass="gris" id="idEstadoActividadImplSeleccionado"
+                        value="#{cuPr15_1_2_AvanceImplemenacionFaces.idEstadoActividadImplSeleccionado}" required="true" >               
+        <f:selectItems value="#{cuPr15_1_2_AvanceImplemenacionFaces.listaEstadoActividadItem}" var="_item" />  
+        <p:ajax update="idpgtabviewestadoactividad" listener="#{cuPr15_1_2_AvanceImplemenacionFaces.handleEstadoActiviadChange}" />
+      </p:selectOneRadio>
+
+    </h:panelGrid>
+    <h:panelGrid rendered="#{cuPr15_1_2_AvanceImplemenacionFaces.soloLecturaActividadesPlanImplementacion}"
+                 columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaLabel_70_porciento">
+
+      <h:outputLabel value="Estado de la actividad" styleClass="gris negrilla" />
+      <h:outputLabel value="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesImplementacionEstadoRealizadaInformeAvance.estadoActividad.valor}" styleClass="gris" />
+
+      <h:outputLabel value="Resultado de la Actividad" styleClass="gris negrilla" />
+      <h:panelGrid columns="1">
+        <p:inputTextarea value="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesImplementacionEstadoRealizadaInformeAvance.resultadoActividad}" 
+                         maxlength="512" required="true" counter="contadoridresultadoActividad" 
+                         readonly="true"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}" autoResize="false"
+                         styleClass="textareaMaximo"  title="Resultado de la Actividad, maximo 512 caracteres"                                                 
+                         cols="100" rows="3" id="idresultadoActividad" >
+          <f:validateLength minimum="1" maximum="512" />
+        </p:inputTextarea>
+        <h:outputText id="contadoridresultadoActividad" styleClass="gris" />
+      </h:panelGrid>
+
+      <h:outputLabel value="Fecha real de inicio" styleClass="gris negrilla" />
+      <h:outputLabel value="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesImplementacionEstadoRealizadaInformeAvance.fechaInicioReal}" styleClass="gris" >
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+      </h:outputLabel>
+
+      <h:outputLabel value="Fecha real de fin" styleClass="gris negrilla" />    
+      <h:outputLabel value="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesImplementacionEstadoRealizadaInformeAvance.fechaFinReal}" styleClass="gris" >
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+      </h:outputLabel>
+
+      <h:outputLabel value="Archivo de soporte" styleClass="gris negrilla" />      
+      <p:commandLink ajax="false" immediate="true" 
+                     rendered="#{cuPr15_1_2_AvanceImplemenacionFaces.mostrarLinkDescargaArchivoSoporteActividadRealizada}">
+        <h:outputLabel value="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesImplementacionEstadoRealizadaInformeAvance.archivoSoporte}" />
+        <p:fileDownload value="#{cuPr15_1_2_AvanceImplemenacionFaces.downloadAvanceProcesoArchivoProcesoContentPropertyActividadRealizada}" />
+      </p:commandLink>
+
+      <h:outputLabel value="Evidencia fotográfica" styleClass="gris negrilla" />
+      <p:commandLink ajax="false" immediate="true" 
+                     rendered="#{cuPr15_1_2_AvanceImplemenacionFaces.mostrarLinkDescargaEvidenciaFotograficaActividadRealizada}">
+        <h:outputLabel value="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesImplementacionEstadoRealizadaInformeAvance.evidenciaFotografica}" />
+        <p:fileDownload value="#{cuPr15_1_2_AvanceImplemenacionFaces.downloadAvanceProcesoEvidenciaFotograficaContentPropertyActividadRealizada}" />
+      </p:commandLink>
+
+    </h:panelGrid>
+
+    <h:panelGroup id="idpgtabviewestadoactividad">
+
+      <p:tabView orientation="top" id="idtabviewestadoactividad" >  
+
+        <p:tab title="Resultado de actividad realizada" rendered="#{cuPr15_1_2_AvanceImplemenacionFaces.isMostrarTabViewActividad('ACTIVIDAD_REALIZADA')}" >
+          <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                       columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaLabel_70_porciento">
+
+            <h:outputLabel value="Resultado de la Actividad" styleClass="gris negrilla" for="idresultadoActividad" />
+            <h:panelGrid columns="1">
+              <p:inputTextarea value="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesImplementacion.resultadoActividad}" 
+                               maxlength="512" required="true" counter="contadoridresultadoActividad" 
+                               counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}" autoResize="false"
+                               styleClass="textareaMaximo"  title="Resultado de la Actividad, maximo 512 caracteres"                                                 
+                               cols="100" rows="3" id="idresultadoActividad" >
+                <f:validateLength minimum="1" maximum="512" />
+              </p:inputTextarea>
+              <h:outputText id="contadoridresultadoActividad" styleClass="gris" />
+            </h:panelGrid>
+
+            <h:outputLabel value="Fecha real de inicio" styleClass="gris negrilla" for="idfechaInicioReal" />            
+            <p:calendar pattern="#{properties.value('general_formato_fecha')}" 
+                        locale="es" id="idfechaInicioReal"
+                        value="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesImplementacion.fechaInicioReal}"
+                        yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                        navigator="true" showOn="button" styleClass="gris"
+                        required="true" />  
+
+            <h:outputLabel value="Fecha real de fin" styleClass="gris negrilla" for="idfechaFinReal" />            
+            <p:calendar pattern="#{properties.value('general_formato_fecha')}" 
+                        locale="es" 
+                        value="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesImplementacion.fechaFinReal}"
+                        yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                        navigator="true" showOn="button" styleClass="gris" id="idfechaFinReal"
+                        required="true" />  
+
+            <h:outputLabel value="Archivo de soporte" styleClass="gris negrilla" for="idarchivoSoporte" />                    
+            <h:panelGrid columns="1" id="idpaDetalleArchivoDescargaArchivoSoporte">
+              <p:commandLink ajax="false" immediate="true" id="idCommanLinkDescargaArchivo" 
+                             rendered="#{cuPr15_1_2_AvanceImplemenacionFaces.mostrarLinkDescargaArchivoSoporte}">
+                <h:outputLabel value="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesImplementacion.archivoSoporte}" />
+                <p:fileDownload value="#{cuPr15_1_2_AvanceImplemenacionFaces.downloadAvanceProcesoArchivoProcesoContentProperty}" />
+              </p:commandLink>
+              <h:outputLabel id="idNombreArchivoCargado" styleClass="green" rendered="#{!cuPr15_1_2_AvanceImplemenacionFaces.mostrarLinkDescargaArchivoSoporte}" 
+                             value="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesImplementacion.archivoSoporte}" />
+              <p:fileUpload dragDropSupport="true" fileUploadListener="#{cuPr15_1_2_AvanceImplemenacionFaces.handleFileUploadArchivoSoporte}"
+                            fileLimit="1" update=":form_informacion_general_implementacion:tabViewAvanceImplementacion:idtabviewestadoactividad:idpaDetalleArchivoDescargaArchivoSoporte" 
+                            id="idarchivoSoporte"
+                            label="#{properties.value('cu_ne_2_lbl_examinar')}" multiple="false"
+                            fileLimitMessage="#{properties.value('cu_ne_2_lbl_mensaje_maximo_numero_archivo')}"
+                            uploadLabel="#{properties.value('cu_ne_2_lbl_subiendo')}" 
+                            invalidFileMessage="#{properties.value('cu_ne_2_lbl_archivo_invalido')}"
+                            invalidSizeMessage="#{properties.value('cu_ne_2_lbl_tamanio_invalido_archivo')}" 
+                            allowTypes="#{properties.value('cu_ne_2_lbl_formatos_archivos_soportados')}"
+                            mode="advanced" auto="false" cancelLabel="#{properties.value('cu_ne_2_lbl_cancelar')}"  />
+
+            </h:panelGrid>
+
+            <h:outputLabel value="Evidencia fotográfica" styleClass="gris negrilla" for="idevidenciaFotografica" />
+            <h:panelGrid columns="1" id="idpaDetalleArchivoDescargavieciaArch">
+              <p:commandLink ajax="false" immediate="true" id="idCommanLinkDescargaArchivoEvidenciF" 
+                             rendered="#{cuPr15_1_2_AvanceImplemenacionFaces.mostrarLinkDescargaEvidenciaFotografica}">
+                <h:outputLabel value="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesImplementacion.evidenciaFotografica}" />
+                <p:fileDownload value="#{cuPr15_1_2_AvanceImplemenacionFaces.downloadAvanceProcesoEvidenciaFotograficaContentProperty}" />
+              </p:commandLink>
+              <h:outputLabel id="idNombreArchivoCargadoEvidenciF" styleClass="green" rendered="#{!cuPr15_1_2_AvanceImplemenacionFaces.mostrarLinkDescargaEvidenciaFotografica}" 
+                             value="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesImplementacion.evidenciaFotografica}" />
+              <p:fileUpload dragDropSupport="true" fileUploadListener="#{cuPr15_1_2_AvanceImplemenacionFaces.handleFileUploadEvidenciaFotografica}"
+                            fileLimit="1" update=":form_informacion_general_implementacion:tabViewAvanceImplementacion:idtabviewestadoactividad:idpaDetalleArchivoDescargavieciaArch" 
+                            label="#{properties.value('cu_ne_2_lbl_examinar')}" multiple="false" id="idevidenciaFotografica"
+                            fileLimitMessage="#{properties.value('cu_ne_2_lbl_mensaje_maximo_numero_archivo')}"
+                            uploadLabel="#{properties.value('cu_ne_2_lbl_subiendo')}" 
+                            invalidFileMessage="Archivo invalido. Formatos soportados: (.gif, .jpe, .jpeg, .png)"
+                            invalidSizeMessage="#{properties.value('cu_ne_2_lbl_tamanio_invalido_archivo')}" 
+                            allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+                            mode="advanced" auto="false" cancelLabel="#{properties.value('cu_ne_2_lbl_cancelar')}"  />
+
+            </h:panelGrid>
+
+          </h:panelGrid>
+
+        </p:tab>
+
+        <p:tab title="Resultado de actividad realizada parcialmente" rendered="#{cuPr15_1_2_AvanceImplemenacionFaces.isMostrarTabViewActividad('ACTIVIDAD_REALIZADA_PARCIALMENTE')}">
+
+          <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                       columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaLabel_70_porciento">
+
+            <h:outputLabel value="Porcentaje de cumplimiento" styleClass="gris negrilla" for="idporcentajeCumplimiento" />
+            <h:panelGrid columns="2" >
+
+              <p:inputText id="idporcentajeCumplimiento"  maxlength="2" onkeypress="return soloNumerosInpuText(event);"
+                           value="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesImplementacion.porcentajeCumplimiento}" 
+                           styleClass="textMaximo" required="true" size="5"  >
+                <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" maxFractionDigits="0" />
+              </p:inputText>
+              <h:outputLabel value=" %" styleClass="gris negrilla" />
+
+            </h:panelGrid>                                                
+
+            <h:outputLabel value="Nueva fecha de finalización" styleClass="gris negrilla" for="idnuevaFechaFin" />            
+            <p:calendar pattern="#{properties.value('general_formato_fecha')}" 
+                        locale="es" id="idnuevaFechaFin"
+                        value="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesImplementacion.nuevaFechaFin}"
+                        yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                        navigator="true" showOn="button" styleClass="gris"
+                        required="true" />  
+
+            <h:outputLabel value="Justificación" styleClass="gris negrilla" for="idjustificacionParcial" />        
+            <h:panelGrid columns="1">
+              <p:inputTextarea value="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesImplementacion.justificacionParcial}" 
+                               maxlength="512" required="true" counter="contadoridjustificacionParcial" 
+                               counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}" autoResize="false"
+                               styleClass="textareaMaximo"  title="Justificación, maximo 512 caracteres"                                                 
+                               cols="100" rows="3" id="idjustificacionParcial" >
+                <f:validateLength minimum="1" maximum="512" />
+              </p:inputTextarea>
+              <h:outputText id="contadoridjustificacionParcial" styleClass="gris" />
+            </h:panelGrid>
+
+          </h:panelGrid>
+
+        </p:tab>
+
+        <p:tab title="Resultado de actividad no cumplida" rendered="#{cuPr15_1_2_AvanceImplemenacionFaces.isMostrarTabViewActividad('ACTIVIDAD_NO_CUMPLIDA')}">
+          <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                       columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaLabel_70_porciento">
+
+            <h:outputLabel value="Acciones adelantadas para sus logros" styleClass="gris negrilla" for="idaccionesLogro" />
+            <h:panelGrid columns="1">
+              <p:inputTextarea value="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesImplementacion.accionesLogro}" 
+                               maxlength="512" required="true" counter="contadoridaccionesLogro" 
+                               counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}" autoResize="false"
+                               styleClass="textareaMaximo"  title="Acciones adelantadas para sus logros, maximo 512 caracteres"                                                 
+                               cols="100" rows="3" id="idaccionesLogro" >
+                <f:validateLength minimum="1" maximum="512" />
+              </p:inputTextarea>
+              <h:outputText id="contadoridaccionesLogro" styleClass="gris" />
+            </h:panelGrid>
+
+            <h:outputLabel value="Nueva fecha de inicio" styleClass="gris negrilla" for="idnuevaFechaInicio" />            
+            <p:calendar pattern="#{properties.value('general_formato_fecha')}" 
+                        locale="es" id="idnuevaFechaInicio"
+                        value="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesImplementacion.nuevaFechaInicio}"
+                        yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                        navigator="true" showOn="button" styleClass="gris"
+                        required="true" />  
+
+            <h:outputLabel value="Nueva fecha fin" styleClass="gris negrilla" for="idnuevaFechaFinnc" />            
+            <p:calendar pattern="#{properties.value('general_formato_fecha')}" 
+                        locale="es" 
+                        value="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesImplementacion.nuevaFechaFin}"
+                        yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                        navigator="true" showOn="button" styleClass="gris" id="idnuevaFechaFinnc"
+                        required="true" />  
+
+          </h:panelGrid>
+
+        </p:tab>
+
+      </p:tabView>
+
+      <br />
+      <div class="centrado">
+        <p:commandButton value="Cancelar" id="btnGuardarTema"
+                         action="#{cuPr15_1_2_AvanceImplemenacionFaces.cancelarGuardarResultado}" 
+                         immediate="true"
+                         rendered="#{cuPr15_1_2_AvanceImplemenacionFaces.actividadesPlanImplementacionSeleccionado != null}"                                          
+                         update="@form" />            
+      </div>
+
+    </h:panelGroup>
+
+  </h:panelGroup>
+
+</html>

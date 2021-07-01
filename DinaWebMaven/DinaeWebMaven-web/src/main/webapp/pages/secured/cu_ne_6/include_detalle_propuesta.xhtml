@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+    <ui:define name="content">
+
+      <h:form id="idForm_cu_ne_6_gestiona_evaluar_propuestas_necesidades">
+
+        <p:tabView id="tabViewGeneralgestiona_evalua_neces" activeIndex="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.idTabSeleccionado}">
+
+          <p:ajax event="tabChange" listener="#{cuPr1ProyectoFaces.onTabChange}" update=":idForm_cu_ne_6_gestiona_evaluar_propuestas_necesidades" />  
+
+          <p:tab id="idtabcu_ne_6_lbl_listado_propuesta" title="#{properties.value('cu_ne_6_lbl_listado_propuesta')}">
+
+            <ui:include src="include_listado_propuesta.xhtml" />
+
+          </p:tab>
+
+          <p:tab id="idtabcu_ne_6_lbl_unidades_no_se_han_presentado" title="#{properties.value('cu_ne_6_lbl_unidades_no_se_han_presentado')}">
+
+            <ui:include src="include_listado_unidades_no_se_han_presentado.xhtml" />
+
+          </p:tab>
+
+        </p:tabView>
+
+        <br />
+        <br />
+        <p:separator styleClass="separadorBorder" /> 
+        <div class="centrado">
+          <p:commandButton value="#{properties.value('cu_ne_2_lbl_regresar')}" 
+                           action="#{navigationFaces.redirectCuNe01}" 
+                           immediate="true" />
+
+          <p:commandButton value="#{properties.value('cu_ne_7_publicar')}" onclick="varConfirmPublicar.show();" id="btnPublicarPropuestaNece"
+                           rendered="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.mostrarBtnAccionesPublicarPreAprobarYrechazar and cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.pestaniaPrincipal}">
+          </p:commandButton>
+        </div>
+        <br />
+        <br />
+
+      </h:form>
+
+      <p:confirmDialog widgetVar="varConfirmPublicar" header="#{properties.value('cu_ne_6_lbl_titulo_confirmacion_publicar')}" 
+                       message="#{properties.value('cu_ne_6_lbl_titulo_confirmacion_mensaje_confirma')}" > 
+
+        <h:form id="idForm_varConfirmPublicar">
+
+          <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmPublicar">
+            <div class="centrado">
+              <p:commandButton actionListener="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.publicarPropuestas}" 
+                               value="#{properties.value('cu_ne_6_lbl_btn_si_publicar')}" immediate="true"
+                               oncomplete="varConfirmPublicar.hide();"
+                               update=":idForm_cu_ne_6_gestiona_evaluar_propuestas_necesidades"/>  
+              <p:commandButton value="#{properties.value('cu_ne_6_lbl_btn_no_publicar')}" 
+                               onclick="varConfirmPublicar.hide();" />       
+            </div>
+          </p:outputPanel>
+
+        </h:form>
+      </p:confirmDialog>
+
+    </ui:define>
+  </ui:composition>
+
+</html>

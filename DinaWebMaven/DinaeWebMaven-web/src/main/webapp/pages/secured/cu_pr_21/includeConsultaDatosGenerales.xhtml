@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+  <h:form id="formConsultaDatosGenerales" >
+    <br />
+    <h:panelGrid id="panelgridDatosGenerales" columns="2" style="width: 100%" 
+                 rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_60_porciento,panelGridColumnaValor_60_porciento">
+
+      <h:outputLabel value="#{properties.value('cu_pr_21_lbl_unidad_policial')}" styleClass="gris negrilla" for="outputUnidadPolicial"/>
+      <h:outputText id="outputUnidadPolicial" styleClass="gris" value="#{cuPr21RegistrarPlanDeTrabajo.proyectoSeleccionado.unidadPolicial.nombre}"/>
+
+      <h:outputLabel value="#{properties.value('cu_pr_21_lbl_fecha_finalizacion')}" styleClass="gris negrilla" for="outputFechaFinalizacion"/>
+      <h:outputText id="outputFechaFinalizacion" styleClass="gris"
+                    value="#{cuPr21RegistrarPlanDeTrabajo.proyectoSeleccionado.fechaEstimadaFinalizacion}">
+        <f:convertDateTime pattern="dd/MM/yyyy" />
+      </h:outputText>
+
+      <h:outputLabel value="#{properties.value('cu_pr_21_lbl_anio_investigacion')}" styleClass="gris negrilla" for="outputAnioInvestigacion"/>
+      <h:outputText id="outputAnioInvestigacion" styleClass="gris" value="#{cuPr21RegistrarPlanDeTrabajo.anioInvestigacion}"/>
+
+      <h:outputLabel value="#{properties.value('cu_pr_21_lbl_fecha_aprobacion')}" styleClass="gris negrilla" for="calendarFechaAprobacion"/>
+      <h:outputText styleClass="gris"
+                    value="#{cuPr21RegistrarPlanDeTrabajo.planTrabajoImplementacion.fechaAprobacionComite}">
+        <f:convertDateTime pattern="dd/MM/yyyy" />
+      </h:outputText>
+
+      <h:outputLabel value="#{properties.value('cu_pr_21_lbl_numero_acta')}" 
+                     styleClass="gris negrilla" for="inputNumeroActa"/>
+      <p:inputText id="inputNumeroActa" required="true"
+                   value="#{cuPr21RegistrarPlanDeTrabajo.planTrabajoImplementacion.nroActaAprobacion}"
+                   maxlength="20" size="50" readonly="true"
+                   styleClass="gris"/>
+
+      <h:outputLabel value="#{properties.value('cu_pr_21_lbl_objetivo_general_implementacion')}" 
+                     styleClass="gris negrilla" for="textAreaObjetivoImplementacion"/>
+      <h:panelGroup>
+        <p:inputTextarea value="#{cuPr21RegistrarPlanDeTrabajo.planTrabajoImplementacion.objetivoGralImplementacion}"
+                         id="textAreaObjetivoImplementacion" styleClass="textareaMaximo" readonly="true"
+                         maxlength="512" counter="contadorObjetivoImplementacion"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         required="true" autoResize="false">
+          <f:validateLength minimum="1"  maximum="512" />
+        </p:inputTextarea>
+        <h:outputText id="contadorObjetivoImplementacion" styleClass="gris" />
+      </h:panelGroup>
+
+      <h:outputLabel value="#{properties.value('cu_pr_21_lbl_objetivo_especifico_implementacion')}" 
+                     styleClass="gris negrilla" for="textAreaObjetivoEspImplementacion"/>
+      <h:panelGroup>
+        <p:inputTextarea value="#{cuPr21RegistrarPlanDeTrabajo.planTrabajoImplementacion.objetivosEspecificos}"
+                         id="textAreaObjetivoEspImplementacion" styleClass="textareaMaximo"
+                         maxlength="1000" counter="contadorObjetivoEspImplementacion" readonly="true"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         required="true" autoResize="false">
+          <f:validateLength minimum="1"  maximum="1000" />
+        </p:inputTextarea>
+        <h:outputText id="contadorObjetivoEspImplementacion" styleClass="gris" />
+      </h:panelGroup>
+    </h:panelGrid>
+    <h:panelGrid rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_total">
+      <p:commandLink immediate="true" id="linkCuPr05" action="#{cuPr21RegistrarPlanDeTrabajo.redirectRegistrarPresupuesto}" >  
+        <h:outputText value="Registrar presupuesto para la implemetación del proyecto de investigación" />  
+      </p:commandLink>  
+    </h:panelGrid>
+    <br/>
+    <br/>
+    <p:commandLink ajax="false" immediate="true" value="Generar Formato" >
+      <p:fileDownload value="#{cuPr21RegistrarPlanDeTrabajo.generarFormato}" />
+    </p:commandLink>
+    <br/>
+    <br/>
+    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+    <div class="centrado">
+
+      <p:commandButton value="Regresar" immediate="true"
+                       action="#{cuPr21RegistrarPlanDeTrabajo.regresar}" 
+                       update="@form"/>
+
+    </div>
+  </h:form>
+</html>

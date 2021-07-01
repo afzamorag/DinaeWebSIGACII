@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <br />
+  <h:outputLabel value="#{properties.value('cu_co_1_lbl_convocatoria_financia')}" styleClass="green negrilla"/>  
+  <br />
+  <h:outputLabel value="#{properties.value('cu_co_1_lbl_convocatoria_titulo_ayuda_lis')}" styleClass="gris"/>
+  <br />
+  <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+               id="idDataTablelistaConvocatoriaFinanciacion" var="_convocatoria" 
+               value="#{cuCo1GestionarConvocatoriasFaces.listaConvocatoriaFinanciacion}" 
+               resizableColumns="true"
+               rowIndexVar="idFila" rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true" 
+               rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+               paginatorPosition="bottom">
+
+    <p:column width="80" headerText="#{properties.value('cu_co_1_lbl_tabla_concecutivo')}">  
+      <h:outputLabel value="#{_convocatoria.concecutivo}" />  
+    </p:column>
+    <p:column headerText="#{properties.value('cu_co_1_lbl_tabla_nombre_comboca')}">  
+      <h:outputLabel value="#{_convocatoria.nombreConvocatorio}" />  
+    </p:column>
+
+    <p:column width="80" headerText="#{properties.value('cu_pr_1_lbl_info_basica_subtitulo_fecha_inicio')}">  
+      <h:outputLabel value="#{_convocatoria.fechaInicio}" styleClass="gris" >
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+      </h:outputLabel>
+    </p:column>
+    <p:column width="80" headerText="#{properties.value('cu_pr_1_lbl_info_basica_subtitulo_fecha_fin')}">  
+      <h:outputLabel value="#{_convocatoria.fechaFin}" styleClass="gris">
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+      </h:outputLabel>
+    </p:column>
+
+
+    <p:column width="70" headerText="#{properties.value('cu_co_1_lbl_tabla_estado')}">  
+      <h:outputLabel value="#{_convocatoria.estadoConvocatorio}" />  
+    </p:column>
+    <p:column width="75" headerText="#{properties.value('cu_co_1_lbl_tabla_mod_consul')}">  
+      <p:commandButton value="#{properties.value('cu_co_1_lbl_btn_mod_tabla_financia')}" 
+                       immediate="true" 
+                       rendered="#{cuCo1GestionarConvocatoriasFaces.mostrarBtnModificarConvocatoriaFinancia}"
+                       action="#{cuCo1GestionarConvocatoriasFaces.modificarConvocatoriaFinanciaEnsayo( _convocatoria )}" />
+    </p:column>
+    <p:column width="75" headerText="#{properties.value('cu_co_1_lbl_tabla_revisa_pro')}">  
+      <p:commandButton value="#{properties.value('cu_co_1_lbl_btn_rev_tabla_financia')}" 
+                       immediate="true" 
+                       rendered="#{cuCo1GestionarConvocatoriasFaces.mostrarBtnRevisarConvocatoriaFinancia( _convocatoria )}"
+                       action="#{cuCo1GestionarConvocatoriasFaces.revisarConvocatoriaFinancia( _convocatoria )}" />
+    </p:column>
+
+    <f:facet name="footer">  
+      #{fn:length( cuCo1GestionarConvocatoriasFaces.listaConvocatoriaFinanciacion )} #{properties.value('general_mensaje_footer_datatable_count')}
+    </f:facet>
+
+  </p:dataTable>
+
+
+
+  <br />
+  <h:outputLabel value="#{properties.value('cu_co_1_lbl_convocatoria_concurso_ensayo_cri')}" styleClass="green negrilla"/>  
+  <br />
+  <h:outputLabel value="#{properties.value('cu_co_1_lbl_seleccione_convoc_listado_ensayo_tabla')}" styleClass="gris"/>
+  <br />
+  <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+               id="idDataTablelistaConvocatoriaEnsayo" var="_convocatoria" 
+               resizableColumns="true"
+               value="#{cuCo1GestionarConvocatoriasFaces.listaConvocatoriaEnsayo}" 
+               rowIndexVar="idFila" rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true" 
+               rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+               paginatorPosition="bottom">
+
+    <p:column width="80" headerText="#{properties.value('cu_co_1_lbl_tabla_concecutivo')}">  
+      <h:outputLabel value="#{_convocatoria.concecutivo}" />  
+    </p:column>
+    <p:column headerText="#{properties.value('cu_co_1_lbl_tabla_nombre_comboca')}">  
+      <h:outputLabel value="#{_convocatoria.nombreConvocatorio}" />  
+    </p:column>
+
+    <p:column width="80" headerText="#{properties.value('cu_pr_1_lbl_info_basica_subtitulo_fecha_inicio')}">  
+      <h:outputLabel value="#{_convocatoria.fechaInicio}" styleClass="gris" >
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+      </h:outputLabel>
+    </p:column>
+    <p:column width="80" headerText="#{properties.value('cu_pr_1_lbl_info_basica_subtitulo_fecha_fin')}">  
+      <h:outputLabel value="#{_convocatoria.fechaFin}" styleClass="gris">
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+      </h:outputLabel>
+    </p:column>
+
+    <p:column width="70" headerText="#{properties.value('cu_co_1_lbl_tabla_estado')}">  
+      <h:outputLabel value="#{_convocatoria.estadoConvocatorio}" />  
+    </p:column>
+    <p:column width="75" headerText="#{properties.value('cu_co_1_lbl_tabla_mod_consul')}">  
+      <p:commandButton value="#{properties.value('cu_co_1_lbl_btn_mod_tabla_financia')}" 
+                       immediate="true" 
+                       rendered="#{cuCo1GestionarConvocatoriasFaces.mostrarBtnModificarConvocatoriaFinancia}"
+                       action="#{cuCo1GestionarConvocatoriasFaces.modificarConvocatoriaFinanciaEnsayo( _convocatoria )}" />
+    </p:column>
+    <p:column width="75" headerText="#{properties.value('cu_co_1_lbl_tabla_revisa_pro')}">  
+      <p:commandButton value="#{properties.value('cu_co_1_lbl_btn_rev_tabla_financia')}" 
+                       immediate="true" 
+                       rendered="#{cuCo1GestionarConvocatoriasFaces.mostrarBtnRevisarConvocatoriaEnsayo( _convocatoria )}"
+                       action="#{cuCo1GestionarConvocatoriasFaces.revisarConvocatoriaEnsayo( _convocatoria )}" />
+    </p:column>
+
+    <f:facet name="footer">  
+      #{fn:length( cuCo1GestionarConvocatoriasFaces.listaConvocatoriaEnsayo )} #{properties.value('general_mensaje_footer_datatable_count')}
+    </f:facet>
+
+  </p:dataTable>
+
+  <br />
+  <br />
+  <p:separator styleClass="separadorBorder" /> 
+  <div class="centrado">
+    <p:commandLink value="#{properties.value('cu_co_1_lbl_agregar_nueva_convocatoria')}"
+                   action="#{cuCo1GestionarConvocatoriasFaces.agreagaNuevaConvocatoria}" 
+                   rendered="#{cuCo1GestionarConvocatoriasFaces.mostrarBtnModificarConvocatoriaFinancia}"
+                   immediate="true" />
+  </div>
+  <br />
+  <br />
+
+</html>

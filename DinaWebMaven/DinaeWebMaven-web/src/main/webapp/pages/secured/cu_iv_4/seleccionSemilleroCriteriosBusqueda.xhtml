@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+
+      <ui:define name="content">
+        <h:form id="formProyectoEvaluacion">
+
+          <div class="fixed-menu">
+            <div class="right-col">
+              <h2 style="font: verdana;">
+                Consultar semilleros
+              </h2>
+            </div>
+          </div>
+
+          <br />
+          <h:outputLabel value="Seleccione cualquiera de los criterios de búsqueda" styleClass="green negrilla"/>
+          <br /><br/>
+          <h:panelGrid id="panelgridComponentesProyecto" columns="2" style="width: 100%" 
+                       rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                       columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+
+            <h:outputLabel value="#{properties.value('cu_pr_12_lbl_unidad_policial')}" styleClass="gris negrilla"/>
+            <h:selectOneMenu value="#{cuIv4ConsultarDetalleSemilleroFaces.idUnidadPolicial}" styleClass="gris" id="selectUnidadFiltroSemillero">  
+              <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+              <f:selectItems value="#{cuIv4ConsultarDetalleSemilleroFaces.listaUnidadesPoliciales}" var="_unit" 
+                             itemValue="#{_unit.idUnidadPolicial}" itemLabel="#{_unit.nombre}"/>
+            </h:selectOneMenu>
+
+            <h:outputLabel value="Palabra clave en el nombre" styleClass="gris negrilla"/>
+            <h:panelGrid columns="2">
+              <p:inputText id="inputPalabraClaveNombre" value="#{cuIv4ConsultarDetalleSemilleroFaces.palabrasClaveNombre}" maxlength="10"/>
+              <h:outputLabel value="(10 caracteres max)" styleClass="gris"/>
+            </h:panelGrid>
+
+            <h:outputLabel value="Estado" styleClass="gris negrilla"/>
+            <h:selectOneMenu value="#{cuIv4ConsultarDetalleSemilleroFaces.estadoSemillero}" styleClass="gris" id="selectEstadoSemillero">  
+              <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+              <f:selectItem itemLabel="ACTIVO" itemValue="A" />
+              <f:selectItem itemLabel="INACTIVO" itemValue="I" />                            
+            </h:selectOneMenu>
+
+            <h:outputLabel value="Año creación" styleClass="gris negrilla"/>
+            <h:selectOneMenu value="#{cuIv4ConsultarDetalleSemilleroFaces.anioCreacion}" styleClass="gris" id="selectAnioSemilleroFiltro">  
+              <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+              <f:selectItems value="#{cuIv4ConsultarDetalleSemilleroFaces.listaAniosCreacion}" var="_anio" 
+                             itemValue="#{_anio}" itemLabel="#{_anio}"/>
+            </h:selectOneMenu>
+
+            <h:outputLabel value="Trabajo independiente" styleClass="gris negrilla" />
+            <p:selectOneRadio id="radioTrabajoIndependiente"  styleClass="gris"
+                              value="#{cuIv4ConsultarDetalleSemilleroFaces.trabajoIndependiente}">  
+              <f:selectItem itemLabel="Sí" itemValue="S" />  
+              <f:selectItem itemLabel="No" itemValue="N" />
+            </p:selectOneRadio>  
+
+          </h:panelGrid>
+          <br/>
+          <div class="centrado">
+            <p:commandButton value="#{properties.value('general_lbl_btn_buscar')}" id="btnBuscar"
+                             action="#{cuIv4ConsultarDetalleSemilleroFaces.buscarSemillerosCriterios}" 
+                             update="@form tablaSemillerosCriterio"/>
+
+            <p:commandButton value="#{properties.value('general_lbl_btn_limpiar')}" id="btnLimpiar"
+                             action="#{cuIv4ConsultarDetalleSemilleroFaces.inicializarCamposFiltros}" 
+                             update="@form tablaSemillerosCriterio"/>
+          </div>       
+
+
+          <br/>
+          <div class="centrado">
+            <p:dataTable var="_semillero" value="#{cuIv4ConsultarDetalleSemilleroFaces.listaSemillerosBusquedaModel}"
+                         rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                         id="tablaSemillerosCriterio"
+                         emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                         selectionMode="single"
+                         selection="#{cuIv4ConsultarDetalleSemilleroFaces.semilleroSeleccionado}"
+                         style="width: 100%;" paginator="true"
+                         resizableColumns="true" rowIndexVar="idFila"
+                         paginatorPosition="bottom"
+                         rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+              <p:ajax event="rowSelect"  listener="#{cuIv4ConsultarDetalleSemilleroFaces.cargarDetallesSemillero}"   
+                      update="@form @form:tablaSemillerosCriterio"/>  
+              <p:ajax event="rowUnselect" listener="#{cuIv4ConsultarDetalleSemilleroFaces.noSeleccionDetalles}" 
+                      update="@form:tablaSemillerosCriterio"/>  
+
+
+              <p:column headerText="#{properties.value('general_lbl_numero_tabla')}" width="15" style="color: white; font-size: 13px">
+                <h:outputText value="#{idFila + 1}" styleClass="gris" style="font-size: 13px"/>
+              </p:column>
+              <p:column headerText="Nombre del semillero" style="color: white; font-size: 13px">
+                <h:outputText value="#{_semillero.nombre}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+              </p:column>
+              <p:column headerText="Unidad policial" style="color: white; font-size: 13px">
+                <h:outputText value="#{_semillero.siglaUnidadPolicial} - #{_semillero.nombreUnidadPolicial}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+              </p:column>
+              <p:column headerText="Fecha de creación" width="80" style="color: white; font-size: 13px">
+                <h:outputText value="#{_semillero.fechaRegistro}" styleClass="gris" style="font-size: 13px">
+                  <f:convertDateTime pattern="#{properties.value('general_formato_fecha_hora')}" locale="es_CO" />
+                </h:outputText>                                 
+              </p:column>
+              <p:column headerText="Estado" width="70" style="color: white; font-size: 13px">
+                <h:outputText value="#{_semillero.estadoEntreFecha}" styleClass="gris" style="font-size: 13px"/>      
+              </p:column>
+              <f:facet name="footer">  
+                #{fn:length(cuIv4ConsultarDetalleSemilleroFaces.listaSemillerosBusqueda)} #{properties.value('general_mensaje_footer_datatable_count')}
+              </f:facet>
+            </p:dataTable>                        
+          </div>
+        </h:form>                
+      </ui:define>
+    </ui:composition>
+  </body>
+</html>

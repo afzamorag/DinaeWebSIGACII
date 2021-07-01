@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"> 
+
+
+  <h:form id="forminclude_sugerencias_proyecto" >
+    <br />
+    <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaValor_30_porciento,panelGridColumnaValor_70_porciento" id="pginclude_informacion_informe_proyecto">
+
+      <h:outputLabel value="#{properties.value('cu_pr_7_lbl_tab_sugerencia_mejoramiento')}" styleClass="gris negrilla" 
+                     for="idcu_pr_7_lbl_tab_sugerencia_mejoramiento" />
+      <h:panelGrid columns="1" style="width: 100%">
+        <p:inputTextarea value="#{cuPr7RegistrarAvanceInvestigacionFaces.sugerenciasProyectoSeleccionado.sugerencia}"  
+                         id="idcu_pr_7_lbl_tab_sugerencia_mejoramiento"
+                         maxlength="512" counter="contadorInputeTextArea" 
+                         required="true" cols="100" rows="3" autoResize="false"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         styleClass="textareaMaximo">
+          <f:validateLength minimum="1"  maximum="512" />
+        </p:inputTextarea>
+        <h:outputText id="contadorInputeTextArea" styleClass="gris" />
+      </h:panelGrid>
+
+    </h:panelGrid>
+    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+    <p:separator styleClass="separadorBorder" /> 
+    <div class="centrado">
+
+      <p:commandButton value="#{properties.value('cu_pr_7_lbl_tab_actividesde_realizada_btn_agregar')}" 
+                       id="idBtnAgregar"
+                       update="@form"
+                       action="#{cuPr7RegistrarAvanceInvestigacionFaces.guardarSugerencia}"
+                       rendered="#{cuPr7RegistrarAvanceInvestigacionFaces.sugerenciasProyectoSeleccionado.idSugerenciasProyecto == null}" />
+
+      <p:commandButton value="#{properties.value('cu_pr_3_lbl_btn_actualizar_funcionario')}"                              
+                       update="@form"
+                       action="#{cuPr7RegistrarAvanceInvestigacionFaces.actualizarSugerenciaSeleccionada}"
+                       rendered="#{cuPr7RegistrarAvanceInvestigacionFaces.sugerenciasProyectoSeleccionado.idSugerenciasProyecto != null}" />
+
+      <p:commandButton value="#{properties.value('cu_pr_23_lbl_cancelar_compromiso')}"                              
+                       update="@form"
+                       action="#{cuPr7RegistrarAvanceInvestigacionFaces.cancelarSugerenciaMejoramientoSeleccionado}"
+                       rendered="#{cuPr7RegistrarAvanceInvestigacionFaces.sugerenciasProyectoSeleccionado.idSugerenciasProyecto != null}" />
+
+    </div>
+    <br />
+    <br />
+
+    <ui:include src="include_lista_sugerencias_proyecto.xhtml" />
+
+  </h:form>     
+  <p:confirmDialog widgetVar="varConfirmEliminarSugerencia" header="#{properties.value('cu_pr_2_lbl_titulo_confirmacion_titulo')}" 
+                   message="#{properties.value('cu_pr_2_lbl_titulo_confirmacion_mensaje_eliminar_actividad')}" > 
+
+    <h:form id="idForm_varSugerencias">
+
+      <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmEliminarSugerencia">
+        <div class="centrado">
+          <p:commandButton actionListener="#{cuPr7RegistrarAvanceInvestigacionFaces.eliminarSugerencia}" 
+                           value="#{properties.value('cu_pr_7_lbl_btn_confirma_si')}" immediate="true"
+                           oncomplete="varConfirmEliminarSugerencia.hide();"
+                           update=":tabViewAvanceProyectos:forminclude_sugerencias_proyecto:idDataTableDatosSugerencias" />  
+          <p:commandButton value="#{properties.value('cu_pr_7_lbl_btn_confirma_no')}" 
+                           onclick="varConfirmEliminarSugerencia.hide();" type="button" />       
+        </div>
+      </p:outputPanel>
+
+    </h:form>
+  </p:confirmDialog>
+</html>

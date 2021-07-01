@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+  <h:form id="formAgregarTalentoHumanoTrabajoDeGrado" >
+    <br />
+    <h:panelGroup id="id_cu_tr_01_panel_formulario_talento_humano">
+
+      <h:outputLabel  value="#{properties.value('cu_tr_01_lbl_sub_titulo_investigadores')}" styleClass="gris negrilla" />
+      <br/>   
+
+      <h:panelGrid columns="4">
+
+        <h:outputLabel for="idcu_tr_01_lbl_sub_titulo_numero_identificacion" value="#{properties.value('cu_tr_01_lbl_sub_titulo_numero_identificacion')}" styleClass="gris negrilla"/>
+
+        <p:inputText id="idcu_tr_01_lbl_sub_titulo_numero_identificacion" 
+                     required="true" 
+                     value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.identificacionFuncionario}"
+                     disabled="#{cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura or cuTr01IngresarModificarTrabajoDeGradoFaces.modoInvestigadorPrincipal}">                
+        </p:inputText>
+
+        <p:commandButton id="idcu_tr_01_btn_buscar_funcionario" 
+                         value="#{properties.value('cu_tr_01_lbl_boton_buscar')}" 
+                         actionListener="#{cuTr01IngresarModificarTrabajoDeGradoFaces.obtenerDatosFuncionario}"                             
+                         update="idcu_tr_01_funcionario_consultado,idcu_tr_01_pg_ciuad_funcionario,idcu_tr_01_select_tipo_vinculacion"
+                         disabled="#{cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura or cuTr01IngresarModificarTrabajoDeGradoFaces.modoInvestigadorPrincipal}"
+                         process="@this,idcu_tr_01_lbl_sub_titulo_numero_identificacion,idcu_tr_01_pg_ciuad_funcionario"
+                         >
+
+        </p:commandButton>
+
+        <h:panelGroup id="idcu_tr_01_pg_ciuad_funcionario">
+          <p:outputLabel for="idcu_tr_01_lbl_de_ciudad" 
+                         value="#{properties.value('cu_tr_01_lbl_de_ciudad')}" 
+                         styleClass="gris negrilla"
+                         rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.vistaFuncionario != null and cuTr01IngresarModificarTrabajoDeGradoFaces.ciudadFuncionario != null}"/>
+
+          <p:outputLabel id="idcu_tr_01_lbl_de_ciudad" 
+                         value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.ciudadFuncionario}"
+                         rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.vistaFuncionario != null and cuTr01IngresarModificarTrabajoDeGradoFaces.ciudadFuncionario != null}"/>                 
+        </h:panelGroup>
+
+
+
+      </h:panelGrid>
+
+
+
+
+
+      <h:panelGroup id="idcu_tr_01_funcionario_consultado">
+        <h:panelGrid columns="6" style="width: 100%" 
+                     rowClasses="filaParPanelGridPar,filaParPanelGridImPar" rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.vistaFuncionario != null}">
+
+          <h:outputLabel value="#{properties.value('cu_tr_0_lbl_sub_titulo_grado')}" styleClass="gris negrilla" />
+          <h:outputLabel value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.vistaFuncionario.grado}" styleClass="gris" />
+
+          <h:outputLabel value="#{properties.value('cu_tr_01_lbl_sub_titulo_nom_y_appellido')}" styleClass="gris negrilla"  />
+          <h:outputLabel value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.vistaFuncionario.nombreCompleto}" styleClass="gris" />
+
+          <h:outputLabel value="#{properties.value('cu_tr_01_lbl_sub_titulo_correo')}" styleClass="gris negrilla" />
+          <h:outputLabel value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.vistaFuncionario.correo}" styleClass="gris" />
+
+        </h:panelGrid>
+
+        <h:panelGrid columns="4" style="width: 100%" rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.vistaFuncionario != null}">
+
+          <h:outputLabel value="#{properties.value('cu_tr_01_lbl_sub_titulo_cargo')}" styleClass="gris negrilla" />
+          <h:outputLabel value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.vistaFuncionario.cargo}" styleClass="gris" />
+
+          <h:outputLabel value="#{properties.value('cu_tr_01_lbl_sub_titulo_num_telefono')}" styleClass="gris negrilla" />
+          <h:outputLabel value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.vistaFuncionario.telefono}" styleClass="gris" />
+
+          <h:outputLabel value="#{properties.value('cu_tr_01_lbl_sub_titulo_tipo_vinculacion')}" 
+                         styleClass="gris negrilla" 
+                         for="idcu_tr_01_select_tipo_vinculacion"/>
+          <h:selectOneMenu styleClass="gris" 
+                           id="idcu_tr_01_select_tipo_vinculacion" 
+                           required="true" 
+                           value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.idTipoVinculacionSeleccionado}" >  
+            <f:selectItem itemLabel="--Select--" itemValue="" />  
+            <f:selectItems value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.listaTipoVinculacionItem}" var="_itemVinculacion" />                    
+          </h:selectOneMenu> 
+
+          <h:outputLabel for="idcu_tr_01_lbl_sub_titulo_tipo_investigador" value="#{properties.value('cu_tr_01_lbl_sub_titulo_tipo_investigador')}" 
+                         styleClass="gris negrilla" />
+          <h:selectOneMenu styleClass="gris" 
+                           id="idcu_tr_01_lbl_sub_titulo_tipo_investigador" 
+                           required="true"
+                           value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.idTipoInvestigadorSeleccionado}" >  
+            <f:selectItem itemLabel="--Select--" itemValue="" />  
+            <f:selectItems value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.listaTipoInvestigadorItem}" var="_itemTipoInvestigador" />                 
+          </h:selectOneMenu>
+
+        </h:panelGrid>
+      </h:panelGroup>
+
+    </h:panelGroup>
+
+    <br />
+    <br />
+    <div class="centrado">
+      <p:commandButton id="agregarInvestigadorCommandButton" value="#{properties.value('cu_tr_01_lbl_boton_agregar')}"
+                       actionListener="#{cuTr01IngresarModificarTrabajoDeGradoFaces.agregarInvestigadorOAsesorTrabajoDeGrado}" 
+                       update="id_cu_tr_01_data_table_investigadores,id_cu_tr_01_data_table_asesores,id_cu_tr_01_panel_formulario_talento_humano"
+                       disabled="#{cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura or cuTr01IngresarModificarTrabajoDeGradoFaces.modoInvestigadorPrincipal}">
+      </p:commandButton>
+    </div>
+
+    <br />
+    <br />
+    <h:outputLabel value="#{properties.value('cu_tr_01_lbl_sub_titulo_investigadores')}" styleClass="green negrilla" />
+    <p:dataTable id="id_cu_tr_01_data_table_investigadores" var="_investigadores"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.listaInvestigadoresTrabajoDeGrado}" 
+                 rowStyleClass="#{idFilaInves % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rowIndexVar="idFilaInves" paginatorPosition="bottom" 
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true">
+
+      <p:column headerText="#{properties.value('cu_tr_01_lbl_sub_titulo_tabla_tipo_investigador')}">  
+        <h:outputLabel value="#{_investigadores.tipoInvestigador.valor}" />  
+      </p:column>  
+      <p:column headerText="#{properties.value('cu_tr_0_lbl_sub_titulo_tabla_grado')}">  
+        <h:outputLabel value="#{_investigadores.grado}" />  
+      </p:column> 
+      <p:column headerText="#{properties.value('cu_tr_0_lbl_tabla_evaluadores_identificacion')}">  
+        <h:outputLabel value="#{_investigadores.identificacion}"  />  
+      </p:column>
+      <p:column headerText="#{properties.value('cu_tr_01_lbl_sub_titulo_tabla_nom_y_appellido')}">  
+        <h:outputLabel value="#{_investigadores.nombreCompleto}"  />  
+      </p:column>
+      <p:column headerText="#{properties.value('cu_tr_01_lbl_sub_titulo_tabla_correo')}">  
+        <h:outputLabel value="#{_investigadores.correo}"  />  
+      </p:column>
+      <p:column headerText="#{properties.value('cu_tr_01_lbl_sub_titulo_tabla_num_telefono')}">  
+        <h:outputLabel value="#{_investigadores.telefono}"  />  
+      </p:column>
+
+      <f:facet name="footer">  
+        #{fn:length( cuTr01IngresarModificarTrabajoDeGradoFaces.listaInvestigadoresTrabajoDeGrado )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+    </p:dataTable>
+
+    <br />
+    <br />
+
+    <h:outputLabel value="#{properties.value('cu_tr_01_lbl_sub_titulo_asesores')}" styleClass="green negrilla" />
+    <p:dataTable id="id_cu_tr_01_data_table_asesores" var="_asesores"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.listaAsesoresTrabajoDeGrado}" 
+                 rowStyleClass="#{idFilaAses % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rowIndexVar="idFilaAses" paginatorPosition="bottom" 
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true">
+
+      <p:column headerText="#{properties.value('cu_tr_01_lbl_sub_titulo_tabla_tipo_investigador')}">  
+        <h:outputLabel value="#{_asesores.tipoInvestigador.valor}" />  
+      </p:column>  
+      <p:column headerText="#{properties.value('cu_tr_0_lbl_sub_titulo_tabla_grado')}">  
+        <h:outputLabel value="#{_asesores.grado}" />  
+      </p:column> 
+      <p:column headerText="#{properties.value('cu_tr_0_lbl_tabla_evaluadores_identificacion')}">  
+        <h:outputLabel value="#{_asesores.identificacion}"  />  
+      </p:column>
+      <p:column headerText="#{properties.value('cu_tr_01_lbl_sub_titulo_tabla_nom_y_appellido')}">  
+        <h:outputLabel value="#{_asesores.nombreCompleto}"  />  
+      </p:column>
+      <p:column headerText="#{properties.value('cu_tr_01_lbl_sub_titulo_tabla_correo')}">  
+        <h:outputLabel value="#{_asesores.correo}"  />  
+      </p:column>
+      <p:column headerText="#{properties.value('cu_tr_01_lbl_sub_titulo_tabla_num_telefono')}">  
+        <h:outputLabel value="#{_asesores.telefono}"  />  
+      </p:column>
+
+      <f:facet name="footer">  
+        #{fn:length( cuTr01IngresarModificarTrabajoDeGradoFaces.listaAsesoresTrabajoDeGrado )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+    </p:dataTable>
+
+    <h:panelGroup id="idcu_tr_01_pgroup_include_accion_botones_abajo_talento_humano">
+      <ui:include src="include_accion_botones_abajo_trabajo_de_grado.xhtml" />
+    </h:panelGroup>
+
+  </h:form>
+
+</html>

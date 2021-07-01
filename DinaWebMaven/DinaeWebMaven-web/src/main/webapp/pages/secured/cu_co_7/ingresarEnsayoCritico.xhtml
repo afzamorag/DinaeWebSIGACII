@@ -1,0 +1,274 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+
+      <ui:define name="content">
+        <div class="fixed-menu">
+          <div class="right-col">
+            <h2>
+              #{properties.value('cu_co_7_lbl_titulo')}
+            </h2>
+          </div>
+        </div>
+        <div>
+          <div class="green negrilla" align="left">
+            #{properties.value('cu_co_7_lbl_sub_titulo')}
+          </div>
+        </div>
+        <div width="100%">
+          <p:separator styleClass="separadorBorder" /> 
+          <h:form id="idFormIngregarEnsayoCritico">
+            <h:panelGrid columns="2" width="100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                         columnClasses="panelGridColumnaValor_30_porciento,panelGridColumnaValor_70_porciento">
+
+              <h:outputLabel rendered="#{cuCo7ConvocatoriasEnsayoCriticoFaces.deshabilitarCamposEnsayo and cuCo7ConvocatoriasEnsayoCriticoFaces.ensayoCritico.estadoCuCo10 != null}" value="Estado" styleClass="gris negrilla" />
+              <h:outputLabel rendered="#{cuCo7ConvocatoriasEnsayoCriticoFaces.deshabilitarCamposEnsayo and cuCo7ConvocatoriasEnsayoCriticoFaces.ensayoCritico.estadoCuCo10 != null}" value="#{cuCo7ConvocatoriasEnsayoCriticoFaces.ensayoCritico.estadoCuCo10 == null ? cuCo7ConvocatoriasEnsayoCriticoFaces.ensayoCritico.estadoCuCo8.valor : cuCo7ConvocatoriasEnsayoCriticoFaces.ensayoCritico.estadoCuCo10.valor}" styleClass="gris" />
+
+              <h:panelGrid columns="2">
+                <h:outputLabel value="*" style="color: red; font-weight: bold" />
+                <h:outputLabel value="#{properties.value('cu_co_7_lbl_titulo_ensayo')} " styleClass="gris negrilla" style="text-align: right" />
+              </h:panelGrid> 
+              <h:panelGroup>
+                <p:inputTextarea value="#{cuCo7ConvocatoriasEnsayoCriticoFaces.tituloEnsayo}"  
+                                 id="idTituloEnsayo" disabled="#{cuCo7ConvocatoriasEnsayoCriticoFaces.deshabilitarCamposEnsayo}"
+                                 maxlength="512" counter="contTitulo" 
+                                 counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                                 styleClass="textareaMaximo" cols="100" rows="3" autoResize="false">
+                  <f:validateLength minimum="0"  maximum="512"/>
+                </p:inputTextarea>
+                <h:outputText id="contTitulo" styleClass="gris" />
+              </h:panelGroup>
+
+              <h:panelGrid columns="2">
+                <h:outputLabel value="*" style="color: red; font-weight: bold" />
+                <h:panelGrid columns="1">
+                  <h:outputLabel value="#{properties.value('cu_co_7_lbl_resumen')} " styleClass="gris negrilla" style="text-align: right" />
+                  <h:outputLabel value="#{properties.value('cu_co_7_lbl_palabras')} " styleClass="gris negrilla" style="text-align: right" />
+                </h:panelGrid>
+              </h:panelGrid>                     
+              <h:panelGroup>
+                <p:inputTextarea value="#{cuCo7ConvocatoriasEnsayoCriticoFaces.resumenEnsayo}"  
+                                 id="idResumen" disabled="#{cuCo7ConvocatoriasEnsayoCriticoFaces.deshabilitarCamposEnsayo}"
+                                 maxlength="4000" counter="contResumen"
+                                 counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                                 styleClass="textareaMaximo" cols="100" rows="3" autoResize="false">                                    
+                  <f:validateLength minimum="0"  maximum="4000" />
+                </p:inputTextarea>
+                <h:outputText id="contResumen" styleClass="gris"  />
+              </h:panelGroup>
+
+              <h:panelGrid columns="2">
+                <h:outputLabel value="*" style="color: red; font-weight: bold" />
+                <h:outputLabel value="#{properties.value('cu_co_7_lbl_palabras_clave')} " styleClass="gris negrilla" style="text-align: right" />
+              </h:panelGrid>                     
+              <h:panelGroup>
+                <p:inputTextarea value="#{cuCo7ConvocatoriasEnsayoCriticoFaces.palabrasClaveEnsayo}"  
+                                 id="idAbstract" disabled="#{cuCo7ConvocatoriasEnsayoCriticoFaces.deshabilitarCamposEnsayo}"
+                                 maxlength="256" counter="contPalabrasClave"                                          
+                                 counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                                 styleClass="textareaMaximo" cols="100" rows="3" autoResize="false">
+                  <f:validateLength minimum="0"  maximum="256" />
+                </p:inputTextarea>
+                <h:outputText id="contPalabrasClave" styleClass="gris" />
+              </h:panelGroup>
+
+              <h:panelGrid columns="2">
+                <h:outputLabel value="*" style="color: red; font-weight: bold" />
+                <h:outputLabel value="#{properties.value('cu_co_7_lbl_abstract')} " styleClass="gris negrilla" style="text-align: right" />
+              </h:panelGrid>                     
+              <h:panelGroup>
+                <p:inputTextarea value="#{cuCo7ConvocatoriasEnsayoCriticoFaces.abstractEnsayo}"  
+                                 id="idKeywords" disabled="#{cuCo7ConvocatoriasEnsayoCriticoFaces.deshabilitarCamposEnsayo}"
+                                 maxlength="4000" counter="contAbstract" 
+                                 counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                                 styleClass="textareaMaximo" cols="100" rows="3" autoResize="false">
+                  <f:validateLength minimum="0"  maximum="4000" />
+                </p:inputTextarea>
+                <h:outputText id="contAbstract" styleClass="gris" />
+              </h:panelGroup>
+
+              <h:panelGrid columns="2">
+                <h:outputLabel value="*" style="color: red; font-weight: bold" />
+                <h:outputLabel value="#{properties.value('cu_co_7_lbl_keywords')} " styleClass="gris negrilla" style="text-align: right" />
+              </h:panelGrid>                     
+              <h:panelGroup>
+                <p:inputTextarea value="#{cuCo7ConvocatoriasEnsayoCriticoFaces.keywordsEnsayo}"  
+                                 id="idConclusion" disabled="#{cuCo7ConvocatoriasEnsayoCriticoFaces.deshabilitarCamposEnsayo}"
+                                 maxlength="256" counter="contKeywords" 
+                                 counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                                 styleClass="textareaMaximo" cols="100" rows="3" autoResize="false">
+                  <f:validateLength minimum="0"  maximum="256" />
+                </p:inputTextarea>
+                <h:outputText id="contKeywords" styleClass="gris" />
+              </h:panelGroup>
+
+              <h:panelGrid columns="2">
+                <h:outputLabel value="*" style="color: red; font-weight: bold" />
+                <h:outputLabel value="#{properties.value('cu_co_7_lbl_introduccion')} " styleClass="gris negrilla" style="text-align: right" />
+              </h:panelGrid>                     
+              <h:panelGroup>
+                <p:inputTextarea value="#{cuCo7ConvocatoriasEnsayoCriticoFaces.introduccionEnsayo}"  
+                                 id="idIntroduccion" disabled="#{cuCo7ConvocatoriasEnsayoCriticoFaces.deshabilitarCamposEnsayo}"
+                                 maxlength="4000" counter="contIntroduccion" 
+                                 counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                                 styleClass="textareaMaximo" cols="100" rows="3" autoResize="false">
+                  <f:validateLength minimum="0"  maximum="4000" />
+                </p:inputTextarea>
+                <h:outputText id="contIntroduccion" styleClass="gris" />
+              </h:panelGroup>    
+
+              <h:panelGrid columns="2">
+                <h:outputLabel value="*" style="color: red; font-weight: bold" />
+                <h:outputLabel value="#{properties.value('cu_co_7_lbl_desarrollo_ensayo')} " styleClass="gris negrilla" style="text-align: right" />
+              </h:panelGrid>         
+              <p:editor id="idEditor" disabled="#{cuCo7ConvocatoriasEnsayoCriticoFaces.deshabilitarCamposEnsayo}"
+                        value="#{cuCo7ConvocatoriasEnsayoCriticoFaces.desarrolloEnsayo}"
+                        maxlength="6000"/> 
+
+
+              <h:panelGrid columns="2">
+                <h:outputLabel value="*" style="color: red; font-weight: bold" />
+                <h:outputLabel value="#{properties.value('cu_co_7_lbl_archivo_ensayo')} " styleClass="gris negrilla" style="text-align: right" />
+              </h:panelGrid>  
+              <h:panelGrid columns="1" id="pgidNombreArchivoCargado">
+                <p:commandLink ajax="false" immediate="true" id="idCommanLinkDescargaArchivo" 
+                               rendered="#{cuCo7ConvocatoriasEnsayoCriticoFaces.esVisibleEnlaceDescarga}">
+                  <h:outputLabel value="#{cuCo7ConvocatoriasEnsayoCriticoFaces.nombreArchivoEnsayo}" />
+                  <p:fileDownload value="#{cuCo7ConvocatoriasEnsayoCriticoFaces.downloadContentProperty}" />
+                </p:commandLink>
+                <h:outputLabel id="idNombreArchivoCargado" styleClass="green" rendered="#{cuCo7ConvocatoriasEnsayoCriticoFaces.esVisibleNombreArchivo}" 
+                               value="#{cuCo7ConvocatoriasEnsayoCriticoFaces.nombreArchivoEnsayo}" />
+
+                <p:fileUpload dragDropSupport="true" fileUploadListener="#{cuCo7ConvocatoriasEnsayoCriticoFaces.handleFileUpload}"
+                              fileLimit="1" update="pgidNombreArchivoCargado idCommanLinkDescargaArchivo"
+                              label="#{properties.value('cu_pr_4_lbl_examinar')}" multiple="false"
+                              fileLimitMessage="#{properties.value('cu_pr_4_lbl_mensaje_maximo_numero_archivo')}"
+                              uploadLabel="#{properties.value('cu_pr_4_lbl_subiendo')}" 
+                              invalidFileMessage="#{properties.value('cu_co_7_lbl_solo_formato_word')}"
+                              invalidSizeMessage="#{properties.value('cu_pr_4_lbl_tamanio_invalido_archivo')}" 
+                              allowTypes="#{properties.value('cu_co_7_lbl_archivos_permitidos')}"
+                              mode="advanced" auto="false" cancelLabel="#{properties.value('cu_pr_4_lbl_cancelar')}"                                               
+                              id="idCargaArchivo"
+                              disabled="#{cuCo7ConvocatoriasEnsayoCriticoFaces.deshabilitarCamposEnsayo}">
+                </p:fileUpload>
+                <h:outputLabel style="color: red;" value="#{properties.value('cu_co_7_lbl_solo_formato_word')} " />
+              </h:panelGrid>
+              <h:panelGrid columns="2">
+                <h:outputLabel value="*" style="color: red; font-weight: bold" />
+                <h:outputLabel value="#{properties.value('cu_co_7_lbl_conlusiones_recomendaciones')} " styleClass="gris negrilla" style="text-align: right" />
+              </h:panelGrid>
+              <h:panelGroup>
+                <p:inputTextarea value="#{cuCo7ConvocatoriasEnsayoCriticoFaces.conclusionRecomendacionEnsayo}"  
+                                 id="idRecomendaciones"
+                                 maxlength="4000" counter="contRecomendaciones" 
+                                 counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                                 styleClass="textareaMaximo" cols="100" rows="3" autoResize="false"
+                                 disabled="#{cuCo7ConvocatoriasEnsayoCriticoFaces.deshabilitarCamposEnsayo}">
+                  <f:validateLength minimum="0"  maximum="4000" />
+                </p:inputTextarea>
+                <h:outputText id="contRecomendaciones" styleClass="gris" />
+              </h:panelGroup>
+
+              <h:panelGrid columns="2">
+                <h:outputLabel value="*" style="color: red; font-weight: bold" />
+                <h:outputLabel value="#{properties.value('cu_co_7_lbl_propuesta')} " styleClass="gris negrilla" style="text-align: right" />
+              </h:panelGrid>
+              <h:panelGroup>
+                <p:inputTextarea value="#{cuCo7ConvocatoriasEnsayoCriticoFaces.propuestaEnsayo}"  
+                                 id="idPropuesta"
+                                 maxlength="4000" counter="contPropuesta" 
+                                 counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                                 styleClass="textareaMaximo" cols="100" rows="3" autoResize="false"
+                                 disabled="#{cuCo7ConvocatoriasEnsayoCriticoFaces.deshabilitarCamposEnsayo}">
+                  <f:validateLength minimum="0"  maximum="4000" />
+                </p:inputTextarea>
+                <h:outputText id="contPropuesta" styleClass="gris" />
+              </h:panelGroup>
+
+              <h:panelGrid columns="2">
+                <h:outputLabel value="*" style="color: red; font-weight: bold" />
+                <h:outputLabel value="#{properties.value('cu_co_7_lbl_bibliografia_cybergrafia')} " styleClass="gris negrilla" style="text-align: right" />
+              </h:panelGrid>
+              <h:panelGroup>
+                <p:inputTextarea value="#{cuCo7ConvocatoriasEnsayoCriticoFaces.bibliografiaEnsayo}"  
+                                 id="idBibliografia"
+                                 maxlength="4000" counter="contBibliografia" 
+                                 counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                                 styleClass="textareaMaximo" cols="100" rows="3" autoResize="false"
+                                 disabled="#{cuCo7ConvocatoriasEnsayoCriticoFaces.deshabilitarCamposEnsayo}">
+                  <f:validateLength minimum="0"  maximum="4000" />
+                </p:inputTextarea>
+                <h:outputText id="contBibliografia" styleClass="gris" />
+              </h:panelGroup>
+            </h:panelGrid>
+            <br />
+            <br />
+            <p:dataTable var="autor" value="#{cuCo7ConvocatoriasEnsayoCriticoFaces.listaAutor}"
+                         rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                         id="tablaAutor"
+                         emptyMessage="#{properties.value('general_mensaje_no_records_found')}"                                     
+                         style="width: 100%;"
+                         resizableColumns="true" rowIndexVar="idFila"                                     
+                         rowStyleClass="filaParDataTable">
+
+              <p:column headerText="#{properties.value('cu_co_7_lbl_grado')}" >
+                <h:outputText value="#{autor.grado}" />
+              </p:column>
+              <p:column headerText="#{properties.value('cu_co_7_lbl_nombres_apellidos')}" >
+                <h:outputText value="#{autor.nombreCompleto}" />
+              </p:column>
+              <p:column headerText="#{properties.value('cu_co_7_lbl_correo_electronico')}">
+                <h:outputText value="#{autor.correo}" />
+              </p:column>
+            </p:dataTable>
+
+            <p:separator styleClass="separadorBorder" /> 
+            <div class="centrado">
+              <p:commandButton value="#{properties.value('cu_co_7_lbl_btn_regresar')}"
+                               id="btnRegresar" immediate="true" action="#{cuCo7ConvocatoriasEnsayoCriticoFaces.regresar}"/>
+
+              <p:commandButton value="#{properties.value('cu_co_7_lbl_btn_guardar')}"
+                               id="btnGuardarEnsayo" action="#{cuCo7ConvocatoriasEnsayoCriticoFaces.guardarEnsayo}"
+                               update="@form" process="@form" rendered="#{!cuCo7ConvocatoriasEnsayoCriticoFaces.deshabilitarCamposEnsayo}"/>
+
+              <p:commandButton value="#{properties.value('cu_co_7_lbl_btn_enviar')}"
+                               oncomplete="PF('varConfirmarEnviarEnsayo').show()"
+                               id="btnEnviarEnsayo" 
+                               update="@form" process="@form" rendered="#{!cuCo7ConvocatoriasEnsayoCriticoFaces.deshabilitarCamposEnsayo}"/>
+
+            </div>
+
+
+            <p:confirmDialog widgetVar="varConfirmarEnviarEnsayo" header="#{properties.value('cu_pr_2_lbl_titulo_confirmacion_titulo')}" 
+                             message="#{properties.value('cu_co_7_mensaje_enviar')}" > 
+
+              <h:form id="idForm_varEnviarEnsayo">
+
+                <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmEnviarEnsayo">
+                  <div class="centrado">
+                    <p:commandButton actionListener="#{cuCo7ConvocatoriasEnsayoCriticoFaces.enviarEnsayo}" 
+                                     value="#{properties.value('cu_pr_7_lbl_btn_confirma_si')}" immediate="true"
+                                     oncomplete="varConfirmarEnviarEnsayo.hide();"
+                                     update=":idFormIngregarEnsayoCritico" />  
+                    <p:commandButton value="#{properties.value('cu_pr_7_lbl_btn_confirma_no')}" 
+                                     onclick="varConfirmarEnviarEnsayo.hide();" type="button" />       
+                  </div>
+                </p:outputPanel>
+
+              </h:form>
+            </p:confirmDialog>
+
+          </h:form>
+        </div>
+      </ui:define>
+    </ui:composition>
+  </body>
+</html>

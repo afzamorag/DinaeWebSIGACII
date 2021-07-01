@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+      <ui:define name="content">
+
+        <h:form id="idForm_cu_ne_6_gestiona_evaluar_propuestas_necesidades_detalle_propuesta">
+
+          <ui:include src="/pages/secured/cu_ne_7/include_detalle_propuesta_necesidad_datos.xhtml" /> 
+
+          <br />
+          <br />
+          <h:outputText value="#{properties.value('cu_ne_7_unida_policial_ejecutora')}" styleClass="green negrilla"/>
+          <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}"  var="_ejecutor" id="tablaEjecutoresNecesidad" 
+                       value="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.listadoEjecutorNecesidad}"
+                       paginatorPosition="bottom" rowIndexVar="idFila"
+                       resizableColumns="true"
+                       rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                       rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true" >
+
+            <p:column headerText="#{properties.value('cu_ne_7_lista_unidad_policial')}">  
+              <h:outputText value="#{_ejecutor.nombreUnidadPolicial}" />                    
+            </p:column>
+            <p:column width="110" headerText="#{properties.value('cu_ne_7_rol')}">  
+              <h:outputText value="#{_ejecutor.nombreRol}" />                    
+            </p:column>
+
+            <f:facet name="footer">  
+              #{fn:length( cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.listadoEjecutorNecesidad )} #{properties.value('general_mensaje_footer_datatable_count')}
+            </f:facet>
+
+          </p:dataTable>
+          <br />
+          <br />
+          <h:outputLabel value="#{properties.value('cu_ne_7_vincular_otras_unida_policiale')}" styleClass="green negrilla" />
+          <br />
+
+
+          <h:panelGrid columns="5" id="detalleVinculaIUnidad">
+            <h:outputLabel value="#{properties.value('cu_ne_7_nombre_de_la_unidad')}" 
+                           for="idListaSelectItemUnidad" styleClass="gris negrilla" />
+            <h:selectOneMenu required="true" id="idListaSelectItemUnidad"  styleClass="gris" 
+                             value="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.idUnidadPolicialVinculaSeleccionado}" >  
+              <f:selectItem itemLabel="--Select--" itemValue="" />  
+              <f:selectItems value="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.listaItemUnidadPolicialVincula}" var="_item" />  
+            </h:selectOneMenu>
+            <h:outputLabel value="#{properties.value('cu_ne_7_rol_en_proyecto')}" for="idListaSelectItemLinea" styleClass="gris negrilla" />
+            <h:selectOneMenu required="true" id="idListaSelectItemLinea" styleClass="gris"
+                             value="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.idRolVinculaEjecutorSelecionado}">  
+              <f:selectItem itemLabel="--Select--" itemValue="" />  
+              <f:selectItems value="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.listaItemRolVincula}" />  
+            </h:selectOneMenu>
+            <p:commandButton value="#{properties.value('cu_ne_7_vincular')}" 
+                             action="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.vincularUnidadFuncional}" 
+                             update="detalleVinculaIUnidad tablaEjecutoresNecesidad" >
+            </p:commandButton>
+
+          </h:panelGrid> 
+          <br />
+          <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+
+          <br />
+          <br />
+
+          <p:separator styleClass="separadorBorder" /> 
+          <div class="centrado">
+            <p:commandButton value="#{properties.value('cu_ne_7_lbl_regresar')}" 
+                             action="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.regresarListPropuesta}" 
+                             immediate="true" />
+            <p:commandButton value="#{properties.value('cu_ne_6_lbl_btn_no_pre_aprobar')}" 
+                             id="idAccionBtnPreAprobarPropuestaSeleccionada"
+                             rendered="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.mostrarBtnAccionesPublicarPreAprobarYrechazar}"
+                             action="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.preAprobarPropuestaSeleccionada}" 
+                             immediate="true" oncomplete="if (#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.mostrarConformacionDialogo}){wvConformacionDialogo.show();}" 
+                             update="@form" />
+            <p:commandButton value="#{properties.value('cu_ne_6_lbl_btn_rechazar')}" 
+                             rendered="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.mostrarBtnAccionesPublicarPreAprobarYrechazar}"
+                             action="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.rechazarPropuestaSeleccionada}" 
+                             immediate="true" />
+
+          </div>
+          <br />
+          <br />
+        </h:form>
+
+        <ui:include src="../panelglobal/confirmDialog.xhtml" />
+
+      </ui:define>
+    </ui:composition>
+
+  </body>
+</html>

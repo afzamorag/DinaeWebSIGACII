@@ -1,0 +1,181 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link href="#{request.contextPath}/images/css/default.css" rel="stylesheet" type="text/css" />
+        <link href="#{request.contextPath}/images/css/cssLayout.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="#{request.contextPath}/ui/js/calendar_es.js"></script>
+        <script type="text/javascript" src="#{request.contextPath}/ui/js/utilidades_dinae.js"></script>
+        <script type="text/javascript" src="#{request.contextPath}/ui/js/calendar_es.js"></script>
+        <title>DINAE-SIEDU</title>
+    </h:head>
+    <h:body 
+        class="body">
+        <p:panel id="main" styleClass="ui-fluid">
+            <h:form id="frmlist" prependId="false">
+                <h:outputText
+                    styleClass="gris negrilla"
+                    value="#{bundle['panelMoodle.titulo.lbl']}"/>
+                <p:separator />
+                <p:panel 
+                    id="pnlSearch"
+                    styleClass="ui-fluid">
+                    <p:panelGrid 
+                        columns="2"
+                        layout="grid"
+                        columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2"
+                        styleClass="ui-panelgrid-blank">
+                        <p:outputLabel 
+                            for="dateFechaInicio"
+                            value="#{bundle['panelMoodle.fechainicial.lbl']}"/>
+                        <p:calendar 
+                            pattern="#{bundle['pattern.default.date']}" 
+                            locale="es" 
+                            style="text-align: center"
+                            id="dateFechaInicio"
+                            navigator="true" 
+                            required="true"
+                            value="#{moodlePanel.fechaDesde}">
+                        </p:calendar>
+                        <p:outputLabel 
+                            for="dateFechaFin"
+                            value="#{bundle['panelMoodle.fechafinal.lbl']}"/>
+                        <p:calendar 
+                            pattern="#{bundle['pattern.default.date']}" 
+                            locale="es" 
+                            style="text-align: center"
+                            id="dateFechaFin"                                
+                            navigator="true" 
+                            required="true"
+                            value="#{moodlePanel.fechaHasta}">
+                        </p:calendar>   
+                        <p:outputLabel 
+                            for="servicio"
+                            value="#{bundle['panelMoodle.servicio.lbl']}"/>
+                        <p:selectOneMenu 
+                            id="servicio" 
+                            value="#{moodlePanel.servicio}" 
+                            required="true"
+                            >
+                            <f:selectItem noSelectionOption="true"/>
+                            <f:selectItems 
+                                value="#{moodlePanel.lista}"/>                                
+                        </p:selectOneMenu>                       
+                        <p:outputLabel 
+                            for="filtro"
+                            value="#{bundle['panelMoodle.filtro.lbl']}"/>
+                        <p:inputText 
+                            id="filtro"
+                            value="#{moodlePanel.filtro}" />
+                    </p:panelGrid>    
+                </p:panel>    
+                <p:panel id="pnlbtns">
+                    <p:panelGrid
+                        columns="6"
+                        layout="grid" 
+                        columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+                        styleClass="ui-panelgrid-blank">
+                        <p:commandButton 
+                            id="btnCreate" 
+                            value="#{bundle['commons.btn.find']}"
+                            title="#{bundle['commons.btn.find']}"
+                            icon="ui-icon-search"
+                            actionListener="#{moodlePanel.onFindRecords()}"
+                            update=":main"/>
+                        <p:commandButton 
+                            value="#{bundle['commons.btn.cancel']}"
+                            title="#{bundle['commons.btn.cancel']}"
+                            icon="ui-icon-closethick"
+                            actionListener="#{moodlePanel.onCancel()}"
+                            process="@this"
+                            update=":main"/>
+                    </p:panelGrid>
+                </p:panel>
+                <p:panel id="pnlResults" rendered="#{moodlePanel.registros ne null}" >
+                    <p:dataTable 
+                        id="dtList"
+                        value="#{moodlePanel.registros}"
+                        var="record"
+                        paginator="true"
+                        paginatorPosition="bottom"
+                        rows="50"
+                        rowKey="#{record.id}"
+                        rowIndexVar="index"
+                        reflow="true"
+                        paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                        rowsPerPageTemplate="50,100,200,500,1000"
+                        style="font-size: smaller"> 
+                        <p:column style="width: 32px;">
+                            <p:rowToggler />
+                        </p:column>
+                        <p:column 
+                            headerText="#{bundle['panelMoodle.record.id']}"
+                            style="width: 40px;"
+                            sortBy="#{record.id}">
+                            <h:outputText 
+                                value="#{record.id}"/>
+                        </p:column>
+                        <p:column 
+                            headerText="#{bundle['panelMoodle.fecha.lbl']}"
+                            style="width: "
+                            sortBy="#{record.fecha}">
+                            <h:outputText 
+                                value="#{record.fecha}">
+                                <f:convertDateTime 
+                                    type="date" 
+                                    pattern="#{bundle['pattern.default.datetime']}"/>                                
+                            </h:outputText>    
+                        </p:column>
+                        <p:column 
+                            headerText="#{bundle['panelMoodle.servicio.lbl']}"
+                            sortBy="#{record.servicio}">
+                            <p:inputTextarea readonly="true" value="#{record.servicio}" />
+                        </p:column>
+                        <p:column 
+                            headerText="#{bundle['panelMoodle.uri.lbl']}"
+                            filterMatchMode="contains"
+                            filterBy="#{record.uri}"                            
+                            >
+                            <p:inputTextarea readonly="true" value="#{record.uri}" style="width: 100%"/>
+                        </p:column>
+                        <p:column 
+                            headerText="#{bundle['panelMoodle.parameters.lbl']}"
+                            filterMatchMode="contains"
+                            filterBy="#{record.parameters}"                            
+                            >
+                            <p:inputTextarea readonly="true" value="#{record.parameters}" />
+                        </p:column>
+                        <p:column 
+                            headerText="#{bundle['panelMoodle.result.lbl']}"
+                            filterMatchMode="contains"
+                            filterBy="#{record.resultado}"                            
+                            >
+                            <p:inputTextarea readonly="true" value="#{record.resultado}" />
+                        </p:column>
+                        <p:rowExpansion>
+                            <p:panel id="extReg" style="text-align: center;">
+                                <p:inputTextarea rows="20" readonly="true" style="width: 100%;" value="#{record.error}"  rendered="#{record.error ne null}"/>
+                                <p:inputTextarea rows="20" readonly="true" style="width: 100%;" value="#{record.result}" rendered="#{record.result ne null}"/>
+                                <p:commandButton 
+                                    id="btnCreate" 
+                                    value="#{bundle['panelMoodle.renenviar.lbl']}"
+                                    title="#{bundle['panelMoodle.renenviar.lbl']}"
+                                    style="text-align: center; width: 100px; margin-top: 10px;"
+                                    process="@this"
+                                    icon="ui-icon-search"
+                                    actionListener="#{moodlePanel.onSendRecord(record)}"
+                                    update=":dtList:#{index}:extReg"/>
+                            </p:panel>
+                        </p:rowExpansion>
+                    </p:dataTable>    
+                </p:panel>     
+            </h:form>                
+        </p:panel>            
+    </h:body>
+</html>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <h:form id="formIncludeEstimulosSemillero" >
+
+    <br />
+
+    <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="Motivo del otorgamiento" styleClass="gris negrilla" />
+      </h:panelGrid>            
+      <p:inputText id="inputMotivoEstimulo"  maxlength="50"
+                   styleClass="textMaximo #{cuIv3GestionarSemillerosInvestigacionFaces.inputMotivoEstimulo.valid?'':'inputInvalid'}" 
+                   binding="#{cuIv3GestionarSemillerosInvestigacionFaces.inputMotivoEstimulo}" 
+                   value="#{cuIv3GestionarSemillerosInvestigacionFaces.motivoEstimulo}" />                
+
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="Describa el tipo de estimulo" styleClass="gris negrilla" />
+      </h:panelGrid>            
+      <h:panelGrid columns="1" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                   columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+        <p:inputTextarea maxlength="4000" counter="descripcionMotivoEstimuloCounter" id="textAreaDescripcionMotivoEstimulo"
+                         value="#{cuIv3GestionarSemillerosInvestigacionFaces.descMotivoEstimulo}"
+                         binding="#{cuIv3GestionarSemillerosInvestigacionFaces.textAreaDescripcionMotivoEstimulo}"
+                         autoResize="false" cols="100" rows="3"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         styleClass="textareaMaximo #{cuIv3GestionarSemillerosInvestigacionFaces.textAreaDescripcionMotivoEstimulo.valid?'':'inputInvalid'}">
+          <f:validateLength minimum="1"  maximum="4000" />
+        </p:inputTextarea>
+        <h:outputText id="descripcionMotivoEstimuloCounter" styleClass="gris" />
+      </h:panelGrid>
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="Fecha en que se otorgó" styleClass="gris negrilla" />
+      </h:panelGrid>    
+      <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es"
+                  value="#{cuIv3GestionarSemillerosInvestigacionFaces.fechaOtrogamiento}"
+                  styleClass="#{cuIv3GestionarSemillerosInvestigacionFaces.calendarFechaOtorgamiento.valid?'':'inputInvalid'}"
+                  binding="#{cuIv3GestionarSemillerosInvestigacionFaces.calendarFechaOtorgamiento}" 
+                  yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                  id="fechaOtorgamiento" showOn="button" readonlyInput="true"
+                  navigator="true">
+      </p:calendar>
+    </h:panelGrid>
+
+
+    <br />
+    <p:dataTable id="idDataTableDatosHumanoEstimulo" var="_participante"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 value="#{cuIv3GestionarSemillerosInvestigacionFaces.listaRecursosSemilleroEstimuloDTOModel}" 
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rowIndexVar="idFila" paginatorPosition="bottom" 
+                 selection="#{cuIv3GestionarSemillerosInvestigacionFaces.participantesOtorgados}"
+                 resizableColumns="true"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true">
+
+      <p:column selectionMode="multiple" style="width:15px" /> 
+
+      <p:column headerText="Relación con el semillero" width="100" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_participante.valorTipoRelacionSemillero}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column headerText="Grado" width="50" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_participante.grado}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column headerText="Nombres y apellidos" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_participante.nombres}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column headerText="Correo electrónico" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_participante.correoElectronico}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>            
+
+      <p:column headerText="Número telefónico" style="color: white; font-size: 13px" width="70">  
+        <h:outputLabel value="#{_participante.telefono}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>   
+
+      <p:column headerText="Estado" width="70" style="color: white; font-size: 13px" >  
+        <h:outputLabel value="#{(_participante.estado == 'A') ? 'ACTIVO' : 'INACTIVO'}" styleClass="gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <f:facet name="footer">  
+        #{fn:length( cuIv3GestionarSemillerosInvestigacionFaces.listaRecursosSemilleroEstimuloDTO )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable>  
+
+
+    <br />
+    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+    <br />        
+    <div class="centrado">        
+      <p:commandButton value="Agregar" id="btnAgregarEstimulo" 
+                       action="#{cuIv3GestionarSemillerosInvestigacionFaces.guardarOtorgamientoEstimulo}" 
+                       rendered="#{cuIv3GestionarSemillerosInvestigacionFaces.estimuloSemilleroSeleccionado == null}"
+                       update="@form idDataTableEstimulosSemillero"/>    
+
+      <p:commandButton value="#{properties.value('general_lbl_btn_modificar')}" id="btnModificarEstimuloSemillero"
+                       action="#{cuIv3GestionarSemillerosInvestigacionFaces.guardarOtorgamientoEstimulo}" 
+                       rendered="#{cuIv3GestionarSemillerosInvestigacionFaces.estimuloSemilleroSeleccionado != null}"
+                       update="@form idDataTableEstimulosSemillero"/>
+
+      <p:commandButton value="#{properties.value('general_lbl_btn_cancelar')}" id="btnCancelarEstimuloSemillero"
+                       action="#{cuIv3GestionarSemillerosInvestigacionFaces.cancelarModificarEstimuloSemillero}"
+                       rendered="#{cuIv3GestionarSemillerosInvestigacionFaces.estimuloSemilleroSeleccionado != null}"
+                       update="@form idDataTableEstimulosSemillero"/>
+    </div>
+    <br />
+    <p:dataTable id="idDataTableEstimulosSemillero" var="_estimulo"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 value="#{cuIv3GestionarSemillerosInvestigacionFaces.listaEstimulosSemilleroModel}" 
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rowIndexVar="idFila" paginatorPosition="bottom" 
+                 selectionMode="single"
+                 selection="#{cuIv3GestionarSemillerosInvestigacionFaces.estimuloSemilleroSeleccionado}"
+                 resizableColumns="true"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true">
+
+      <p:ajax event="rowSelect"  listener="#{cuIv3GestionarSemillerosInvestigacionFaces.cargarDatosEstimulosSemillero}"   
+              update="@form @form:idDataTableEstimulosSemillero"/>  
+      <p:ajax event="rowUnselect" listener="#{cuIv3GestionarSemillerosInvestigacionFaces.noSeleccionEstimuloSemillero}" 
+              update="@form @form:idDataTableEstimulosSemillero"/>  
+
+
+      <p:column headerText="#{properties.value('general_lbl_numero_tabla')}" width="15" style="color: white; font-size: 13px">                                
+        <h:outputLabel value="#{idFila + 1}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+      </p:column>
+
+      <p:column headerText="Motivo del otorgamiento" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_estimulo.motivoOtorgamiento}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column headerText="Describe el tipo de estimulo" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_estimulo.descripcionTipoEstimulo}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column headerText="Fecha" width="100" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_estimulo.fechaOtorgamiento}" styleClass="gris" style="font-size: 13px">                      
+          <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+        </h:outputLabel>   
+      </p:column>
+
+      <p:column headerText="Participantes" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_estimulo.participantes}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>                       
+
+      <f:facet name="footer">  
+        #{fn:length( cuIv3GestionarSemillerosInvestigacionFaces.listaSemilleroInvestigacionDTOJefeUnidadAprueba )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable>
+    <br />        
+  </h:form>
+</html>

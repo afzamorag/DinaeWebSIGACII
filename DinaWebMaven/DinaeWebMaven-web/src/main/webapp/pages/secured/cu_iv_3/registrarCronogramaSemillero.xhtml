@@ -1,0 +1,236 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+
+      <ui:define name="content">
+        <h:form id="formCronogramaSemillero">
+
+          <div class="fixed-menu">
+            <div class="right-col">
+              <h2 style="font: verdana;">
+                Registar semillero de investigación
+              </h2>
+            </div>
+          </div>
+
+          <br />
+          <h:outputLabel value="Cronograma de trabajo" styleClass="green negrilla"/>
+          <br /><br/>                    
+          <h:panelGrid columns="2" style="width: 100%;">  
+            <h:panelGrid columns="2" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                         columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento"> 
+              <h:outputLabel value="#{properties.value('cu_pr_12_lbl_titulo_proyecto')}: " styleClass="gris negrilla" />  
+              <h:outputLabel value="#{cuIv3GestionarSemillerosInvestigacionFaces.tituloProyecto}" styleClass="gris"/>  
+            </h:panelGrid>
+
+            <h:panelGrid columns="2" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                         columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento"> 
+              <h:outputLabel value="#{properties.value('cu_pr_12_lbl_codigo_proyecto')}: " styleClass="gris negrilla" />  
+              <h:outputLabel value="#{cuIv3GestionarSemillerosInvestigacionFaces.codigoProyecto}" styleClass="gris"/> 
+            </h:panelGrid>
+          </h:panelGrid>  
+          <br /><br/> 
+          <h:panelGrid id="panelgridComponentesCronogramaSemillero" columns="2" style="width: 100%" 
+                       rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                       columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+
+            <h:panelGrid columns="2">
+              <h:outputLabel value="*" style="color: red; font-weight: bold" />
+              <h:outputLabel value="Actividad" styleClass="gris negrilla" />
+            </h:panelGrid>            
+            <p:inputText maxlength="100" id="inputActividadCronograma" 
+                         styleClass="#{cuIv3GestionarSemillerosInvestigacionFaces.inputActividad.valid?'':'inputInvalid'} textMaximo"
+                         value="#{cuIv3GestionarSemillerosInvestigacionFaces.actividadCronograma}"
+                         binding="#{cuIv3GestionarSemillerosInvestigacionFaces.inputActividad}" />
+
+            <h:panelGrid columns="2">
+              <h:outputLabel value="*" style="color: red; font-weight: bold" />
+              <h:outputLabel value="Objetivo" styleClass="gris negrilla" />
+            </h:panelGrid>
+            <h:panelGrid columns="1" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                         columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+              <p:inputTextarea maxlength="512" counter="productoObjetivoCounter" id="inputObjetivoCronograma"
+                               value="#{cuIv3GestionarSemillerosInvestigacionFaces.objetivoCronograma}"
+                               binding="#{cuIv3GestionarSemillerosInvestigacionFaces.inputObjetivo}"
+                               autoResize="false" cols="100" rows="3" 
+                               counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                               styleClass="textareaMaximo #{cuIv3GestionarSemillerosInvestigacionFaces.inputObjetivo.valid?'':'inputInvalid'}">
+                <f:validateLength minimum="1"  maximum="512" />
+              </p:inputTextarea>
+              <h:outputText id="productoObjetivoCounter" styleClass="gris" />
+            </h:panelGrid>
+
+            <h:panelGrid columns="2">
+              <h:outputLabel value="*" style="color: red; font-weight: bold" />
+              <h:outputLabel value="Responsable" styleClass="gris negrilla" />
+            </h:panelGrid>            
+            <p:inputText maxlength="50" id="inputResponsableCronograma" 
+                         styleClass="textMaximo #{cuIv3GestionarSemillerosInvestigacionFaces.inputResponsable.valid?'':'inputInvalid'}" 
+                         value="#{cuIv3GestionarSemillerosInvestigacionFaces.responsableCronograma}"
+                         binding="#{cuIv3GestionarSemillerosInvestigacionFaces.inputResponsable}"/>
+
+
+            <h:panelGrid columns="2">
+              <h:outputLabel value="*" style="color: red; font-weight: bold" />
+              <h:outputLabel value="Producto o resultado esperado" styleClass="gris negrilla" />
+            </h:panelGrid>  
+            <h:panelGrid columns="1" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                         columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+              <p:inputTextarea maxlength="512" counter="productoResultadoCounter" id="textAreaProductoResultadoCronograma"
+                               value="#{cuIv3GestionarSemillerosInvestigacionFaces.productoResultado}"
+                               binding="#{cuIv3GestionarSemillerosInvestigacionFaces.textAreaProductoResultado}"
+                               autoResize="false" cols="100" rows="3"
+                               counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                               styleClass="textareaMaximo #{cuIv3GestionarSemillerosInvestigacionFaces.textAreaProductoResultado.valid?'':'inputInvalid'}">
+                <f:validateLength minimum="1"  maximum="512" />
+              </p:inputTextarea>
+              <h:outputText id="productoResultadoCounter" styleClass="gris" />
+            </h:panelGrid>
+
+            <h:panelGrid columns="2">
+              <h:outputLabel value="*" style="color: red; font-weight: bold" />
+              <h:outputLabel value="Fecha de cumplimiento" styleClass="gris negrilla" />
+            </h:panelGrid>         
+            <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es"
+                        value="#{cuIv3GestionarSemillerosInvestigacionFaces.fechaCumplimiento}"
+                        styleClass="#{cuIv3GestionarSemillerosInvestigacionFaces.calendarFechaCumplimiento.valid?'':'inputInvalid'}"
+                        binding="#{cuIv3GestionarSemillerosInvestigacionFaces.calendarFechaCumplimiento}" 
+                        yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                        id="fechaFinPrograma" showOn="button"
+                        navigator="true"/>
+
+
+            <h:outputLabel value="Archivo evidencia fotográfica" styleClass="gris negrilla" style="text-align: right" />                        
+            <h:panelGroup id="idPanelArchivoEvidenciaFoto">
+              <p:commandLink ajax="false" immediate="true" id="upoladArchivoEvidenciaFoto" 
+                             rendered="#{cuIv3GestionarSemillerosInvestigacionFaces.mostrarEnlaceDescargaFoto}">
+                <h:outputLabel value="#{cuIv3GestionarSemillerosInvestigacionFaces.cronogramaSemillero.archivoEvidenciaFoto}" />
+                <p:fileDownload value="#{cuIv3GestionarSemillerosInvestigacionFaces.descargarArchivoEvidenciaFoto}" />
+              </p:commandLink>
+              <h:outputLabel id="idNombreArchivoEvidenciaFoto" styleClass="green" 
+                             rendered="#{!cuIv3GestionarSemillerosInvestigacionFaces.mostrarEnlaceDescargaFoto and cuIv3GestionarSemillerosInvestigacionFaces.uploadEvidenciaFoto != null}" 
+                             value="#{cuIv3GestionarSemillerosInvestigacionFaces.nombreArchivoEvidenciaFoto}" />
+
+              <p:fileUpload dragDropSupport="true" fileUploadListener="#{cuIv3GestionarSemillerosInvestigacionFaces.cargarArchivoEvidenciaFoto}"
+                            fileLimit="1" update="idPanelArchivoEvidenciaFoto idNombreArchivoEvidenciaFoto"
+                            label="#{properties.value('cu_pr_4_lbl_examinar')}" multiple="false"
+                            fileLimitMessage="#{properties.value('cu_pr_4_lbl_mensaje_maximo_numero_archivo')}"
+                            uploadLabel="#{properties.value('cu_pr_4_lbl_subiendo')}" 
+                            invalidFileMessage="#{properties.value('cu_pr_7_lbl_archivo_invalido')}"
+                            invalidSizeMessage="#{properties.value('cu_pr_4_lbl_tamanio_invalido_archivo')}" 
+                            allowTypes="/(\.|\/)(pdf|doc|dox|ppt|pptx|gif|jpe?g|png)$/"
+                            mode="advanced" auto="false" cancelLabel="#{properties.value('cu_pr_4_lbl_cancelar')}"  />
+            </h:panelGroup>
+
+
+            <h:outputLabel value="Archivo evidencia " styleClass="gris negrilla" style="text-align: right" />                        
+            <h:panelGroup id="idPanelArchivoEvidencia">
+              <p:commandLink ajax="false" immediate="true" id="idCommanLinkDescargaArchivo" 
+                             rendered="#{cuIv3GestionarSemillerosInvestigacionFaces.mostrarEnlaceDescarga}">
+                <h:outputLabel value="#{cuIv3GestionarSemillerosInvestigacionFaces.cronogramaSemillero.archivoEvidencia}" />
+                <p:fileDownload value="#{cuIv3GestionarSemillerosInvestigacionFaces.descargarArchivoEvidencia}" />
+              </p:commandLink>
+              <h:outputLabel id="idArchivoEvidencia" styleClass="green" 
+                             rendered="#{!cuIv3GestionarSemillerosInvestigacionFaces.mostrarEnlaceDescarga and cuIv3GestionarSemillerosInvestigacionFaces.uploadEvidencia != null}" 
+                             value="#{cuIv3GestionarSemillerosInvestigacionFaces.nombreArchivoEvidencia}" />
+
+              <p:fileUpload dragDropSupport="true" fileUploadListener="#{cuIv3GestionarSemillerosInvestigacionFaces.cargarArchivoEvidencia}"
+                            fileLimit="1"  update="idPanelArchivoEvidencia idArchivoEvidencia"
+                            label="#{properties.value('cu_pr_4_lbl_examinar')}" multiple="false"
+                            fileLimitMessage="#{properties.value('cu_pr_4_lbl_mensaje_maximo_numero_archivo')}"
+                            uploadLabel="#{properties.value('cu_pr_4_lbl_subiendo')}" 
+                            invalidFileMessage="#{properties.value('cu_pr_7_lbl_archivo_invalido')}"
+                            invalidSizeMessage="#{properties.value('cu_pr_4_lbl_tamanio_invalido_archivo')}" 
+                            allowTypes="/(\.|\/)(pdf|doc|dox|ppt|pptx|gif|jpe?g|png)$/"
+                            mode="advanced" auto="false" cancelLabel="#{properties.value('cu_pr_4_lbl_cancelar')}"  />
+            </h:panelGroup>
+
+          </h:panelGrid>
+          <br />
+          <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+          <br/>
+
+          <div class="centrado">
+            <p:commandButton value="#{properties.value('general_lbl_btn_guardar')}" id="btnGuardarCronograma"
+                             rendered="#{cuIv3GestionarSemillerosInvestigacionFaces.cronogramaSemillero == null}"
+                             action="#{cuIv3GestionarSemillerosInvestigacionFaces.agregarActividadCronograma}" 
+                             update="@form panelgridComponentesCronogramaSemillero tablaCronogramaSemillero"/>
+
+            <p:commandButton value="#{properties.value('general_lbl_btn_modificar')}" id="btnModificarCronograma"
+                             action="#{cuIv3GestionarSemillerosInvestigacionFaces.agregarActividadCronograma}" 
+                             rendered="#{cuIv3GestionarSemillerosInvestigacionFaces.cronogramaSemillero != null}"
+                             update="@form panelgridComponentesCronogramaSemillero tablaCronogramaSemillero"/>
+
+            <p:commandButton value="#{properties.value('general_lbl_btn_cancelar')}" id="btnCancelarModificarCronograma"
+                             action="#{cuIv3GestionarSemillerosInvestigacionFaces.cancelarModificarCronograma}"
+                             rendered="#{cuIv3GestionarSemillerosInvestigacionFaces.cronogramaSemillero != null}"
+                             update="@form panelgridComponentesCronogramaSemillero tablaCronogramaSemillero"/>
+          </div>       
+
+
+          <br/>
+          <div class="centrado">
+            <p:dataTable var="_crono" value="#{cuIv3GestionarSemillerosInvestigacionFaces.listaCronogramaSemilleroModel}"
+                         rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                         id="tablaCronogramaSemillero"                                         
+                         selectionMode="single"
+                         selection="#{cuIv3GestionarSemillerosInvestigacionFaces.seleccionCronograma}"
+                         emptyMessage="#{properties.value('general_mensaje_no_records_found')}"                                     
+                         style="width: 100%;" paginator="true"
+                         resizableColumns="true" rowIndexVar="idFila"
+                         paginatorPosition="bottom"
+                         rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+              <p:ajax event="rowSelect"  listener="#{cuIv3GestionarSemillerosInvestigacionFaces.cargarDatosCronogramaModificar}"   
+                      update="@form @form:tablaCronogramaSemillero @form:panelgridComponentesCronogramaSemillero"/>  
+              <p:ajax event="rowUnselect" listener="#{cuIv3GestionarSemillerosInvestigacionFaces.noSeleccionCronograma}" 
+                      update="@form:tablaCronogramaSemillero"/>  
+
+
+              <p:column headerText="#{properties.value('general_lbl_numero_tabla')}" width="15" style="color: white; font-size: 13px">                                
+                <h:outputLabel value="#{idFila + 1}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+              </p:column>
+              <p:column headerText="Actividad" width="120" style="color: white; font-size: 13px">                                                                
+                <h:outputLabel value="#{_crono.actividad}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+              </p:column>
+              <p:column headerText="Objetivo" style="color: white; font-size: 13px">
+                <h:outputLabel value="#{_crono.objetivo}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+              </p:column>
+              <p:column headerText="Responsable" style="color: white; font-size: 13px">
+                <h:outputLabel value="#{_crono.responsable}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>      
+              </p:column>
+              <p:column headerText="Fecha cumplimiento" width="80" style="color: white; font-size: 13px">
+                <h:outputLabel value="#{_crono.fechaCumplimiento}" styleClass="gris" style="font-size: 13px">
+                  <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+                </h:outputLabel>                                 
+              </p:column>
+              <p:column headerText="Producto o resultado esperado" style="color: white; font-size: 13px">
+                <h:outputLabel value="#{_crono.productoResultadoEsperado}" styleClass="gris" style="font-size: 13px"/>
+              </p:column>                            
+              <f:facet name="footer">  
+                #{fn:length( cuIv3GestionarSemillerosInvestigacionFaces.listaCronogramaSemillero )} #{properties.value('general_mensaje_footer_datatable_count')}
+              </f:facet>
+            </p:dataTable>                        
+          </div>
+          <p:separator styleClass="separadorBorder" /> 
+          <div class="centrado">
+            <p:commandButton value="#{properties.value('general_lbl_btn_regresar')}"
+                             action="#{cuIv3GestionarSemillerosInvestigacionFaces.regresarTab3}" 
+                             id="btnRegresarTab3Semilleros"
+                             immediate="true"/>
+
+          </div>
+        </h:form>                
+      </ui:define>
+    </ui:composition>
+  </body>
+</html>

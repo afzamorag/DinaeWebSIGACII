@@ -1,0 +1,1 @@
+mvn install:install-file -DgroupId=dinae.local.com.oracle -DartifactId=ojdbc6 -Dversion=6.0 -Dpackaging=jar -Dfile=C:\oraclexe\app\oracle\product\11.2.0\server\jdbc\lib\ojdbc6.jar -DgeneratePom=true

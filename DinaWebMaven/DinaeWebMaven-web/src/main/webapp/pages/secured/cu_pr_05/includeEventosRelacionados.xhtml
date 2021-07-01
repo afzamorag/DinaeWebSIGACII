@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+  <h:form id="formEventosRelacionados">
+    <br />
+    <h:panelGrid id="panelgridEventosRelacionados" columns="2" style="width: 100%" 
+                 rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_titulo_evento')}" styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:panelGroup>
+        <p:inputTextarea value="#{registrarPresupuesto.tituloEvento}"
+                         id="textAreaTituloEvento" styleClass="textareaMaximo"
+                         maxlength="256" counter="contadorTituloEvento"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         cols="100" rows="3" autoResize="false">
+          <f:validateLength minimum="0"  maximum="256" />                    
+        </p:inputTextarea>
+        <h:outputText id="contadorTituloEvento" styleClass="gris" />
+      </h:panelGroup>
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_objetivo_evento')}" styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:panelGroup>
+        <p:inputTextarea value="#{registrarPresupuesto.objetivoEvento}"
+                         id="textAreaObjetivo" styleClass="textareaMaximo"
+                         maxlength="512" counter="contadorObjetivoEvento"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         cols="100" rows="3" autoResize="false">
+          <f:validateLength minimum="0"  maximum="512" />
+        </p:inputTextarea>
+        <h:outputText id="contadorObjetivoEvento" styleClass="gris" />
+      </h:panelGroup>
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_departamento_evento')}" styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:selectOneMenu value="#{registrarPresupuesto.departamentoEvento}" id="selectDeptoEvento" styleClass="gris">  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{registrarPresupuesto.departamentosList}" var="_dept" itemValue="#{_dept.idDepartamento}" itemLabel="#{_dept.descDepartamento}"/>
+        <p:ajax event="change" update="@this selectCiudadesEvento" 
+                listener="#{registrarPresupuesto.cargarCiudadesDepartamento}"/>
+      </h:selectOneMenu>
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_ciudad_evento')}" styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:selectOneMenu value="#{registrarPresupuesto.ciudadEvento}" id="selectCiudadesEvento" styleClass="gris">  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{registrarPresupuesto.listaCiudadesDepartamento}" var="_mpio" itemValue="#{_mpio.codMunicipio}" itemLabel="#{_mpio.descMunicipio}" />
+      </h:selectOneMenu>
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_fuente_evento')}" styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:selectOneMenu value="#{registrarPresupuesto.fuenteEvento}" id="selectFuenteEvento" styleClass="gris" >
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{registrarPresupuesto.listaFuentesProyectoItem}"/>
+      </h:selectOneMenu>
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_costo_evento')}" styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:inputText value="#{registrarPresupuesto.costoEvento}" onkeypress="return soloNumerosInpuText(event);"
+                   maxlength="18" id="inputCostoEvento" >
+        <p:ajax event="blur" update="inputCostoEvento" />
+        <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" maxFractionDigits="2" />
+      </h:inputText>
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_tipos_gasto_evento')}" styleClass="gris negrilla" style="width: 25%;"/>
+      </h:panelGrid>
+      <p:selectManyCheckbox  value="#{registrarPresupuesto.tipoGastoEvento}" >
+        <f:selectItems value="#{registrarPresupuesto.listaTipoGastoEvento}"/>
+      </p:selectManyCheckbox >
+    </h:panelGrid>
+    <br/>
+    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+    <div class="centrado">
+      <p:commandButton value="#{properties.value('cu_pr_5_lbl_btn_add_evento_relacionado')}"
+                       actionListener="#{registrarPresupuesto.guardarTabEventos}"
+                       rendered="#{!registrarPresupuesto.esModificaEvento}"                       
+                        process="@form"
+                       update="@form"/>
+
+      <p:commandButton value="#{properties.value('cu_pr_5_lbl_btn_cancel_fuente_financiera')}" 
+                       actionListener="#{registrarPresupuesto.cancelarModificarEvento}"
+                       rendered="#{registrarPresupuesto.esModificaEvento}"
+                       process="@this"
+                       update="@form"/>  
+
+    </div>
+    <br/>
+
+    <div class="centrado">
+
+      <ui:include src="include_lista_eventos_relacionados.xhtml" />
+
+    </div>
+
+    <p:confirmDialog widgetVar="varConfirmEliminarEvento" header="#{properties.value('cu_pr_2_lbl_titulo_confirmacion_titulo')}" 
+                     message="#{properties.value('cu_pr_5_lbl_titulo_confirmacion_mensaje_eliminar_evento')}" > 
+
+      <h:form id="idFormEliminarEquipo">
+
+        <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmEliminarEvento">
+          <div class="centrado">
+            <p:commandButton actionListener="#{registrarPresupuesto.eliminarEventoProyecto}" 
+                             value="#{properties.value('cu_pr_7_lbl_btn_confirma_si')}" immediate="true"
+                             oncomplete="varConfirmEliminarEvento.hide();"
+                             update=":tabView:formEventosRelacionados:tablaEventoProyectos" />  
+            <p:commandButton value="#{properties.value('cu_pr_7_lbl_btn_confirma_no')}" 
+                             onclick="varConfirmEliminarEvento.hide();" type="button" />       
+          </div>
+        </p:outputPanel>
+
+      </h:form>
+    </p:confirmDialog>
+  </h:form>
+</html>
+

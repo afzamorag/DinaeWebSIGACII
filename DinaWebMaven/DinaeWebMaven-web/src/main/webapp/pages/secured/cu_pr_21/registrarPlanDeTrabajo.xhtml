@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+  <body>        
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+      <ui:define name="content">
+        <div class="fixed-menu">
+          <!--VENTANA DE LISTA DE PERIODOS-->
+          <div class="right-col">
+            <h2 style="font: verdana;">
+              #{properties.value('cu_pr_21_lbl_titulo_registra_plan_de_trabajo')}
+            </h2>
+
+            <br />
+            <h:panelGrid id="panelgridActividadesARealizar" columns="2" style="width: 100%" 
+                         rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                         columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+              <h:outputLabel value="Titulo del proyecto: " styleClass="green negrilla" />
+              <h:outputText value="#{cuPr21RegistrarPlanDeTrabajo.proyectoSeleccionado.tituloPropuesto}" styleClass="gris"/>
+
+              <h:outputLabel  value="#{properties.value('cu_pr_11_lbl_codigo_del_proyecto')}" styleClass="green negrilla"/>
+              <h:outputLabel value="#{cuPr21RegistrarPlanDeTrabajo.proyectoSeleccionado.codigoProyecto}" styleClass="gris"/>
+
+              <h:outputLabel  value="#{properties.value('cu_ne_6_lbl_unidad_policial')}" styleClass="green negrilla"/>
+              <h:outputLabel value="#{cuPr21RegistrarPlanDeTrabajo.proyectoSeleccionado.unidadPolicial.siglaFisica} - #{cuPr21RegistrarPlanDeTrabajo.proyectoSeleccionado.unidadPolicial.nombre}" styleClass="gris"/>
+
+            </h:panelGrid>                        
+
+            <br/>
+            <br/>
+            <p:tabView id="tabView" orientation="top" activeIndex="#{cuPr21RegistrarPlanDeTrabajo.idTabSeleccionado}">
+
+              <p:ajax event="tabChange" listener="#{cuPr21RegistrarPlanDeTrabajo.onTabChange}" update=":tabView"/> 
+
+              <p:tab id="tabDatosGenerales" title="#{properties.value('cu_pr_21_lbl_titulo_tab_datos_generales')}">
+                <h:panelGroup rendered="#{!cuPr21RegistrarPlanDeTrabajo.accesoSoloConsulta}">
+                  <ui:include src="includeDatosGenerales.xhtml"/>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{cuPr21RegistrarPlanDeTrabajo.accesoSoloConsulta}">
+                  <ui:include src="includeConsultaDatosGenerales.xhtml"/>
+                </h:panelGroup>
+
+              </p:tab>
+
+              <p:tab id="tabPersonalImplementacion" title="#{properties.value('cu_pr_21_lbl_titulo_tab_personal_implementacion')}">
+                <h:panelGroup rendered="#{!cuPr21RegistrarPlanDeTrabajo.accesoSoloConsulta}">
+                  <ui:include src="includePersonalDeLaImplementacion.xhtml"/>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{cuPr21RegistrarPlanDeTrabajo.accesoSoloConsulta}">
+                  <ui:include src="includeConsultaPersonalDeLaImplementacion.xhtml"/>
+                </h:panelGroup>                                
+              </p:tab>
+
+              <p:tab id="tabActividadesARealizar" title="#{properties.value('cu_pr_21_lbl_titulo_tab_actividades_realizar')}">
+                <h:panelGroup rendered="#{!cuPr21RegistrarPlanDeTrabajo.accesoSoloConsulta}">
+                  <ui:include src="includeActividadesARealizar.xhtml" />
+                </h:panelGroup>
+                <h:panelGroup rendered="#{cuPr21RegistrarPlanDeTrabajo.accesoSoloConsulta}">
+                  <ui:include src="includeConsultaActividadesARealizar.xhtml" />
+                </h:panelGroup>                                
+              </p:tab>
+
+              <p:tab id="tabIndicadoresDeImpacto" title="#{properties.value('cu_pr_21_lbl_titulo_tab_indicadores_impacto')}">
+                <h:panelGroup rendered="#{!cuPr21RegistrarPlanDeTrabajo.accesoSoloConsulta}">
+                  <ui:include src="includeAgregarIndicadoresPlanTrabajo.xhtml" />
+                </h:panelGroup>
+                <h:panelGroup rendered="#{cuPr21RegistrarPlanDeTrabajo.accesoSoloConsulta}">
+                  <ui:include src="includeConsultaAgregarIndicadoresPlanTrabajo.xhtml" />
+                </h:panelGroup>                                
+              </p:tab>                            
+            </p:tabView>
+
+          </div>
+        </div>
+
+        <p:confirmDialog widgetVar="varConfirmEnviarPlanDeTrabajo" header="#{properties.value('cu_co_3_lbl_titulo_confirmacion_publicar')}" 
+                         message="Está seguro que desea enviar el compromiso Plan de trabajo ?" > 
+
+          <h:form id="idForm_varConfirmPublicar">
+
+            <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmPublicar">
+              <div class="centrado">
+                <p:commandButton actionListener="#{cuPr21RegistrarPlanDeTrabajo.enviarPlanDeTrabajo}" 
+                                 value="#{properties.value('cu_co_3_lbl_btn_si_publicar')}" immediate="true"
+                                 oncomplete="varConfirmEnviarPlanDeTrabajo.hide();" />  
+                <p:commandButton value="#{properties.value('cu_co_3_lbl_btn_no_publicar')}" 
+                                 onclick="varConfirmEnviarPlanDeTrabajo.hide();" type="button" />       
+              </div>
+            </p:outputPanel>
+
+          </h:form>
+        </p:confirmDialog>
+
+      </ui:define>
+    </ui:composition>
+
+  </body>
+</html>

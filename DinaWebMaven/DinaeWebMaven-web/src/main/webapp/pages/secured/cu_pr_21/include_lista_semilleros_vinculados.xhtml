@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+  <p:dataTable var="semillero" value="#{cuPr21RegistrarPlanDeTrabajo.listaSemillerosVinculados}"
+               rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+               id="tablaSemillerosVinculados" style="width: 100%; text-align: center;"
+               emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+               paginator="true" paginatorPosition="bottom" 
+               resizableColumns="true" rowIndexVar="idFila"
+               rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+    <p:column headerText="#{properties.value('cu_pr_21_lbl_column_numero')}" width="25">
+      <h:outputText value="#{idFila + 1}" />
+    </p:column>
+    <p:column headerText="#{properties.value('cu_pr_21_lbl_column_semillero')}" >
+      <h:outputText value="#{semillero.semilleroInvestigacion.nombre}" />
+    </p:column>
+    <p:column headerText="" width="80" >
+      <p:commandLink value="#{properties.value('cu_pr_3_lbl_btn_eliminar')}" 
+                     update="tablaSemillerosVinculados" immediate="true"
+                     oncomplete="PF('varConfirmEliminarSemilleroImpl').show()">  
+        <f:setPropertyActionListener value="#{semillero}" target="#{cuPr21RegistrarPlanDeTrabajo.semillerosImplementacionEliminar}" />  
+      </p:commandLink> 
+    </p:column>
+    <f:facet name="footer">  
+      #{fn:length( cuPr21RegistrarPlanDeTrabajo.listaSemillerosVinculados)} #{properties.value('general_mensaje_footer_datatable_count')}
+    </f:facet>
+  </p:dataTable>
+</html>

@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+
+      <ui:define name="content">
+        <h:form id="formProyectoEvaluacion">
+
+          <div class="fixed-menu">
+            <div class="right-col">
+              <h2 style="font: verdana;">
+                #{properties.value('cu_pr_12_lbl_titulo')}
+              </h2>
+            </div>
+          </div>
+
+          <br />
+          <h:outputLabel value="#{properties.value('cu_pr_12_lbl_info')}" styleClass="green negrilla"/>
+          <br /><br/>
+          <h:panelGrid id="panelgridComponentesProyecto" columns="2" style="width: 100%" 
+                       rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                       columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+
+            <h:outputLabel value="#{properties.value('cu_pr_12_lbl_unidad_policial')}" styleClass="gris negrilla"/>
+            <h:selectOneMenu value="#{cuPr12EvaluacionProyectosInvestigacionFaces.idUnidad}" styleClass="gris" id="selectUnidadFiltro">  
+              <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+              <f:selectItems value="#{cuPr12EvaluacionProyectosInvestigacionFaces.listaUnidadesPoliciales}" var="_unit" itemValue="#{_unit.idUnidadPolicial}" itemLabel="#{_unit.siglaFisica} - #{_unit.nombre}"/>
+            </h:selectOneMenu>
+
+            <h:outputLabel value="#{properties.value('cu_pr_12_lbl_tipo_proyecto')}" styleClass="gris negrilla"/>
+            <h:selectOneMenu value="#{cuPr12EvaluacionProyectosInvestigacionFaces.idTipoProyecto}" styleClass="gris" id="selectTipoProyectoFiltro">  
+              <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+              <f:selectItems value="#{cuPr12EvaluacionProyectosInvestigacionFaces.listaTiposProyecto}" var="_type" itemValue="#{_type.idConstantes}" itemLabel="#{_type.valor}"/>
+            </h:selectOneMenu>
+
+            <h:outputLabel value="#{properties.value('cu_pr_12_lbl_codigo_proyecto')}" styleClass="gris negrilla"/>            
+            <h:inputText value="#{cuPr12EvaluacionProyectosInvestigacionFaces.codigoProyecto}" styleClass="gris" id="inputCodProyectoFiltro" />
+
+          </h:panelGrid>
+          <br/>
+          <div class="centrado">
+            <p:commandButton value="#{properties.value('general_lbl_btn_buscar')}" id="btnBuscar"
+                             action="#{cuPr12EvaluacionProyectosInvestigacionFaces.buscarFiltros}" update="@form"/>
+
+            <p:commandButton value="#{properties.value('general_lbl_btn_limpiar')}" id="btnLimpiar"
+                             action="#{cuPr12EvaluacionProyectosInvestigacionFaces.limpiarFiltros}" 
+                             update="@form"/>
+          </div>       
+
+
+          <br/>
+          <div class="centrado">
+            <p:dataTable var="_proy" value="#{cuPr12EvaluacionProyectosInvestigacionFaces.listaProyectosInvestigacion}"
+                         rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                         id="tablaProyectoEvaluacion"
+                         emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                         style="width: 100%;" paginator="true"
+                         resizableColumns="true" rowIndexVar="idFila"
+                         paginatorPosition="bottom"                                     
+                         selectionMode="single"
+                         selection="#{cuPr12EvaluacionProyectosInvestigacionFaces.proyectoSeleccionadoConsultaCuPr06}"
+                         rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+              <p:ajax event="rowSelect" listener="#{cuPr12EvaluacionProyectosInvestigacionFaces.seleccionarProyectoConsulta}" />
+
+              <p:column headerText="#{properties.value('general_lbl_numero_tabla')}" width="15" style="color: white; font-size: 13px">
+                <h:outputText value="#{idFila + 1}" styleClass="gris" style="font-size: 13px" />
+              </p:column>
+              <p:column headerText="#{properties.value('cu_pr_12_lbl_table_codigo')}" width="120" style="color: white; font-size: 13px">
+                <h:outputText value="#{_proy.codigoProyecto}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+              </p:column>
+              <p:column headerText="#{properties.value('cu_pr_12_lbl_table_titulo')}" style="color: white; font-size: 13px">
+                <h:outputText value="#{_proy.tituloPropuesto}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+              </p:column>
+              <p:column headerText="Fecha de creación" width="80" style="color: white; font-size: 13px">
+                <h:outputText value="#{_proy.fechaEstimadaInicio}" styleClass="gris" style="font-size: 13px">
+                  <f:convertDateTime pattern="#{properties.value('general_formato_fecha_hora')}" locale="es_CO" />
+                </h:outputText>                                 
+              </p:column>
+              <p:column headerText="#{properties.value('cu_pr_12_lbl_table_unidad')}" style="color: white; font-size: 13px">
+                <h:outputText value="#{_proy.nombreUnidadPolicial}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>      
+              </p:column>
+              <p:column headerText="#{properties.value('cu_pr_12_lbl_table_tipo_investigacion')}" width="80" style="color: white; font-size: 13px">
+                <h:outputText value="#{cuPr12EvaluacionProyectosInvestigacionFaces.tomarTipoProyecto(_proy.codigoProyecto)}" styleClass="gris" style="font-size: 13px"/>
+              </p:column>
+              <p:column width="80" headerText="#{properties.value('cu_pr_12_lbl_evaluacion')}" style="color: white; font-size: 13px">
+
+                <div class="centrado">
+                  <p:commandLink value="#{properties.value('cu_pr_12_lbl_agregar_evaluacion')}" 
+                                 immediate="true" style="font-size: 13px"
+                                 action="#{cuPr12EvaluacionProyectosInvestigacionFaces.irEvaluacionProyecto}">  
+                    <f:setPropertyActionListener value="#{_proy}" target="#{cuPr12EvaluacionProyectosInvestigacionFaces.proyectoSeleccionado}" />
+                  </p:commandLink>
+                </div>
+
+              </p:column>
+              <f:facet name="footer">  
+                #{cuPr12EvaluacionProyectosInvestigacionFaces.listaProyectosInvestigacion.numeroRegistro } #{properties.value('general_mensaje_footer_datatable_count')}
+              </f:facet>
+            </p:dataTable>                        
+          </div>
+        </h:form>                
+      </ui:define>
+    </ui:composition>
+  </body>
+</html>

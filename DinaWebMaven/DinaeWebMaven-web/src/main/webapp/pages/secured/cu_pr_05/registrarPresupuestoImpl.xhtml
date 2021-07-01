@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:body>
+        <div class="body">
+            <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+                <ui:define name="content">
+                    <div class="fixed-menu">
+                        <!--VENTANA DE LISTA DE PERIODOS-->
+                        <div class="right-col">
+                            <h2 style="font: verdana;">
+                                #{properties.value('cu_pr_5_lbl_titulo_registra_presupuesto')}
+                            </h2>
+
+                            <h:outputLabel value="Titulo del proyecto: " styleClass="gris negrilla" />
+                            <h:outputText value="#{presupuestoImplemetacionProyectoFaces.proyectoImplemetacion.proyecto.tituloPropuesto}" 
+                                          styleClass="gris"/>
+                            <br/>
+                            <br/>
+                            <p:tabView id="tabView" orientation="top" activeIndex="#{presupuestoImplemetacionProyectoFaces.idTabSeleccionado}">
+
+                                <p:ajax event="tabChange" listener="#{presupuestoImplemetacionProyectoFaces.onTabChange}" update=":tabView"/> 
+                                <p:tab id="tabFuentesFinancieras" title="#{properties.value('cu_pr_5_lbl_titulo_tab_fuentes_financieras')}">                                    
+                                    <h:panelGroup rendered="#{presupuestoImplemetacionProyectoFaces.soloConsulta}">
+                                        <ui:include src="include_lista_lista_fuentes_financieras_impl.xhtml"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{!presupuestoImplemetacionProyectoFaces.soloConsulta}">
+                                        <ui:include src="includeAgregarFuenteFinancieraImpl.xhtml"/>
+                                    </h:panelGroup>                                    
+                                </p:tab>
+                                <p:tab id="tabPersonalInvestigacion" title="#{properties.value('cu_pr_14_lbl_tab_personal_investigacion')}">
+                                    <ui:include src="includePersonalDeLaInvestigacionImpl.xhtml"/>
+                                </p:tab>
+                                <p:tab id="tabEquiposInvestigacion" title="#{properties.value('cu_pr_14_lbl_tab_equipos_investigacion')}">
+                                    <h:panelGroup rendered="#{presupuestoImplemetacionProyectoFaces.soloConsulta}">
+                                        <ui:include src="include_lista_equipo_de_la_investigacion_impl.xhtml" />
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{!presupuestoImplemetacionProyectoFaces.soloConsulta}">
+                                        <ui:include src="includeEquipoDeLaInvestigacionImpl.xhtml" />
+                                    </h:panelGroup>                                                                        
+                                </p:tab>
+                                <p:tab id="tabEventosRelacionados" title="#{properties.value('cu_pr_14_lbl_tab_eventos_relacionados')}">
+                                    <h:panelGroup rendered="#{presupuestoImplemetacionProyectoFaces.soloConsulta}">
+                                        <ui:include src="include_lista_eventos_relacionados_impl.xhtml" />
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{!presupuestoImplemetacionProyectoFaces.soloConsulta}">
+                                        <ui:include src="includeEventosRelacionadosImpl.xhtml" />
+                                    </h:panelGroup>                                                                        
+                                </p:tab>
+                                <p:tab id="tabViajesRelacionados" title="#{properties.value('cu_pr_14_lbl_tab_viajes_relacionados')}">
+                                    <h:panelGroup rendered="#{presupuestoImplemetacionProyectoFaces.soloConsulta}">
+                                        <ui:include src="include_lista_viajes_relacionados_impl.xhtml" />
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{!presupuestoImplemetacionProyectoFaces.soloConsulta}">
+                                        <ui:include src="includeViajesRelacionadosImpl.xhtml" />
+                                    </h:panelGroup>                                    
+                                </p:tab>
+                                <p:tab id="tabOtrosGastosProyecto" title="#{properties.value('cu_pr_14_lbl_tab_otros')}">
+                                    <h:panelGroup rendered="#{presupuestoImplemetacionProyectoFaces.soloConsulta}">
+                                        <ui:include src="include_lista_otros_gastos_impl.xhtml" />
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{!presupuestoImplemetacionProyectoFaces.soloConsulta}">
+                                        <ui:include src="includeOtrosGastosImpl.xhtml" />
+                                    </h:panelGroup>                                    
+                                </p:tab>
+                                <p:tab id="tabPresupuestoGlobal" title="#{properties.value('cu_pr_5_lbl_titulo_tab_presupuesto_global')}">
+                                    <h:panelGrid width="100%" columns="1" rendered="#{presupuestoImplemetacionProyectoFaces.importPresupuestoPage != null}">
+                                        <ui:include src="#{presupuestoImplemetacionProyectoFaces.importPresupuestoPage}" />
+                                    </h:panelGrid>
+                                </p:tab>
+                            </p:tabView>
+
+                            <br/>
+                            <p:separator styleClass="separadorBorder" /> 
+                            <div class="centrado">
+                                <p:commandButton value="#{properties.value('cu_pr_14_lbl_btn_regresar')}" id="idBtnRegresarProyecto"
+                                                 actionListener="#{presupuestoImplemetacionProyectoFaces.regresar}"
+                                                 immediate="true"
+                                                 process="@this"/>
+                            </div>                            
+                        </div>
+                    </div>
+                </ui:define>
+            </ui:composition>
+        </div>
+    </h:body>
+</html>
+

@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config 
+  version="2.1" 
+  xmlns="http://java.sun.com/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
+  <application>
+    <from-view-id>pages/login/login.xhtml</from-view-id>
+    <lifecycle>
+      <phase-listener id="nocache">co.gov.policia.dinae.converter.listener.CacheControlPhaseListener</phase-listener>
+    </lifecycle>
+    <resource-bundle>
+      <base-name>bundle</base-name>
+      <var>bundle</var>
+    </resource-bundle>
+    <locale-config>
+      <default-locale>es_CO</default-locale>
+    </locale-config>
+  </application>
+  <navigation-rule>
+    <from-view-id>*</from-view-id>
+  </navigation-rule>
+</faces-config>

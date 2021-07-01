@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <h:form id="form_include_popup_jefe_grupo_investigacion">        
+
+    <h:panelGrid style="width: 100%">
+
+      <h:panelGroup>
+        <h:panelGrid rendered="#{cuAd01TipoUsuarioAdministrador.mensajePopupJefeUnidad != null}">                                    
+          <div class="div-error-login">
+            <div align="left" style="width: content-box; height: auto">                            
+              &nbsp;&nbsp;<img src="#{request.contextPath}/images/error.png" style="display: inline-block; line-height: 30px; vertical-align: middle;"/>
+              &nbsp;<h:outputText value="#{cuAd01TipoUsuarioAdministrador.mensajePopupJefeUnidad}" styleClass="font-error-login"   />                                 
+            </div>
+          </div>
+        </h:panelGrid>
+      </h:panelGroup>
+
+      <h:outputLabel value="El usuario a selecionar debe pertenecer a la Unidad" styleClass="green negrilla" />
+      <p:separator styleClass="separadorBorder" /> 
+
+      <h:panelGrid id="panelNuevoUsuarioAsignar" columns="2" style="width: 100%" 
+                   rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                   columnClasses="panelGridColumnaLabel_40_porciento,panelGridColumnaValor_60_porciento">
+
+        <h:outputLabel value="Unidad Policial" styleClass="gris negrilla" for="idIdentifacionJefeUnidadBuscar" />
+        <h:outputLabel value="#{cuAd01TipoUsuarioAdministrador.nombreUnidadPolicialSeleccionado}" styleClass="gris negrilla" />
+
+        <h:outputLabel value="N° de identificación" styleClass="gris negrilla" for="idIdentifacionJefeUnidadBuscar" />
+        <h:panelGrid columns="2">
+
+          <p:inputText id="idIdentifacionJefeUnidadBuscar" maxlength="50" value="#{cuAd01TipoUsuarioAdministrador.identificacionjefeUnidadBuscar}" />                                
+          <p:commandButton value="Buscar" id="idBtnIdentifacionJefeUnidadBuscar"
+                           actionListener="#{cuAd01TipoUsuarioAdministrador.buscarJefeUnidad}"                          
+                           process="idIdentifacionJefeUnidadBuscar idBtnIdentifacionJefeUnidadBuscar"
+                           update="@form" />
+
+        </h:panelGrid>
+
+      </h:panelGrid>                
+      <br />
+      <h:panelGroup>
+
+        <h:panelGrid columns="2" style="width: 100%" 
+                     rendered="#{cuAd01TipoUsuarioAdministrador.vistaFuncionarioSeleccionado != null}"
+                     rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                     columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+          <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_grado')}" styleClass="gris negrilla" />
+          <h:outputLabel value="#{cuAd01TipoUsuarioAdministrador.vistaFuncionarioSeleccionado.grado}" styleClass="gris" />
+
+          <h:outputLabel value="Identificación" styleClass="gris negrilla" />
+          <h:outputLabel value="#{cuAd01TipoUsuarioAdministrador.vistaFuncionarioSeleccionado.identificacion}" styleClass="gris" />
+
+          <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_nom_y_appellido')}" styleClass="gris negrilla"  />
+          <h:outputLabel value="#{cuAd01TipoUsuarioAdministrador.vistaFuncionarioSeleccionado.nombreCompleto}" styleClass="gris" />
+
+          <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_correo')}" styleClass="gris negrilla" />
+          <h:outputLabel value="#{cuAd01TipoUsuarioAdministrador.vistaFuncionarioSeleccionado.correo}" styleClass="gris" />
+
+          <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_cargo')}" styleClass="gris negrilla" />
+          <h:outputLabel value="#{cuAd01TipoUsuarioAdministrador.vistaFuncionarioSeleccionado.cargo}" styleClass="gris" />
+
+        </h:panelGrid>
+
+      </h:panelGroup>    
+
+      <f:facet name="footer">
+        <div class="centrado">                  
+          <p:commandButton value="Adicionar Jefe Grupo Investigación"
+                           actionListener="#{cuAd01TipoUsuarioAdministrador.adicionarNuevoJefeGrupoInvestigacion}" 
+                           disabled="#{!cuAd01TipoUsuarioAdministrador.seleccionoVistaFuncionarioSeleccionadoValue}"
+                           process="@form"
+                           update="@all" />                             
+
+          <p:commandButton value="#{properties.value('general_lbl_btn_cancelar')}" immediate="true" oncomplete="PF('wvformPopupJefeGrupoInvestigacion').hide();"/>
+
+        </div>                
+      </f:facet>
+
+    </h:panelGrid>
+
+  </h:form>
+</html>

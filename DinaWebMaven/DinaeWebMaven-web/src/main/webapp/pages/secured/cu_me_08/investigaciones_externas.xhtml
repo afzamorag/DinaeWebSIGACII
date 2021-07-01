@@ -1,0 +1,825 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+        <ui:define name="content">
+            <p:panel 
+                id="main"
+                styleClass="ui-fluid"
+                header="#{properties.value('cu_me_08_lbl_titulo_cu')}">
+                <h:form 
+                    id="idform_investigacion_externa"
+                    prependId="false"
+                    rendered="#{cuMe8InvestigacionExterna.renderPanel}">
+                    <p:panel>
+                        <p:panelGrid 
+                            id="pgBusqueda" 
+                            columns="2"
+                            layout="grid" 
+                            columnClasses="ui-grid-col-3,ui-grid-col-9" 
+                            styleClass="ui-panelgrid-blank">
+                            <h:outputLabel 
+                                for="cu_me_08_lbl_entidad" 
+                                value="#{properties.value('cu_me_08_lbl_entidad')}:" 
+                                styleClass="gris negrilla"/>
+                            <p:selectOneMenu 
+                                id="cu_me_08_lbl_entidad"
+                                rendered="true"
+                                converter="entidadConverter"
+                                required="false" 
+                                value="#{cuMe8InvestigacionExterna.entidad}"
+                                filter="true"
+                                filterMatchMode="contains">
+                                <f:selectItem 
+                                    itemLabel=" SELECCIONE "
+                                    itemValue=""/>
+                                <f:selectItems 
+                                    value="#{cuMe8InvestigacionExterna.entidades}" 
+                                    var="entidad" 
+                                    itemLabel="#{entidad.entiNombre}" 
+                                    itemValue="#{entidad}"/> 
+                            </p:selectOneMenu>
+                            <p:outputLabel 
+                                for="cu_me_08_lbl_grupo" 
+                                value="#{properties.value('cu_me_08_lbl_grupo')}:" 
+                                styleClass="gris negrilla"/>
+                            <p:selectOneMenu 
+                                rendered="true" 
+                                id="cu_me_08_lbl_grupo" 
+                                converter="grupoInvestigacionConverter"
+                                value="#{cuMe8InvestigacionExterna.grupo}" 
+                                required="false"
+                                filter="true"
+                                filterMatchMode="contains">  
+                                <f:selectItem itemLabel=" SELECCIONE " itemValue=""/>
+                                <f:selectItems value="#{cuMe8InvestigacionExterna.grupos}" 
+                                               var="grupo" itemLabel="#{grupo.descripcion}" 
+                                               itemValue="#{grupo}"/> 
+                            </p:selectOneMenu>                        
+                            <h:outputLabel 
+                                for="cu_me_08_lbl_titulo" 
+                                value="#{properties.value('cu_me_08_lbl_titulo')}:" 
+                                styleClass="gris negrilla"/>
+                            <p:inputText 
+                                value="#{cuMe8InvestigacionExterna.titulo}" 
+                                id="cu_me_08_lbl_titulo" 
+                                required="false" 
+                                maxlength="50" 
+                                styleClass="gris"/>
+                            <h:outputLabel 
+                                for="cu_me_08_lbl_identificacion" 
+                                value="#{properties.value('cu_me_08_lbl_identificacion')}:" 
+                                styleClass="gris negrilla"/>
+                            <p:inputText 
+                                value="#{cuMe8InvestigacionExterna.identificacion}" 
+                                id="cu_me_08_lbl_identificacion" 
+                                required="false" 
+                                maxlength="50"/>
+                        </p:panelGrid>
+                        <f:facet name="footer">
+                            <p:panelGrid 
+                                id="pnlButon"
+                                columns="6"
+                                layout="grid" 
+                                columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+                                styleClass="ui-panelgrid-blank">
+                                <p:commandButton 
+                                    value="#{properties.value('cu_me_08_lbl_buscar')}" 
+                                    style="border:none"
+                                    actionListener="#{cuMe8InvestigacionExterna.buscar()}" 
+                                    update="idDataTableRegistros, messages, pnlButon" />  
+                                <p:commandButton 
+                                    id="btnNuevo"
+                                    value="#{properties.value('cu_me_08_lbl_nuevo')}"                                      
+                                    style="border:none" 
+                                    rendered="#{cuMe8InvestigacionExterna.busco}"
+                                    update="main" 
+                                    actionListener="#{cuMe8InvestigacionExterna.nuevo()}"/>  
+                            </p:panelGrid>
+                        </f:facet>                
+                    </p:panel>
+                    <p:dataTable 
+                        emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                        id="idDataTableRegistros" 
+                        var="registro" 
+                        value="#{cuMe8InvestigacionExterna.investigaciones}" 
+                        rowIndexVar="idFila" 
+                        rows="15" 
+                        paginator="true" 
+                        reflow="true"
+                        resizableColumns="true" 
+                        rowKey="#{registro.idInve}"
+                        paginatorPosition="bottom"                          
+                        rendered="#{cuMe8InvestigacionExterna.renderPanel}">
+                        <p:column 
+                            headerText="#{properties.value('cu_me_08_lbl_entidad')}"
+                            filterMatchMode="contains"
+                            filterBy="#{registro.entidad.entiNombre}">
+                            <h:outputText 
+                                value="#{registro.entidad.entiNombre}" />
+                        </p:column>
+                        <p:column 
+                            headerText="#{properties.value('cu_me_08_lbl_titulo')}">
+                            <h:outputText 
+                                value="#{registro.titulo}" />
+                        </p:column>
+                        <p:column 
+                            headerText="#{properties.value('cu_me_08_lbl_descripcion')}"
+                            style="text-justify: distribute">
+                            <h:outputText 
+                                value="#{registro.convocatoria}" />
+                        </p:column>
+                        <p:column 
+                            headerText="#{properties.value('cu_me_08_lbl_unidad')}"
+                            filterMatchMode="contains"
+                            filterBy="#{registro.unidad.descripcionDependencia}">
+                            <h:outputText 
+                                value="#{registro.unidad.descripcionDependencia}" />
+                        </p:column>
+                        <p:column 
+                            headerText="#{properties.value('cu_me_08_lbl_avance')}"
+                            style="text-align: center">
+                            <h:outputText 
+                                value="#{cuMe8InvestigacionExterna.avanceAprobados(registro)}"/>
+                        </p:column>
+                        <p:column 
+                            headerText="#{properties.value('cu_me_08_lbl_compromisos_aprobados')}"
+                            style="text-align: center">
+                            <h:outputText 
+                                value="#{cuMe8InvestigacionExterna.compromisosAprobados(registro)}" />
+                        </p:column>  
+                        <p:column 
+                            headerText="#{properties.value('cu_me_07_lbl_opciones')}"
+                            style="text-align: center">
+                            <h:panelGroup>
+                                <p:commandLink 
+                                    value="Eliminar" 
+                                    immediate="true" 
+                                    action="#{cuMe8InvestigacionExterna.eliminar()}"
+                                    update="idDataTableRegistros">
+                                    <f:setPropertyActionListener 
+                                        value="#{registro}" 
+                                        target="#{cuMe8InvestigacionExterna.investigacionSeleccionada}"/>
+                                    <p:confirm 
+                                        header="#{bundle['commons.cfmdlg.header']}" 
+                                        message="#{bundle['commons.cfmdlg.remove.message']}" 
+                                        icon="ui-icon-alert" />
+                                </p:commandLink>
+                                &nbsp;&nbsp;
+                                <p:commandLink 
+                                    value="Ver" 
+                                    update="main"
+                                    immediate="true" 
+                                    action="#{cuMe8InvestigacionExterna.editar(registro)}">
+                                    <f:setPropertyActionListener 
+                                        value="#{registro}" 
+                                        target="#{cuMe8InvestigacionExterna.investigacionSeleccionada}" />
+                                </p:commandLink>
+                            </h:panelGroup>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+                <h:form
+                    prependId="false"
+                    id="frmdetalles"
+                    rendered="#{!cuMe8InvestigacionExterna.renderPanel}">
+                    <p:panel 
+                        id="pnlDetalles"
+                        header="Detalles de la investigación" 
+                        style="margin-top:20px"
+                        rendered="#{cuMe8InvestigacionExterna.compromisoDetalle}">
+                        <p:panelGrid 
+                            columns="4"
+                            layout="grid" 
+                            columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" 
+                            styleClass="ui-panelgrid-blank">
+                            <p:outputLabel 
+                                for="cu_me_08_lbl_entidad_insert" 
+                                value="#{properties.value('cu_me_08_lbl_entidad')}:" 
+                                styleClass="gris negrilla"/>
+                            <h:panelGroup>
+                                <p:selectOneMenu 
+                                    rendered="#{cuMe8InvestigacionExterna.renderboton}"
+                                    id="cu_me_08_lbl_entidad_insert" 
+                                    converter="entidadConverter"
+                                    value="#{cuMe8InvestigacionExterna.investigacionSeleccionada.entidad}" 
+                                    required="true"
+                                    filter="true"
+                                    filterMatchMode="contains">
+                                    <f:selectItem itemLabel="SELECCIONE"/>
+                                    <f:selectItems 
+                                        value="#{cuMe8InvestigacionExterna.entidades}" 
+                                        var="entidad" 
+                                        itemLabel="#{entidad.entiNombre}" 
+                                        itemValue="#{entidad}"/> 
+                                </p:selectOneMenu>
+                                <h:outputText
+                                    value="#{cuMe8InvestigacionExterna.investigacionSeleccionada.entidad.entiNombre}"
+                                    style="text-align: justify"
+                                    rendered="#{!cuMe8InvestigacionExterna.renderboton}"/>
+                                <p:message
+                                    for="cu_me_08_lbl_entidad_insert"/>
+                            </h:panelGroup>
+                            <p:outputLabel 
+                                for="cu_me_08_lbl_grupo_insert" 
+                                value="#{properties.value('cu_me_08_lbl_grupo')}:" 
+                                styleClass="gris negrilla"/>
+                            <h:panelGroup>
+                                <h:outputText
+                                    value="#{cuMe8InvestigacionExterna.investigacionSeleccionada.grupoInvestigacion.descripcion}"
+                                    style="text-align: justify"
+                                    rendered="#{!cuMe8InvestigacionExterna.renderboton}"/>
+                                <p:selectOneMenu 
+                                    rendered="#{cuMe8InvestigacionExterna.renderboton}"
+                                    id="cu_me_08_lbl_grupo_insert" 
+                                    converter="grupoInvestigacionConverter"
+                                    value="#{cuMe8InvestigacionExterna.investigacionSeleccionada.grupoInvestigacion}" 
+                                    required="false"
+                                    filter="true"
+                                    filterMatchMode="contains">  
+                                    <f:selectItem 
+                                        itemLabel=" SELECCIONE " 
+                                        itemValue=""/>
+                                    <f:selectItems 
+                                        value="#{cuMe8InvestigacionExterna.grupos}" 
+                                        var="grupo" 
+                                        itemLabel="#{grupo.descripcion}" 
+                                        itemValue="#{grupo}"/> 
+                                </p:selectOneMenu>
+                            </h:panelGroup>
+                            <p:outputLabel 
+                                for="cu_me_08_lbl_unidad" 
+                                value="#{properties.value('cu_me_08_lbl_unidad')}:" 
+                                styleClass="gris negrilla"/>
+                            <h:panelGroup>
+                                <p:selectOneMenu 
+                                    rendered="#{cuMe8InvestigacionExterna.renderboton}" 
+                                    id="cu_me_08_lbl_unidad" 
+                                    converter="unidadDependenciaConverter"
+                                    value="#{cuMe8InvestigacionExterna.investigacionSeleccionada.unidad}" 
+                                    required="true"
+                                    filter="true"
+                                    filterMatchMode="contains">
+                                    <f:selectItem itemLabel="SELECCIONE"/>
+                                    <f:selectItems 
+                                        value="#{appController.unidadesDependencias}" 
+                                        var="unidad" 
+                                        itemLabel="#{unidad.descripcionDependencia}" 
+                                        itemValue="#{unidad}"/> 
+                                </p:selectOneMenu>
+                                <h:outputText
+                                    value="#{cuMe8InvestigacionExterna.investigacionSeleccionada.unidad.descripcionDependencia}"
+                                    style="text-align: justify"
+                                    rendered="#{!cuMe8InvestigacionExterna.renderboton}"/>
+                                <p:message
+                                    for="cu_me_08_lbl_unidad"/>
+                            </h:panelGroup>
+                            <p:outputLabel 
+                                for="cu_me_08_lbl_fecha_aprobacion" 
+                                value="#{properties.value('cu_me_08_lbl_fecha_aprobacion')}:" 
+                                styleClass="gris negrilla" />
+                            <h:panelGroup>
+                                <p:calendar 
+                                    pattern="#{properties.value('general_formato_fecha')}" 
+                                    locale="es"  
+                                    navigator="true" 
+                                    effect="fold"                                              
+                                    value="#{cuMe8InvestigacionExterna.investigacionSeleccionada.fechaAprobacion}" 
+                                    id="cu_me_08_lbl_fecha_aprobacion" 
+                                    required="true"
+                                    rendered="#{cuMe8InvestigacionExterna.renderboton}">
+                                </p:calendar>
+                                <h:outputText
+                                    value="#{cuMe8InvestigacionExterna.investigacionSeleccionada.fechaAprobacion}"
+                                    style="text-align: justify"
+                                    rendered="#{!cuMe8InvestigacionExterna.renderboton}">
+                                    <f:convertDateTime type="date" pattern="#{bundle['pattern.default.date']}"/>
+                                </h:outputText>
+                                <p:message
+                                    for="cu_me_08_lbl_fecha_aprobacion" />
+                            </h:panelGroup>
+                        </p:panelGrid>
+                        <p:panelGrid 
+                            columns="2"
+                            layout="grid" 
+                            columnClasses="ui-grid-col-2,ui-grid-col-10" 
+                            styleClass="ui-panelgrid-blank">
+                            <p:outputLabel 
+                                for="cu_me_08_lbl_titulo_insert" 
+                                value="#{properties.value('cu_me_08_lbl_titulo')}:" 
+                                styleClass="gris negrilla"/>
+                            <h:panelGroup>
+                                <p:inputText 
+                                    value="#{cuMe8InvestigacionExterna.investigacionSeleccionada.titulo}" 
+                                    id="cu_me_08_lbl_titulo_insert" 
+                                    rendered="#{cuMe8InvestigacionExterna.renderboton}"
+                                    required="true" 
+                                    maxlength="500"/>
+                                <h:outputText
+                                    value="#{cuMe8InvestigacionExterna.investigacionSeleccionada.titulo}"                          
+                                    rendered="#{!cuMe8InvestigacionExterna.renderboton}"
+                                    style="text-align: justify"/>
+                                <p:message
+                                    for="cu_me_08_lbl_titulo_insert"/>
+                            </h:panelGroup>
+                            <p:outputLabel 
+                                for="cu_me_08_lbl_descripcion" 
+                                value="#{properties.value('cu_me_08_lbl_descripcion')}:" 
+                                styleClass="gris negrilla"/>
+                            <p:inputTextarea 
+                                value="#{cuMe8InvestigacionExterna.investigacionSeleccionada.convocatoria}" 
+                                id="cu_me_08_lbl_descripcion" 
+                                rendered="#{cuMe8InvestigacionExterna.renderboton}" 
+                                required="false" 
+                                maxlength="500"
+                                rows="1"
+                                autoResize="true"/>
+                            <h:outputText
+                                value="#{cuMe8InvestigacionExterna.investigacionSeleccionada.convocatoria}"                          
+                                rendered="#{!cuMe8InvestigacionExterna.renderboton}"
+                                style="text-align: justify"/>
+                        </p:panelGrid>
+                    </p:panel>
+                    <p:panel 
+                        id="pnlinvestigadores" 
+                        header="#{bundle['investigacionesexternasvicin.compromisos.title']}"
+                        style="margin-top:20px"
+                        rendered="#{cuMe8InvestigacionExterna.compromisoDetalle}">                
+                        <p:panelGrid 
+                            columns="6" 
+                            layout="grid" 
+                            columnClasses="ui-grid-col-4,ui-grid-col-3, ui-grid-col-2, ui-grid-col-1, ui-grid-col-1, ui-grid-col-1"
+                            rendered="#{cuMe8InvestigacionExterna.renderboton}">                 
+                            <f:facet name="header">
+                                <p:row>
+                                    <p:column 
+                                        colspan="6">#{bundle['investigacionesexternasvicin.investigador.lbl']}    
+                                    </p:column>
+                                </p:row>
+                            </f:facet>
+                        </p:panelGrid>
+                        <p:panelGrid 
+                            columns="6"  
+                            layout="grid" 
+                            columnClasses="ui-grid-col-3,ui-grid-col-3, ui-grid-col-2, ui-grid-col-2, ui-grid-col-1, ui-grid-col-1"
+                            rendered="#{cuMe8InvestigacionExterna.renderboton}">
+                            <p:outputLabel 
+                                for="cu_me_08_lbl_identificacion_funcionario" 
+                                value="#{bundle['investigacionesexternasvicin.investigador.identificacion.lbl']}:"
+                                styleClass="gris negrilla"/>
+                            <p:inputText 
+                                value="#{cuMe8InvestigacionExterna.documentoFuncionario}" 
+                                id="cu_me_08_lbl_identificacion_funcionario" 
+                                disabled="#{cuMe8InvestigacionExterna.editando==0}" 
+                                required="false" 
+                                maxlength="30"/>
+                            <p:commandButton 
+                                value="#{properties.value('cu_me_08_lbl_agregar_investigador')}" 
+                                immediate="false"
+                                actionListener="#{cuMe8InvestigacionExterna.agregarFuncionario()}" 
+                                update="idDataTableFuncionarios, cu_me_08_lbl_identificacion_funcionario" 
+                                process="@this, cu_me_08_lbl_identificacion_funcionario"
+                                style="border:none"/>
+                        </p:panelGrid>
+                        <p:dataTable 
+                            emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                            id="idDataTableFuncionarios" 
+                            var="funcionario" 
+                            value="#{cuMe8InvestigacionExterna.propParticipantes}"                            
+                            rows="10"
+                            paginator="true" 
+                            paginatorPosition="bottom" 
+                            rendered="true"           
+                            reflow="true"
+                            style="margin-top:20px">
+                            <f:facet name="header">
+                                Funcionarios que participan en la investigación
+                            </f:facet>
+                            <p:column 
+                                headerText="#{bundle['identificacion']}">
+                                <h:outputText 
+                                    value="#{funcionario.persona.persNroid}" 
+                                    style="text-align: center"/>
+                            </p:column>
+                            <p:column 
+                                headerText="#{bundle['grado']}">
+                                <h:outputText 
+                                    value="#{funcionario.persona.persGrado}" 
+                                    style="text-align: center"/>
+                            </p:column>
+                            <p:column 
+                                headerText="#{bundle['nombres']}">
+                                <h:outputText 
+                                    value="#{funcionario.persona.persNombres} #{funcionario.persona.persApellidos}" />
+                            </p:column>
+                            <p:column 
+                                headerText="#{bundle['unidad']}"
+                                style="text-align: center">
+                                <h:outputText 
+                                    value="#{funcionario.persona.unidad.descripcionDependencia}" />
+                            </p:column>
+                            <p:column 
+                                headerText="#{properties.value('cu_me_lbl_opciones')}"
+                                rendered="#{cuMe8InvestigacionExterna.renderboton}">                             
+                                <p:commandLink 
+                                    value="#{properties.value('cu_me_01_lbl_eliminar')}" 
+                                    immediate="true" 
+                                    style="border:none" 
+                                    action="#{cuMe8InvestigacionExterna.eliminarFuncionario()}"
+                                    update="idDataTableFuncionarios, messages">
+                                    <f:setPropertyActionListener 
+                                        value="#{funcionario}" 
+                                        target="#{cuMe8InvestigacionExterna.funcionarioSeleccionado}" /> 
+                                    <p:confirm 
+                                        header="#{bundle['commons.cfmdlg.header']}" 
+                                        message="#{bundle['commons.cfmdlg.remove.message']}" 
+                                        icon="ui-icon-alert" />
+                                </p:commandLink>
+                            </p:column>
+                        </p:dataTable> 
+                        <p:panelGrid 
+                            columns="6" 
+                            layout="grid" 
+                            columnClasses="ui-grid-col-2,ui-grid-col-3, ui-grid-col-2, ui-grid-col-2, ui-grid-col-2, ui-grid-col-1"
+                            style="margin-top:20px"
+                            rendered="#{cuMe8InvestigacionExterna.renderboton}">
+                            <f:facet name="header">
+                                <p:row>
+                                    <p:column colspan="6">#{bundle['investigacionesexternasvicin.compromisos.lbl']}
+                                    </p:column>
+                                </p:row>
+                            </f:facet>
+                        </p:panelGrid>
+                        <p:panelGrid 
+                            id="pnlcompromiso"
+                            columns="4" 
+                            layout="grid" 
+                            columnClasses="ui-grid-col-2, ui-grid-col-7, ui-grid-col-1, ui-grid-col-2"
+                            rendered="#{cuMe8InvestigacionExterna.renderboton}">
+                            <p:outputLabel                                 
+                                value="#{bundle['investigacionesexternasvicin.compromisos.descripcion.lbl']}"
+                                styleClass="gris negrilla" />
+                            <p:inputTextarea 
+                                id='cu_me_08_lbl_compromiso_descripcion'
+                                value="#{cuMe8InvestigacionExterna.compromisoNvo.descripcion}" 
+                                required="false" 
+                                maxlength="500"
+                                rows="1"
+                                autoResize="true"/>
+                            <p:outputLabel 
+                                value="#{bundle['investigacionesexternasvicin.compromisos.fechaentrega.lbl']}"
+                                styleClass="gris negrilla" />
+                            <p:calendar 
+                                pattern="#{properties.value('general_formato_fecha')}" 
+                                locale="es"  
+                                navigator="true" 
+                                effect="fold"                                              
+                                value="#{cuMe8InvestigacionExterna.compromisoNvo.fechaEntrega}" 
+                                id="cu_me_08_lbl_compromiso_fecha_entrega" 
+                                required="false"
+                                mindate="#{cuMe8InvestigacionExterna.date}">
+                            </p:calendar>  
+                            <p:outputLabel 
+                                value="#{bundle['investigacionesexternasvicin.compromisos.resultado.lbl']}"
+                                styleClass="gris negrilla" />
+                            <p:inputTextarea 
+                                id='cu_me_08_lbl_compromiso_resultado'
+                                value="#{cuMe8InvestigacionExterna.compromisoNvo.resultadoEsperado}"
+                                rows="1"
+                                autoResize="true"
+                                required="false"/>
+                        </p:panelGrid>
+                        <p:panelGrid 
+                            columns="6" 
+                            layout="grid" 
+                            columnClasses="ui-grid-col-2,ui-grid-col-2, ui-grid-col-2, ui-grid-col-2, ui-grid-col-2, ui-grid-col-2" 
+                            styleClass="ui-panelgrid-blank"
+                            style="margin-top:10px"
+                            rendered="#{cuMe8InvestigacionExterna.renderboton}">
+                            <p:commandButton 
+                                value="#{bundle['investigacionesexternasvicin.compromisos.agregar.boton']}" 
+                                immediate="false"
+                                actionListener="#{cuMe8InvestigacionExterna.agregarCompromiso()}" 
+                                update="idDataTableCompromisos, pnlcompromiso" 
+                                process="@this, pnlcompromiso"
+                                style="border:none"/>
+                        </p:panelGrid>              
+                        <p:dataTable 
+                            emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                            id="idDataTableCompromisos" 
+                            var="compromiso" 
+                            value="#{cuMe8InvestigacionExterna.compromisos}"                             
+                            rows="10"
+                            paginator="true"                                      
+                            paginatorPosition="bottom" 
+                            rendered="true"
+                            selection="#{cuMe8InvestigacionExterna.compromisoSeleccionado}"                                 
+                            reflow="true"
+                            style="margin-top:20px">                
+                            <f:facet
+                                name="header">
+                                Compromisos
+                            </f:facet>
+                            <p:column 
+                                headerText="#{properties.value('cu_me_08_lbl_estado')}"
+                                style="text-align: center">
+                                <h:outputText 
+                                    value="#{compromiso.estadoTexto}" />
+                            </p:column>
+                            <p:column 
+                                headerText="#{properties.value('cu_me_08_lbl_compromiso')}">
+                                <h:outputText 
+                                    value="#{compromiso.descripcion}" />
+                            </p:column>
+                            <p:column 
+                                headerText="#{properties.value('cu_me_08_lbl_resultado_esperado')}">
+                                <h:outputText 
+                                    value="#{compromiso.resultadoEsperado}" />
+                            </p:column>
+                            <p:column 
+                                headerText="#{properties.value('cu_me_08_lbl_fecha_entrega')}"
+                                style="text-align: center">
+                                <h:outputText 
+                                    value="#{compromiso.fechaEntrega}">
+                                    <f:convertDateTime type="date" pattern="#{bundle['pattern.default.date']}"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column 
+                                headerText="#{properties.value('cu_me_08_lbl_opciones')}"
+                                style="text-align: center">
+                                <h:panelGroup>
+                                    <p:commandLink 
+                                        value="#{properties.value('cu_me_01_lbl_eliminar')}"
+                                        rendered ="#{compromiso.estado == 'P' and (compromiso.observaciones.size() == 0 or compromiso.observaciones.size() == null)}"
+                                        immediate="true" 
+                                        style="border:none" 
+                                        action="#{cuMe8InvestigacionExterna.eliminarCompromiso()}"
+                                        update="idDataTableCompromisos, messages">
+                                        <f:setPropertyActionListener 
+                                            value="#{compromiso}" 
+                                            target="#{cuMe8InvestigacionExterna.compromisoSeleccionado}" /> 
+                                        <p:confirm 
+                                            header="#{bundle['commons.cfmdlg.header']}" 
+                                            message="#{bundle['commons.cfmdlg.remove.message']}" 
+                                            icon="ui-icon-alert"/>
+                                    </p:commandLink>
+                                    &nbsp;&nbsp;
+                                    <p:commandLink 
+                                        value="#{properties.value('cu_me_08_lbl_ver_entrega')}"                                         
+                                        immediate="true" 
+                                        style="border:none" 
+                                        action="#{cuMe8InvestigacionExterna.detallesCompromiso()}"
+                                        update="frmdetalles">
+                                        <f:setPropertyActionListener 
+                                            value="#{compromiso}" 
+                                            target="#{cuMe8InvestigacionExterna.compromisoSeleccionado}" /> 
+                                    </p:commandLink>
+                                </h:panelGroup>
+                            </p:column>
+                        </p:dataTable>                        
+                        <f:facet name="footer">
+                            <p:panelGrid
+                                columns="6"
+                                layout="grid" 
+                                columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+                                styleClass="ui-panelgrid-blank">
+                                <p:commandButton 
+                                    value="#{properties.value('cu_me_02_lbl_editar')}" 
+                                    update="frmdetalles" 
+                                    process="@this" 
+                                    style="border:none" 
+                                    rendered="#{!cuMe8InvestigacionExterna.renderboton}"                                    
+                                    actionListener="#{cuMe8InvestigacionExterna.editar()}"/>  
+                                <p:commandButton 
+                                    value="#{properties.value('cu_me_02_lbl_guardar')}" 
+                                    update="messages, idform_investigacion_externa, frmdetalles"                                      
+                                    style="border:none"                                    
+                                    rendered="#{cuMe8InvestigacionExterna.renderboton}"                                  
+                                    actionListener="#{cuMe8InvestigacionExterna.guardar()}"/>  
+                                <p:commandButton 
+                                    value="#{properties.value('cu_me_08_lbl_cancelar')}" 
+                                    update="pnlinvestigadores, pnlDetalles" 
+                                    style="border:none"                                     
+                                    actionListener="#{cuMe8InvestigacionExterna.cancelarEdicion()}"
+                                    immediate="true"/>  
+                                <p:commandButton 
+                                    value="#{properties.value('cu_me_02_lbl_volver')}"                                     
+                                    style="border:none"
+                                    actionListener="#{cuMe8InvestigacionExterna.botonVolver()}"
+                                    update="main"
+                                    immediate="true">
+                                    <p:resetInput 
+                                        target="idform_investigacion_externa" />
+                                </p:commandButton>
+                            </p:panelGrid>
+                        </f:facet>
+                    </p:panel>
+                    <p:panel
+                        rendered="#{!cuMe8InvestigacionExterna.compromisoDetalle}">
+                        <p:panelGrid
+                            columns="2"
+                            layout="grid" 
+                            columnClasses="ui-grid-col-2,ui-grid-col-10">
+                            <f:facet
+                                name="header">
+                                Detalles del compromiso
+                            </f:facet>
+                            <p:outputLabel                                 
+                                value="#{properties.value('cu_me_08_lbl_compromiso')}:" 
+                                styleClass="gris negrilla"/>
+                            <h:outputText
+                                value="#{cuMe8InvestigacionExterna.compromisoSeleccionado.descripcion}" />
+                            <h:outputLabel
+                                value="#{properties.value('cu_me_08_lbl_resultado_esperado')}:" 
+                                styleClass="gris negrilla"/>
+                            <h:outputText
+                                value="#{cuMe8InvestigacionExterna.compromisoSeleccionado.resultadoEsperado}" />
+                            <p:outputLabel                                
+                                value="#{properties.value('cu_me_08_lbl_fecha_entrega')}:" 
+                                styleClass="gris negrilla"/>
+                            <h:outputText
+                                value="#{cuMe8InvestigacionExterna.compromisoSeleccionado.fechaEntrega}" >
+                                <f:convertDateTime 
+                                    type="date" 
+                                    pattern="#{bundle['pattern.default.date']}"/>
+                            </h:outputText>
+                            <p:outputLabel 
+                                for="cu_me_08_lbl_grupo" 
+                                value="#{bundle['investigacionesexternasvicin.archivoanexo.lbl']}:" 
+                                styleClass="gris negrilla"/>
+                            <p:commandLink
+                                immediate="true"
+                                ajax="false"                                            
+                                onclick="PrimeFaces.monitorDownload(start, stop);" 
+                                title="#{bundle['commons.btn.download']}">                                
+                                <h:outputText                                            
+                                    value="#{cuMe8InvestigacionExterna.archivoActual.nombreArchivo}"/>                                    
+                                <f:setPropertyActionListener 
+                                    value="#{cuMe8InvestigacionExterna.archivoActual}" 
+                                    target="#{cuMe8InvestigacionExterna.archivoSeleccionado}" />
+                                <p:fileDownload 
+                                    value="#{cuMe8InvestigacionExterna.archivo}"/>
+                            </p:commandLink>  
+                        </p:panelGrid> 
+                        <p:dataTable 
+                            emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                            id="idDataTableobservaciones" 
+                            value="#{cuMe8InvestigacionExterna.compromisoSeleccionado.observaciones}" 
+                            var="observacion"
+                            reflow="true"
+                            style="margin-top:20px"                            
+                            rows="10"
+                            paginator="true"                                      
+                            paginatorPosition="bottom"
+                            sortBy="#{observacion.obcoFechaCrea}"
+                            sortOrder="descending"
+                            selection="">  
+                            <f:facet
+                                name="header">
+                                Observaciones
+                            </f:facet>
+                            <p:column 
+                                headerText="#{bundle['investigacionesexternasvicin.fechacreacion.lbl']}"
+                                style="text-align: center">
+                                <h:outputText 
+                                    value="#{observacion.obcoFechaCrea}">
+                                    <f:convertDateTime type="date" pattern="#{bundle['pattern.default.date']}"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column 
+                                headerText="#{bundle['investigacionesexternasvicin.observacion.lbl']}">
+                                <h:outputText 
+                                    value="#{observacion.observacion}" />
+                            </p:column>
+                            <p:column 
+                                headerText="#{bundle['investigacionesexternasvicin.creadopor.lbl']}"
+                                style="text-align: center">
+                                <h:outputText 
+                                    value="#{observacion.obcoUsuCrea}" />
+                            </p:column> 
+                        </p:dataTable> 
+                        <p:dataTable
+                            value="#{cuMe8InvestigacionExterna.lstArchivos}" 
+                            var="archivo"                   
+                            reflow="true"                            
+                            style="margin-top:20px"                            
+                            rows="5"
+                            paginator="true"                                      
+                            paginatorPosition="bottom"
+                            sortBy="#{archivo.sieduArchivoCompromisoPK.idArchivo}"
+                            sortOrder="ascending"
+                            selection="">
+                            <f:facet name="header">
+                                Documentos anexados al compromiso
+                            </f:facet>
+                            <p:column
+                                headerText="#{bundle['investigacionesexternasunidad.consutivo.documento.lbl']}"
+                                style="text-align: center">
+                                <h:outputText
+                                    value="#{archivo.sieduArchivoCompromisoPK.idArchivo}"/>
+                            </p:column>
+                            <p:column
+                                headerText="#{bundle['investigacionesexternasunidad.documento.lbl']}">                       
+                                <p:commandLink
+                                    immediate="true"
+                                    ajax="false"                                            
+                                    onclick="PrimeFaces.monitorDownload(start, stop);" 
+                                    title="#{bundle['commons.btn.download']}">                                
+                                    <h:outputText                                            
+                                        value="#{archivo.nombreArchivo}"/>                                    
+                                    <f:setPropertyActionListener 
+                                        value="#{archivo}" 
+                                        target="#{cuMe8InvestigacionExterna.archivoSeleccionado}" />
+                                    <p:fileDownload 
+                                        value="#{cuMe8InvestigacionExterna.archivo}"/>
+                                </p:commandLink>                                
+                            </p:column>
+                            <p:column
+                                headerText="Fecha envio"
+                                style="text-align: center">
+                                <h:outputText 
+                                    value="#{archivo.arcoFechaCrea}">
+                                    <f:convertDateTime 
+                                        type="date" 
+                                        pattern="#{bundle['pattern.default.date']}"/>
+                                </h:outputText>
+                            </p:column>
+                        </p:dataTable>
+                        <p:panelGrid
+                            columns="3"
+                            layout="grid" 
+                            columnClasses="ui-grid-col-2,ui-grid-col-8, ui-grid-col-2" 
+                            styleClass="ui-panelgrid-blank"
+                            style="margin-top:20px"
+                            rendered="#{cuMe8InvestigacionExterna.compromisoSeleccionado.estado!='A'}"> 
+                            <p:outputLabel                                 
+                                value="#{bundle['investigacionesexternasvicin.compromisos.observaciones.lbl']}"
+                                styleClass="gris negrilla" />
+                            <p:inputTextarea 
+                                id='cu_me_08_lbl_compromiso_observacion'
+                                value="#{cuMe8InvestigacionExterna.observacion.observacion}"
+                                rows="1"
+                                autoResize="true"
+                                required="false"
+                                cols="100"/>
+                            <p:commandButton 
+                                value="#{bundle['investigacionesexternasvicin.agregarobservacion.lbl']}" 
+                                style="border:none"
+                                actionListener="#{cuMe8InvestigacionExterna.guardarObservacionCompromiso()}" 
+                                update="idDataTableobservaciones, messages, frmdetalles" />  
+                        </p:panelGrid>                          
+                        <p:panelGrid
+                            columns="2"
+                            layout="grid" 
+                            columnClasses="ui-grid-col-2,ui-grid-col-10" 
+                            styleClass="ui-panelgrid-blank">
+                            <!--p:commandLink 
+                                ajax="false"
+                                rendered="#{!cuMe5PropuestaPorUnidad.renderButtonGuardar}"
+                                onclick="PrimeFaces.monitorDownload(start, stop);" 
+                                title="#{bundle['commons.btn.download']}">
+                                <h:outputText                                            
+                                    value="#{cuMe5PropuestaPorUnidad.propuestaSeleccionada.nombreArchivo}"/>
+                                <p:fileDownload 
+                                    value="#{cuMe5PropuestaPorUnidad.archivo}"/>
+                            </p:commandLink-->
+                        </p:panelGrid>
+                        <f:facet
+                            name="footer">
+                            <p:panelGrid
+                                columns="6"
+                                layout="grid" 
+                                columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+                                styleClass="ui-panelgrid-blank">
+                                <p:commandButton 
+                                    value="#{bundle['commons.btn.back']}" 
+                                    action="#{cuMe8InvestigacionExterna.detallesCompromisoTrue()}"
+                                    update="frmdetalles"
+                                    style="border:none"
+                                    immediate="true"/> 
+                                <p:commandButton 
+                                    value="#{bundle['investigacionesexternasvicin.aprobarcompromiso.btn']}" 
+                                    update="frmdetalles" 
+                                    process="@this" 
+                                    style="border:none" 
+                                    rendered ="#{cuMe8InvestigacionExterna.compromisoSeleccionado.estado == 'E'}"                                   
+                                    actionListener="#{cuMe8InvestigacionExterna.aprobarCompromiso()}"/>
+                                <p:commandButton 
+                                    value="#{bundle['investigacionesexternasvicin.rechazarcompromiso.btn']}" 
+                                    update="frmdetalles" 
+                                    process="@this" 
+                                    style="border:none" 
+                                    rendered ="#{cuMe8InvestigacionExterna.compromisoSeleccionado.estado == 'E'}"                                
+                                    actionListener="#{cuMe8InvestigacionExterna.rechazarCompromiso()}" />  
+                            </p:panelGrid>     
+                        </f:facet>
+                    </p:panel>
+                </h:form>
+            </p:panel>
+        </ui:define>
+    </ui:composition>
+</html>

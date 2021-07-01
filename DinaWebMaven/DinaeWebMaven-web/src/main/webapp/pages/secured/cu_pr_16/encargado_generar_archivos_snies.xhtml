@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <body>
+    <div class="body">
+
+      <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+        <ui:define name="content">
+
+          <h:form id="idForm_encargado_generar_archivos_snies">
+
+            <div class="fixed-menu">
+
+              <div class="right-col">
+                <h2>
+                  Generar archivos SNIES
+                </h2>                                
+              </div>
+            </div>
+
+            <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                         columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento" >
+
+              <h:outputLabel for="id_tipoproyecto" value="Tipo de proyecto" styleClass="gris negrilla" /> 
+              <h:selectOneMenu required="true" id="id_tipoproyecto" value="#{cuPr16EncargadoGeneracionArchivosSniesFaces.tipoProyectoSeleccionado}"  styleClass="gris">
+                <f:selectItem itemValue="" itemLabel="--Seleccione--"/>
+                <f:selectItems value="#{cuPr16EncargadoGeneracionArchivosSniesFaces.listaItemTipoProyectoSeleccionado}"  />                                
+              </h:selectOneMenu> 
+
+              <h:outputLabel value="Fecha creación proyecto" styleClass="gris negrilla" for="idFechaCreacionInicio" />            
+              <h:panelGrid columns="2">
+
+                <p:calendar pattern="#{properties.value('general_formato_fecha')}" 
+                            locale="es" id="idFechaCreacionInicio"
+                            value="#{cuPr16EncargadoGeneracionArchivosSniesFaces.fechaInicialReporteSeleccionado}"
+                            yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                            navigator="true" showOn="button" styleClass="gris"
+                            required="true" />  
+
+                <p:calendar pattern="#{properties.value('general_formato_fecha')}" 
+                            locale="es" 
+                            value="#{cuPr16EncargadoGeneracionArchivosSniesFaces.fechaFinalReporteSeleccionado}"
+                            yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                            navigator="true" showOn="button" styleClass="gris" id="idFechaCreacionFin"
+                            required="true" /> 
+
+              </h:panelGrid>
+            </h:panelGrid>
+
+            <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+            <br />
+            <p:separator styleClass="separadorBorder" /> 
+            <div class="centrado">
+
+              <p:commandButton ajax="false" value="Generar archivos para SNIES" update="@form" process="@this,id_tipoproyecto,idFechaCreacionInicio,idFechaCreacionFin" >
+                <p:fileDownload value="#{cuPr16EncargadoGeneracionArchivosSniesFaces.reporte}" />
+              </p:commandButton>
+            </div>
+
+          </h:form>
+
+
+        </ui:define>
+      </ui:composition>
+    </div>
+  </body>
+</html>

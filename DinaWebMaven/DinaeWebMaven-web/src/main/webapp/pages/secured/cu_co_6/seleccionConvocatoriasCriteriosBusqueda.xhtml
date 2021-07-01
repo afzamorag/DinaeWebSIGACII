@@ -1,0 +1,142 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+
+      <ui:define name="content">
+        <h:form id="formFiltroConvocatorias">
+
+          <div class="fixed-menu">
+            <div class="right-col">
+              <h2 style="font: verdana;">
+                Consultar convocatorias
+              </h2>
+            </div>
+          </div>
+
+          <br />
+          <h:outputLabel value="Seleccione cualquiera de los criterios de búsqueda" styleClass="green negrilla"/>
+          <br /><br/>
+          <h:panelGrid id="panelgridFiltroConvocatorias" columns="2" style="width: 100%" 
+                       rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                       columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+
+            <h:outputLabel value="Tipo convocatoria" styleClass="gris negrilla"/>
+            <h:selectOneMenu value="#{cuCo6ConsultaConvocatoriasFaces.idTipoConvocatoria}" id="selectTipoConvocatoriaFiltro"
+                             styleClass="gris">  
+              <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+              <f:selectItems value="#{cuCo6ConsultaConvocatoriasFaces.listaItemsTipoConvocatorias}"/>
+            </h:selectOneMenu>
+
+            <h:outputLabel value="Consecutivo N°" styleClass="gris negrilla"/>
+            <h:panelGrid columns="2">
+              <p:inputText value="#{cuCo6ConsultaConvocatoriasFaces.numeroConsecutivo}" 
+                           maxlength="10" size="10" onkeypress="return soloNumerosInpuText(event);" 
+                           id="inputConsecutivoConvocatoriaFiltro"/>                            
+            </h:panelGrid> 
+
+            <h:outputLabel value="Palabra clave en el nombre y/o descripción" styleClass="gris negrilla"/>
+            <h:panelGrid columns="2">
+              <p:inputText value="#{cuCo6ConsultaConvocatoriasFaces.palabraClave}" 
+                           maxlength="50" size="70" id="inputPalabraClaveConvocatoriaFiltro"/>
+              <h:outputLabel value="(50 caracteres max)" styleClass="gris"/>
+            </h:panelGrid> 
+
+            <h:outputLabel value="Estado" styleClass="gris negrilla"/>
+            <h:selectOneMenu value="#{cuCo6ConsultaConvocatoriasFaces.idEstadoConvocatoria}" styleClass="gris"
+                             id="selectEstadoConvocatoriaFiltro">  
+              <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+              <f:selectItems value="#{cuCo6ConsultaConvocatoriasFaces.listaItemsEstadosConvocatorias}"/>                            
+            </h:selectOneMenu>
+
+
+            <h:outputLabel value="Fecha de presentación" styleClass="gris negrilla"/>
+            <h:panelGrid columns="3">                            
+              <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es" style="text-align: left"
+                          id="dateFechaPresentacionInicialConvocatoriaFiltro"
+                          yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                          navigator="true" value="#{cuCo6ConsultaConvocatoriasFaces.fechaInicioConvocatoria}" 
+                          showOn="button">
+              </p:calendar>
+              <h:outputText value="-" />
+              <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es" style="text-align: left"
+                          id="dateFechaPresentacionFinalConvocatoriaFiltro"
+                          yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                          navigator="true" value="#{cuCo6ConsultaConvocatoriasFaces.fechaFinalConvocatoria}" 
+                          showOn="button">
+              </p:calendar>            
+            </h:panelGrid>
+          </h:panelGrid>
+          <br/>
+          <div class="centrado">
+            <p:commandButton value="#{properties.value('general_lbl_btn_buscar')}" id="btnBuscar"
+                             action="#{cuCo6ConsultaConvocatoriasFaces.cargarListaConvocatoriasFiltros}" 
+                             update="@form tablaConvocatoriasFiltro"/>
+
+            <p:commandButton value="#{properties.value('general_lbl_btn_limpiar')}" id="btnLimpiar"
+                             action="#{cuCo6ConsultaConvocatoriasFaces.limpiarFiltros}" 
+                             update="@form tablaConvocatoriasFiltro"/>
+          </div>       
+
+
+          <br/>
+          <div class="centrado">
+            <p:dataTable var="_convocatoria" value="#{cuCo6ConsultaConvocatoriasFaces.listadoConvocatoriasModel}"
+                         rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                         id="tablaConvocatoriasFiltro"
+                         emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                         selectionMode="single"
+                         selection="#{cuCo6ConsultaConvocatoriasFaces.convocatoriaSeleccionada}"
+                         style="width: 100%;" paginator="true"
+                         resizableColumns="true" rowIndexVar="idFila"
+                         paginatorPosition="bottom"
+                         rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+              <p:ajax event="rowSelect"  listener="#{cuCo6ConsultaConvocatoriasFaces.navgar}"   
+                      update="@form @form:tablaConvocatoriasFiltro"/>  
+              <p:ajax event="rowUnselect" listener="#{cuCo6ConsultaConvocatoriasFaces.noSeleccionDetalles}" 
+                      update="@form:tablaConvocatoriasFiltro"/>  
+
+
+              <p:column headerText="#{properties.value('general_lbl_numero_tabla')}" width="15" style="color: white; font-size: 13px">
+                <h:outputText value="#{idFila + 1}" styleClass="gris" style="font-size: 13px"/>
+              </p:column>
+              <p:column headerText="Consecutivo" width="80" style="color: white; font-size: 13px">
+                <h:outputText value="#{_convocatoria.concecutivo}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+              </p:column>
+              <p:column headerText="Nombre" style="color: white; font-size: 13px">
+                <h:outputText value="#{_convocatoria.nombreConvocatorio}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+              </p:column>
+              <p:column headerText="Estado" width="130" style="color: white; font-size: 13px">
+                <h:outputText value="#{_convocatoria.estadoConvocatorio}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+              </p:column>
+              <p:column headerText="Periodo de presentación" style="color: white; font-size: 13px">                                
+                <div align="center">
+                  <h:outputText value="#{_convocatoria.fechaInicio}" styleClass="gris" style="font-size: 13px">
+                    <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+                  </h:outputText> 
+                  <h:outputText value=" - " styleClass="gris" style="font-size: 13px"/>
+                  <h:outputText value="#{_convocatoria.fechaFin}" styleClass="gris" style="font-size: 13px">
+                    <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+                  </h:outputText> 
+                </div>
+              </p:column>                             
+
+              <f:facet name="footer">  
+                <div align="right">Cantidad: #{fn:length(cuCo6ConsultaConvocatoriasFaces.listadoConvocatorias)}</div>
+              </f:facet>
+            </p:dataTable>                        
+          </div>
+        </h:form>                
+      </ui:define>
+    </ui:composition>
+  </body>
+</html>

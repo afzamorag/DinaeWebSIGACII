@@ -1,0 +1,150 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+
+    <ui:define name="content">
+      <h:form id="formPropuestaProyectoInvestigacion">
+
+        <div class="fixed-menu">
+          <div class="right-col">
+            <h2 style="font: verdana;">
+              Consultar propuestas a convocatorias
+            </h2>
+          </div>
+        </div>
+
+        <br />
+        <h:outputLabel value="Seleccione cualquiera de los criterios de búsqueda" styleClass="green negrilla"/>
+        <br /><br/>
+        <h:panelGrid id="panelgridComponentesPropuestasProyecto" columns="2" style="width: 100%" 
+                     rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                     columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+
+          <h:outputLabel value="Área" styleClass="gris negrilla"/>
+          <h:selectOneMenu value="#{cuCo5ConsultaPropuestasProyectosConvocatoriaFaces.idArea}" id="selectAreaPropuestasProyectos"
+                           styleClass="gris">  
+            <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+            <f:selectItems value="#{cuCo5ConsultaPropuestasProyectosConvocatoriaFaces.listaItemsAreaSaber}"/>
+            <p:ajax event="change" update="selectLineaPropuestasProyectos" 
+                    listener="#{cuCo5ConsultaPropuestasProyectosConvocatoriaFaces.cargarLineasPorAreaCienciaTecnologiaSeleccionada}"/>
+          </h:selectOneMenu>
+
+          <h:outputLabel value="Línea" styleClass="gris negrilla"/>
+          <h:selectOneMenu value="#{cuCo5ConsultaPropuestasProyectosConvocatoriaFaces.idLinea}" id="selectLineaPropuestasProyectos" styleClass="gris">  
+            <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+            <f:selectItems value="#{cuCo5ConsultaPropuestasProyectosConvocatoriaFaces.listaItemsLinea}"/>
+          </h:selectOneMenu>
+
+          <h:outputLabel value="Palabra clave en el tema" styleClass="gris negrilla"/>
+          <h:panelGrid columns="2">
+            <p:inputText id="inputPalabraClaveTema" value="#{cuCo5ConsultaPropuestasProyectosConvocatoriaFaces.palabraClave}" maxlength="20" size="50"/>
+            <h:outputLabel value="(20 caracteres max)" styleClass="gris"/>
+          </h:panelGrid> 
+
+          <h:outputLabel value="Estado" styleClass="gris negrilla"/>
+          <h:selectOneMenu value="#{cuCo5ConsultaPropuestasProyectosConvocatoriaFaces.idEstadoPropuesta}" id="selectEstadoPropuesta" styleClass="gris">  
+            <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+            <f:selectItems value="#{cuCo5ConsultaPropuestasProyectosConvocatoriaFaces.listaItemsEstados}"/>                            
+          </h:selectOneMenu>
+
+          <h:outputLabel value="Unidad policial" styleClass="gris negrilla"/>
+          <h:selectOneMenu value="#{cuCo5ConsultaPropuestasProyectosConvocatoriaFaces.idUnidadPolicial}" 
+                           id="selectUnidadPolicialFiltro" styleClass="gris" 
+                           rendered="#{!cuCo5ConsultaPropuestasProyectosConvocatoriaFaces.usuarioUnidad}">  
+            <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+            <f:selectItems value="#{cuCo5ConsultaPropuestasProyectosConvocatoriaFaces.listaItemsUnidades}"/>                            
+          </h:selectOneMenu>
+          <h:outputLabel value="#{cuCo5ConsultaPropuestasProyectosConvocatoriaFaces.unidaPolicialDTO.nombre}" styleClass="gris" 
+                         rendered="#{cuCo5ConsultaPropuestasProyectosConvocatoriaFaces.usuarioUnidad}"/>
+
+          <h:outputLabel value="Fecha de presentación" styleClass="gris negrilla"/>
+          <h:panelGrid columns="3">
+
+            <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es" style="text-align: left"
+                        id="dateFechaPresentacionInicial"
+                        yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                        navigator="true" value="#{cuCo5ConsultaPropuestasProyectosConvocatoriaFaces.fechaInicialPresentacion}" 
+                        showOn="button">
+            </p:calendar>
+            <h:outputText value="-" />
+            <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es" style="text-align: left"
+                        id="dateFechaPresentacionFinal"
+                        yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                        navigator="true" value="#{cuCo5ConsultaPropuestasProyectosConvocatoriaFaces.fechaFinalPresentacion}" 
+                        showOn="button">
+            </p:calendar>
+          </h:panelGrid>                        
+
+          <h:outputLabel value="N° de la convocatoria" styleClass="gris negrilla"/>
+          <h:selectOneMenu value="#{cuCo5ConsultaPropuestasProyectosConvocatoriaFaces.idConvocatoria}" id="selectConvocatoria" styleClass="gris">  
+            <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+            <f:selectItems value="#{cuCo5ConsultaPropuestasProyectosConvocatoriaFaces.listaItemsCovocatorias}"/>                            
+          </h:selectOneMenu>
+
+        </h:panelGrid>
+        <br/>
+        <div class="centrado">
+          <p:commandButton value="#{properties.value('general_lbl_btn_buscar')}" id="btnBuscar"
+                           action="#{cuCo5ConsultaPropuestasProyectosConvocatoriaFaces.cargarListaPropuestasProyectosInvestigacionFiltros}" 
+                           update="formPropuestaProyectoInvestigacion" />
+
+          <p:commandButton value="#{properties.value('general_lbl_btn_limpiar')}" id="btnLimpiar"
+                           action="#{cuCo5ConsultaPropuestasProyectosConvocatoriaFaces.inicializarCamposFiltros}" 
+                           update="formPropuestaProyectoInvestigacion"/>
+        </div>       
+
+
+        <br/>
+        <p:dataTable var="_propuesta" value="#{cuCo5ConsultaPropuestasProyectosConvocatoriaFaces.listaPropuestasProyectosInvestigacionModel}"
+                     rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                     id="tablaPropuestasProyectosInvestigacion"
+                     emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                     selectionMode="single"
+                     selection="#{cuCo5ConsultaPropuestasProyectosConvocatoriaFaces.propuestaSeleccionada}"
+                     style="width: 100%;" paginator="true"
+                     resizableColumns="true" rowIndexVar="idFila"
+                     paginatorPosition="bottom"
+                     rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+          <p:ajax event="rowSelect"  listener="#{cuCo5ConsultaPropuestasProyectosConvocatoriaFaces.navgarCuPr06}"   
+                  update="@form @form:tablaPropuestasProyectosInvestigacion"/>  
+          <p:ajax event="rowUnselect" listener="#{cuCo5ConsultaPropuestasProyectosConvocatoriaFaces.noSeleccionDetalles}" 
+                  update="@form:tablaPropuestasProyectosInvestigacion"/>  
+
+
+          <p:column headerText="#{properties.value('general_lbl_numero_tabla')}" width="15" style="color: white; font-size: 13px">
+            <h:outputText value="#{idFila + 1}" styleClass="gris" style="font-size: 13px"/>
+          </p:column>
+          <p:column headerText="Fecha" width="80" style="color: white; font-size: 13px">
+            <h:outputText value="#{_propuesta.fechaPresentacion}" styleClass="gris" style="font-size: 13px">
+              <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+            </h:outputText>  
+          </p:column>
+          <p:column headerText="Unidad policial" style="color: white; font-size: 13px">
+            <h:outputText value="#{_propuesta.nombreUnidadPolicial}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+          </p:column>
+          <p:column headerText="Área" width="130" style="color: white; font-size: 13px">
+            <h:outputText value="#{_propuesta.nombreArea}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+          </p:column>
+          <p:column headerText="Tema" style="color: white; font-size: 13px">
+            <h:outputText value="#{_propuesta.tituloPropuesto}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+          </p:column>
+          <p:column headerText="Estado" width="70" style="color: white; font-size: 13px">
+            <h:outputText value="#{_propuesta.estado}" styleClass="gris" style="font-size: 13px"/>      
+          </p:column>
+          <f:facet name="footer">  
+            #{fn:length(cuCo5ConsultaPropuestasProyectosConvocatoriaFaces.listaPropuestasProyectosInvestigacion)} #{properties.value('general_mensaje_footer_datatable_count')}
+          </f:facet>
+        </p:dataTable>                        
+      </h:form>                
+    </ui:define>
+  </ui:composition>
+</html>

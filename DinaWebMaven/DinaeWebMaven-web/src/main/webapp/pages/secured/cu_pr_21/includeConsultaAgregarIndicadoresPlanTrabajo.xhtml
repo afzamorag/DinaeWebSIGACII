@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+  <h:form id="formConsultaIncludeAgregarIndicadores" >
+
+    <h:outputLabel value="#{properties.value('cu_pr_1_lbl_otros_indicadores')}" styleClass="green negrilla" />
+    <br />
+
+    <ui:include src="include_lista_indicadores_plan_trabajo_otros.xhtml"/>
+
+    <br />
+    <br />
+    <p:separator styleClass="separadorBorder" /> 
+    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+    <div class="centrado">
+
+      <p:commandButton value="Regresar" immediate="true"
+                       action="#{cuPr21RegistrarPlanDeTrabajo.regresar}" 
+                       update="@form"/>
+
+    </div>
+
+  </h:form>
+
+</html>

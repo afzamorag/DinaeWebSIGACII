@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+      <ui:define name="content">
+
+        <h:form id="idForm_include_revisar_propuesta_convocatoria">
+
+          <div class="fixed-menu">
+            <div class="right-col">
+              <h2>
+                #{properties.value('cu_co_4_titulo_pantalla_evaluacion_pro')}
+              </h2>
+            </div>
+          </div>
+
+          <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                       columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento" >
+
+            <h:outputText value="#{properties.value('cu_co_4_revisar_concecutivo_num')}" styleClass="gris negrilla"/>
+            <h:outputText value="#{cuCo4EvaluarPropuestaConvocatoriaFaces.periodoSeleccionado.concecutivo}" styleClass="gris"/>
+
+            <h:outputText value="#{properties.value('cu_co_4_revisar_titulo_proy')}" styleClass="gris negrilla"/>
+            <h:outputText value="#{cuCo4EvaluarPropuestaConvocatoriaFaces.proyectoDTOSeleccionadoRevisar.tituloPropuesto}" styleClass="gris"/>
+
+          </h:panelGrid>
+
+          <br />
+          <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}"  
+                       id="idDataTablePropuestas" var="_criterio" paginatorPosition="bottom" 
+                       rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true" 
+                       value="#{cuCo4EvaluarPropuestaConvocatoriaFaces.listaCriterioPropuestaConvocatoriaDTO}" 
+                       rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                       resizableColumns="true"
+                       rowIndexVar="idFila">
+
+            <p:column width="30" headerText="#{properties.value('cu_co_4_datatable_num')}">  
+              #{idFila + 1}
+            </p:column> 
+
+            <p:column headerText="#{properties.value('cu_co_4_datatable_criterio')}">  
+              #{_criterio.criterio}
+            </p:column> 
+
+            <p:column width="70" headerText="#{properties.value('cu_co_4_datatable_val_maximo')}">  
+              #{_criterio.valorMaximoConvocatoria}%
+            </p:column> 
+
+            <p:column width="100" headerText="#{properties.value('cu_co_4_datatable_valor')}">  
+              <p:inputText value="#{_criterio.valorIngresadoConvocatoria}" size="10" rendered="#{_criterio.editable}"
+                           onkeypress="return soloNumerosInpuText(event);" required="true" maxlength="3" >
+                <p:ajax event="blur" listener="#{cuCo4EvaluarPropuestaConvocatoriaFaces.recargarValorTotal}" 
+                        update=":idForm_include_revisar_propuesta_convocatoria" />
+              </p:inputText>
+              <h:outputLabel value="#{_criterio.valorIngresadoConvocatoria}%" rendered="#{!_criterio.editable}" />
+            </p:column>
+
+          </p:dataTable>
+
+          <br />
+          <br />
+          <p:separator styleClass="separadorBorder" /> 
+          <div class="centrado">
+
+            <p:commandButton value="#{properties.value('cu_co_4_btn_regresar_evaluar')}"
+                             action="#{navigationFaces.redirectCuCo4EvaluarPropuestaConvocatoriaRedirect}" 
+                             immediate="true" />
+
+            <p:commandButton value="#{properties.value('cu_co_4_btn_guardar_evaluar')}"
+                             action="#{cuCo4EvaluarPropuestaConvocatoriaFaces.guardarPropuestasEvaluadas}" 
+                             update=":idForm_include_revisar_propuesta_convocatoria" />
+
+            <p:commandButton value="#{properties.value('cu_co_4_btn_agregar_comentario_pro')}"
+                             action="#{cuCo4EvaluarPropuestaConvocatoriaFaces.agregarComentarioPropuestaEvaluada}" 
+                             immediate="true" />
+          </div>
+          <br />
+          <br />
+
+        </h:form>
+
+      </ui:define>
+
+    </ui:composition>
+
+  </body>
+</html>

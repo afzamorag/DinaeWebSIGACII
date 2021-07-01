@@ -1,0 +1,264 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <body>
+
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+      <ui:define name="content">
+
+        <h:form id="idForm_cu_co_2_include_participar_convocatoria">
+
+          <div class="fixed-menu">
+            <div class="right-col">
+              <h2>
+                Convocatoria
+              </h2>
+            </div>
+          </div>
+
+          <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                       columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+            <h:outputLabel value="Consecutivo N°" styleClass="gris negrilla" />
+            <h:outputLabel value="#{cuCo6ConsultaConvocatoriasFaces.periodo.concecutivoConvocatoria == null ? cuCo6ConsultaConvocatoriasFaces.periodo.concecutivo : cuCo6ConsultaConvocatoriasFaces.periodo.concecutivoConvocatoria}" styleClass="gris" />
+
+            <h:outputLabel value="Tipo" styleClass="gris negrilla" />
+            <h:outputLabel value="#{cuCo6ConsultaConvocatoriasFaces.periodo.tipoPeriodo.valor}" styleClass="gris" />
+
+            <h:outputLabel value="Nombre de la convocatoria" styleClass="gris negrilla" />
+            <h:outputLabel value="#{cuCo6ConsultaConvocatoriasFaces.periodo.nombreConvocatorio}" styleClass="gris" />
+
+            <h:outputLabel value="Descripción" styleClass="gris negrilla" />
+            <h:outputLabel value="#{cuCo6ConsultaConvocatoriasFaces.periodo.descripcion}" styleClass="gris" />
+
+            <h:outputLabel value="Fecha de presentación" styleClass="gris negrilla" />
+            <h:panelGroup>
+              <div align="left">
+
+                <h:outputLabel value="Inicio: " styleClass="gris negrilla" />
+                &nbsp;
+                <h:outputText value="#{cuCo6ConsultaConvocatoriasFaces.periodo.fechaInicio}" styleClass="gris" style="font-size: 13px">
+                  <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+                </h:outputText> 
+                &nbsp; &nbsp;
+                <h:outputLabel value="Fin: " styleClass="gris negrilla" />
+                &nbsp;
+                <h:outputText value="#{cuCo6ConsultaConvocatoriasFaces.periodo.fechaFin}" styleClass="gris" style="font-size: 13px">
+                  <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+                </h:outputText> 
+              </div>
+            </h:panelGroup>
+
+            <h:outputLabel value="#{properties.value('cu_co_2_lbl_sub_titulo_archivo')}" styleClass="gris negrilla" />
+            <p:commandLink ajax="false" immediate="true" id="idCommanLinkDescargaArchivo" 
+                           rendered="#{cuCo6ConsultaConvocatoriasFaces.mostrarLinkDescargaArchivo}">
+              <h:outputLabel value="#{cuCo6ConsultaConvocatoriasFaces.periodo.nombreArchivo}" />
+              <p:fileDownload value="#{cuCo6ConsultaConvocatoriasFaces.downloadContentProperty}" />
+            </p:commandLink>
+
+            <h:outputLabel value="Estado actual" styleClass="gris negrilla" />
+            <h:outputLabel value="#{cuCo6ConsultaConvocatoriasFaces.periodo.estadoConvocatorio.valor}" styleClass="gris" />
+
+            <h:outputLabel value="Ver resultado" styleClass="gris negrilla"
+                           rendered="#{cuCo6ConsultaConvocatoriasFaces.mostrarLinkDescargaArchivoReporteConvoca}" />
+            <p:commandLink ajax="false" immediate="true" 
+                           rendered="#{cuCo6ConsultaConvocatoriasFaces.mostrarLinkDescargaArchivoReporteConvoca}">
+              <h:outputLabel value="#{cuCo6ConsultaConvocatoriasFaces.periodo.nombreArchivoOriginalConvocatoriaEnsayo}" />
+              <p:fileDownload value="#{cuCo6ConsultaConvocatoriasFaces.downloadContentPropertyConvocatoriaEnsayo}" />
+            </p:commandLink>
+
+            <h:outputLabel value="Ver resultado" styleClass="gris negrilla" rendered="#{cuCo6ConsultaConvocatoriasFaces.mostrarLinkDescargaArchivoReporteConvocaFinancia}" />
+            <p:commandLink ajax="false" immediate="true"  
+                           rendered="#{cuCo6ConsultaConvocatoriasFaces.mostrarLinkDescargaArchivoReporteConvocaFinancia}">
+              <h:outputLabel value="#{cuCo6ConsultaConvocatoriasFaces.periodo.nombreArchivoFisicoPropuestaConvocatoriaReporte}" />
+              <p:fileDownload value="#{cuCo6ConsultaConvocatoriasFaces.downloadContentPropertyReporte}" />
+            </p:commandLink>
+
+          </h:panelGrid>   
+
+          <br />
+          <h:outputLabel value="Compromisos:" styleClass="green negrilla" />
+          <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                       id="idDataTableCompromisosPeriodo" var="_compromiso" 
+                       styleClass="tabla"
+                       rows="#{properties.value('general_mensaje_filas_datatable_pagina')}"
+                       value="#{cuCo6ConsultaConvocatoriasFaces.listadoCompromisosConvocatoria}"
+                       rowIndexVar="idFila"
+                       resizableColumns="true"
+                       rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+
+            <p:column width="18" headerText="#{properties.value('cu_co_2_lbl_datatable_num')}">  
+              <h:outputText value="#{idFila + 1}" styleClass="gris" />
+            </p:column>  
+
+            <p:column headerText="Nombre del compromiso">  
+              <h:outputText value="#{_compromiso.nombreCompromisoNumeroIncrementa}" styleClass="gris" />                            
+            </p:column> 
+
+            <p:column width="100" headerText="Fecha límite">  
+              <h:outputText value="#{_compromiso.fecha}" styleClass="gris" >
+                <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+              </h:outputText>                                                        
+            </p:column>  
+          </p:dataTable>
+          <br />
+
+          <h:outputLabel value="Criterios de evaluación:" styleClass="green negrilla" />
+          <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                       id="idDataTableCriteriosEvaluacionConvocatoria" var="_criterio" 
+                       styleClass="tabla"
+                       rows="#{properties.value('general_mensaje_filas_datatable_pagina')}"
+                       value="#{cuCo6ConsultaConvocatoriasFaces.listadoCriterioEvaluacion}"
+                       rowIndexVar="idFila"
+                       resizableColumns="true"
+                       rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+
+            <p:column width="18" headerText="#{properties.value('cu_co_2_lbl_datatable_num')}">  
+              <h:outputText value="#{idFila + 1}" styleClass="gris" />
+            </p:column>  
+
+            <p:column headerText="Criterios">  
+              <h:outputText value="#{_criterio.criterio}" styleClass="gris" />                            
+            </p:column> 
+
+            <p:column width="100" headerText="Valor máximo">  
+              <h:outputText value="#{_criterio.valorMaximoConvocatoria}%" styleClass="gris" />                               
+            </p:column>  
+          </p:dataTable>
+          <br />
+
+          <h:outputLabel value="Ensayos o Propuestas presentadas" styleClass="green negrilla" />
+          <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                       id="idDataTablePropuestasPresentadas" var="_prop" 
+                       styleClass="tabla"
+                       rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                       value="#{cuCo6ConsultaConvocatoriasFaces.listadoPropuestasPresentadas}"
+                       rowIndexVar="idFila"
+                       resizableColumns="true"
+                       rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                       rendered="#{cuCo6ConsultaConvocatoriasFaces.listadoPropuestasPresentadas != null}"
+                       paginator="true"
+                       paginatorPosition="bottom">
+
+
+            <p:column width="18" headerText="#{properties.value('cu_co_2_lbl_datatable_num')}">  
+              <h:outputText value="#{idFila + 1}" styleClass="gris" style="font-size: 13px" />
+            </p:column>  
+
+            <p:column headerText="Unidad policial">  
+              <h:outputText value="#{_prop.unidadPolicialDTO.siglaFisicaUnidad}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>                            
+            </p:column> 
+
+            <p:column headerText="Titulo propuesto">  
+              <h:outputText value="#{_prop.tituloPropuesto}" styleClass="alineadoIzquierda gris" style="font-size: 13px" />                               
+            </p:column>  
+            <p:column width="100" headerText="Presupuesto solicitado">  
+              <h:outputText value="#{_prop.presupuestoSolicitado == null ? '0' : _prop.presupuestoSolicitado}" styleClass="alineadoDerecha gris" style="font-size: 13px" >
+                <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" locale="es_CO" />
+              </h:outputText>
+            </p:column>  
+
+            <p:column headerText="Criterios">  
+              <h:outputText value="#{cuCo6ConsultaConvocatoriasFaces.tomarCriteriosEvaluacionProyecto(_prop.id)}" escape="false" 
+                            styleClass="alineadoIzquierda gris" style="font-size: 13px"/>                            
+            </p:column> 
+
+            <p:column width="100" headerText="Calificacion">  
+              <h:outputText value="#{cuCo6ConsultaConvocatoriasFaces.tomarCalificacionProyecto(_prop.id)}" 
+                            styleClass="alineadoIzquierda gris" style="font-size: 13px" />                               
+            </p:column>  
+
+            <p:column width="100" headerText="Estado">  
+              <h:outputText value="#{_prop.estado}" styleClass="gris" style="font-size: 13px" />                               
+            </p:column>  
+
+            <p:column width="100" headerText="Presupuesto aprobado">  
+              <h:outputText value="#{_prop.valorFinanciar}" styleClass="alineadoDerecha gris" style="font-size: 13px" >
+                <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" locale="es_CO" />
+              </h:outputText>
+            </p:column> 
+
+            <f:facet name="footer">  
+              Cantidad propuestas presentadas: #{cuCo6ConsultaConvocatoriasFaces.cantidadPropuestasPresentadas} &nbsp; Cantidad propuestas aprobadas #{cuCo6ConsultaConvocatoriasFaces.cantidadPropuestasAprobadas}
+            </f:facet>
+
+          </p:dataTable>
+
+          <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                       id="idDataTableEnsayosPresentadas" var="_ensayo" 
+                       styleClass="tabla"
+                       rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                       value="#{cuCo6ConsultaConvocatoriasFaces.listadoEnsayosCritico}"
+                       rowIndexVar="idFila"
+                       resizableColumns="true"
+                       rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                       rendered="#{cuCo6ConsultaConvocatoriasFaces.listadoEnsayosCritico != null}"
+                       paginator="true"
+                       selectionMode="single"
+                       selection="#{cuCo6ConsultaConvocatoriasFaces.ensayoCriticoSeleccionado}"
+                       paginatorPosition="bottom">
+
+            <p:ajax event="rowSelect"  listener="#{cuCo6ConsultaConvocatoriasFaces.seleccionarEnsayoYnavegar}"/>                          
+
+            <p:column width="18" headerText="#{properties.value('cu_co_2_lbl_datatable_num')}">  
+              <h:outputText value="#{idFila + 1}" styleClass="gris" style="font-size: 13px" />
+            </p:column>  
+
+            <p:column headerText="Unidad policial" width="70">  
+              <h:outputText value="#{_ensayo.unidadPolicial.siglaFisica}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>                            
+            </p:column> 
+
+            <p:column headerText="Titulo propuesto">  
+              <h:outputText value="#{_ensayo.tituloEnsayo}" styleClass="alineadoIzquierda gris" style="font-size: 13px" />                               
+            </p:column>
+
+            <p:column headerText="Autor" width="80">  
+              <h:outputText value="#{_ensayo.gradoYnombres}" styleClass="alineadoIzquierda gris" style="font-size: 13px" />                               
+            </p:column>
+
+            <p:column headerText="Criterios" width="120">  
+              <h:outputText value="#{cuCo6ConsultaConvocatoriasFaces.tomarCriteriosEvaluacionEnsayoCritico(_ensayo.idEnsayoCritico)}" escape="false" 
+                            styleClass="alineadoIzquierda gris" style="font-size: 13px"/>                            
+            </p:column> 
+
+            <p:column width="80" headerText="Calificación" >  
+              <h:outputText value="#{cuCo6ConsultaConvocatoriasFaces.tomarCalificacionEnsayoCritico(_ensayo.idEnsayoCritico)}" 
+                            styleClass="alineadoIzquierda gris" style="font-size: 13px" />                               
+            </p:column>  
+
+            <p:column width="100" headerText="Estado">  
+              <h:outputText value="#{_ensayo.estadoCuCo10 == null ? _ensayo.estadoCuCo8.valor : _ensayo.estadoCuCo10.valor}" styleClass="gris" style="font-size: 13px" />                               
+            </p:column>                       
+
+            <f:facet name="footer">  
+              Cantidad propuestas presentadas: #{cuCo6ConsultaConvocatoriasFaces.cantidadPropuestasPresentadas} &nbsp; Cantidad propuestas aprobadas #{cuCo6ConsultaConvocatoriasFaces.cantidadPropuestasAprobadas}
+            </f:facet>
+
+          </p:dataTable>
+
+
+          <br />
+
+
+          <p:separator styleClass="separadorBorder" /> 
+          <div class="centrado">
+
+            <p:commandButton value="#{properties.value('cu_pr_2_lbl_btn_regresar')}" id="idBtnRegresarProyecto"
+                             action="#{navigationFaces.redirectCuCo6ConsultarConvocatoriasRedirect}"
+                             immediate="true" />
+
+          </div>
+
+        </h:form>
+      </ui:define>
+    </ui:composition>
+  </body>
+</html>

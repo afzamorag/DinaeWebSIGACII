@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+      <ui:define name="content">
+
+        <h:form id="idForm_cu_co_2_lista_comentarios">
+
+          <div class="fixed-menu">
+
+            <div class="right-col">
+              <h2>
+                #{properties.value('cu_pr_2_lbl_titulo_comentarios')}
+              </h2>
+            </div>
+          </div>
+
+          <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                       columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+            <h:outputLabel value="#{properties.value('cu_co_2_lbl_subtitulo_concecutivo_convocatoria')}" styleClass="gris negrilla" />
+            <h:outputLabel value="#{cuCo2ParticipaConvocatoriasFaces.convotariaSeleccionado.concecutivo}" styleClass="gris" />
+
+            <h:outputLabel value="#{properties.value('cu_pr_2_lbl_subtitulo_titulo_propuesto')}" styleClass="gris negrilla" />
+            <h:outputLabel value="#{cuCo2ParticipaConvocatoriasFaces.proyectoSeleccionadoInformacionComentario.tituloPropuesto}" styleClass="gris"  />  
+
+          </h:panelGrid>
+
+          <br />
+          <br />
+          <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                       id="idDataTableComnetarios" var="_comnetario" 
+                       value="#{cuCo2ParticipaConvocatoriasFaces.listaComentarios}" 
+                       paginatorPosition="bottom" styleClass="tabla" rowIndexVar="idFila"
+                       rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                       resizableColumns="true"
+                       rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true"  >
+
+            <p:column width="150" headerText="#{properties.value('cu_pr_2_lbl_subtitulo_fecha_comentario')}">
+              <h:outputLabel value="#{_comnetario.fecha}">
+                <f:convertDateTime pattern="#{properties.value('general_formato_fecha_hora')}" locale="es_CO" />
+              </h:outputLabel>    
+            </p:column>
+
+            <p:column headerText="#{properties.value('cu_pr_2_lbl_subtitulo_comentario')}"> 
+              #{_comnetario.comentario}
+            </p:column>  
+
+            <p:column width="200" headerText="#{properties.value('cu_pr_2_lbl_subtitulo_autor_comentario')}">  
+              #{_comnetario.autor}
+            </p:column> 
+
+            <f:facet name="footer">  
+              #{fn:length( cuCo2ParticipaConvocatoriasFaces.listaComentarios )} #{properties.value('general_mensaje_footer_datatable_count')}
+            </f:facet>
+
+          </p:dataTable> 
+
+          <br />
+          <br />
+
+          <p:separator styleClass="separadorBorder" /> 
+          <div class="centrado">
+            <p:commandButton value="#{properties.value('cu_pr_2_lbl_btn_regresar')}" 
+                             action="#{navigationFaces.redirectCuCo2DetalleParticipaConvocatoriasRedirect}" 
+                             immediate="true" />
+          </div>
+          <br />
+          <br />
+
+        </h:form>
+
+      </ui:define>
+    </ui:composition>
+  </body>
+</html>

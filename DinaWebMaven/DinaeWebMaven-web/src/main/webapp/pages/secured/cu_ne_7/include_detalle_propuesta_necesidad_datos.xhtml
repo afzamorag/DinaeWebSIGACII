@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      >
+  <body>
+    <div class="fixed-menu">
+      <!--VENTANA DE LISTA DE PERIODOS-->
+      <div class="right-col">
+        <h2>
+          #{properties.value('cu_ne_7_titulo')}
+        </h2>
+      </div>
+    </div>  
+    <h:panelGroup>
+      <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                   columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+        <h:outputText value="#{properties.value('cu_ne_7_unidad policial')}" styleClass="nombreTextoNegro" class="gris negrilla"/>
+        <h:outputText value="#{cuNe7PropuestaNecesidadFaces.propuestaNecesidad.unidadPolicial.nombre}" styleClass="gris"/>                       
+
+        <h:outputText value="#{properties.value('cu_ne_7_fecha')}" styleClass="gris negrilla"/>
+        <h:outputText value="#{cuNe7PropuestaNecesidadFaces.propuestaNecesidad.fechaRegistro}" styleClass="gris" >
+          <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+        </h:outputText>
+
+      </h:panelGrid>
+
+      <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                   columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+        <h:outputText value="#{properties.value('cu_ne_7_Area')}" styleClass="gris negrilla" />
+        <h:outputText value="#{cuNe7PropuestaNecesidadFaces.propuestaNecesidad.linea.areaCienciaTecnologia.nombre}" styleClass="gris"/>                       
+        <h:outputText value="#{properties.value('cu_ne_7_Linea')}" styleClass="gris negrilla"/>
+        <h:outputText value="#{cuNe7PropuestaNecesidadFaces.propuestaNecesidad.linea.nombre}" styleClass="gris"/>                       
+
+        <h:outputText value="#{properties.value('cu_ne_7_Tema')}" styleClass="gris negrilla"/>                
+        <p:inputTextarea readonly="true" autoResize="false" value="#{cuNe7PropuestaNecesidadFaces.propuestaNecesidad.tema}" styleClass="textareaMaximo"/>                                               
+        <h:outputText value="#{properties.value('cu_ne_7_resultado')}" styleClass="gris negrilla"/>                                                        
+        <p:inputTextarea readonly="true" autoResize="false" value="#{cuNe7PropuestaNecesidadFaces.propuestaNecesidad.resultadoEsperado}" styleClass="textareaMaximo"/>       
+        <h:outputText value="#{properties.value('cu_ne_7_fuentes')}" styleClass="gris negrilla"/>                                                
+        <p:inputTextarea readonly="true" autoResize="false" value="#{cuNe7PropuestaNecesidadFaces.propuestaNecesidad.fuenteInformacion}" styleClass="textareaMaximo"/> 
+        <h:outputText value="#{properties.value('cu_ne_7_posible_actividad')}" styleClass="gris negrilla"/>                                          
+        <p:inputTextarea readonly="true" autoResize="false" value="#{cuNe7PropuestaNecesidadFaces.propuestaNecesidad.posibleActividad}" styleClass="textareaMaximo"/> 
+
+      </h:panelGrid>   
+
+      <h:panelGroup>
+        <br />
+        <h:panelGrid columns="1" rendered="#{cuNe7PropuestaNecesidadFaces.mostrarLinkDescargaArchivo}">
+          <p:commandLink ajax="false" immediate="true">
+            <h:outputLabel value="#{properties.value('cu_ne_ver_archivo')} #{cuNe7PropuestaNecesidadFaces.propuestaNecesidad.nombreArchivo}" />
+            <p:fileDownload value="#{cuNe7PropuestaNecesidadFaces.downloadContentProperty}" />
+          </p:commandLink>
+        </h:panelGrid>
+      </h:panelGroup>
+
+      <br />
+      <h:outputText value="#{properties.value('cu_ne_7_funcionario_proponen_tema')}" styleClass="green negrilla"/>
+      <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}"  var="funcionarios" id="tablafuncionarios" value="#{cuNe7PropuestaNecesidadFaces.propuestaNecesidad.funcionarioNecesidadList}"
+                   paginator="true"  paginatorPosition="bottom" styleClass="tabla"
+                   rows="#{properties.value('general_mensaje_filas_datatable_pagina')}"
+                   rowIndexVar="idFila"
+                   rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+        <p:column width="20" headerText="#{properties.value('cu_ne_7_lista_funcionario_grado')}">  
+          <h:outputText value="#{funcionarios.grado}" />                    
+        </p:column>
+        <p:column width="20" headerText="#{properties.value('cu_ne_7_lista_funcionario_nombres')}"> 
+          <h:outputLabel escape="false" 
+                         value="#{cuNe7PropuestaNecesidadFaces.formatearCadenaCaracteresPorLineaFormatoHTML(funcionarios.nombreCompleto, 30)}"  />  
+        </p:column>
+        <p:column width="20" headerText="#{properties.value('cu_ne_7_lista_funcionario_correo')}">  
+          <h:outputText value="#{funcionarios.correo}" />                    
+        </p:column>
+        <p:column width="20" headerText="#{properties.value('cu_ne_7_lista_funcionario_telefono')}">  
+          <h:outputText value="#{funcionarios.telefono}" />                    
+        </p:column> 
+        <p:column width="20" headerText="#{properties.value('cu_ne_7_lista_funcionario_cargo')}">  
+          <h:outputText value="#{funcionarios.cargo}" />                    
+        </p:column> 
+        <f:facet name="footer">
+          #{fn:length(
+            cuNe7PropuestaNecesidadFaces.propuestaNecesidad.funcionarioNecesidadList
+            )}
+          #{properties.value('general_mensaje_footer_datatable_count')}
+        </f:facet>
+      </p:dataTable>
+
+    </h:panelGroup>
+
+  </body>
+</html>

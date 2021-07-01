@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"> 
+
+
+  <p:dataTable id="idDataTableDatosSugerencias" var="_dato"
+               emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+               value="#{cuPr7RegistrarAvanceInvestigacionFaces.listaSugerenciasProyectoDTO}" 
+               rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+               rowIndexVar="idFila" paginatorPosition="bottom" 
+               resizableColumns="true"
+               disabledSelection="#{cuPr7RegistrarAvanceInvestigacionFaces.soloConsulta}" 
+               rowKey="#{_dato.idSugerenciaProyecto}" selectionMode="single" selection="#{cuPr7RegistrarAvanceInvestigacionFaces.seleccionaSugerenciasProyectoDTO}"
+               rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true">
+
+    <p:ajax event="rowSelect" listener="#{cuPr7RegistrarAvanceInvestigacionFaces.actualizarSugerenciaMejoramiento}" 
+            update="#{cuPr7RegistrarAvanceInvestigacionFaces.soloConsulta ? 'idDataTableDatosSugerencias' : '@form'}" />
+
+    <p:column width="20" headerText="#{properties.value('cu_pr_7_lbl_tab_actividesde_realizada_num')}">  
+      <h:outputLabel value="#{ idFila + 1}" />  
+    </p:column>  
+
+    <p:column headerText="#{properties.value('cu_pr_7_lbl_tab_sugerencia_subtitulo')}">  
+      <h:outputLabel value="#{_dato.sugerencia}" />  
+    </p:column>
+
+    <p:column width="70" headerText="" rendered="#{!cuPr7RegistrarAvanceInvestigacionFaces.soloConsulta}">  
+      <p:commandLink value="#{properties.value('cu_pr_7_lbl_btn_eliminar')}" 
+                     immediate="true"
+                     oncomplete="PF('varConfirmEliminarSugerencia').show()">  
+        <f:setPropertyActionListener value="#{_dato}" target="#{cuPr7RegistrarAvanceInvestigacionFaces.sugerenciasProyectoDTOEliminarSeleccionado}" />  
+      </p:commandLink>  
+    </p:column>
+
+    <f:facet name="footer">  
+      #{fn:length( cuPr7RegistrarAvanceInvestigacionFaces.listaSugerenciasProyectoDTO )} #{properties.value('general_mensaje_footer_datatable_count')}
+    </f:facet>
+
+  </p:dataTable>
+</html>

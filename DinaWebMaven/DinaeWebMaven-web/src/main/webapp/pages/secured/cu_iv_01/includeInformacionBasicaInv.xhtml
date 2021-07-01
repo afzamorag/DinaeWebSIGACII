@@ -1,0 +1,314 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+  <h:form id="formInformacionBasicaIv" >
+
+    <br />
+    <h:panelGrid id="panelgridInformacionBasicaIvBusqueda" columns="2" style="width: 100%" 
+                 rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_identificacion_investigador')}" 
+                     styleClass="gris negrilla" for="inputNumIdentificacionIv"/>
+      <h:panelGroup>
+        <p:inputText id="inputNumIdentificacionIv" required="true"
+                     value="#{cuIv01GestionarInvestigadoresFaces.numIdentificacionInv}"
+                     disabled="#{cuIv01GestionarInvestigadoresFaces.existeInvestigador or cuIv01GestionarInvestigadoresFaces.esFuncionario}"
+                     maxlength="20" size="20">
+        </p:inputText>
+
+        <p:commandButton value="#{properties.value('cu_iv_01_lbl_btn_buscar_investigador')}"
+                         action="#{cuIv01GestionarInvestigadoresFaces.buscarInvestigadorPorNumeroIdentificacion}" 
+                         process="@this inputNumIdentificacionIv"
+                         disabled="#{cuIv01GestionarInvestigadoresFaces.existeInvestigador or cuIv01GestionarInvestigadoresFaces.esFuncionario}"
+                         update="formInformacionBasicaIv :tabView"/>
+
+      </h:panelGroup>
+    </h:panelGrid>
+
+    <h:panelGroup>
+
+      <h:panelGroup rendered="#{cuIv01GestionarInvestigadoresFaces.esFuncionario}">
+
+        <h:panelGrid columns="2" style="width: 100%" 
+                     rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                     columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+          <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_grado')}" styleClass="gris negrilla" />
+          <h:outputLabel value="#{cuIv01GestionarInvestigadoresFaces.vistaFuncionarioSeleccionado.grado}" styleClass="gris" />
+
+          <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_nom_y_appellido')}" styleClass="gris negrilla"  />
+          <h:outputLabel value="#{cuIv01GestionarInvestigadoresFaces.vistaFuncionarioSeleccionado.nombreCompleto}" styleClass="gris" />
+
+          <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_correo')}" styleClass="gris negrilla" />
+          <h:outputLabel value="#{cuIv01GestionarInvestigadoresFaces.vistaFuncionarioSeleccionado.correo}" styleClass="gris" />
+
+          <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_cargo')}" styleClass="gris negrilla" />
+          <h:outputLabel value="#{cuIv01GestionarInvestigadoresFaces.vistaFuncionarioSeleccionado.cargo}" styleClass="gris" />
+
+          <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_num_telefono')}" styleClass="gris negrilla" />
+          <h:outputLabel value="#{cuIv01GestionarInvestigadoresFaces.vistaFuncionarioSeleccionado.telefono}" styleClass="gris" />
+
+          <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_direccion')}" styleClass="gris negrilla" />
+          <h:outputLabel value="#{cuIv01GestionarInvestigadoresFaces.vistaFuncionarioSeleccionado.direccionEmpleado}" styleClass="gris" />
+
+          <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_dpto')}" styleClass="gris negrilla" />
+          <h:outputLabel value="#{cuIv01GestionarInvestigadoresFaces.vistaFuncionarioSeleccionado.departamentoReside}" styleClass="gris" />
+
+          <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_ciudad')}" styleClass="gris negrilla" />
+          <h:outputLabel value="#{cuIv01GestionarInvestigadoresFaces.vistaFuncionarioSeleccionado.ciudadReside}" styleClass="gris" />
+
+          <h:outputLabel value="Unidad Policial" styleClass="gris negrilla" />
+          <h:outputLabel value="#{cuIv01GestionarInvestigadoresFaces.vistaFuncionarioSeleccionado.siglaLaborando}" styleClass="gris" />
+
+          <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_tiempo_institu')}" styleClass="gris negrilla" />
+          <h:panelGrid columns="6">
+
+            <h:outputLabel value="#{cuIv01GestionarInvestigadoresFaces.vistaFuncionarioSeleccionado.antiguedadDTO.anosAntiguedad}" styleClass="gris" />
+            <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_anios')}" styleClass="gris" />
+
+            <h:outputLabel value="#{cuIv01GestionarInvestigadoresFaces.vistaFuncionarioSeleccionado.antiguedadDTO.mesesAntiguiedad}" styleClass="gris" />
+            <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_meses')}" styleClass="gris" />
+
+            <h:outputLabel value="#{cuIv01GestionarInvestigadoresFaces.vistaFuncionarioSeleccionado.antiguedadDTO.diasAntiguedad}" styleClass="gris" />
+            <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_dias')}" styleClass="gris" />
+
+          </h:panelGrid>
+          <h:outputLabel value="#{properties.value('cu_iv_01_lbl_profesor_policial')}" styleClass="gris negrilla" />
+          <p:selectOneRadio id="profesorPolicialSIAT" value="#{cuIv01GestionarInvestigadoresFaces.profesorPolicialSIAT}" required="true">
+            <f:selectItem itemLabel="Sí" itemValue="Y" />
+            <f:selectItem itemLabel="No" itemValue="N" />
+          </p:selectOneRadio>
+
+        </h:panelGrid>
+        <p:separator styleClass="separadorBorder" /> 
+        <div class="centrado">
+          <p:commandButton value="Actualizar información"                                      
+                           action="#{cuIv01GestionarInvestigadoresFaces.actualizarInformacionPersonaSIAT}" 
+                           update=":tabView:tabInformacionBasica"/>
+        </div>
+        <br />
+        <ui:include src="includeVistaFormaciones.xhtml"/>
+        <br />
+        <p:separator styleClass="separadorBorder" /> 
+        <div class="centrado">
+
+          <p:commandButton value="#{properties.value('cu_iv_01_lbl_btn_new_investigador')}"                                      
+                           immediate="true"
+                           action="#{cuIv01GestionarInvestigadoresFaces.nuevoInvestigador}" 
+                           update=":tabView:formInformacionBasicaIv :tabView"/>
+        </div>
+
+      </h:panelGroup>
+
+      <h:panelGroup rendered="#{!cuIv01GestionarInvestigadoresFaces.esFuncionario}">
+        <h:panelGrid id="panelgridInformacionBasicaIv" columns="2" style="width: 100%" 
+                     rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                     columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">            
+
+          <h:outputLabel value="#{properties.value('cu_iv_01_lbl_departamento_investigador')}" 
+                         styleClass="gris negrilla" for="selectDeptoIdentificacion"/>
+          <h:selectOneMenu value="#{cuIv01GestionarInvestigadoresFaces.departamentoExpedicion}" id="selectDeptoIdentificacion" styleClass="gris">  
+            <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+            <f:selectItems value="#{cuIv01GestionarInvestigadoresFaces.listaItemsDepartamentos}" />
+            <p:ajax event="change" update="@this selectCiudadIdentificacion" 
+                    listener="#{cuIv01GestionarInvestigadoresFaces.obtenerCiudadesPorDeptoExp}"/>
+          </h:selectOneMenu>
+
+          <h:outputLabel value="#{properties.value('cu_iv_01_lbl_ciudad_investigador')}" 
+                         styleClass="gris negrilla" for="selectCiudadIdentificacion"    />
+          <h:selectOneMenu value="#{cuIv01GestionarInvestigadoresFaces.ciudadExpedicion}" id="selectCiudadIdentificacion" styleClass="gris">  
+            <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+            <f:selectItems value="#{cuIv01GestionarInvestigadoresFaces.listaItemsCiudades}" />
+          </h:selectOneMenu>
+
+          <h:outputLabel value="#{properties.value('cu_iv_01_lbl_nombre_investigador')}" 
+                         styleClass="gris negrilla" for="inputNombreInvestigador"/>
+          <p:inputText id="inputNombreInvestigador" required="true"
+                       value="#{cuIv01GestionarInvestigadoresFaces.nombreInvestigador}"
+                       maxlength="100" style="width: 99%"/>
+
+          <h:outputLabel value="#{properties.value('cu_iv_01_lbl_apellidos_investigador')}" 
+                         styleClass="gris negrilla" for="inputApellidosInvestigador"/>
+          <p:inputText id="inputApellidosInvestigador" required="true"
+                       value="#{cuIv01GestionarInvestigadoresFaces.apellidosInvestigador}"
+                       maxlength="100" style="width: 99%"/>
+
+          <h:outputLabel value="#{properties.value('cu_iv_01_lbl_correo_investigador')}" 
+                         styleClass="gris negrilla" for="inputCorreoInvestigador"/>
+          <p:inputText id="inputCorreoInvestigador" required="true"
+                       value="#{cuIv01GestionarInvestigadoresFaces.correoInvestigador}"
+                       maxlength="100" style="width: 50%"/>
+
+          <h:outputLabel value="#{properties.value('cu_iv_01_lbl_telefono_investigador')}" 
+                         styleClass="gris negrilla" for="inputTelefonoInvestigador"/>
+          <p:inputText id="inputTelefonoInvestigador" required="true"
+                       value="#{cuIv01GestionarInvestigadoresFaces.telefonoInvestigador}"
+                       maxlength="20"/>
+
+          <h:outputLabel value="#{properties.value('cu_iv_01_lbl_direccion_investigador')}" 
+                         styleClass="gris negrilla" for="textAreaDireccionInvestigador"/>
+          <h:panelGroup>
+            <p:inputTextarea value="#{cuIv01GestionarInvestigadoresFaces.direccionInvestigador}"
+                             id="textAreaDireccionInvestigador" styleClass="textareaMaximo"
+                             maxlength="256" counter="contadorDireccionInvestigador"
+                             counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                             required="true"  autoResize="false" cols="100" rows="3">
+              <f:validateLength minimum="1"  maximum="256" />
+            </p:inputTextarea>
+            <h:outputText id="contadorDireccionInvestigador" styleClass="gris" />
+          </h:panelGroup>
+
+          <h:outputLabel value="#{properties.value('cu_iv_01_lbl_departamento_residencia_iv')}" 
+                         styleClass="gris negrilla" for="selectDeptoResidencia"/>
+          <h:selectOneMenu value="#{cuIv01GestionarInvestigadoresFaces.departamentoResidencia}" styleClass="gris" required="true" id="selectDeptoResidencia">  
+            <f:selectItem itemLabel="-- Seleccione --"/>
+            <f:selectItems value="#{cuIv01GestionarInvestigadoresFaces.listaItemsDeptosResidencia}" />
+            <p:ajax event="change" update="@this selectCiudadResidencia" 
+                    listener="#{cuIv01GestionarInvestigadoresFaces.obtenerCiudadesPorDeptoRes}"/>
+          </h:selectOneMenu>
+
+          <h:outputLabel value="#{properties.value('cu_iv_01_lbl_ciudad_residencia_iv')}" 
+                         styleClass="gris negrilla" for="selectCiudadResidencia"    />
+          <h:selectOneMenu value="#{cuIv01GestionarInvestigadoresFaces.ciudadResidencia}" styleClass="gris" required="true" id="selectCiudadResidencia">  
+            <f:selectItem itemLabel="-- Seleccione --" />
+            <f:selectItems value="#{cuIv01GestionarInvestigadoresFaces.listaItemsCiudadesRes}" />
+          </h:selectOneMenu>
+
+          <h:outputLabel value="#{properties.value('cu_iv_01_lbl_profesor_policial')}" 
+                         styleClass="gris negrilla" />
+          <p:selectOneRadio id="radioProfesorPolicial" value="#{cuIv01GestionarInvestigadoresFaces.profesorPolicial}">
+            <f:selectItem itemLabel="Sí" itemValue="Si" />
+            <f:selectItem itemLabel="No" itemValue="No" />
+          </p:selectOneRadio>
+
+          <h:outputLabel value="#{properties.value('cu_iv_01_lbl_tipo_vinculacion')}" 
+                         styleClass="gris negrilla" for="selectTipoVinculacion"    />
+          <h:selectOneMenu id="selectTipoVinculacion" required="true" styleClass="gris"
+                           value="#{cuIv01GestionarInvestigadoresFaces.tipoVinculacion}">  
+            <f:selectItem itemLabel="-- Seleccione --" />
+            <f:selectItems value="#{cuIv01GestionarInvestigadoresFaces.listaItemsTiposVinculacion}" />
+          </h:selectOneMenu>
+
+          <h:outputLabel value="#{properties.value('cu_iv_01_lbl_funciones_investigador')}" 
+                         styleClass="gris negrilla" for="textAreaFuncionesInvestigador"/>
+          <h:panelGroup>
+            <p:inputTextarea value="#{cuIv01GestionarInvestigadoresFaces.funcionesInvestigador}"
+                             id="textAreaFuncionesInvestigador" styleClass="textareaMaximo"
+                             maxlength="512" counter="contadorFuncionesInvestigador"
+                             counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                             required="true" autoResize="false" cols="100" rows="3"
+                             >
+              <f:validateLength minimum="1"  maximum="512" />
+            </p:inputTextarea>
+            <h:outputText id="contadorFuncionesInvestigador" styleClass="gris" />
+          </h:panelGroup>
+
+        </h:panelGrid>
+        <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+
+        <p:separator styleClass="separadorBorder" rendered="#{cuIv01GestionarInvestigadoresFaces.existeInvestigador}" /> 
+
+        <p:panel header="Niveles de formación">
+
+          <h:panelGrid id="panelgridInformacionBasicaIv2" columns="2" style="width: 100%" 
+                       rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                       columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento"
+                       rendered="#{cuIv01GestionarInvestigadoresFaces.existeInvestigador}">
+            <h:outputLabel value="#{properties.value('cu_iv_01_lbl_nivel_formacion_investigador')}" 
+                           styleClass="gris negrilla" for="textAreaFuncionesInvestigador"/>
+            <p:selectOneListbox id="basic" value="#{cuIv01GestionarInvestigadoresFaces.nivelFormacion}"
+                                required="#{cuIv01GestionarInvestigadoresFaces.formacionRequerida}">  
+              <f:selectItems value="#{cuIv01GestionarInvestigadoresFaces.listaItemsNivelesFormacion}" />
+            </p:selectOneListbox>  
+
+            <h:outputLabel value="#{properties.value('cu_iv_01_lbl_area_saber_investigador')}" 
+                           styleClass="gris negrilla" for="selectAreaSaber"    />
+            <h:selectOneMenu value="#{cuIv01GestionarInvestigadoresFaces.areaSaber}" id="selectAreaSaber" styleClass="gris">  
+              <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+              <f:selectItems value="#{cuIv01GestionarInvestigadoresFaces.listaItemsAreaSaber}" />
+            </h:selectOneMenu>
+
+            <h:outputLabel value="#{properties.value('cu_iv_01_lbl_titulo_obtenido')}" 
+                           styleClass="gris negrilla" for="textAreaFuncionesInvestigador"/>
+            <p:inputText id="inputTituloObtenido" required="#{cuIv01GestionarInvestigadoresFaces.formacionRequerida}"
+                         value="#{cuIv01GestionarInvestigadoresFaces.tituloObtenido}"
+                         maxlength="100" style="width: 99%"/>
+
+            <h:outputLabel value="#{properties.value('cu_iv_01_lbl_fecha_finalizacion')}" 
+                           styleClass="gris negrilla" for="calendarFechaFinalizacion"/>
+            <p:calendar value="#{cuIv01GestionarInvestigadoresFaces.fechaFinalizacion}" 
+                        id="calendarFechaFinalizacion" showOn="button" navigator="true"
+                        readonlyInput="false" pattern="dd/MM/yyyy" locale="es"
+                        maxdate="#{cuIv01GestionarInvestigadoresFaces.fechaActual}"
+                        yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" />
+
+          </h:panelGrid>
+          <br/>
+
+          <div class="centrado">
+            <p:commandButton value="#{properties.value('cu_iv_01_lbl_btn_add_formacion')}" 
+                             action="#{cuIv01GestionarInvestigadoresFaces.agregarFormacionInvestigador}" 
+                             update="@form"
+                             rendered="#{cuIv01GestionarInvestigadoresFaces.existeInvestigador}"/>
+          </div>
+          <br/>
+          <p:dataTable var="formacion" value="#{cuIv01GestionarInvestigadoresFaces.listaFormacionesInvestigador}"
+                       rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                       rendered="#{cuIv01GestionarInvestigadoresFaces.existeInvestigador}"
+                       id="tablaFormacion"
+                       emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                       style="width: 100%;" paginator="true"
+                       resizableColumns="true" rowIndexVar="idFila"
+                       paginatorPosition="bottom" 
+                       rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+            <p:column headerText="#{properties.value('cu_iv_01_lbl_column_numero')}" width="25">
+              <h:outputText value="#{idFila + 1}" />
+            </p:column>
+            <p:column headerText="#{properties.value('cu_iv_01_lbl_column_titulo_obtenido')}" >
+              <h:outputText value="#{formacion.tituloObtenido}" />
+            </p:column>
+            <p:column headerText="#{properties.value('cu_iv_01_lbl_column_nivel_formacion')}" width="100" >
+              <h:outputText value="#{formacion.nivelFormacion.valor}" />
+            </p:column>
+            <p:column headerText="#{properties.value('cu_iv_01_lbl_column_area_saber')}" width="150" >
+              <h:outputText value="#{formacion.areaSaber.valor}" />
+            </p:column>
+            <p:column headerText="#{properties.value('cu_iv_01_lbl_column_fecha_finalizacion')}" width="100" >
+              <h:outputText value="#{formacion.fechaFinalizacion}" >
+                <f:convertDateTime pattern="dd/MM/yyyy" type="date"/>
+              </h:outputText>
+            </p:column>
+            <f:facet name="footer">  
+              #{fn:length( cuIv01GestionarInvestigadoresFaces.listaFormacionesInvestigador)} #{properties.value('general_mensaje_footer_datatable_count')}
+            </f:facet>
+          </p:dataTable>
+
+        </p:panel>
+
+        <br/>
+        <p:separator styleClass="separadorBorder" /> 
+        <div class="centrado">
+          <p:commandButton value="#{properties.value('cu_iv_01_lbl_btn_guardar_investigador')}" 
+                           actionListener="#{cuIv01GestionarInvestigadoresFaces.guardarInformacionInvestigador}" 
+                           update=":tabView @form" process="@form"/>
+
+          <p:commandButton value="#{properties.value('cu_iv_01_lbl_btn_new_investigador')}" 
+                           rendered="#{cuIv01GestionarInvestigadoresFaces.mostrarBotonGuardar}"
+                           action="#{cuIv01GestionarInvestigadoresFaces.nuevoInvestigador}" 
+                           immediate="true"
+                           update=":tabView:formInformacionBasicaIv :tabView"/>
+        </div>
+
+      </h:panelGroup>
+
+    </h:panelGroup>
+  </h:form>
+</html>
+

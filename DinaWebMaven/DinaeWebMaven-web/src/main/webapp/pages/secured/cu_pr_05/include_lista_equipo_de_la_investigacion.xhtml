@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+
+    <p:dataTable var="equipo" value="#{registrarPresupuesto.listaEquiposInvestigacionModel}"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                 id="tablaEquiposInvestigacion" selectionMode="single"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                 selection="#{registrarPresupuesto.equipo}"
+                 style="width: 100%;" paginator="true"
+                 resizableColumns="true" rowIndexVar="idFila"
+                 paginatorPosition="bottom"
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+        <p:ajax event="rowSelect" listener="#{registrarPresupuesto.cargarDatosEquipo}"   
+                update=":tabView:formEquiposInvestigacion"/>
+
+        <p:ajax event="rowUnselect" listener="#{registrarPresupuesto.noSeleccionEquipos}" 
+                update=":tabView:formEquiposInvestigacion:tablaEquiposInvestigacion"/>  
+
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_column_numero')}" width="15" style="color: white">
+            <h:outputText value="#{idFila + 1}" styleClass="gris" />
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_column_nombre_equipo')}" style="color: white">
+            <h:outputText value="#{equipo.nombreEquipo}" styleClass="alineadoIzquierda gris" />
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_column_especificaciones')}" style="color: white">
+            <h:outputText value="#{equipo.especificaciones}" styleClass="alineadoIzquierda gris" />
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_column_origen')}" width="90" style="color: white">
+            <h:outputText value="#{equipo.origen.valor}" styleClass="gris" />
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_column_valor')}" width="100" style="color: white">
+            <h:outputText value="#{equipo.valor}" styleClass="alineadoDerecha gris">                    
+                <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" />
+            </h:outputText>            
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_column_fuente_financiera')}" width="80" style="color: white">
+            <h:outputText value="#{equipo.fuenteProyecto.nombreFuente}" styleClass="gris" />
+        </p:column>
+        <p:column width="80" headerText="#{properties.value('cu_pr_19_lbl_tabla_acciones')}" style="color: white">
+
+            <h:panelGroup>
+
+                <p:commandLink value="#{bundle['commons.btn.remove']}" 
+                               title="#{bundle['commons.btn.remove']}" 
+                               actionListener="#{registrarPresupuesto.eliminarEquipoInvestigacion}"
+                               immediate="true"
+                               process="@this"
+                               update=":tabView:formEquiposInvestigacion:tablaEquiposInvestigacion">
+                    <f:setPropertyActionListener value="#{equipo}" target="#{registrarPresupuesto.equipo}"/>
+                    <p:confirm 
+                        header="#{bundle['commons.cfmdlg.header']}" 
+                        message="#{bundle['commons.cfmdlg.remove.message']}" 
+                        icon="ui-icon-alert" />
+                </p:commandLink>              
+          </h:panelGroup>
+
+        </p:column>
+        <f:facet name="footer">  
+            #{fn:length( registrarPresupuesto.listaEquiposInvestigacion )} #{properties.value('general_mensaje_footer_datatable_count')}
+        </f:facet>
+    </p:dataTable>
+
+</html>
+

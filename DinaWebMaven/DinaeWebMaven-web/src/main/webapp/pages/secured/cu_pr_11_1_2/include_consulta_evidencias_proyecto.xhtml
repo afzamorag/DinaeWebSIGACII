@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"      
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"> 
+
+
+  <h:form id="forminclude_consulta_evidencias_proyecto" >
+    <br />
+    <p:dataTable id="idDataTableDatos" var="_dato"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 value="#{cuPr11ConsultarDetalleCompromisoFaces.listaEvidenciaProyectoDTO}" 
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rowIndexVar="idFila" paginatorPosition="bottom" 
+                 resizableColumns="true"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true">
+
+      <p:column width="20" headerText="#{properties.value('cu_pr_7_lbl_tab_actividesde_realizada_num')}">  
+                #{ idFila + 1}
+      </p:column>  
+
+      <p:column width="70" headerText="#{properties.value('cu_pr_7_lbl_evidencia_tipoarchivo')}">  
+        #{_dato.nombreTipoArchivo}
+      </p:column>
+
+      <p:column headerText="#{properties.value('cu_pr_7_lbl_evidencia_descripcion_archivo')}">  
+        #{_dato.descripcion}
+      </p:column>
+
+      <p:column width="250" headerText="#{properties.value('cu_pr_7_lbl_evidencia_archivo_soporte')}">  
+        <p:commandLink ajax="false" immediate="true" id="idCommanLinkDescargaArchivo" >
+          <h:outputLabel value="#{_dato.nombreArchivo}" />
+          <f:setPropertyActionListener value="#{_dato}" target="#{cuPr11ConsultarDetalleCompromisoFaces.evidenciaProyectoDTODescargarSeleccionado}" />  
+          <p:fileDownload value="#{cuPr11ConsultarDetalleCompromisoFaces.downloadContentProperty}" />
+        </p:commandLink>
+      </p:column>
+
+      <f:facet name="footer">  
+        #{fn:length( cuPr11ConsultarDetalleCompromisoFaces.listaEvidenciaProyectoDTO )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable>
+  </h:form>     
+</html>

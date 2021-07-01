@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <div class="fixed-menu">
+    <div class="right-col">
+      <h2>
+        #{properties.value('cu_pr_24_lbl_titulo_unidades_no_han_presentado')}
+      </h2>
+    </div>
+  </div> 
+
+  <h:panelGrid id="pgBusquedaComboSeleccionUnidadPolicial" columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar"  >
+
+
+    <h:outputLabel for="idcu_pr_24_lbl_subtui_busqueda_unidades_no_prese_tipoproyecto" value="#{properties.value('cu_pr_24_lbl_subtui_busqueda_unidades_no_prese_tipoproyecto')}:" styleClass="gris negrilla"/>
+    <p:selectOneRadio id="idcu_pr_24_lbl_subtui_busqueda_unidades_no_prese_tipoproyecto" styleClass="gris"
+                      value="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.idListaItemTiposProyectosSeleccionado}" required="true" >               
+      <f:selectItems value="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.listaItemTiposProyectos}" var="_item" />  
+      <p:ajax update="pgBusquedaComboSeleccionUnidadPolicial" listener="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.handleFiltroBusquedaTipoProyectoChange}" />
+    </p:selectOneRadio>
+
+    <h:outputLabel rendered="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.mostrarFiltroBusquedaAnio}" 
+                   for="idcu_pr_24_lbl_subtui_busqueda_unidades_no_prese_anio" value="#{properties.value('cu_pr_24_lbl_subtui_busqueda_unidades_no_prese_anio')}:" styleClass="gris negrilla"/>
+    <h:selectOneMenu rendered="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.mostrarFiltroBusquedaAnio}" 
+                     id="idcu_pr_24_lbl_subtui_busqueda_unidades_no_prese_anio" class="gris"
+                     value="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.idListaItemAnioSeleccionado}" required="false" >  
+      <f:selectItem itemLabel="--Todos--" itemValue="" />  
+      <f:selectItems value="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.listaItemAnio}" var="_item" />  
+      <p:ajax update="pgBusquedaComboSeleccionUnidadPolicial" listener="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.handleFiltroBusquedaTipoCompromisoPorAnioChange}" />
+    </h:selectOneMenu>
+
+    <h:outputLabel rendered="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.mostrarFiltroBusquedaConvocatoria}"
+                   for="idcu_pr_24_lbl_subtui_busqueda_unidades_no_prese_convocatoria" value="#{properties.value('cu_pr_24_lbl_subtui_busqueda_unidades_no_prese_convocatoria')}:" styleClass="gris negrilla"/>
+    <h:selectOneMenu rendered="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.mostrarFiltroBusquedaConvocatoria}"
+                     id="idcu_pr_24_lbl_subtui_busqueda_unidades_no_prese_convocatoria" class="gris"
+                     value="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.idListaItemConvocatoriasSeleccionado}" required="false" >  
+      <f:selectItem itemLabel="--Todos--" itemValue="" />  
+      <f:selectItems value="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.listaItemConvocatorias}" var="_item" />  
+      <p:ajax update="pgBusquedaComboSeleccionUnidadPolicial" listener="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.handleFiltroBusquedaTipoCompromisoPorConvocatoriaChange}" />
+    </h:selectOneMenu>
+
+    <h:outputLabel rendered="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.mostrarFiltroBusquedaTipoCompromiso}" 
+                   for="idcu_pr_24_lbl_subtui_busqueda_unidades_no_prese_tipocompromiso" value="#{properties.value('cu_pr_24_lbl_subtui_busqueda_unidades_no_prese_tipocompromiso')}:" styleClass="gris negrilla"/>
+    <h:selectOneMenu rendered="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.mostrarFiltroBusquedaTipoCompromiso}" 
+                     id="idcu_pr_24_lbl_subtui_busqueda_unidades_no_prese_tipocompromiso" class="gris"
+                     value="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.idListaItemTipoCompromisoSeleccionado}" required="false" >  
+      <f:selectItem itemLabel="--Todos--" itemValue="" />  
+      <f:selectItems value="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.listaItemTipoCompromiso}" var="_item" />  
+    </h:selectOneMenu>
+
+    <h:outputLabel value="#{properties.value('cu_pr_24_lbl_subtui_busqueda_unidades_no_prese_fechaconsulta')}:" styleClass="gris negrilla"/>
+    <h:outputLabel value="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.fechaConsulta}" styleClass="gris">
+      <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+    </h:outputLabel> 
+  </h:panelGrid>
+
+  <br />
+  <div class="centrado">
+    <p:commandButton value="#{properties.value('cu_pr_24_lbl_subtui_busqueda_unidades_no_prese_btn_buscar')}"
+                     update="idDataTableUnidadesNoPresentanPropues"
+                     action="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.buscarUnidadesFuncionalesNoPresentanCompromisos}" />
+  </div>
+  <br />
+  <h:outputLabel value="#{properties.value('cu_pr_24_lbl_unidades_con_incumplimiento')}:" styleClass="green negrilla"/>
+  <br />
+  <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}"  
+               id="idDataTableUnidadesNoPresentanPropues" var="_unidadcompromiso" styleClass="tabla"
+               value="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.listadoUnidadesNoSeHanPresentadoCompromiso}" 
+               paginatorPosition="bottom" rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+               rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+               resizableColumns="true"
+               paginator="true"  rowIndexVar="idFila">
+
+    <p:column width="30" headerText="#{properties.value('cu_ne_6_lbl_numero')}">
+      <h:outputText value="#{idFila + 1}" />  
+    </p:column>
+
+    <p:column headerText="#{properties.value('cu_ne_6_lbl_unidad_policial')}">  
+      <h:outputText value="#{_unidadcompromiso.nombreUnidadPolicial}" />  
+    </p:column>  
+
+    <p:column headerText="#{properties.value('cu_pr_25_lbl_datatable_titulo_proyec')}">  
+      <h:outputText value="#{_unidadcompromiso.tituloProyecto}" />  
+    </p:column>  
+
+    <p:column headerText="#{properties.value('cu_pr_6_lbl_datatable_nombre_compro')}">  
+      <h:outputText value="#{_unidadcompromiso.compromiso}" />  
+    </p:column>  
+
+    <p:column headerText="#{properties.value('cu_pr_24_lbl_datatable_fechalimite_gnr')}">  
+      <h:outputLabel value="#{_unidadcompromiso.fechaLimieGeneral}" styleClass="gris">
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+      </h:outputLabel> 
+    </p:column>  
+
+    <p:column headerText="#{properties.value('cu_pr_24_lbl_datatable_fechalimite_otorgada')}">  
+      <h:outputLabel value="#{_unidadcompromiso.fechaLimieOtorgada}" styleClass="gris">
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+      </h:outputLabel> 
+    </p:column>  
+
+    <f:facet name="footer">  
+      #{fn:length( cuPr24RevisarCompromisoEnviadosPorJefeUnidad.listadoUnidadesNoSeHanPresentadoCompromiso )} #{properties.value('general_mensaje_footer_datatable_count')}
+    </f:facet>
+
+  </p:dataTable> 
+
+</html>

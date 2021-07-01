@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+  <h:form>
+    <br />
+    <h:panelGroup id="id_cu_tr_01_panel_evaluacion_trabajo_de_grado">
+
+      <br/>   
+
+      <h:panelGrid columns="2">
+
+        <h:outputLabel value="#{properties.value('cu_tr_01_lbl_fecha_sustentacion_trabajo_de_grado')}" 
+                       styleClass="gris negrilla" />
+        <h:outputLabel value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.fechaSustentacionTrabajoDeGrado}" styleClass="gris">
+          <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+        </h:outputLabel>                
+
+        <h:outputLabel value="#{properties.value('cu_tr_01_lbl_nota_de_trabajo')}" styleClass="gris negrilla"/>
+        <h:outputLabel value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.notaTrabajoDeGrado}" styleClass="gris" >
+          <f:convertNumber maxIntegerDigits="2" minIntegerDigits="1" minFractionDigits="2" maxFractionDigits="2"/>
+        </h:outputLabel>                
+
+        <h:outputLabel value="#{properties.value('cu_tr_01_lbl_nota_sustentacion_de_trabajo')}" styleClass="gris negrilla"/>            
+        <h:outputLabel value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.notaSustentacionTrabajoDeGrado}" styleClass="gris" >
+          <f:convertNumber maxIntegerDigits="2" minIntegerDigits="1" minFractionDigits="2" maxFractionDigits="2"/>
+        </h:outputLabel>                
+
+        <h:outputLabel value="#{properties.value('cu_tr_01_lbl_nota_final_de_trabajo')}" styleClass="gris negrilla"/>
+        <h:outputLabel value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.notaFinalTrabajoDeGrado}" styleClass="gris" >
+          <f:convertNumber maxIntegerDigits="2" minIntegerDigits="1" minFractionDigits="2" maxFractionDigits="2"/>
+        </h:outputLabel>                
+
+      </h:panelGrid>
+      <br/>
+      <h:outputLabel value="#{properties.value('cu_tr_01_lbl_evaluadores')}" 
+                     styleClass="gris negrilla" />           
+
+    </h:panelGroup>
+
+    <p:dataTable var="_evaluadores"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.listaEvaluadoresTrabajoDeGrado}" 
+                 rowStyleClass="#{idFilaInves % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rowIndexVar="idFilaEval" paginatorPosition="bottom" 
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true">
+
+      <p:column headerText="#{properties.value('cu_tr_0_lbl_tabla_evaluadores_identificacion')}">  
+        <h:outputLabel value="#{_evaluadores.identificacion}" />  
+      </p:column> 
+      <p:column headerText="#{properties.value('cu_tr_0_lbl_tabla_evaluadores_grado')}">  
+        <h:outputLabel value="#{_evaluadores.grado}"  />  
+      </p:column>
+      <p:column headerText="#{properties.value('cu_tr_0_lbl_tabla_evaluadores_nombre_completo')}">  
+        <h:outputLabel value="#{_evaluadores.nombreCompleto}"  />  
+      </p:column>
+      <p:column headerText="#{properties.value('cu_tr_0_lbl_tabla_evaluadores_correo')}">  
+        <h:outputLabel value="#{_evaluadores.correo}"  />  
+      </p:column>
+      <p:column headerText="#{properties.value('cu_tr_0_lbl_tabla_evaluadores_telefono')}">  
+        <h:outputLabel value="#{_evaluadores.telefono}"  />  
+      </p:column>            
+
+      <f:facet name="footer">  
+        #{fn:length( cuTr01IngresarModificarTrabajoDeGradoFaces.listaEvaluadoresTrabajoDeGrado )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+    </p:dataTable>
+
+    <h:panelGroup id="idcu_tr_01_pgroup_include_accion_botones_abajo_evaluacion">
+      <ui:include src="include_consulta_accion_botones_abajo_trabajo_de_grado.xhtml" />
+    </h:panelGroup>
+
+  </h:form>
+
+
+</html>

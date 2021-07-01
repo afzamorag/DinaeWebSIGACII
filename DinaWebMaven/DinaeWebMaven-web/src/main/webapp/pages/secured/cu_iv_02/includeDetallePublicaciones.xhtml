@@ -1,0 +1,153 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+  <h:form id="formPublicaciones" >
+    <br/>
+    <p:dataTable var="publicacion" value="#{cuIv02ConsultarInvestigadores.listaPublicaciones}"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                 id="tablaPublicacionesConsulta" selectionMode="single"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                 selection="#{cuIv02ConsultarInvestigadores.publicacionSeleccionada}"
+                 style="width: 100%;" paginator="true"
+                 resizableColumns="true" rowIndexVar="idFila"
+                 paginatorPosition="bottom" rowKey="#{publicacion.idPublicacionInvestigador}"
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+      <p:ajax event="rowSelect" listener="#{cuIv02ConsultarInvestigadores.seleccionarPublicacionConsultada}"
+              update="@form"/>  
+      <p:column headerText="No." width="25">
+        <h:outputText value="#{idFila + 1}" />
+      </p:column>
+      <p:column headerText="Tipo de publicación" width="100" >
+        <h:outputText value="#{publicacion.tipoPublicacion.valor}" />
+      </p:column>
+      <p:column headerText="Título" >
+        <h:outputText value="#{publicacion.tituloPublicacion}" />
+      </p:column>
+      <p:column headerText="Resumen" >
+        <h:outputText value="#{publicacion.resumenPublicacion}" />
+      </p:column>
+      <p:column headerText="#{properties.value('cu_iv_01_lbl_column_fecha_publicacion')}" width="100" >
+        <h:outputText value="#{publicacion.fechaPublicacion}" >
+          <f:convertDateTime pattern="dd/MM/yyyy" type="date"/>
+        </h:outputText>
+      </p:column>
+      <f:facet name="footer">  
+        #{fn:length( cuIv02ConsultarInvestigadores.listaPublicaciones)} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+    </p:dataTable>
+    <br />
+    <h:panelGrid id="panelgridPublicaciones" columns="2" style="width: 100%" 
+                 rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento"
+                 rendered="#{cuIv02ConsultarInvestigadores.mostrarDetallesPublicacion}">
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_tipo_publicacion')}" 
+                     styleClass="gris negrilla" for="outputTipoPublicacion"/>
+      <h:outputText value="#{cuIv02ConsultarInvestigadores.publicacionSeleccionada.tipoPublicacion.valor}" 
+                    id="outputTipoPublicacion" styleClass="gris"/>  
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_titulo_publicacion')}" 
+                     styleClass="gris negrilla" for="outputTituloPublicacion"/>
+      <h:outputText value="#{cuIv02ConsultarInvestigadores.publicacionSeleccionada.tituloPublicacion}"
+                    id="outputTituloPublicacion" styleClass="gris"/>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_resumen_publicacion')}" 
+                     styleClass="gris negrilla" for="outputResumenPublicacion"/>
+      <h:outputText value="#{cuIv02ConsultarInvestigadores.publicacionSeleccionada.resumenPublicacion}"
+                    id="outputResumenPublicacion" styleClass="gris"/>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_fecha_publicacion')}" 
+                     styleClass="gris negrilla" for="outputFechaPublicacion"
+                     rendered="#{cuIv02ConsultarInvestigadores.mostrarCuandoEsOtro}"/>
+      <h:outputText value="#{cuIv02ConsultarInvestigadores.publicacionSeleccionada.fechaPublicacion}" 
+                    id="outputFechaPublicacion" 
+                    rendered="#{cuIv02ConsultarInvestigadores.mostrarCuandoEsOtro}">
+        <f:convertDateTime pattern="dd/MM/yyyy" type="date"/>
+      </h:outputText>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_pais_publicacion')}" 
+                     styleClass="gris negrilla" for="outputPaisPublicacion"    
+                     rendered="#{cuIv02ConsultarInvestigadores.mostrarCuandoEsOtro}"/>
+      <h:outputText value="#{cuIv02ConsultarInvestigadores.publicacionSeleccionada.nombrePaisPublicacion}" 
+                    id="outputPaisPublicacion"
+                    rendered="#{cuIv02ConsultarInvestigadores.mostrarCuandoEsOtro}"/>  
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_codigo_ISSN_publicacion')}" 
+                     styleClass="gris negrilla" for="outputcodigoISSN"
+                     rendered="#{cuIv02ConsultarInvestigadores.mostrarCuandoEsRevista}"/>
+      <h:outputText id="outputcodigoISSN"
+                    value="#{cuIv02ConsultarInvestigadores.publicacionSeleccionada.codigoIssn}" 
+                    rendered="#{cuIv02ConsultarInvestigadores.mostrarCuandoEsRevista}"/>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_nombre_publicacion')}" 
+                     styleClass="gris negrilla" for="outputNombreRevista"
+                     rendered="#{cuIv02ConsultarInvestigadores.mostrarCuandoEsRevista}"/>
+      <h:outputText id="outputNombreRevista"
+                    value="#{cuIv02ConsultarInvestigadores.publicacionSeleccionada.nombreRevista}" 
+                    rendered="#{cuIv02ConsultarInvestigadores.mostrarCuandoEsRevista}"/>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_volumen_publicacion')}" 
+                     styleClass="gris negrilla" for="outputVolumenRevista"
+                     rendered="#{cuIv02ConsultarInvestigadores.mostrarCuandoEsRevista}"/>
+      <h:outputText id="outputVolumenRevista"
+                    value="#{cuIv02ConsultarInvestigadores.publicacionSeleccionada.volumenRevista}" 
+                    rendered="#{cuIv02ConsultarInvestigadores.mostrarCuandoEsRevista}"/>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_fasciculo_publicacion')}" 
+                     styleClass="gris negrilla" for="outputFasciculoRevista"
+                     rendered="#{cuIv02ConsultarInvestigadores.mostrarCuandoEsRevista}"/>
+      <h:outputText id="outputFasciculoRevista"
+                    value="#{cuIv02ConsultarInvestigadores.publicacionSeleccionada.fasciculoRevista}" 
+                    rendered="#{cuIv02ConsultarInvestigadores.mostrarCuandoEsRevista}"/>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_serie_publicacion')}" 
+                     styleClass="gris negrilla" for="outputSerieRevista"
+                     rendered="#{cuIv02ConsultarInvestigadores.mostrarCuandoEsRevista}"/>
+      <h:outputText id="outputSerieRevista" 
+                    value="#{cuIv02ConsultarInvestigadores.publicacionSeleccionada.serieRevista}" 
+                    rendered="#{cuIv02ConsultarInvestigadores.mostrarCuandoEsRevista}"/>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_pag_inicio_publicacion')}" 
+                     styleClass="gris negrilla" for="outputPagInicioRevista"
+                     rendered="#{cuIv02ConsultarInvestigadores.mostrarCuandoEsRevista}"/>
+      <h:outputText id="outputPagInicioRevista"
+                    value="#{cuIv02ConsultarInvestigadores.publicacionSeleccionada.paginaInicioRevista}" 
+                    rendered="#{cuIv02ConsultarInvestigadores.mostrarCuandoEsRevista}"/>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_codigo_ISBN_publicacion')}" 
+                     styleClass="gris negrilla" for="outputCodigoISBN"
+                     rendered="#{cuIv02ConsultarInvestigadores.mostrarCuandoEsLibro}"/>
+      <h:outputText id="outputCodigoISBN" 
+                    value="#{cuIv02ConsultarInvestigadores.publicacionSeleccionada.codigoIsbn}" 
+                    rendered="#{cuIv02ConsultarInvestigadores.mostrarCuandoEsLibro}"/>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_nombre_libro')}" 
+                     styleClass="gris negrilla" for="outputNombreLibro"
+                     rendered="#{cuIv02ConsultarInvestigadores.mostrarCuandoEsLibro}"/>
+      <h:outputText id="outputNombreLibro"
+                    value="#{cuIv02ConsultarInvestigadores.publicacionSeleccionada.nombreLibro}" 
+                    rendered="#{cuIv02ConsultarInvestigadores.mostrarCuandoEsLibro}"/>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_editorial')}" 
+                     styleClass="gris negrilla" for="outputEditorialLibro"
+                     rendered="#{cuIv02ConsultarInvestigadores.mostrarCuandoEsLibro}"/>
+      <h:outputText id="outputEditorialLibro"
+                    value="#{cuIv02ConsultarInvestigadores.publicacionSeleccionada.editorialLibro}" 
+                    rendered="#{cuIv02ConsultarInvestigadores.mostrarCuandoEsLibro}"/>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_pag_inicio_libro')}" 
+                     styleClass="gris negrilla" for="outputPagIniciolLibro"
+                     rendered="#{cuIv02ConsultarInvestigadores.mostrarCuandoEsCapituloEnLibro}"/>
+      <h:outputText id="outputPagIniciolLibro"
+                    value="#{cuIv02ConsultarInvestigadores.publicacionSeleccionada.paginaInicioLibro}" 
+                    rendered="#{cuIv02ConsultarInvestigadores.mostrarCuandoEsCapituloEnLibro}"/>
+
+    </h:panelGrid>
+
+  </h:form>
+</html>
+

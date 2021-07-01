@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"> 
+
+  <h:form id="forminclude_consulta_horas_investigacion_proyecto" >
+    <br />
+    <p:dataTable id="idDataTableDatos" var="_dato"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 value="#{cuPr11ConsultarDetalleCompromisoFaces.listaInvestigadorProyectoDTOhorasInvestigacion}" 
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rowIndexVar="idFila" paginatorPosition="bottom" 
+                 resizableColumns="true"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true">
+
+      <p:column width="25" headerText="#{properties.value('cu_pr_7_lbl_horas_investiga_dt_num')}">  
+        <h:outputLabel value="#{ idFila + 1}" />  
+      </p:column>  
+
+      <p:column width="120" headerText="#{properties.value('cu_pr_7_lbl_horas_investiga_dt_tipo_inves')}">  
+        <h:outputLabel value="#{_dato.tipoInvestigador}" />  
+      </p:column>
+
+      <p:column width="100" headerText="#{properties.value('cu_pr_7_lbl_horas_investiga_dt_grado')}">  
+        <h:outputLabel value="#{_dato.grado}" />  
+      </p:column>
+
+      <p:column headerText="#{properties.value('cu_pr_7_lbl_horas_investiga_dt_nombre_y_apellido')}">  
+        <h:outputLabel value="#{_dato.nombreCompleto}" />  
+      </p:column>
+
+      <p:column width="150" headerText="#{properties.value('cu_pr_7_lbl_horas_investiga_dt_unidad_funco')}">  
+        <h:outputLabel value="#{_dato.unidadPolicial}" />  
+      </p:column>
+
+      <p:column width="150" headerText="#{properties.value('cu_pr_7_lbl_horas_investiga_dt_horas_investiga_periodo')}">  
+        <h:outputLabel value="#{_dato.horasInvestigacionTabajadasPeriodo}" />  
+      </p:column>
+
+      <f:facet name="footer">  
+        #{fn:length( cuPr11ConsultarDetalleCompromisoFaces.listaInvestigadorProyectoDTOhorasInvestigacion )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable>
+
+  </h:form>     
+</html>

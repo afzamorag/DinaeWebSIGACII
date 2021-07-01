@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <br />
+    <br />
+    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+    <p:separator styleClass="separadorBorder" /> 
+    <div class="centrado">
+
+        <p:commandButton value="#{properties.value('cu_pr_3_lbl_btn_regresar')}" id="idBtnRegresarProyecto"
+                         action="#{cuPr1ProyectoFaces.regresarCuCo02}"
+                         immediate="true"
+                         rendered="#{cuPr1ProyectoFaces.mostrarBtnRegresar}" />
+
+        <p:commandButton value="#{properties.value('cu_pr_1_lbl_para_mas_informacion_click_btn_guarda')}" id="idBtnModificarProyecto"
+                         action="#{cuPr1ProyectoFaces.guardarProyecto}"
+                         ajax="false"
+                         update="@form" />
+
+        <p:commandButton 
+            value="#{properties.value('cu_pr_1_lbl_para_mas_informacion_click_btn_envia')}" 
+            id="idBtnEnviarProyecto"            
+            oncomplete="PF('varConfirmEnviarPropuestConvocatoria').show()"
+            immediate="true" 
+            ajax="true"
+            rendered="#{cuPr1ProyectoFaces.mostrarBtnEnviar}" />
+
+    </div>
+
+</html>

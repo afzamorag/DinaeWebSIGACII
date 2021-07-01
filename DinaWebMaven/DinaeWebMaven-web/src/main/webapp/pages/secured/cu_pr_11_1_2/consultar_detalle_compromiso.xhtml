@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <body>
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+      <ui:define name="content">
+
+        <h:panelGroup >
+          <div class="fixed-menu">
+            <div class="right-col">
+              <h2>
+                <h:outputLabel value="#{cuPr11ConsultarDetalleCompromisoFaces.lblTituloInforme}" />
+              </h2>
+            </div>
+          </div>       
+        </h:panelGroup>
+        <br />
+        <h:panelGroup rendered="#{cuPr11ConsultarDetalleCompromisoFaces.compromisoInformeAvance}">
+
+          <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                       columnClasses="panelGridColumnaValor_30_porciento,panelGridColumnaValor_70_porciento" id="pginclude_informacion_informe_proyecto">
+
+
+            <h:outputLabel  value="Periodo" styleClass="gris negrilla"/>
+            <h:panelGrid columns="3">
+              <h:outputLabel styleClass="gris" value="#{cuPr11ConsultarDetalleCompromisoFaces.informeAvanceSeleccionado.fechaInicio}">
+                <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+              </h:outputLabel>
+              <h:outputLabel  value=" - " styleClass="gris negrilla"/>
+              <h:outputLabel styleClass="gris" value="#{cuPr11ConsultarDetalleCompromisoFaces.informeAvanceSeleccionado.fechaFinalizacion}">
+                <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+              </h:outputLabel>
+            </h:panelGrid>
+
+            <h:outputLabel  value="Fecha límite del compromiso:" styleClass="gris negrilla"/>
+            <h:outputLabel styleClass="gris" value="#{cuPr11ConsultarDetalleCompromisoFaces.compromisoProyectoSeleccionado.fechaCompromisoCorreccionNumeroIncrementa}">
+              <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+            </h:outputLabel>
+
+            <h:outputLabel  value="Titulo del Proyecto" styleClass="gris negrilla"/>
+            <h:outputLabel value="#{cuPr11ConsultarDetalleCompromisoFaces.proyectoSeleccionado.tituloPropuesto}" styleClass="gris"/>
+
+            <h:outputLabel  value="#{properties.value('cu_pr_11_lbl_codigo_del_proyecto')}" styleClass="gris negrilla"/>
+            <h:outputLabel value="#{cuPr11ConsultarDetalleCompromisoFaces.proyectoSeleccionado.codigoProyecto}" styleClass="gris"/>
+
+          </h:panelGrid>
+          <br />
+          <div class="centrado">
+
+            <h:outputLabel styleClass="green negrilla" value="#{properties.value('cu_pre_1_lbl_unidades_ejecutoras')}"/>
+            <p:dataTable var="_unidadejecutora" paginator="true" 
+                         value="#{cuPr11ConsultarDetalleCompromisoFaces.listaUnidadPolicialEjecutoras}"
+                         rowIndexVar="idFila" paginatorPosition="bottom" 
+                         rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                         emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                         rows="#{properties.value('general_mensaje_filas_datatable_pagina')}">  
+
+              <p:column headerText="#{properties.value('cu_pr_08_lbl_column_unidad_policial')}">  
+                <h:outputLabel value="#{_unidadejecutora.unidadPolicial.nombre}" />  
+              </p:column> 
+
+              <p:column headerText="#{properties.value('cu_pr_1_lbl_datatable_rol')}">  
+                <h:outputLabel value="#{_unidadejecutora.rol.valor}" />  
+              </p:column> 
+
+            </p:dataTable>
+
+          </div>
+          <div class="centrado">
+
+            <h:outputLabel styleClass="green negrilla" value="Investigador principal"/>
+            <p:dataTable var="_investigador" paginator="true" 
+                         value="#{cuPr11ConsultarDetalleCompromisoFaces.listaInvestigadoresProyecto}"
+                         rowIndexVar="idFila" paginatorPosition="bottom" 
+                         rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                         emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                         rows="#{properties.value('general_mensaje_filas_datatable_pagina')}">  
+
+              <p:column headerText="#{properties.value('cu_iv_3_lbl_datatable_jefe_nombres_app')}">  
+                #{_investigador.nombreCompleto}
+              </p:column>
+
+            </p:dataTable>
+
+          </div>
+
+        </h:panelGroup>
+
+        <p:tabView id="tab_detalle_compromisos" activeIndex="#{cuPr11ConsultarDetalleCompromisoFaces.idTabSeleccionado}">
+
+          <p:ajax event="tabChange" listener="#{cuPr11ConsultarDetalleCompromisoFaces.onTabChange}" update="@this @this:panelgridPresupuestoEjecutado" />  
+
+          <p:tab id="itabtabcu_pr_11_lbl_tab_informacion_basica" title="#{properties.value('cu_pr_10_lbl_tab_info_basica')}">
+
+            <h:panelGroup rendered="#{cuPr11ConsultarDetalleCompromisoFaces.compromisoInformeFinal}">
+              <ui:include src="include_informacion_basica.xhtml" />
+            </h:panelGroup>
+            <h:panelGroup rendered="#{cuPr11ConsultarDetalleCompromisoFaces.compromisoInformeAvance}">
+              <ui:include src="include_informacion_proyecto.xhtml" />
+            </h:panelGroup>
+
+          </p:tab>
+
+          <p:tab id="idtabcu_pr_11_lbl_tab_resenia_investigacion" 
+                 rendered="#{cuPr11ConsultarDetalleCompromisoFaces.compromisoInformeFinal}" 
+                 title="#{properties.value('cu_pr_11_lbl_tab_resenia_investigacion')}">
+
+            <h:panelGroup rendered="#{cuPr11ConsultarDetalleCompromisoFaces.compromisoInformeFinal}">
+              <ui:include src="include_resenia_investigacion.xhtml" />
+            </h:panelGroup>                            
+
+          </p:tab>
+
+          <p:tab id="idcu_pr_11_lbl_tab_titulo_actividades_realiza" 
+                 rendered="#{cuPr11ConsultarDetalleCompromisoFaces.compromisoInformeAvance}" 
+                 title="#{properties.value('cu_pr_7_lbl_tab_titulo_actividades_realiza')}" >
+
+            <ui:include src="include_consulta_actividades_realizadas_proyecto.xhtml" />
+          </p:tab>
+
+          <p:tab id="idcu_pr_11_lbl_tab_titulo_resultados_alcanz" 
+                 rendered="#{cuPr11ConsultarDetalleCompromisoFaces.compromisoInformeAvance}" 
+                 title="#{properties.value('cu_pr_7_lbl_tab_titulo_resultados_alcanz')}" >
+            <ui:include src="include_consulta_resultados_alcanzados_proyecto.xhtml" />
+          </p:tab>
+
+          <p:tab id="idcu_pr_11_lbl_tab_titulo_horas_investi" 
+                 rendered="#{cuPr11ConsultarDetalleCompromisoFaces.compromisoInformeAvance}" 
+                 title="#{properties.value('cu_pr_7_lbl_tab_titulo_horas_investi')}" >
+            <ui:include src="include_consulta_horas_investigacion_proyecto.xhtml" />
+          </p:tab>
+
+          <p:tab id="idcu_pr_11_lbl_tab_titulo_presupuesto_ejecu" 
+                 rendered="#{cuPr11ConsultarDetalleCompromisoFaces.compromisoInformeAvance}" 
+                 title="#{properties.value('cu_pr_7_lbl_tab_titulo_presupuesto_ejecu')}" >                        
+
+            <h:panelGrid columns="1" width="100%" rendered="#{cuPr11ConsultarDetalleCompromisoFaces.importPresupuestoPage != null}"
+                         id="panelgridPresupuestoEjecutado">    
+              <p:commandLink value="Ver detalle presupuesto ejecutado" 
+                             immediate="true"
+                             action="#{cuPr11ConsultarDetalleCompromisoFaces.irAvancePresupuestoCuPr14}">  
+                <f:setPropertyActionListener value="#{fuente}" target="#{registrarPresupuesto.fuenteProyectoDTO}" />  
+              </p:commandLink>                            
+            </h:panelGrid>
+            <ui:include src="../include_pantallas_genericas/includePresupuestoGlobalGenerico.xhtml" id="includeTablasPresupuesto" />
+
+          </p:tab>
+
+          <p:tab id="idcu_pr_11_lbl_tab_titulo_indicadores" 
+                 rendered="#{cuPr11ConsultarDetalleCompromisoFaces.compromisoInformeAvance}" 
+                 title="#{properties.value('cu_pr_7_lbl_tab_titulo_indicadores')}" >
+            <ui:include src="include_consulta_agregar_indicadores_proyecto.xhtml" />
+          </p:tab>
+
+          <p:tab id="idcu_pr_11_lbl_tab_titulo_sugerencia" 
+                 rendered="#{cuPr11ConsultarDetalleCompromisoFaces.compromisoInformeAvance}" 
+                 title="#{properties.value('cu_pr_7_lbl_tab_titulo_sugerencia')}" >
+            <ui:include src="include_consulta_sugerencias_proyecto.xhtml" />
+          </p:tab>
+
+          <p:tab id="idcu_pr_11_lbl_tab_titulo_evidencia" 
+                 rendered="#{cuPr11ConsultarDetalleCompromisoFaces.compromisoInformeAvance}" 
+                 title="#{properties.value('cu_pr_7_lbl_tab_titulo_evidencia')}" >
+            <ui:include src="include_consulta_evidencias_proyecto.xhtml" />
+          </p:tab>
+
+        </p:tabView>
+
+        <br />
+        <br />
+
+        <p:separator styleClass="separadorBorder" /> 
+        <div class="centrado">
+
+          <p:commandButton value="#{properties.value('cu_pr_14_lbl_btn_regresar')}" id="idBtnRegresarProyecto"
+                           action="#{cuPr11ConsultarDetalleCompromisoFaces.regresar}"
+                           immediate="true" />
+
+        </div>
+      </ui:define>
+    </ui:composition>
+  </body>
+</html>

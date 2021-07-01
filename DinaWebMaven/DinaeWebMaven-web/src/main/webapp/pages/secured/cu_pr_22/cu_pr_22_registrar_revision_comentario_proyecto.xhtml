@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+      <ui:define name="content">
+
+        <h:form id="idForm_cu_pr_22_registrar_revision_comentario_proyecto">
+
+          <div class="fixed-menu">
+            <div class="right-col">
+              <h2>
+                #{properties.value('cu_pr_22_titulo_comentario')}
+              </h2>
+            </div>
+          </div>
+
+          <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                       columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento" >
+
+            <h:outputLabel value="#{properties.value('cu_pr_22_subtitulo_propuesto')}:" styleClass="gris negrilla"/>
+            <h:outputLabel value="#{cuCo4EvaluarPropuestaConvocatoriaFaces.proyectoDTOSeleccionadoRevisar.tituloPropuesto}" styleClass="gris"/>
+
+            <h:outputLabel for="idcu_pr_22_subtitulo_item" value="#{properties.value('cu_pr_22_subtitulo_item')}:" styleClass="gris negrilla"/>
+            <h:selectOneMenu styleClass="include_listado_propuesta" id="idcu_pr_22_subtitulo_item" class="gris" 
+                             value="#{cuCo4EvaluarPropuestaConvocatoriaFaces.itemComentarioSeleccionado}" required="true" >  
+              <f:selectItem itemLabel="--Todos--" itemValue="" />  
+              <f:selectItems value="#{cuCo4EvaluarPropuestaConvocatoriaFaces.listaItemItemComentario}" var="_item" />  
+            </h:selectOneMenu>
+
+            <h:outputLabel for="idcu_pr_22_subtitulo_comentario" value="#{properties.value('cu_pr_22_subtitulo_comentario')}:" styleClass="gris negrilla"/>
+            <h:panelGrid columns="1">
+              <p:inputTextarea value="#{cuCo4EvaluarPropuestaConvocatoriaFaces.comentarioProyectoSeleccionado.comentario}" 
+                               maxlength="512" required="true" counter="contadorcomentario" id="idcu_pr_22_subtitulo_comentario"
+                               counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}" autoResize="false"
+                               styleClass="textareaMaximo"  title="#{properties.value('cu_pr_22_subtitulo_comentario')}, maximo 512 caracteres"
+                               cols="100" rows="3" >
+                <f:validateLength minimum="1" maximum="512" />
+              </p:inputTextarea>
+              <h:outputText id="contadorcomentario" styleClass="gris" />
+            </h:panelGrid>
+
+          </h:panelGrid>
+          <br />
+          <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+          <p:separator styleClass="separadorBorder" /> 
+          <div class="centrado">
+
+            <p:commandButton value="#{properties.value('cu_pr_22_btn_guardar')}"
+                             action="#{cuCo4EvaluarPropuestaConvocatoriaFaces.guardarComentarioPropuestaEvaluada}" 
+                             update=":idForm_cu_pr_22_registrar_revision_comentario_proyecto" />
+
+            <p:commandButton value="#{properties.value('cu_pr_22_btn_cancela_modifica')}"
+                             rendered="#{cuCo4EvaluarPropuestaConvocatoriaFaces.comentarioProyectoSeleccionado.idComentarioProyecto != null}"
+                             action="#{cuCo4EvaluarPropuestaConvocatoriaFaces.cancelarModificarComentarioPropuestaEvaluada}" 
+                             update=":idForm_cu_pr_22_registrar_revision_comentario_proyecto"
+                             ajax="false" immediate="true" />
+
+          </div>
+          <br />
+          <br />
+          <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}"  
+                       id="idDataTableComentarios" var="_comentario" paginatorPosition="bottom" 
+                       rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true" 
+                       value="#{cuCo4EvaluarPropuestaConvocatoriaFaces.listaComentarioProyecto}" 
+                       rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                       resizableColumns="true"
+                       rowIndexVar="idFila">
+
+            <p:column width="120" headerText="#{properties.value('cu_pr_22_subtitulo_item')}">  
+              #{_comentario.valorItem}
+            </p:column> 
+
+            <p:column headerText="#{properties.value('cu_pr_22_subtitulo_comentario')}">  
+              #{_comentario.comentario}
+            </p:column> 
+
+            <p:column width="120" headerText="#{properties.value('cu_pr_22_nombre_completo_datable_comentario')}">  
+              #{_comentario.nombreCompleto}
+            </p:column>
+
+
+            <p:column width="80" headerText="#{properties.value('cu_pr_22_btn_modificar')}">  
+              <p:commandButton value="#{properties.value('cu_pr_22_btn_modificar')}"
+                               action="#{cuCo4EvaluarPropuestaConvocatoriaFaces.modificarComentarioPropuestaEvaluada( _comentario )}" 
+                               immediate="true"
+                               ajax="false" />
+            </p:column> 
+
+            <p:column width="100" headerText="#{properties.value('cu_pr_22_datatable_comenatrio_enviar')}" rendered="false">  
+              <p:selectBooleanCheckbox value="#{_comentario.enviarComentarioCheck}" immediate="true"
+                                       valueChangeListener="#{cuCo4EvaluarPropuestaConvocatoriaFaces.selecccionarComentarioEnviar}">  
+              </p:selectBooleanCheckbox>
+            </p:column>
+
+          </p:dataTable>
+
+          <br />
+          <br />
+          <p:separator styleClass="separadorBorder" /> 
+          <div class="centrado">
+
+            <p:commandButton value="#{properties.value('cu_co_4_btn_regresar_evaluar')}"
+                             action="#{cuCo4EvaluarPropuestaConvocatoriaFaces.getRegresarDesdeComentario}" 
+                             immediate="true" />
+
+          </div>
+          <br />
+          <br />
+
+        </h:form>
+
+      </ui:define>
+
+    </ui:composition>
+
+  </body>
+</html>

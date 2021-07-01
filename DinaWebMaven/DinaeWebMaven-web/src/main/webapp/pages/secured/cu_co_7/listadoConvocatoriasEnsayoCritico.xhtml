@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+
+  <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+               id="idDataTableConvocatoriasEnsayo" var="_convocatoria" 
+               value="#{cuCo7ConvocatoriasEnsayoCriticoFaces.listaConvocatoriasEnsayoCriticoModel}" 
+               rowIndexVar="idFila" rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+               paginator="true" 
+               resizableColumns="true"
+               rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+               paginatorPosition="bottom" selection="#{cuCo7ConvocatoriasEnsayoCriticoFaces.convocatoriaEnsayoCritico}" 
+               selectionMode="single" >
+
+    <p:ajax event="rowSelect" listener="#{cuCo7ConvocatoriasEnsayoCriticoFaces.enviarPropuestaSeleccionConvocatoriaEnsayo}"/>  
+    <p:ajax event="rowUnselect" listener="#{cuCo7ConvocatoriasEnsayoCriticoFaces.noSeleccionConvocatoria}" 
+            update=":idFormGestionarConvocatoriasEnsayoCritico"/>  
+
+    <p:column width="20" headerText="#{properties.value('cu_co_7_lbl_datatable_numero')}">  
+      #{_convocatoria.concecutivo}  
+    </p:column>
+
+    <p:column width="250" headerText="#{properties.value('cu_co_7_lbl_datatable_nombre_convocatoria')}">
+      #{_convocatoria.nombreConvocatorio}
+    </p:column> 
+
+    <p:column headerText="#{properties.value('cu_co_7_lbl_datatable_desc_convocatoria')}">  
+      #{_convocatoria.descripcion}
+    </p:column>  
+
+    <p:column width="70" headerText="#{properties.value('cu_co_7_lbl_datatable_fecha_limite')}">
+      <h:outputLabel value="#{_convocatoria.fechaFin}">
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+      </h:outputLabel>    
+    </p:column>
+
+    <p:column headerText="Condiciones" width="110">  
+      <p:commandLink ajax="false" immediate="true" id="idCommanLinkDescargaArchivo" 
+                     rendered="#{cuCo7ConvocatoriasEnsayoCriticoFaces.isMostrarLinkDescargaArchivo(_convocatoria.idPeriodo)}">
+        <h:outputLabel value="Ver condiciones" />
+        <p:fileDownload value="#{cuCo7ConvocatoriasEnsayoCriticoFaces.descargarCondicionesConvocatoria(_convocatoria.idPeriodo)}" />
+      </p:commandLink>
+    </p:column>  
+
+    <f:facet name="footer">
+      #{fn:length(cuCo7ConvocatoriasEnsayoCriticoFaces.listaConvocatoriasEnsayoCritico)} #{properties.value('general_mensaje_footer_datatable_count')}
+    </f:facet>
+
+  </p:dataTable> 
+
+</html>

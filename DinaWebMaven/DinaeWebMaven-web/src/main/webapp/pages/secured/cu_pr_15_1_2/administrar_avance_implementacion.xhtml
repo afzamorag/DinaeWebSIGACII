@@ -1,0 +1,171 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+
+      <ui:define name="content">
+
+        <h:form id="form_informacion_general_implementacion" >
+
+          <div class="fixed-menu">
+            <div class="right-col">
+              <h2>
+                #{cuPr15_1_2_AvanceImplemenacionFaces.lblTituloPagina}
+              </h2>
+            </div>
+          </div>
+          <br />
+          <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                       columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+            <h:outputLabel styleClass="green negrilla" value="Periodo del informe" for="id_fechaFin" />
+            <h:panelGrid columns="2" >
+              <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es" 
+                          yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                          navigator="true" required="true" value="#{cuPr15_1_2_AvanceImplemenacionFaces.informeAvanceImplementacion.fechaInicio}" 
+                          id="id_fechaInicio" showOn="button" disabled="true" /> 
+              <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es" 
+                          yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                          navigator="true" required="true" value="#{cuPr15_1_2_AvanceImplemenacionFaces.informeAvanceImplementacion.fechaFin}" 
+                          id="id_fechaFin" showOn="button" /> 
+
+            </h:panelGrid>
+
+          </h:panelGrid>
+
+          <br /><br />
+
+          <p:tabView id="tabViewAvanceImplementacion" orientation="top"  activeIndex="#{cuPr15_1_2_AvanceImplemenacionFaces.idTabSeleccionado}" >  
+
+            <p:ajax event="tabChange" listener="#{cuPr15_1_2_AvanceImplemenacionFaces.onTabChange}" immediate="true" update="@form" />  
+
+            <p:tab title="1. Información general" id="idtabinformacion_general_implementacion">
+              <ui:include src="informacion_general_implementacion.xhtml"></ui:include>
+            </p:tab>
+
+            <p:tab title="#{cuPr15_1_2_AvanceImplemenacionFaces.labelTab2Informe}" id="idtabavance_proceso_implementacion">
+              <ui:include src="avance_proceso_implementacion.xhtml"></ui:include>
+            </p:tab>                                               
+
+            <p:tab title="2.1. Actividades realizadas" id="idtabactividades_realizadas_implementacion">                            
+              <ui:include src="actividades_realizadas_avance_implementacion.xhtml"></ui:include>                                                        
+            </p:tab>
+
+            <p:tab title="3. Tiempo dedicado" id="idtiempo_dedicado_implementacion">
+              <ui:include src="tiempo_dedicado_implementacion.xhtml"></ui:include>
+            </p:tab>
+
+            <p:tab title="4. Presupuesto invertido" id="idtabpresupuesto_implmentacion">
+              <h:panelGrid columns="1" width="100%" rendered="#{cuPr15_1_2_AvanceImplemenacionFaces.importPresupuestoPage != null}">                            
+                <ui:include src="#{cuPr15_1_2_AvanceImplemenacionFaces.importPresupuestoPage}" />
+              </h:panelGrid>   
+
+
+              <div class="centrado">
+                <p:commandLink value="Ingresar avance presupuesto implementación"
+                               immediate="true" process="@this"
+                               action="#{cuPr15_1_2_AvanceImplemenacionFaces.irAvancePresupuestoImplementacion}" />                                  
+                <h:outputLabel value="  |  " />                            
+                <p:commandLink value="Actualizar presupuesto definido para la implementación" 
+                               immediate="true" process="@this"
+                               action="#{cuPr15_1_2_AvanceImplemenacionFaces.irPresupuestoDefinidoImplementacion}" />                                  
+
+              </div>                            
+
+            </p:tab>
+
+            <p:tab title="5. Gestión de Indicadores" id="idtabgestion_indicadores_implementacion">
+              <ui:include src="gestion_indicadores_implementacion.xhtml"></ui:include>
+            </p:tab>
+
+            <p:tab title="6. Información a tener en cuenta" id="idtabinformacion_en_cuenta_implementacion">
+              <ui:include src="informacion_en_cuenta_implementacion.xhtml"></ui:include>
+            </p:tab>
+
+            <p:tab title="7.Ver evidencia fotográfica" id="idtabevidencia_fotografica_implementacion">
+              <ui:include src="evidencia_fotografica_implementacion.xhtml"></ui:include>
+            </p:tab>                        
+
+          </p:tabView>
+
+          <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+          <p:separator styleClass="separadorBorder" /> 
+          <div class="centrado">
+
+            <p:commandButton value="#{properties.value('cu_pr_14_lbl_btn_regresar')}" id="idBtnRegresarProyecto"
+                             action="#{cuPr15_1_2_AvanceImplemenacionFaces.regresar}"
+                             immediate="true" />
+
+            <p:commandButton value="#{properties.value('general_lbl_btn_guardar')}"                                         
+                             actionListener="#{cuPr15_1_2_AvanceImplemenacionFaces.guardarInformacionGeneral}"
+                             process="@this,:form_informacion_general_implementacion:id_fechaFin,
+                             :form_informacion_general_implementacion:tabViewAvanceImplementacion:id_fechaAprobacionComite,
+                             :form_informacion_general_implementacion:tabViewAvanceImplementacion:id_numeroAprobacionComite"
+                             rendered="#{cuPr15_1_2_AvanceImplemenacionFaces.isMostrarBtn('btnGuardarInformacionGeneral') and !cuPr15_1_2_AvanceImplemenacionFaces.accesoSoloConsulta}"
+                             update="@form" />
+
+            <p:commandButton value="#{properties.value('general_lbl_btn_guardar')}" id="btnGuardarTema"
+                             action="#{cuPr15_1_2_AvanceImplemenacionFaces.guardarTemaResultadosObtenidos}"                                          
+                             rendered="#{cuPr15_1_2_AvanceImplemenacionFaces.isMostrarBtn('btnGuardarTemaAvanceProceso') and !cuPr15_1_2_AvanceImplemenacionFaces.accesoSoloConsulta}"
+                             process="@this,:form_informacion_general_implementacion:tabViewAvanceImplementacion:idEditor"
+                             update="@form" />
+
+            <p:commandButton value="#{properties.value('general_lbl_btn_guardar')}" id="btnGuardarTemaInformacionTenerCuenta"
+                             action="#{cuPr15_1_2_AvanceImplemenacionFaces.guardarTemaInformacionTenerCuenta}" 
+                             rendered="#{cuPr15_1_2_AvanceImplemenacionFaces.isMostrarBtn('btnGuardarTemaInformacionTenerCuenta') and !cuPr15_1_2_AvanceImplemenacionFaces.accesoSoloConsulta}"
+                             process="@this,:form_informacion_general_implementacion:tabViewAvanceImplementacion:idEditor_info_cuenta"
+                             update="@form" />
+
+            <p:commandButton value="#{properties.value('general_lbl_btn_guardar')}" id="btnGuardarResultado"
+                             action="#{cuPr15_1_2_AvanceImplemenacionFaces.guardarResultado}"                                          
+                             rendered="#{cuPr15_1_2_AvanceImplemenacionFaces.isMostrarBtn('btnGuardarResultado') and !cuPr15_1_2_AvanceImplemenacionFaces.accesoSoloConsulta}"                                         
+                             process="@this
+                             ,:form_informacion_general_implementacion:tabViewAvanceImplementacion:idEstadoActividadImplSeleccionado
+                             ,:form_informacion_general_implementacion:tabViewAvanceImplementacion:idtabviewestadoactividad:idresultadoActividad
+                             ,:form_informacion_general_implementacion:tabViewAvanceImplementacion:idtabviewestadoactividad:idfechaInicioReal
+                             ,:form_informacion_general_implementacion:tabViewAvanceImplementacion:idtabviewestadoactividad:idfechaFinReal
+                             ,:form_informacion_general_implementacion:tabViewAvanceImplementacion:idtabviewestadoactividad:idporcentajeCumplimiento
+                             ,:form_informacion_general_implementacion:tabViewAvanceImplementacion:idtabviewestadoactividad:idnuevaFechaFin
+                             ,:form_informacion_general_implementacion:tabViewAvanceImplementacion:idtabviewestadoactividad:idjustificacionParcial
+                             ,:form_informacion_general_implementacion:tabViewAvanceImplementacion:idtabviewestadoactividad:idaccionesLogro
+                             ,:form_informacion_general_implementacion:tabViewAvanceImplementacion:idtabviewestadoactividad:idnuevaFechaInicio
+                             ,:form_informacion_general_implementacion:tabViewAvanceImplementacion:idtabviewestadoactividad:idnuevaFechaFinnc"
+                             update="@form" />
+
+            <p:commandButton value="#{properties.value('general_lbl_btn_guardar')}" id="btnGuardarTiempoDedicado"
+                             action="#{cuPr15_1_2_AvanceImplemenacionFaces.guardarTiempoDedicado}" 
+                             rendered="#{cuPr15_1_2_AvanceImplemenacionFaces.isMostrarBtn('btnGuardarTiempoDedicado') and !cuPr15_1_2_AvanceImplemenacionFaces.accesoSoloConsulta}"
+                             process="@this
+                             ,:form_informacion_general_implementacion:tabViewAvanceImplementacion:tablaPersonalImplementacion"
+                             update="@form" />
+            
+            
+             <p:commandButton
+                value="#{properties.value('cu_pr_7_lbl_evidencia_enviar_revision')}"
+                title="#{properties.value('cu_pr_7_lbl_evidencia_enviar_revision')}"                            
+                actionListener="#{cuPr15_1_2_AvanceImplemenacionFaces.enviarInformeAvanceImpl}"
+                rendered="#{!cuPr15_1_2_AvanceImplemenacionFaces.accesoSoloConsulta}"
+                update="@form"
+                style="border: none">
+                <p:confirm 
+                    header="#{bundle['commons.cfmdlg.header']}" 
+                    message="Esta seguro de enviar el informe de avance a VICIN?" 
+                    icon="ui-icon-alert" />            
+            </p:commandButton>             
+
+          </div>
+
+        </h:form>     
+
+      </ui:define>
+
+    </ui:composition>
+  </body>
+</html>

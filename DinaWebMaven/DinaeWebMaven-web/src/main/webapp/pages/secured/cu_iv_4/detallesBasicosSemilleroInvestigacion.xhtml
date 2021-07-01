@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <h:form id="formDetallesBasicosSemilleroInvestigacion" >
+
+    <br />
+
+    <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+      <h:outputLabel value="#{properties.value('cu_iv_3_lbl_tab_infobasica_nombresemillero')}" styleClass="gris negrilla" />
+      <h:outputText value="#{cuIv4ConsultarDetalleSemilleroFaces.semilleroInvestigacion.nombre}" styleClass="gris" />
+
+      <h:outputLabel value="#{properties.value('cu_iv_3_lbl_tab_infobasica_mision')}" styleClass="gris negrilla" />
+      <h:outputText value="#{cuIv4ConsultarDetalleSemilleroFaces.semilleroInvestigacion.misionSemillero}" styleClass="gris" />
+
+      <h:outputLabel value="#{properties.value('cu_iv_3_lbl_tab_infobasica_vision')}" styleClass="gris negrilla" />
+      <h:outputText value="#{cuIv4ConsultarDetalleSemilleroFaces.semilleroInvestigacion.visionSemillero}" styleClass="gris" />
+
+      <h:outputLabel value="#{properties.value('cu_iv_3_lbl_tab_infobasica_obj_general')}" styleClass="gris negrilla" />
+      <h:outputText value="#{cuIv4ConsultarDetalleSemilleroFaces.semilleroInvestigacion.objetivoGeneral}" styleClass="gris" />
+
+      <h:outputLabel value="#{properties.value('cu_iv_3_lbl_tab_infobasica_obj_especi')}" styleClass="gris negrilla" />
+      <h:outputText value="#{cuIv4ConsultarDetalleSemilleroFaces.semilleroInvestigacion.objetivoEspecifico}" styleClass="gris" />           
+
+      <h:outputLabel value="#{properties.value('cu_iv_3_lbl_tab_infobasica_metodologia_trab')}" styleClass="gris negrilla" />
+      <h:outputText value="#{cuIv4ConsultarDetalleSemilleroFaces.semilleroInvestigacion.metodologiaTrabajo}" styleClass="gris" /> 
+
+      <h:outputLabel value="#{properties.value('cu_iv_3_lbl_tab_infobasica_producto_esperado')}" styleClass="gris negrilla" />
+      <h:outputText value="#{cuIv4ConsultarDetalleSemilleroFaces.semilleroInvestigacion.productoOresultado}" styleClass="gris" /> 
+
+      <h:outputLabel value="#{properties.value('cu_iv_3_lbl_tab_infobasica_nombre_red_ndo_pertenece')}" styleClass="gris negrilla" />
+      <h:outputText value="#{cuIv4ConsultarDetalleSemilleroFaces.semilleroInvestigacion.nombreRedNodoPertenece}" styleClass="gris" />      
+
+      <h:outputLabel value="#{properties.value('cu_iv_3_lbl_tab_infobasica_fechainicio')}" styleClass="gris negrilla" /> 
+      <h:outputText value="#{cuIv4ConsultarDetalleSemilleroFaces.semilleroInvestigacion.fechaInicio}" styleClass="gris">
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+      </h:outputText>
+
+      <h:outputLabel value="#{properties.value('cu_iv_3_lbl_tab_infobasica_fechafin')}" styleClass="gris negrilla" /> 
+      <h:outputText value="#{cuIv4ConsultarDetalleSemilleroFaces.semilleroInvestigacion.fechaFin}" styleClass="gris">
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+      </h:outputText>
+
+      <h:outputLabel value="Fecha registro" styleClass="gris negrilla" /> 
+      <h:outputText value="#{cuIv4ConsultarDetalleSemilleroFaces.semilleroInvestigacion.fechaRegistro}" styleClass="gris">
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+      </h:outputText>           
+    </h:panelGrid>             
+  </h:form>
+</html>

@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+
+      <ui:define name="content">
+
+        <div class="fixed-menu">
+          <div class="right-col">
+            <h2>
+              Detalle de proyecto
+            </h2>
+          </div>
+        </div>
+
+        <br />
+
+        <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                     columnClasses="panelGridColumnaValor_30_porciento,panelGridColumnaValor_70_porciento" id="pginclude_informacion_informe_proyecto">
+
+
+          <h:outputLabel  value="#{properties.value('cu_pr_7_lbl_subtitulo_titulo_pro')}" styleClass="green negrilla"/>
+          <h:outputLabel value="#{includeInformacionInformeProyectoGenericoFaces.proyectoSeleccionado.tituloPropuesto}" styleClass="gris"/>
+
+          <br /><h:outputLabel />
+          <h:outputLabel  value="#{properties.value('cu_pr_11_lbl_codigo_del_proyecto')}" styleClass="green negrilla"/>
+          <h:outputLabel value="#{includeInformacionInformeProyectoGenericoFaces.proyectoSeleccionado.codigoProyecto}" styleClass="gris"/>
+
+          <br /><h:outputLabel />
+          <h:outputLabel  value="#{properties.value('cu_ne_6_lbl_unidad_policial')}" styleClass="green negrilla"/>
+          <h:outputLabel value="#{includeInformacionInformeProyectoGenericoFaces.proyectoSeleccionado.unidadPolicial.siglaFisica} - #{includeInformacionInformeProyectoGenericoFaces.proyectoSeleccionado.unidadPolicial.nombre}" styleClass="gris"/>
+
+        </h:panelGrid>
+
+        <br />
+
+        <div class="centrado">
+
+          <h:panelGroup rendered="#{not empty cuPr1ProyectoFaces.listaUnidadPolicialEjecutoras}">
+            <h:outputLabel styleClass="green negrilla" value="#{properties.value('cu_pre_1_lbl_unidades_ejecutoras')}"/>
+            <p:dataTable var="_unidadejecutora" paginator="false" 
+                         value="#{cuPr1ProyectoFaces.listaUnidadPolicialEjecutoras}"
+                         rowIndexVar="idFila" paginatorPosition="bottom" 
+                         rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                         emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                         rows="#{properties.value('general_mensaje_filas_datatable_pagina')}">  
+
+              <p:column headerText="#{properties.value('cu_pr_1_lbl_datatable_unidadpolicial')}">  
+                <h:outputLabel value="#{_unidadejecutora.unidadPolicial.nombre}" />  
+              </p:column> 
+
+              <p:column headerText="#{properties.value('cu_pr_1_lbl_datatable_rol')}">  
+                <h:outputLabel value="#{_unidadejecutora.rol.valor}" />  
+              </p:column> 
+
+            </p:dataTable>
+          </h:panelGroup>
+
+        </div>
+
+        <br />
+
+        <p:tabView id="tabViewProyectos" orientation="top" activeIndex="#{cuPr1ProyectoFaces.idTabSeleccionado}" >  
+
+          <p:ajax event="tabChange" listener="#{cuPr1ProyectoFaces.onTabChange}" update=":tabViewProyectos" />  
+
+          <p:tab id="idTabViewInformacionBasicoProyecto" title="#{properties.value('cu_pre_1_lbl_informacion_basica_proyecto')}">
+            <ui:include src="include_consultar_proyecto_informacion_basica.xhtml"></ui:include>
+          </p:tab>
+
+          <p:tab id="idTabViewTalentoHumano" title="#{properties.value('cu_pre_1_lbl_talento_humano')}" >  
+            <h:panelGroup>
+              <ui:include src="include_consultar_talento_humano.xhtml" />
+            </h:panelGroup>
+          </p:tab>
+
+          <p:tab id="idTabViewPlanteamientoProyecto" title="#{properties.value('cu_pre_1_lbl_planteamiento_proyecto')}" >                          
+            <h:panelGroup>
+              <ui:include src="include_consultar_planteamiento_proyecto.xhtml" />
+            </h:panelGroup>
+          </p:tab>
+
+          <p:tab rendered="#{cuPr6ConsultarDetalleProyectoInvestigacion.mostrarTabOtrosParticipantes}" id="idTabViewOtrosParticipantes" title="#{properties.value('cu_pre_1_lbl_otros_participantes')}" >
+            <h:panelGroup>
+              <ui:include src="include_consultar_otro_participantes_proyecto.xhtml" />
+            </h:panelGroup>
+          </p:tab>
+
+          <p:tab rendered="#{cuPr6ConsultarDetalleProyectoInvestigacion.mostrarTabPresupuesto}" id="idTabViewPresupuestoProyectoDetalleProyecto" title="#{properties.value('cu_pr_6_lbl_tab_presupuesto')}" >  
+            <h:panelGroup>
+              <h:panelGrid width="100%" columns="1" rendered="#{cuPr1ProyectoFaces.importPresupuestoPage != null}">
+
+                <p:commandLink value="Consultar detalle presupuesto" immediate="true" action="#{cuPr1ProyectoFaces.consultarPresupuesto}" />
+                <ui:include src="#{cuPr1ProyectoFaces.importPresupuestoPage}" />
+
+              </h:panelGrid>
+            </h:panelGroup>
+          </p:tab>
+
+          <p:tab rendered="#{cuPr6ConsultarDetalleProyectoInvestigacion.mostrarTabInforme}" id="idTabViewInformeDetalleProyecto" title="#{properties.value('cu_pr_6_lbl_tab_informe')}" >                        
+            <h:panelGroup>
+              <ui:include src="include_consultar_informe_proyecto.xhtml" />
+            </h:panelGroup>
+          </p:tab>
+
+          <p:tab rendered="#{cuPr6ConsultarDetalleProyectoInvestigacion.mostrarTabIndicadores}" id="idTabViewVerIndicadores" title="7. Indicadores" >                        
+            <ui:include src="/pages/secured/cu_pr_1/include_lista_indicadores_generales.xhtml" />
+            <br />
+            <ui:include src="include_lista_indicadores_otros.xhtml" />
+          </p:tab>
+
+          <p:tab id="idTabViewVerAsesoriasProyecto" title="8. Asesorias" rendered="#{cuPr6ConsultarDetalleProyectoInvestigacion.mostrarTabAsesoria}">
+            <ui:include src="/pages/secured/cu_pr_6/include_lista_asesorias_proyecto.xhtml" />                        
+          </p:tab>
+
+          <p:tab rendered="#{cuPr6ConsultarDetalleProyectoInvestigacion.mostrarTabEvaluacionProyecto}" id="idTabViewEvaluacionProyecto" title="9. Evaluación" >
+            <ui:include src="includeConsultaEvaluacionProyecto.xhtml" />                                
+          </p:tab>
+
+          <p:tab rendered="#{cuPr6ConsultarDetalleProyectoInvestigacion.esProyectoMigrado}" id="idTabViewHistorialProyectoMigrado" title="Asesorías" >
+            <ui:include src="include_lista_historial_estado_pro_migrados.xhtml" />
+          </p:tab>
+
+        </p:tabView>
+
+        <div class="centrado">
+          <p:commandButton value="#{properties.value('cu_pr_7_lbl_btn_regresar_genenal')}" 
+                           id="idBtnRegresarProyecto"
+                           action="#{cuPr6ConsultarDetalleProyectoInvestigacion.regresar}"
+                           immediate="true" />    
+        </div>
+
+      </ui:define>
+    </ui:composition>
+  </body>
+</html>

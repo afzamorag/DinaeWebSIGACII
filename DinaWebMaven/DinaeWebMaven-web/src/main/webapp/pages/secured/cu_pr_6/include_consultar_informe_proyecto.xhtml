@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"> 
+
+  <h:form id="form_include_consultar_informe_proyecto" >
+
+    <h:outputLabel  value="#{properties.value('cu_pr_23_lbl_compromiso_compromiso')}" styleClass="green negrilla" />
+    <br />
+    <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                 var="_fila" paginatorPosition="bottom" 
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true" 
+                 value="#{cuPr6ConsultarDetalleProyectoInvestigacion.listaCompromisoDTO}"
+                 rowIndexVar="idFila"
+                 resizableColumns="true"
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+      <p:column width="30" headerText="#{properties.value('cu_pr_7_lbl_horas_investiga_dt_num')}">  
+        #{idFila + 1}
+      </p:column>  
+
+      <p:column headerText="#{properties.value('cu_pr_6_lbl_datatable_nombre_compro')}">  
+        #{_fila.nombreCompromiso}
+      </p:column>  
+
+      <p:column width="90" headerText="#{properties.value('cu_pr_6_lbl_datatable_fechalimite')}">
+        <h:outputLabel value="#{_fila.fechaLimieGeneral}" >
+          <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+        </h:outputLabel>  
+      </p:column>
+
+      <p:column width="90" headerText="#{properties.value('cu_pr_6_lbl_datatable_fechapresenta')}">
+        <h:outputLabel value="#{_fila.fechaPrentacion}" >
+          <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+        </h:outputLabel>  
+      </p:column>
+
+      <p:column width="100" headerText="#{properties.value('cu_pr_6_lbl_datatable_estado')}">  
+        #{_fila.estado}
+      </p:column>
+
+      <p:column width="90" headerText="#{properties.value('cu_pr_6_lbl_datatable_ver')}">  
+        <p:commandLink value="#{properties.value('cu_pr_6_lbl_datatable_commandlink_inform')}" immediate="true"
+                       rendered="#{_fila.muestraLink}"
+                       action="#{cuPr6ConsultarDetalleProyectoInvestigacion.verInformeCompromisoDetalleProyecto( _fila )}" />
+      </p:column>
+
+      <f:facet name="footer">  
+        #{fn:length( cuPr6ConsultarDetalleProyectoInvestigacion.listaCompromisoDTO )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable>
+
+  </h:form>
+
+</html>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"      
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+  <h:form id="forminclude_informacion_proyecto" >
+
+    <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaValor_30_porciento,panelGridColumnaValor_70_porciento" id="pginclude_informacion_informe_proyecto">
+
+      <h:outputLabel  value="#{properties.value('cu_pr_7_lbl_subtitulo_titulo_pro')}" styleClass="gris negrilla"/>
+      <h:outputLabel value="#{cuPr11ConsultarDetalleCompromisoFaces.proyectoSeleccionado.tituloPropuesto}" styleClass="gris"/>
+
+      <h:outputLabel  value="#{properties.value('cu_pr_7_lbl_subtitulo_areaciencia')}" styleClass="gris negrilla"/>
+      <h:outputLabel value="#{cuPr11ConsultarDetalleCompromisoFaces.proyectoSeleccionado.linea.areaCienciaTecnologia.nombre}" styleClass="gris"/>
+
+      <h:outputLabel  value="#{properties.value('cu_pr_7_lbl_subtitulo_linea')}" styleClass="gris negrilla"/>
+      <h:outputLabel value="#{cuPr11ConsultarDetalleCompromisoFaces.proyectoSeleccionado.linea.nombre}" styleClass="gris"/>
+
+    </h:panelGrid>
+
+    <br />
+
+    <h:outputLabel  value="Jefe de la Unidad que aprueba:" styleClass="green negrilla"/>
+    <p:dataTable var="_persona"
+                 value="#{cuPr11ConsultarDetalleCompromisoFaces.listaJefeFuncionariosSeleccionadoAprueba}" 
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}"
+                 paginator="true" rowIndexVar="idFila" 
+                 paginatorPosition="bottom"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}">
+
+      <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_grado')}">  
+        #{_persona.grado}
+      </p:column> 
+      <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_nom_y_apell')}">  
+        #{_persona.nombreCompleto}
+      </p:column>    
+      <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_unidadpoli')}" >
+        #{_persona.unidadPolicial.siglaFisica}
+      </p:column>
+      <p:column headerText="#{properties.value('cu_ne_7_lista_funcionario_cargo')}">  
+        #{_persona.cargo}
+      </p:column> 
+      <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_correo')}" >
+        #{_persona.correo}
+      </p:column>
+      <p:column headerText="Ciudad" >
+        #{_persona.ciudadReside}
+      </p:column>
+      <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_num_tel')}" >
+        #{_persona.telefono}
+      </p:column>
+    </p:dataTable>
+
+    <br />
+    <ui:include src="/pages/secured/include_pantallas_genericas/include_informacion_totales_proyecto.xhtml" />
+    <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaValor_30_porciento,panelGridColumnaValor_70_porciento">
+
+      <h:outputLabel  value="Fecha de inicio:" styleClass="gris negrilla"/>
+      <h:outputLabel styleClass="gris" value="#{cuPr11ConsultarDetalleCompromisoFaces.proyectoSeleccionado.fechaEstimadaInicio}">
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+      </h:outputLabel>
+
+      <h:outputLabel  value="Fecha de fin" styleClass="gris negrilla"/>
+      <h:outputLabel styleClass="gris" value="#{cuPr11ConsultarDetalleCompromisoFaces.proyectoSeleccionado.fechaEstimadaFinalizacion}">
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+      </h:outputLabel>
+
+    </h:panelGrid>
+
+  </h:form>
+</html>

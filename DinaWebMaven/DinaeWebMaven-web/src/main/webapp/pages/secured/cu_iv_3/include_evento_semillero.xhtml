@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <h:form id="forminclude_evento_semillero" >
+
+    <br />
+    <h:outputLabel value="Horario de Reuniones de Coordinación" styleClass="green negrilla" />
+    <p:dataTable id="idDataTableHorarioReuniones" var="_horario"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 value="#{cuIv3GestionarSemillerosInvestigacionFaces.listaHorarioReuniones}" 
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rowIndexVar="idFila"
+                 resizableColumns="true"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}">
+
+      <p:column headerText="Dia" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_horario.diaSemana}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column headerText="Hora de Inicio" style="color: white; font-size: 13px">  
+        <p:calendar value="#{_horario.horaInicio}" pattern="HH:mm" timeOnly="true" locale="es" 
+                    showButtonPanel="true" showOn="button"
+                    styleClass="#{_horario.esValidoHoraInicio?'':'inputInvalid'}"/>  
+      </p:column>
+
+      <p:column headerText="Hora de fin" style="color: white; font-size: 13px">                  
+        <p:calendar value="#{_horario.horaFin}" pattern="HH:mm" timeOnly="true" locale="es" 
+                    showButtonPanel="true" showOn="button"
+                    styleClass="#{_horario.esValidoHoraFin?'':'inputInvalid'}"/>  
+      </p:column>
+    </p:dataTable>
+    <br/>
+    <div class="centrado">
+
+      <p:commandButton value="#{properties.value('general_lbl_btn_guardar')}" id="btnGuardarCronograma"
+                       action="#{cuIv3GestionarSemillerosInvestigacionFaces.guardarReunionesSemillero}" 
+                       update="@form idDataTableHorarioReuniones"/>
+
+    </div>
+    <br />
+
+    <h:outputLabel value="Participación en eventos de capacitación" styleClass="green negrilla" />
+    <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 id="panelGridDatosEventosSemillero1" columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="Nombre del evento" styleClass="gris negrilla" />
+      </h:panelGrid>
+      <p:inputText maxlength="100" id="inputNombreEventoSemillero" 
+                   styleClass="#{cuIv3GestionarSemillerosInvestigacionFaces.inputNombreEvento.valid?'':'inputInvalid'} textMaximo"
+                   value="#{cuIv3GestionarSemillerosInvestigacionFaces.nombreEventoSemillero}"
+                   binding="#{cuIv3GestionarSemillerosInvestigacionFaces.inputNombreEvento}"/>
+
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="Lugar del evento" styleClass="gris negrilla" />
+      </h:panelGrid>
+      <p:inputText maxlength="100" id="inputLugarEventoSemillero" 
+                   styleClass="#{cuIv3GestionarSemillerosInvestigacionFaces.inputLugarEvento.valid?'':'inputInvalid'} textMaximo"
+                   value="#{cuIv3GestionarSemillerosInvestigacionFaces.lugarEventoSemillero}"
+                   binding="#{cuIv3GestionarSemillerosInvestigacionFaces.inputLugarEvento}" />
+
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="Fecha de inicio del evento" styleClass="gris negrilla" />    
+      </h:panelGrid>
+      <p:calendar pattern="#{properties.value('general_formato_fecha')}" 
+                  locale="es" 
+                  styleClass="#{cuIv3GestionarSemillerosInvestigacionFaces.calendarFechaInicialEvento.valid?'':'inputInvalid'}"
+                  value="#{cuIv3GestionarSemillerosInvestigacionFaces.fechaInicialEventoSemillero}"
+                  binding="#{cuIv3GestionarSemillerosInvestigacionFaces.calendarFechaInicialEvento}"
+                  yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                  navigator="true" showOn="button"
+                  />  
+
+      <h:outputLabel value="Fecha de fin del evento" styleClass="gris negrilla" />            
+      <p:calendar pattern="#{properties.value('general_formato_fecha')}" 
+                  locale="es" 
+                  value="#{cuIv3GestionarSemillerosInvestigacionFaces.fechaFinalEventoSemillero}"
+                  yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                  navigator="true" showOn="button" styleClass="gris"
+                  />  
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="Departamento de realización" styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:selectOneMenu value="#{cuIv3GestionarSemillerosInvestigacionFaces.departamentoEvento}" id="selectDeptoEventoSemilero"
+                       binding="#{cuIv3GestionarSemillerosInvestigacionFaces.selectDepartamentoEvento}"
+                       styleClass="#{cuIv3GestionarSemillerosInvestigacionFaces.selectDepartamentoEvento.valid?'':'inputInvalid'}">  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{cuIv3GestionarSemillerosInvestigacionFaces.listaDepartamentos}" var="_dept" itemValue="#{_dept.idDepartamento}" itemLabel="#{_dept.descDepartamento}"/>
+        <p:ajax event="change" update="@this selectCiudadesEventoSemillero" 
+                listener="#{cuIv3GestionarSemillerosInvestigacionFaces.cargarCiudadesDepartamento}"/>
+      </h:selectOneMenu>
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="Ciudad de realización" styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:selectOneMenu value="#{cuIv3GestionarSemillerosInvestigacionFaces.ciudadEvento}" id="selectCiudadesEventoSemillero"
+                       binding="#{cuIv3GestionarSemillerosInvestigacionFaces.selectCiudadEvento}"
+                       styleClass="#{cuIv3GestionarSemillerosInvestigacionFaces.selectCiudadEvento.valid?'':'inputInvalid'}">  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{cuIv3GestionarSemillerosInvestigacionFaces.listaCiudadesDepartamento}" var="_mpio" itemValue="#{_mpio.codMunicipio}" itemLabel="#{_mpio.descMunicipio}" />
+      </h:selectOneMenu>            
+
+
+      <h:outputLabel value="Modalidad de participación" styleClass="gris negrilla"/>            
+      <h:selectOneMenu value="#{cuIv3GestionarSemillerosInvestigacionFaces.modalidadParticipacion}" id="selectModalidadParticipaEventoSemillero">  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{cuIv3GestionarSemillerosInvestigacionFaces.listaModalidadParticipacion}" var="_mod" itemValue="#{_mod.idConstantes}" itemLabel="#{_mod.valor}" />
+      </h:selectOneMenu>
+
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="Clase o tema de la ponencia" styleClass="gris negrilla" />
+      </h:panelGrid>
+      <p:inputText maxlength="512" id="inputClaseTemaPonenciaEventoSemillero" 
+                   styleClass="#{cuIv3GestionarSemillerosInvestigacionFaces.inputClaseTemaPonencia.valid?'':'inputInvalid'} textMaximo"
+                   value="#{cuIv3GestionarSemillerosInvestigacionFaces.claseTemaPonencia}"
+                   binding="#{cuIv3GestionarSemillerosInvestigacionFaces.inputClaseTemaPonencia}" />
+
+    </h:panelGrid>
+    <br />
+    <h:outputLabel value="Relación numérica de los partipantes" styleClass="green negrilla" />
+    <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 id="panelGridDatosEventosSemillero2"
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="Oficiales" styleClass="gris negrilla" />
+      </h:panelGrid>
+      <p:inputText maxlength="4" size="10" id="inputNumeroOficialesEventoSemillero" 
+                   onkeypress="return soloNumerosInpuText(event);"
+                   styleClass="#{cuIv3GestionarSemillerosInvestigacionFaces.inputNumeroOficiales.valid?'':'inputInvalid'}"
+                   value="#{cuIv3GestionarSemillerosInvestigacionFaces.numeroOficiales}"
+                   binding="#{cuIv3GestionarSemillerosInvestigacionFaces.inputNumeroOficiales}" />
+
+      <h:outputLabel value="Suboficiales y/o nivel ejecutivo" styleClass="gris negrilla" />
+      <p:inputText maxlength="4" size="10" id="inputNumeroSubOficialesEventoSemillero" 
+                   onkeypress="return soloNumerosInpuText(event);"                         
+                   value="#{cuIv3GestionarSemillerosInvestigacionFaces.numeroSubOficiales}"/>
+
+      <h:outputLabel value="Estudiantes" styleClass="gris negrilla" />
+      <p:inputText maxlength="4" size="10" id="inputNumeroEstudiantesEventoSemillero" 
+                   onkeypress="return soloNumerosInpuText(event);"                        
+                   value="#{cuIv3GestionarSemillerosInvestigacionFaces.numeroEstudiantes}"/>
+
+      <h:outputLabel value="No uniformados" styleClass="gris negrilla" />
+      <p:inputText maxlength="4" size="10" id="inputNumeroNoUniformadosEventoSemillero" 
+                   onkeypress="return soloNumerosInpuText(event);"
+                   value="#{cuIv3GestionarSemillerosInvestigacionFaces.numeroNoUniformados}" />
+
+    </h:panelGrid>
+    <br />
+
+    <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 id="panelGridDatosEventosSemillero3"
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+      <h:outputLabel value="Archivo evidencia documental" styleClass="gris negrilla" />
+      <h:panelGroup id="idPanelArchivoEvidenciaEvento">
+        <p:commandLink ajax="false" immediate="true" id="idCommanLinkDescargaArchivoEvento" 
+                       rendered="#{cuIv3GestionarSemillerosInvestigacionFaces.mostrarEnlaceDescarga}">
+          <h:outputLabel value="#{cuIv3GestionarSemillerosInvestigacionFaces.eventoSemillero.archivoEvidenciaDocumental}" />
+          <p:fileDownload value="#{cuIv3GestionarSemillerosInvestigacionFaces.descargarArchivoEvidenciaEvento}" />
+        </p:commandLink>
+        <h:outputLabel id="idArchivoEvidenciaEvento" styleClass="green" 
+                       rendered="#{!cuIv3GestionarSemillerosInvestigacionFaces.mostrarEnlaceDescarga and cuIv3GestionarSemillerosInvestigacionFaces.uploadEvidencia != null}" 
+                       value="#{cuIv3GestionarSemillerosInvestigacionFaces.nombreArchivoEvidencia}" />
+
+        <p:fileUpload dragDropSupport="true" fileUploadListener="#{cuIv3GestionarSemillerosInvestigacionFaces.cargarArchivoEvidencia}"
+                      fileLimit="1"  update="idPanelArchivoEvidenciaEvento idArchivoEvidenciaEvento"
+                      label="#{properties.value('cu_pr_4_lbl_examinar')}" multiple="false"
+                      fileLimitMessage="#{properties.value('cu_pr_4_lbl_mensaje_maximo_numero_archivo')}"
+                      uploadLabel="#{properties.value('cu_pr_4_lbl_subiendo')}" 
+                      invalidFileMessage="#{properties.value('cu_pr_7_lbl_archivo_invalido')}"
+                      invalidSizeMessage="#{properties.value('cu_pr_4_lbl_tamanio_invalido_archivo')}" 
+                      allowTypes="/(\.|\/)(pdf|doc|dox|xls|xlsx|ppt|pptx|)$/"
+                      mode="advanced" auto="false" cancelLabel="#{properties.value('cu_pr_4_lbl_cancelar')}"  />
+      </h:panelGroup>
+
+
+      <h:outputLabel value="Archivo evidencia fotográfica" styleClass="gris negrilla" />
+      <h:panelGroup id="idPanelArchivoEvidenciaFotoEvento">
+        <p:commandLink ajax="false" immediate="true" id="upoladArchivoEvidenciaFotoEvento" 
+                       rendered="#{cuIv3GestionarSemillerosInvestigacionFaces.mostrarEnlaceDescargaFoto}">
+          <h:outputLabel value="#{cuIv3GestionarSemillerosInvestigacionFaces.eventoSemillero.archivoEvidenciaFotog}" />
+          <p:fileDownload value="#{cuIv3GestionarSemillerosInvestigacionFaces.descargarArchivoEvidenciaFotoEvento}" />
+        </p:commandLink>
+        <h:outputLabel id="idNombreArchivoEvidenciaFotoEvento" styleClass="green" 
+                       rendered="#{!cuIv3GestionarSemillerosInvestigacionFaces.mostrarEnlaceDescargaFoto and cuIv3GestionarSemillerosInvestigacionFaces.uploadEvidenciaFoto != null}" 
+                       value="#{cuIv3GestionarSemillerosInvestigacionFaces.nombreArchivoEvidenciaFoto}" />
+
+        <p:fileUpload dragDropSupport="true" fileUploadListener="#{cuIv3GestionarSemillerosInvestigacionFaces.cargarArchivoEvidenciaFoto}"
+                      fileLimit="1" update="idPanelArchivoEvidenciaFotoEvento idNombreArchivoEvidenciaFotoEvento"
+                      label="#{properties.value('cu_pr_4_lbl_examinar')}" multiple="false"
+                      fileLimitMessage="#{properties.value('cu_pr_4_lbl_mensaje_maximo_numero_archivo')}"
+                      uploadLabel="#{properties.value('cu_pr_4_lbl_subiendo')}" 
+                      invalidFileMessage="#{properties.value('cu_pr_7_lbl_archivo_invalido')}"
+                      invalidSizeMessage="#{properties.value('cu_pr_4_lbl_tamanio_invalido_archivo')}" 
+                      allowTypes="/(\.|\/)(pdf|doc|dox|ppt|pptx|gif|jpe?g|png)$/"
+                      mode="advanced" auto="false" cancelLabel="#{properties.value('cu_pr_4_lbl_cancelar')}"  />
+      </h:panelGroup>
+
+
+    </h:panelGrid>
+    <br />
+    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+    <br />
+
+    <div class="centrado">
+      <p:commandButton value="#{properties.value('general_lbl_btn_guardar')}" id="btnGuardarEventoSemillero"
+                       rendered="#{cuIv3GestionarSemillerosInvestigacionFaces.eventoSemillero == null}"
+                       action="#{cuIv3GestionarSemillerosInvestigacionFaces.guardarEventosSemillero}" 
+                       update="@form dataTableEventosSemillero"/>
+
+      <p:commandButton value="#{properties.value('general_lbl_btn_modificar')}" id="btnModificarEventoSemillero"
+                       action="#{cuIv3GestionarSemillerosInvestigacionFaces.guardarEventosSemillero}" 
+                       rendered="#{cuIv3GestionarSemillerosInvestigacionFaces.eventoSemillero != null}"
+                       update="@form dataTableEventosSemillero"/>
+
+      <p:commandButton value="#{properties.value('general_lbl_btn_cancelar')}" id="btnCancelarModificarEventoSemillero"
+                       action="#{cuIv3GestionarSemillerosInvestigacionFaces.cancelarModificarEventoSemillero}"
+                       rendered="#{cuIv3GestionarSemillerosInvestigacionFaces.eventoSemillero != null}"
+                       update="@form dataTableEventosSemillero"/>
+    </div> 
+    <br />
+    <p:dataTable var="_evento" id="dataTableEventosSemillero"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 value="#{cuIv3GestionarSemillerosInvestigacionFaces.listaEventosSemilleroModel}" 
+                 selectionMode="single"
+                 selection="#{cuIv3GestionarSemillerosInvestigacionFaces.eventoSemillero}"
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rowIndexVar="idFila" paginatorPosition="bottom" 
+                 resizableColumns="true"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true">
+
+      <p:ajax event="rowSelect"  listener="#{cuIv3GestionarSemillerosInvestigacionFaces.cargarDatosEventosSemillero}"   
+              update="@form @form:panelGridDatosEventosSemillero1 @form:panelGridDatosEventosSemillero2 @form:panelGridDatosEventosSemillero3 @form:btnGuardarEventoSemillero @form:btnModificarEventoSemillero @form:btnCancelarModificarEventoSemillero dataTableEventosSemillero"/>  
+      <p:ajax event="rowUnselect" listener="#{cuIv3GestionarSemillerosInvestigacionFaces.noSeleccionEventoSemillero}" 
+              update="@form @form:btnGuardarEventoSemillero @form:btnModificarEventoSemillero @form:btnCancelarModificarEventoSemillero dataTableEventosSemillero "/>  
+
+
+      <p:column headerText="#{properties.value('general_lbl_numero_tabla')}" width="15" style="color: white; font-size: 13px">                                
+        <h:outputLabel value="#{idFila + 1}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+      </p:column>
+      <p:column headerText="Nombre" style="color: white; font-size: 13px">                                                                
+        <h:outputLabel value="#{_evento.nombreEvento}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+      </p:column>
+      <p:column headerText="Clase o tema de la ponencia" style="color: white; font-size: 13px">
+        <h:outputLabel value="#{_evento.claseTemaPonencia}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+      </p:column>
+      <p:column headerText="Lugar" style="color: white; font-size: 13px" width="80">
+        <h:outputLabel value="#{_evento.lugarEvento}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>      
+      </p:column>
+      <p:column headerText="Ciudad" style="color: white; font-size: 13px" width="80">
+        <h:outputLabel value="#{cuIv3GestionarSemillerosInvestigacionFaces.tomarNombreCiudad(_evento.idCiudad)}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>      
+      </p:column>
+
+      <p:column headerText="Fechas de realización" width="70" style="color: white; font-size: 13px">
+        <h:panelGroup>
+          <h:outputLabel value="#{_evento.fechaInicioEvento}" styleClass="gris" style="font-size: 13px">
+            <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+          </h:outputLabel>   
+          <h:outputLabel value=" - " styleClass="gris" style="font-size: 13px"/>
+          <h:outputLabel value="#{_evento.fechaFinalizacionEvento}" styleClass="gris" style="font-size: 13px">
+            <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+          </h:outputLabel>
+        </h:panelGroup>
+      </p:column>
+
+      <p:column headerText="Modalidad" style="color: white; font-size: 13px" width="60">
+        <h:outputLabel value="#{_evento.modalidadParticpacionValor}" styleClass="gris" style="font-size: 13px"/>
+      </p:column>   
+
+      <p:column headerText="Particip." style="color: white; font-size: 13px" width="60">
+        <h:outputLabel value="#{cuIv3GestionarSemillerosInvestigacionFaces.calcularMostrarAsistentesEventos(_evento)}" styleClass="alineadoDerecha gris" style="font-size: 13px"/>
+      </p:column>   
+
+      <p:column headerText="Archivo de evidencia" width="80" style="color: white; font-size: 13px">
+        <p:commandLink ajax="false" immediate="true" id="downloadArchivoEvidenciaFotoEvento" 
+                       disabled="#{_evento.archivoEvidenciaDocumental == null}">
+          <h:outputLabel styleClass="#{_evento.archivoEvidenciaDocumental == null ? 'gris' : ''}" value="#{_evento.archivoEvidenciaDocumental == null? 'No disponible' : _evento.archivoEvidenciaDocumental}" />
+          <p:fileDownload value="#{cuIv3GestionarSemillerosInvestigacionFaces.descargarArchivoEvidenciaFotoEventoTabla(_evento.archivoEvidenciaDocumental, _evento.archivoEvidenciaDocumentalOriginal)}" />
+        </p:commandLink>
+      </p:column>   
+
+      <f:facet name="footer">  
+        #{fn:length( cuIv3GestionarSemillerosInvestigacionFaces.listaEventosSemillero )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable>
+  </h:form>
+</html>

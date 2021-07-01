@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+               columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+    <h:outputLabel value="Otros indicadores" styleClass="green negrilla" />
+
+    <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 var="_indicador"  id="dtcargarListaIndicadoresProyectoOtros"
+                 value="#{cuPr1ProyectoFaces.listaIndicadoresProyectoOtros}" 
+                 paginatorPosition="bottom" styleClass="tabla" rowIndexVar="idFila"
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 resizableColumns="true"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true"  >
+
+      <p:column width="3" headerText="#{properties.value('cu_pr_1_lbl_datatable_num')}"> 
+        #{idFila + 1}
+      </p:column>  
+
+      <p:column width="100" headerText="#{properties.value('cu_pr_1_lbl_datatable_nombre_del_indicador')}">  
+        #{_indicador.nombreIndicador}
+      </p:column>
+
+      <p:column width="200" headerText="#{properties.value('cu_pr_1_lbl_datatable_descripcion_del_indicador')}">  
+        <h:panelGroup>
+          #{_indicador.nombreNumerador}
+          <p:separator styleClass="separadorBorder" /> 
+          #{_indicador.nombreDenominador}
+        </h:panelGroup>
+      </p:column> 
+
+      <p:column width="70" headerText="">  
+        <p:commandLink value="#{properties.value('cu_pr_1_lbl_btn_eliminar_grupo')}" 
+                       immediate="true"
+                       oncomplete="PF('varConfirmEliminarOtroIndicador').show()">  
+          <f:setPropertyActionListener value="#{_indicador}" target="#{cuPr1ProyectoFaces.indicadoresProyectoEliminar}" />  
+        </p:commandLink>  
+      </p:column>
+
+      <f:facet name="footer">  
+        #{fn:length( cuPr1ProyectoFaces.listaIndicadoresProyectoOtros )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable> 
+
+  </h:panelGrid>
+</html>

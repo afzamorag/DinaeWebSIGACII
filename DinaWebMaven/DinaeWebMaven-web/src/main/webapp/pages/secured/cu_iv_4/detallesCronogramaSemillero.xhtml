@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+
+      <ui:define name="content">
+        <h:form id="formCronogramaSemillero">
+
+          <div class="fixed-menu">
+            <div class="right-col">
+              <h2 style="font: verdana;">
+                Registar semillero de investigación
+              </h2>
+            </div>
+          </div>
+
+          <br />
+          <h:outputLabel value="Cronograma de trabajo" styleClass="green negrilla"/>
+          <br /><br/>                    
+
+          <p:dataTable var="_crono" value="#{cuIv4ConsultarDetalleSemilleroFaces.listaCronogramaSemilleroDTO}"
+                       rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                       id="tablaCronogramaSemillero" 
+                       emptyMessage="#{properties.value('general_mensaje_no_records_found')}"                                     
+                       style="width: 100%;" paginator="true"
+                       resizableColumns="true" rowIndexVar="idFila"
+                       paginatorPosition="bottom"
+                       rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+
+            <p:column headerText="#{properties.value('general_lbl_numero_tabla')}" width="15" style="color: white; font-size: 13px">                                
+              <h:outputLabel value="#{idFila + 1}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+            </p:column>
+            <p:column headerText="Actividad" width="120" style="color: white; font-size: 13px">                                                                
+              <h:outputLabel value="#{_crono.actividad}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+            </p:column>
+            <p:column headerText="Objetivo" style="color: white; font-size: 13px">
+              <h:outputLabel value="#{_crono.objetivo}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+            </p:column>
+            <p:column headerText="Responsable" style="color: white; font-size: 13px">
+              <h:outputLabel value="#{_crono.responsable}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>      
+            </p:column>
+            <p:column headerText="Fecha cumplimiento" width="80" style="color: white; font-size: 13px">
+              <h:outputLabel value="#{_crono.fechaCumplimiento}" styleClass="gris" style="font-size: 13px">
+                <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+              </h:outputLabel>                                 
+            </p:column>
+            <p:column headerText="Producto o resultado esperado" style="color: white; font-size: 13px">
+              <h:outputLabel value="#{_crono.productoResultadoEsperado}" styleClass="gris" style="font-size: 13px"/>
+            </p:column>                            
+            <f:facet name="footer">  
+              #{fn:length( cuIv4ConsultarDetalleSemilleroFaces.listaCronogramaSemilleroDTO )} #{properties.value('general_mensaje_footer_datatable_count')}
+            </f:facet>
+          </p:dataTable>      
+          <br />
+          <p:separator styleClass="separadorBorder" /> 
+          <div class="centrado">
+            <p:commandButton value="#{properties.value('general_lbl_btn_regresar')}"
+                             action="#{cuIv4ConsultarDetalleSemilleroFaces.regresarTab3}" 
+                             id="btnRegresarTab3Semilleros"
+                             immediate="true"/>
+
+          </div>
+        </h:form>                
+      </ui:define>
+    </ui:composition>
+  </body>
+</html>

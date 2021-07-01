@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+  <h:panelGroup id="pgDetalleFuncionarioGlobal">
+    <h:form id="buscarPropuesta" styleClass="site">      
+      <div class="fixed-menu">
+        <div class="right-col">
+          <h2>
+            #{properties.value('cu_ne_4_titulo')}
+          </h2>
+        </div>
+      </div>
+
+      <h:outputLabel value="#{properties.value('cu_ne_4_lbl_buscar_parametros_titulo')}" styleClass="green negrilla" />
+
+      <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                   columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+        <h:outputText value="#{properties.value('cu_ne_4_lbl_area')}:" styleClass="gris negrilla" />
+        <h:selectOneMenu  id="idListaSelectItemArea"  styleClass="gris" value="#{cuNe4ConsultaPropuestaDeNecesidad.areaCienciaTecnologiaSeleccionada}" >  
+          <f:selectItem itemLabel="--Select--" itemValue="" />  
+          <f:selectItems value="#{cuNe4ConsultaPropuestaDeNecesidad.listaAreaCienciaTecnologiaItem}" var="_item" /> 
+          <p:ajax update="listaLineaSelectItems" listener="#{cuNe4ConsultaPropuestaDeNecesidad.handleAreaCienciaTecnologiaSeleccionadaChange()}"/>
+        </h:selectOneMenu>
+
+        <h:outputText value="#{properties.value('cu_ne_4_lbl_linea')}:"   styleClass="gris negrilla" />
+        <h:selectOneMenu id="listaLineaSelectItems" styleClass="gris" value="#{cuNe4ConsultaPropuestaDeNecesidad.lineaSeleccionada}">
+          <f:selectItem itemLabel="--Select--" itemValue="" />  
+          <f:selectItems value="#{cuNe4ConsultaPropuestaDeNecesidad.listaLineaItem}"  />  
+        </h:selectOneMenu> 
+
+
+        <h:outputText value="#{properties.value('cu_ne_4_lbl_tema_clave')}:"   styleClass="gris negrilla" />               
+        <p:inputText id="tema"  value="#{cuNe4ConsultaPropuestaDeNecesidad.tema}" maxlength="512" styleClass="textMaximo" size="100" />
+
+      </h:panelGrid>
+
+      <h:panelGroup rendered="#{cuNe4ConsultaPropuestaDeNecesidad.listaIdUnidades==null}">
+        <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                     columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+          <h:outputLabel value="#{properties.value('cu_ne_4_lbl_unidad_policial')}" styleClass="gris negrilla" />
+          <h:selectOneMenu  id="idListaSelectUnidadPolicial" styleClass="gris" value="#{cuNe4ConsultaPropuestaDeNecesidad.idUnidadPolicial}">  
+            <f:selectItem itemLabel="--Select--" itemValue="" />  
+            <f:selectItems value="#{cuNe4ConsultaPropuestaDeNecesidad.unidadesPoliciales}" />  
+          </h:selectOneMenu>
+
+        </h:panelGrid>
+      </h:panelGroup>    
+      <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                   columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+        <h:outputText value="#{properties.value('cu_ne_4_lbl_fechaRango')}:"  styleClass="gris negrilla" />
+
+        <h:panelGrid columns="2">
+          <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es" yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" navigator="true" value="#{cuNe4ConsultaPropuestaDeNecesidad.fechaInicio}" id="fInicio"   />    
+          <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es" yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" navigator="true" value="#{cuNe4ConsultaPropuestaDeNecesidad.fechaFinal}" id="fFinal"/>      
+        </h:panelGrid>
+      </h:panelGrid>
+      <br />
+      <div class="centrado">
+
+        <p:commandButton value="#{properties.value('cu_ne_4_lbl_btn_limpiar')}"
+                         action="#{cuNe4ConsultaPropuestaDeNecesidad.limpiarParametrosBusqueda}" 
+                         update=":buscarPropuesta"
+                         />  
+
+        <p:commandButton value="#{properties.value('cu_ne_4_lbl_btn_buscar')}"
+                         action="#{cuNe4ConsultaPropuestaDeNecesidad.buscarPropuesta()}" 
+                         update=":buscarPropuesta" />  
+
+      </div>
+      <br />
+      <br />
+      <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}"  
+                   var="propuestas" id="tablaPeriodo" value="#{cuNe4ConsultaPropuestaDeNecesidad.listaPropuestaModel}" 
+                   rowIndexVar="idFila" paginator="true"   paginatorPosition="bottom"
+                   selectionMode="single"
+                   selection="#{cuNe4ConsultaPropuestaDeNecesidad.propuestaSeleccionada}"
+                   rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                   styleClass="tabla"
+                   rows="#{properties.value('general_mensaje_filas_datatable_pagina')}">
+        <p:ajax event="rowSelect" listener="#{cuNe4ConsultaPropuestaDeNecesidad.verDatallePropuestaNecesidad}" />  
+        <p:ajax event="rowUnselect" listener="#{cuNe4ConsultaPropuestaDeNecesidad.noSeleccionPropuesta}" update=":buscarPropuesta"/>  
+
+
+        <p:column width="20" headerText="#{properties.value('cu_ne_4_lbl_lista_propuestas_fecha')}">  
+          <h:outputText value="#{propuestas.fechaRegistro}" >
+            <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+          </h:outputText>
+        </p:column> 
+        <p:column width="20" headerText="#{properties.value('cu_ne_4_lbl_unidad_policial')}">  
+          <h:outputText escape="false" value="#{cuNe1PeriodoNecesidadesFaces.formatearCadenaCaracteresPorLineaFormatoHTML(propuestas.unidadPolicial.nombre,30)}" />                    
+        </p:column>
+        <p:column width="20" headerText="#{properties.value('cu_ne_4_lbl_area')}">  
+          <h:outputText value="#{propuestas.linea.areaCienciaTecnologia.nombre}" />                    
+        </p:column>
+        <p:column headerText="#{properties.value('cu_ne_4_lbl_tema')}">  
+          <h:outputText styleClass="gris" escape="false" value="#{cuNe1PeriodoNecesidadesFaces.formatearCadenaCaracteresPorLineaFormatoHTML(propuestas.tema,30)}"  />  
+        </p:column>
+        <f:facet name="footer">
+          #{fn:length(
+            cuNe4ConsultaPropuestaDeNecesidad.listadoPropuestas
+            )}
+          #{properties.value('general_mensaje_footer_datatable_count')}
+        </f:facet>
+      </p:dataTable>
+      <br />
+      <p:separator styleClass="separadorBorder" /> 
+      <div class="centrado">
+        <p:commandButton value="#{properties.value('cu_ne_7_regresar_generico')}" 
+                         action="#{cuNe4ConsultaPropuestaDeNecesidad.getAccionUrlRegresar}"
+                         rendered="#{cuNe4ConsultaPropuestaDeNecesidad.accionUrlRegresar!=null}"
+                         ajax="false"
+                         immediate="true" styleClass="button"/>
+      </div>
+      <br />
+      <br />
+    </h:form>
+
+  </h:panelGroup>
+</html>

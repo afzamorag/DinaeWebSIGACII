@@ -1,0 +1,158 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+  <h:body>
+    <div class="body">
+      <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+        <ui:define name="content">
+          <div class="fixed-menu">
+            <div class="right-col">
+              <h2 style="font: verdana;">Administrar usuarios y perfiles</h2>
+              <br/>
+
+              <h:form id="formAdminCriteriosEvaluacion" >
+                <h:panelGrid id="panelCambiarRol" columns="2" style="width: 100%">
+
+                  <h:panelGrid id="panelDatosRolCambiar" columns="2" style="width: 100%" 
+                               rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                               columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+                    <h:outputLabel value="Rol a cambiar:" styleClass="gris negrilla"/>
+                    <h:outputLabel styleClass="gris" value="#{cuAd01TipoUsuarioAdministrador.nombreRolModificar}"/>  
+
+                  </h:panelGrid>
+
+                  <h:panelGrid id="panelDatosUnidad" columns="2" style="width: 100%" 
+                               rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                               columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+                    <h:outputLabel value="Unidad policial:" styleClass="gris negrilla"/>
+                    <h:outputLabel value="#{cuAd01TipoUsuarioAdministrador.nombreUnidad}" styleClass="gris" />  
+
+                  </h:panelGrid>
+
+                </h:panelGrid>
+                <br /><br />
+                <h:outputLabel value="Usuario actual" styleClass="green negrilla" />
+                <p:separator styleClass="separadorBorder" /> 
+
+                <p:dataTable var="usuario" value="#{cuAd01TipoUsuarioAdministrador.listaDatosUsuarioSeleccionado}"
+                             rows="#{properties.value('general_mensaje_filas_datatable_pagina')}"                                              
+                             emptyMessage="#{properties.value('general_mensaje_no_records_found')}"                                     
+                             style="width: 100%;"
+                             resizableColumns="true" rowIndexVar="idFila"                                     
+                             rowStyleClass="filaParDataTable">
+
+                  <p:column headerText="#{properties.value('cu_co_7_lbl_nombres_apellidos')}" style="color: white; font-size: 13px">
+                    <h:outputText value="#{usuario.identificacion} - #{usuario.nombreCompleto}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+                  </p:column>
+                  <p:column headerText="#{properties.value('cu_co_7_lbl_correo_electronico')}" width="250" style="color: white; font-size: 13px">
+                    <h:outputText value="#{usuario.correo}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+                  </p:column>
+                  <p:column headerText="Cargo" width="100" style="color: white; font-size: 13px">
+                    <h:outputText value="#{usuario.cargo}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+                  </p:column>
+                </p:dataTable>
+
+                <br />
+                <br />
+                <h:outputLabel value="Roles activos" styleClass="green negrilla" rendered="#{cuAd01TipoUsuarioAdministrador.tipoUsuarioAdministrar == 'U'}" />
+                <p:separator styleClass="separadorBorder" rendered="#{cuAd01TipoUsuarioAdministrador.tipoUsuarioAdministrar == 'U'}" /> 
+                <p:dataTable var="_rol" value="#{cuAd01TipoUsuarioAdministrador.listaUsuariosRolesUsuarioUnidadPolicial}"                                             
+                             rendered="#{cuAd01TipoUsuarioAdministrador.tipoUsuarioAdministrar == 'U'}"                                             
+                             rows="#{properties.value('general_mensaje_filas_datatable_pagina')}"                                              
+                             emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                             style="width: 100%;" paginator="true"
+                             resizableColumns="true" rowIndexVar="idFila"
+                             paginatorPosition="bottom"                                             
+                             rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+                  <p:column width="20" headerText="N°">  
+                    <h:outputText value="#{idFila + 1}" />
+                  </p:column>
+
+                  <p:column headerText="Rol" style="color: white">
+                    <h:outputText value="#{_rol.nombreRol}" styleClass="alineadoIzquierda gris" />
+                  </p:column>
+
+                </p:dataTable>
+
+                <br />
+                <br />
+                <h:outputLabel value="Usuario nuevo a asignar" styleClass="green negrilla" />
+                <p:separator styleClass="separadorBorder" /> 
+
+                <h:panelGrid id="panelNuevoUsuarioAsignar" columns="2" style="width: 100%" 
+                             rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                             columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+                  <h:panelGrid columns="2">
+                    <h:outputLabel value="*" style="color: red; font-weight: bold" />
+                    <h:outputLabel value="N° de identificación" styleClass="gris negrilla" />
+                  </h:panelGrid>
+
+                  <h:panelGrid columns="2">
+                    <p:inputText id="inputIdentificacionUsuarioAsignar"  maxlength="15"
+                                 styleClass="textMaximo, #{cuAd01TipoUsuarioAdministrador.inputIdentificacion.valid?'':'inputInvalid'}" 
+                                 binding="#{cuAd01TipoUsuarioAdministrador.inputIdentificacion}" 
+                                 value="#{cuAd01TipoUsuarioAdministrador.identificacion}" />
+                    <p:commandButton value="#{properties.value('general_lbl_btn_buscar')}" id="btnBuscarInvestigador"
+                                     action="#{cuAd01TipoUsuarioAdministrador.buscarUsuario}" update="@form @form:tablaDatosUsuarioAsignar"/> 
+                  </h:panelGrid>
+
+                </h:panelGrid>
+                <br />
+                <p:dataTable var="usuarioN" value="#{cuAd01TipoUsuarioAdministrador.listaDatosNuevoUsuario}"
+                             rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                             id="tablaDatosUsuarioAsignar"
+                             emptyMessage="#{properties.value('general_mensaje_no_records_found')}"                                     
+                             style="width: 100%;"
+                             resizableColumns="true" rowIndexVar="idFila"                                     
+                             rowStyleClass="filaParDataTable">
+
+                  <p:column headerText="#{properties.value('cu_co_7_lbl_grado')}" width="100" style="color: white; font-size: 13px">
+                    <h:outputText value="#{usuarioN.grado}" styleClass="gris" style="font-size: 13px"/>
+                  </p:column>
+                  <p:column headerText="#{properties.value('cu_co_7_lbl_nombres_apellidos')}" style="color: white; font-size: 13px">
+                    <h:outputText value="#{usuarioN.identificacion} - #{usuarioN.nombreCompleto}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+                  </p:column>
+                  <p:column headerText="#{properties.value('cu_co_7_lbl_correo_electronico')}" width="250" style="color: white; font-size: 13px">
+                    <h:outputText value="#{usuarioN.correo}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+                  </p:column>
+                  <p:column headerText="Cargo" width="100" style="color: white; font-size: 13px">
+                    <h:outputText value="#{usuarioN.cargo}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+                  </p:column>
+                </p:dataTable>
+
+                <br />
+                <br />
+                <p:separator styleClass="separadorBorder" /> 
+                <div class="centrado">
+
+                  <p:commandButton value="Cambiar usuario" id="btnGuardarCambioRol"
+                                   action="#{cuAd01TipoUsuarioAdministrador.guardarCambioRolUsuario}" 
+                                   disabled="#{cuAd01TipoUsuarioAdministrador.disableCambiarUsuario}"
+                                   update="@form btnGuardarCambioRol" />            
+
+                  <p:commandButton value="#{properties.value('general_lbl_btn_regresar')}" 
+                                   immediate="true"
+                                   action="#{cuAd01TipoUsuarioAdministrador.regresar}" 
+                                   update="@form" />            
+                </div>
+
+
+
+
+              </h:form>
+            </div>
+          </div>
+        </ui:define>
+      </ui:composition>
+    </div>
+  </h:body>
+</html>
+

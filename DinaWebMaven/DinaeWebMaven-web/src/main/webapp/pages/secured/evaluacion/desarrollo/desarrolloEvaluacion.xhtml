@@ -1,0 +1,272 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/plantillaPrincipal.xhtml">
+    <ui:define 
+        name="content">
+        <p:panel 
+            id="main" 
+            styleClass="ui-fluid">
+            <h:form 
+                id="frmList" 
+                prependId="false">
+                <h:outputText 
+                    value="#{bundle['evaluacion.desarrollo.titulo']}"/>
+                <p:separator />
+                <p:panel>
+                    <p:fieldset>
+                        <p:panelGrid 
+                            id="pgHeader" 
+                            columns="2"
+                            styleClass="ui-panelgrid-blank"                            
+                            layout="grid"                        
+                            columnClasses="ui-grid-col-8,ui-grid-col-4">
+                            <p:outputPanel 
+                                style="text-align: center; font-weight: bold;">
+                                <h:outputText 
+                                    value="#{bundle['commons.lbl.ministerio']}" />
+                                <br />
+                                <h:outputText 
+                                    value="#{bundle['commons.lbl.policia']}" />
+                                <br />
+                                <h:outputText 
+                                    value="#{bundle['commons.lbl.dinae']}" />
+                                <br />                                
+                                <h:outputText 
+                                    value="#{bundle['commons.lbl.vieco']}" />
+                                <br />
+                                <h:outputText 
+                                    value="#{bundle['evaluacion.desarrollo.lbl.fieldset1.line1']}" />
+                                <br />
+                                <h:outputText 
+                                    value="#{desarrolloEvaluacionController.evaluacion.evalDescri}"/>
+                            </p:outputPanel>
+                            <p:graphicImage 
+                                name="logo.png" 
+                                library="images"/>
+                        </p:panelGrid>
+                    </p:fieldset>
+                    <br/>
+                    <br/>
+                    <p:fieldset
+                        legend="#{bundle['evaluacion.desarrollo.objectives.title']}"
+                        toggleable="true">
+                        <p:outputPanel 
+                            style="text-align: justify;">
+                            <h:outputText 
+                                id="otObjetivos" 
+                                value="#{bundle['evaluacion.desarrollo.objectives.text1']}">
+                            </h:outputText>
+                        </p:outputPanel>
+                    </p:fieldset>
+                    <br/>
+                    <br/>
+                    <p:fieldset 
+                        legend="#{bundle['evaluacion.desarrollo.id.title']}"
+                        toggleable="true">
+                        <p:outputPanel 
+                            style="text-align: justify;">
+                            <h:outputText 
+                                id="otIdentificacion" 
+                                value="#{desarrolloEvaluacionController.evento.descripcionCarrera}"/>                            
+                        </p:outputPanel>
+                    </p:fieldset>
+                    <br/>
+                    <br/>
+                    <p:fieldset
+                        legend="#{bundle['evaluacion.desarrollo.instructions.title']}"
+                        toggleable="true">
+                        <h:outputText
+                            value="#{bundle['evaluacion.desarrollo.instructions.text1']}">
+                        </h:outputText>
+                        <p:spacer/> 
+                        <p:outputPanel 
+                            style="text-align: center;">
+                            <p:outputPanel 
+                                style="text-align: center; width: 100%" >
+                                <p:panelGrid 
+                                    columns="2"  style="font-weight: bold;text-align: center;">
+                                    <h:outputFormat
+                                        value="#{bundle['evaluacion.desarrollo.instructions.text2']}">
+                                        <f:param value="1"/>
+                                    </h:outputFormat>
+                                    <h:outputText 
+                                        style="text-align: center;" 
+                                        value="#{bundle['evaluacion.desarrollo.instructions.text3']}">
+                                    </h:outputText>
+                                    <h:outputFormat
+                                        value="#{bundle['evaluacion.desarrollo.instructions.text2']}">
+                                        <f:param value="2"/>
+                                    </h:outputFormat>
+                                    <h:outputText 
+                                        style="text-align: center;" 
+                                        value="#{bundle['evaluacion.desarrollo.instructions.text4']}">
+                                    </h:outputText>
+                                    <h:outputFormat
+                                        value="#{bundle['evaluacion.desarrollo.instructions.text2']}">
+                                        <f:param value="3"/>
+                                    </h:outputFormat>
+                                    <h:outputText 
+                                        style="text-align: center;" 
+                                        value="#{bundle['evaluacion.desarrollo.instructions.text5']}">
+                                    </h:outputText>
+                                    <h:outputFormat
+                                        value="#{bundle['evaluacion.desarrollo.instructions.text2']}">
+                                        <f:param value="4"/>
+                                    </h:outputFormat>
+                                    <h:outputText 
+                                        style="text-align: center;" 
+                                        value="#{bundle['evaluacion.desarrollo.instructions.text6']}">
+                                    </h:outputText>
+                                    <h:outputFormat
+                                        value="#{bundle['evaluacion.desarrollo.instructions.text2']}">
+                                        <f:param value="5"/>
+                                    </h:outputFormat>
+                                    <h:outputText 
+                                        style="text-align: center;" 
+                                        value="#{bundle['evaluacion.desarrollo.instructions.text7']}">
+                                    </h:outputText>
+                                </p:panelGrid>
+                            </p:outputPanel>
+                        </p:outputPanel>
+                    </p:fieldset>
+                    <br/>
+                    <br/>
+                    <!-- aspectos y sus preguntas -->
+                    <ui:repeat 
+                        value="#{desarrolloEvaluacionController.aspectos}" 
+                        varStatus="status" 
+                        id="rAnswer"
+                        var="aspecto">
+                        <p:fieldset 
+                            legend="#{bundle['evaluacion.desarrollo.aspect.title']} #{status.index}: #{aspecto.descripcion}" 
+                            toggleable="true">
+                            <p:dataTable 
+                                id="dtAnswer" 
+                                value="#{aspecto.preguntasDTO}" 
+                                var="record" 
+                                rowIndexVar="index" >
+                                <p:column 
+                                    headerText="#{bundle['evaluacion.desarrollo.aspect.evaluation.indicators']}" 
+                                    width="50%"
+                                    style="text-align: justify">
+                                    <h:outputText 
+                                        value="#{record.descripcion}" />
+                                    <p:selectOneRadio 
+                                        id="sorAnswer" 
+                                        value="#{record.valor}"  
+                                        layout="custom" 
+                                        required="true" 
+                                        label="#{bundle['commons.msg.required']}" >
+                                        <f:selectItem 
+                                            itemLabel="1" 
+                                            itemValue="1" />
+                                        <f:selectItem 
+                                            itemLabel="2" 
+                                            itemValue="2" />
+                                        <f:selectItem 
+                                            itemLabel="3" 
+                                            itemValue="3" />
+                                        <f:selectItem 
+                                            itemLabel="4" 
+                                            itemValue="4" />
+                                        <f:selectItem 
+                                            itemLabel="5" 
+                                            itemValue="5" />
+                                    </p:selectOneRadio>
+                                    <p:message 
+                                        for="sorAnswer" 
+                                        showSummary="false" 
+                                        showDetail="true" />
+                                </p:column>
+                                <p:column 
+                                    headerText="#{bundle['evaluacion.desarrollo.aspect.value.one']}" 
+                                    style="text-align: center" >
+                                    <p:radioButton 
+                                        id="opt1" 
+                                        for="sorAnswer" 
+                                        itemIndex="0" />
+                                </p:column>
+                                <p:column 
+                                    headerText="#{bundle['evaluacion.desarrollo.aspect.value.two']}" 
+                                    style="text-align: center">
+                                    <p:radioButton 
+                                        id="opt2" 
+                                        for="sorAnswer" 
+                                        itemIndex="1" />
+                                </p:column>
+                                <p:column 
+                                    headerText="#{bundle['evaluacion.desarrollo.aspect.value.three']}" 
+                                    style="text-align: center">
+                                    <p:radioButton 
+                                        id="opt3" 
+                                        for="sorAnswer" 
+                                        itemIndex="2" />
+                                </p:column>
+                                <p:column 
+                                    headerText="#{bundle['evaluacion.desarrollo.aspect.value.four']}" 
+                                    style="text-align: center">
+                                    <p:radioButton 
+                                        id="opt4" 
+                                        for="sorAnswer" 
+                                        itemIndex="3" />
+                                </p:column>
+                                <p:column 
+                                    headerText="#{bundle['evaluacion.desarrollo.aspect.value.five']}" 
+                                    style="text-align: center">
+                                    <p:radioButton 
+                                        id="opt5" 
+                                        for="sorAnswer" 
+                                        itemIndex="4" />
+                                </p:column>
+                            </p:dataTable>
+                        </p:fieldset>
+                        <br/>
+                        <br/>
+                    </ui:repeat>
+                    <!-- aspectos y sus preguntas -->
+                    <p:fieldset
+                        legend="#{bundle['evaluacion.desarrollo.suggestions.title']}"
+                        toggleable="true">
+                        <p:inputTextarea 
+                            id="itaSugerencias" 
+                            value="#{desarrolloEvaluacionController.sugerencia}">
+                        </p:inputTextarea>
+                    </p:fieldset>
+                    <f:facet 
+                        name="footer">
+                        <p:panelGrid 
+                            columns="2" 
+                            layout="grid"
+                            columnClasses="ui-grid-col-2,ui-grid-col-2"
+                            styleClass="ui-panelgrid-blank">
+                            <p:commandButton 
+                                id="btnSave" 
+                                update="frmList" 
+                                disabled="#{desarrolloEvaluacionController.disabled}"
+                                value="#{bundle['evaluacion.desarrollo.btn.save.evaluation']}"
+                                title="#{bundle['evaluacion.desarrollo.btn.save.evaluation']}"
+                                icon="ui-icon-disk"
+                                action="#{desarrolloEvaluacionController.guardarDesarrolloEvaluacion()}" 
+                                process="@this frmList"
+                                style="border: none">                                                                             
+                            </p:commandButton>
+                            <p:commandButton 
+                                value="#{bundle['commons.btn.cancel']}"
+                                title="#{bundle['commons.btn.cancel']}" 
+                                immediate="true"
+                                icon="ui-icon-circle-close" 
+                                action="filtroDesarrolloEvaluacion.xhtml?faces-redirect=true" 
+                                process="@this" 
+                                style="border: none"/>
+                        </p:panelGrid>
+                    </f:facet>
+                </p:panel>
+            </h:form>
+        </p:panel>
+    </ui:define>
+</ui:composition>

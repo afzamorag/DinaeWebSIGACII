@@ -1,0 +1,135 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+      <ui:define name="content">
+
+        <h:form id="idForm_gestiona_evaluar_propuestas_convocatoria">
+
+          <div class="fixed-menu">
+            <div class="right-col">
+              <h2>
+                #{properties.value('cu_co_4_titulo_evalua_propuesta_convoa')}
+              </h2>
+            </div>
+          </div>
+
+          <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                       columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+            <h:outputText value="#{properties.value('cu_co_4_subtitulo_concecutivo')}:" styleClass="gris negrilla"/>
+            <h:outputText value="#{cuCo4EvaluarPropuestaConvocatoriaFaces.periodoSeleccionado.concecutivo}" styleClass="gris"/>
+
+            <h:outputText value="#{properties.value('cu_co_4_subtitulo_descripcion')}" styleClass="gris negrilla"/>
+            <h:outputText value="#{cuCo4EvaluarPropuestaConvocatoriaFaces.periodoSeleccionado.descripcion}" styleClass="gris"/>
+
+          </h:panelGrid>
+
+          <br />
+          <br />
+          <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                       columnClasses="panelGridColumnaLabel_50_porciento,panelGridColumnaValor_50_porciento">
+
+            <h:panelGrid columns="1">
+              <h:outputLabel value="#{properties.value('cu_ne_6_lbl_unidad_policial')}:" styleClass="gris negrilla" />
+              <h:selectOneMenu id="idListaSelectItemUnidadPoli" styleClass="gris" 
+                               value="#{cuCo4EvaluarPropuestaConvocatoriaFaces.unidadPolicialSeleccionada}" >  
+                <f:selectItem itemLabel="--Todos--" itemValue="" />  
+                <f:selectItems value="#{cuCo4EvaluarPropuestaConvocatoriaFaces.listaItemUnidadPolicialFiltroBusqueda}" var="_item" />  
+                <p:ajax update="idDataTablePropuestas" listener="#{cuCo4EvaluarPropuestaConvocatoriaFaces.handleUnidadPolicialSeleccionadaChange}" />  
+              </h:selectOneMenu>
+            </h:panelGrid>
+
+            <h:panelGrid>
+              <h:outputLabel value="#{properties.value('cu_co_4_subtitulo_estado')}:" styleClass="gris negrilla" />
+              <h:selectOneMenu styleClass="gris" id="idListaSelectItemEstado"
+                               value="#{cuCo4EvaluarPropuestaConvocatoriaFaces.estadoSeleccionada}" >  
+                <f:selectItem itemLabel="--Todos--" itemValue="" />  
+                <f:selectItems value="#{cuCo4EvaluarPropuestaConvocatoriaFaces.listaItemEstadoFiltroBusqueda}" var="_item" />  
+                <p:ajax update="idDataTablePropuestas" listener="#{cuCo4EvaluarPropuestaConvocatoriaFaces.handleEstadoPropouestaConvocaSeleccionadaChange}" />  
+              </h:selectOneMenu>
+            </h:panelGrid>
+
+          </h:panelGrid>
+
+
+          <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}"  
+                       id="idDataTablePropuestas" var="_propuesta" paginatorPosition="bottom" selectionMode="single"
+                       rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true" 
+                       value="#{cuCo4EvaluarPropuestaConvocatoriaFaces.listaPropuestaConvocatorias}" 
+                       rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                       selection="#{cuCo4EvaluarPropuestaConvocatoriaFaces.propuestaSeleccionada}" 
+                       resizableColumns="true"
+                       rowIndexVar="idFila" >
+
+            <p:ajax event="rowSelect" listener="#{cuCo4EvaluarPropuestaConvocatoriaFaces.verDatallePropuestaNecesidad}" />  
+            <p:ajax event="rowUnselect" listener="#{cuCo4EvaluarPropuestaConvocatoriaFaces.noSeleccionPropuesta}" update="idDataTablePropuestas"/> 
+
+            <p:column width="30" headerText="#{properties.value('cu_co_4_datatable_num')}">  
+              #{idFila + 1}
+            </p:column> 
+
+            <p:column width="200" headerText="#{properties.value('cu_co_4_subtitulo_unidad_policial')}">  
+              #{_propuesta.unidadPolicialDTO.nombre}
+            </p:column> 
+
+            <p:column width="90" headerText="#{properties.value('cu_co_4_datatable_concecutivo')}">  
+              #{idFila + 1} de #{cuCo4EvaluarPropuestaConvocatoriaFaces.numeroRegistroPropuesta}
+            </p:column> 
+
+            <p:column headerText="#{properties.value('cu_co_4_datatable_titulo')}">  
+              #{_propuesta.tituloPropuesto}
+            </p:column> 
+
+            <p:column width="100" headerText="#{properties.value('cu_co_4_datatable_fecha_presenta')}">
+              <h:outputLabel value="#{_propuesta.fechaPresentacion}">
+                <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+              </h:outputLabel>
+
+            </p:column> 
+
+            <p:column width="100" headerText="#{properties.value('cu_co_4_subtitulo_estado')}">  
+              #{_propuesta.estado}
+            </p:column> 
+
+            <p:column width="100">  
+              <p:commandButton value="#{properties.value('cu_co_4_datatable_btn_envia')}" 
+                               immediate="true" 
+                               action="#{cuCo4EvaluarPropuestaConvocatoriaFaces.revisarConvocatoriaDetalle( _propuesta )}" />
+            </p:column> 
+
+            <f:facet name="footer">  
+              #{cuCo4EvaluarPropuestaConvocatoriaFaces.numeroRegistroPropuesta} #{properties.value('general_mensaje_footer_datatable_count')}                            
+            </f:facet>
+
+          </p:dataTable>
+          <br />
+          <p:commandLink value="#{properties.value('cu_co_4_lbl_commandlink_seleccionar_proyect_financia')}"
+                         action="#{cuCo4EvaluarPropuestaConvocatoriaFaces.seleccionarProyectosAfinanciar}"/>
+          <br />
+          <br />
+          <p:separator styleClass="separadorBorder" /> 
+          <div class="centrado">
+
+            <p:commandButton value="#{properties.value('cu_co_4_btn_regresar_evaluar')}"
+                             action="#{navigationFaces.redirectCuCo1GestionarConvocatoriasRedirect}" 
+                             immediate="true" />
+
+          </div>
+          <br />
+          <br />
+        </h:form>
+
+      </ui:define>
+
+    </ui:composition>
+
+  </body>
+</html>

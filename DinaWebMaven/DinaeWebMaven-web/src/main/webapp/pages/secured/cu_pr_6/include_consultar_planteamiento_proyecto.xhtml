@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"> 
+
+  <h:form id="form_include_agregar_planteamiento_proyectoProyecto" >
+
+    <h:panelGroup id="idpanelgroup_planteamiento">
+
+      <h:panelGrid columns="3" cellspacing="10px">
+        <c:forEach items="#{cuPr1ProyectoFaces.listaTemas}" var="_tema">    
+          <h:panelGrid columns="3">
+            <span style="color:#FF0000">*</span>
+            <p:graphicImage value="/images/icono_chechk.png" rendered="#{_tema.mostrarImagenCheckInformacionPlanteamientoProblema}" />
+            <p:commandLink value="#{_tema.descripcionTema}" immediate="true"
+                           oncomplete="" action="#{cuPr6ConsultarDetalleProyectoInvestigacion.seleccionTema( _tema )}" />
+
+          </h:panelGrid>
+        </c:forEach>
+      </h:panelGrid>
+      <br />
+
+      <h:panelGrid id="pgDetalleInformacionPlantea" columns="1" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                   columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento" >
+
+        <h:outputLabel rendered="#{cuPr1ProyectoFaces.mostrarEditorPlanteamiento}" for="idEditor"
+                       value="#{cuPr1ProyectoFaces.temaProyectoSeleccionado.tema.descripcionTema}" styleClass="green negrilla" />
+        <p:editor id="idEditor" rendered="#{cuPr1ProyectoFaces.mostrarEditorPlanteamiento}" 
+                  value="#{cuPr1ProyectoFaces.temaProyectoSeleccionado.texto}" disabled="true"/> 
+
+        <br />
+        <p:commandLink ajax="false" immediate="true" id="idCommanLinkDescargaArchivo" 
+                       rendered="#{cuPr1ProyectoFaces.mostrarLinkDescargaArchivo}">
+          <h:outputLabel value="#{cuPr1ProyectoFaces.temaProyectoSeleccionado.archivoSoporte}" />
+          <p:fileDownload value="#{cuPr1ProyectoFaces.downloadContentProperty}" />
+        </p:commandLink>
+        <h:outputLabel id="idNombreArchivoPlantea" rendered="#{!cuPr1ProyectoFaces.mostrarLinkDescargaArchivo}" 
+                       value="#{cuPr1ProyectoFaces.nombreArchivoPlanteamientoProyecto}" styleClass="green" />
+      </h:panelGrid>
+
+    </h:panelGroup>
+
+
+  </h:form>
+
+</html>

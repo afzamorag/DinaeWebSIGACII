@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+  <h:form id="formEquiposInvestigacion">
+    <br />
+    <h:panelGrid id="panelgridComponentesEquipo" columns="2" style="width: 100%" 
+                 rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_nombre_equipo')}" styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:panelGroup>
+        <p:inputTextarea value="#{registrarPresupuesto.nombreEquipo}"
+                         id="textAreaNombreEquipo"
+                         maxlength="250" counter="contadorNombreEquipo"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         styleClass="textareaMaximo" cols="100" rows="3" autoResize="false">
+          <f:validateLength minimum="0"  maximum="250" />
+        </p:inputTextarea>
+        <h:outputText id="contadorNombreEquipo" styleClass="gris" />
+      </h:panelGroup>
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_origen')}" styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:selectOneMenu value="#{registrarPresupuesto.origenEquipo}" id="selectOrigenEquipo" styleClass="gris">  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{registrarPresupuesto.listaOrigenesFondos}"/>
+      </h:selectOneMenu>
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_valor')}" styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:inputText value="#{registrarPresupuesto.valorEquipo}" onkeypress="return soloNumerosInpuText(event);"
+                   maxlength="12" id="inputValorEquipo">
+        <p:ajax event="blur" update="inputValorEquipo" />
+        <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" maxFractionDigits="2" />
+      </h:inputText>
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_fuente')}" styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:selectOneMenu value="#{registrarPresupuesto.fuenteEquipo}" id="selectFuenteEquipo" styleClass="gris">  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{registrarPresupuesto.listaFuentesProyecto}" var="_fuente" itemValue="#{_fuente.idFuenteProyecto}" itemLabel="#{_fuente.nombreFuente}"/>
+      </h:selectOneMenu>
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_especificaciones')}" styleClass="gris negrilla" />
+      </h:panelGrid>
+      <h:panelGroup>
+        <p:inputTextarea value="#{registrarPresupuesto.especificacionesEquipo}"
+                         id="textAreaEspecificaciones"
+                         maxlength="512" counter="contadorEspecificaciones"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         styleClass="textareaMaximo" autoResize="false">
+          <f:validateLength minimum="0"  maximum="512" />
+        </p:inputTextarea>
+        <h:outputText id="contadorEspecificaciones" styleClass="gris" />
+      </h:panelGroup>
+    </h:panelGrid>
+    <br/>
+    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+    <div class="centrado">
+      <p:commandButton value="#{properties.value('cu_pr_5_lbl_btn_add_equipo_investigacion')}" 
+                       rendered="#{!registrarPresupuesto.esModificaEquipo}" 
+                       id="btn1"
+                       actionListener="#{registrarPresupuesto.updateEquipoInvestigacion}"
+                       process="@form"
+                       update="@form"/>
+
+      <p:commandButton value="#{properties.value('cu_pr_5_lbl_btn_upd_equipo_investigacion')}" 
+                       rendered="#{registrarPresupuesto.esModificaEquipo}"
+                       actionListener="#{registrarPresupuesto.updateEquipoInvestigacion}" 
+                        process="@form"
+                       update="@form"/>
+      
+      <p:commandButton value="#{properties.value('cu_pr_5_lbl_btn_cancel_fuente_financiera')}" 
+                       rendered="#{registrarPresupuesto.esModificaEquipo}"
+                       actionListener="#{registrarPresupuesto.cancelarModificarEquipos}" 
+                        process="@this"
+                       update="@form">
+      </p:commandButton>
+    </div>
+
+
+
+
+    <br/>
+
+    <div class="centrado">
+
+      <ui:include src="include_lista_equipo_de_la_investigacion.xhtml" />
+
+    </div>   
+  </h:form>
+</html>
+

@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"> 
+
+  <h:form id="formAgregarTalentoHumanoFuncionarioProyecto" >
+
+    <h:outputLabel  value="#{properties.value('cu_pr_3_lbl_sub_titulo_investiga')}" styleClass="green negrilla" />
+    <h:panelGrid id="pgArribaTxtBtnBusqueda" columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+      <h:outputLabel for="idcu_pr_3_lbl_sub_titulo_num_identifica" value="#{properties.value('cu_pr_3_lbl_sub_titulo_num_identifica')}" styleClass="gris negrilla"/>
+      <h:panelGrid columns="3" id="idPgTxtBtnBusqueda">
+
+        <h:outputLabel rendered="#{cuPr1ProyectoFaces.investigadorProyecto.idInvestigadorProyecto != null}" 
+                       value="#{cuPr1ProyectoFaces.vistaFuncionario.identificacion}" styleClass="gris"/>
+        <p:inputText rendered="#{cuPr1ProyectoFaces.investigadorProyecto.idInvestigadorProyecto == null}" 
+                     id="idcu_pr_3_lbl_sub_titulo_num_identifica" required="true" value="#{cuPr1ProyectoFaces.identificacionFuncionario}"/>
+        <p:commandButton value="#{properties.value('cu_pr_3_lbl_btn_buscar')}"
+                         rendered="#{cuPr1ProyectoFaces.investigadorProyecto.idInvestigadorProyecto == null}"
+                         action="#{cuPr1ProyectoFaces.buscarFuncionario}" 
+                         update="@form :tabViewProyectos:formAgregarTalentoHumanoDelProyecto:idcu_pr_3_lbl_sub_titulo_valor_hora :tabViewProyectos:formAgregarTalentoHumanoDelProyecto:idDataTableNivelFormacion" />  
+      </h:panelGrid>
+    </h:panelGrid>
+
+    <h:panelGroup id="pgInformacionVistaFuncionario">
+
+      <h:panelGrid columns="4" style="width: 100%" 
+                   rowClasses="filaParPanelGridPar,filaParPanelGridImPar" rendered="#{cuPr1ProyectoFaces.vistaFuncionario != null}">
+
+        <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_grado')}" styleClass="gris negrilla" />
+        <h:outputLabel value="#{cuPr1ProyectoFaces.vistaFuncionario.grado}" styleClass="gris" />
+
+        <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_nom_y_appellido')}" styleClass="gris negrilla"  />
+        <h:outputLabel value="#{cuPr1ProyectoFaces.vistaFuncionario.nombreCompleto}" styleClass="gris" />
+
+        <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_correo')}" styleClass="gris negrilla" />
+        <h:outputLabel value="#{cuPr1ProyectoFaces.vistaFuncionario.correo}" styleClass="gris" />
+
+        <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_cargo')}" styleClass="gris negrilla" />
+        <h:outputLabel value="#{cuPr1ProyectoFaces.vistaFuncionario.cargo}" styleClass="gris" />
+
+        <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_num_telefono')}" styleClass="gris negrilla" />
+        <h:outputLabel value="#{cuPr1ProyectoFaces.vistaFuncionario.telefono}" styleClass="gris" />
+
+        <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_direccion')}" styleClass="gris negrilla" />
+        <h:outputLabel value="#{cuPr1ProyectoFaces.vistaFuncionario.direccionEmpleado}" styleClass="gris" />
+
+        <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_dpto')}" styleClass="gris negrilla" />
+        <h:outputLabel value="#{cuPr1ProyectoFaces.vistaFuncionario.departamentoReside}" styleClass="gris" />
+
+        <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_ciudad')}" styleClass="gris negrilla" />
+        <h:outputLabel value="#{cuPr1ProyectoFaces.vistaFuncionario.ciudadReside}" styleClass="gris" />
+
+        <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_tiempo_institu')}" styleClass="gris negrilla" />
+        <h:panelGrid columns="6">
+
+          <h:outputLabel value="#{cuPr1ProyectoFaces.vistaFuncionario.antiguedadDTO.anosAntiguedad}" styleClass="gris" />
+          <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_anios')}" styleClass="gris" />
+
+          <h:outputLabel value="#{cuPr1ProyectoFaces.vistaFuncionario.antiguedadDTO.mesesAntiguiedad}" styleClass="gris" />
+          <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_meses')}" styleClass="gris" />
+
+          <h:outputLabel value="#{cuPr1ProyectoFaces.vistaFuncionario.antiguedadDTO.diasAntiguedad}" styleClass="gris" />
+          <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_dias')}" styleClass="gris" />
+
+        </h:panelGrid>
+
+        <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_tipo_vincula')}" styleClass="gris negrilla" />
+        <h:outputLabel value="#{cuPr1ProyectoFaces.vistaFuncionario.origenSIAToInvestigador}" styleClass="gris" />
+
+      </h:panelGrid>
+    </h:panelGroup>
+
+  </h:form>
+
+
+  <h:form id="formAgregarTalentoHumanoDelProyecto" >
+    <br />
+    <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_nivel_formacion')}" styleClass="green negrilla" />
+    <p:dataTable id="idDataTableNivelFormacion" var="_nivel"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 value="#{cuPr1ProyectoFaces.listaNivelFormacionFuncionario}" 
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rowIndexVar="idFila" paginatorPosition="bottom" 
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true">
+
+      <p:column headerText="#{properties.value('cu_pr_3_lbl_sub_titulo_titulo_obtenido')}">  
+        <h:outputLabel value="#{_nivel.tituloObtenido}" />  
+      </p:column>  
+      <p:column headerText="#{properties.value('cu_pr_3_lbl_sub_titulo_nivel_academ')}">  
+        <h:outputLabel value="#{_nivel.nivelAcademico}" />  
+      </p:column> 
+      <p:column headerText="#{properties.value('cu_pr_3_lbl_sub_titulo_area_saber')}">  
+        <h:outputLabel value="#{_nivel.areaDelSaber}"  />  
+      </p:column>  
+      <p:column headerText="#{properties.value('cu_pr_3_lbl_sub_titulo_fecha_finaliza')}" >
+        <h:outputLabel value="#{_nivel.fechaFinalizacion}" >
+          <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+        </h:outputLabel>
+      </p:column>
+      <f:facet name="footer">  
+        #{fn:length( cuPr1ProyectoFaces.listaNivelFormacionFuncionario )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+    </p:dataTable>
+
+    <br />   
+
+    <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+      <h:outputLabel for="idcu_pr_3_lbl_sub_titulo_tipo_investi" value="#{properties.value('cu_pr_3_lbl_sub_titulo_tipo_investi')}" 
+                     styleClass="gris negrilla" />
+      <h:selectOneMenu styleClass="gris" id="idcu_pr_3_lbl_sub_titulo_tipo_investi" required="true" value="#{cuPr1ProyectoFaces.idTipoVinculacionSeleccionado}" >  
+        <f:selectItem itemLabel="--Select--" itemValue="" />  
+        <f:selectItems value="#{cuPr1ProyectoFaces.listaTipoInvestigador}" var="_item" />                 
+      </h:selectOneMenu>
+
+      <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_funcion_proyecto')}" styleClass="gris negrilla" 
+                     for="idcu_pr_3_lbl_sub_titulo_funcion_proyecto" />
+      <h:panelGrid columns="1" style="width: 100%">
+        <p:inputTextarea value="#{cuPr1ProyectoFaces.investigadorProyecto.funcionProyecto}"  
+                         id="idcu_pr_3_lbl_sub_titulo_funcion_proyecto"
+                         maxlength="512" counter="contadorTemaProyecto" 
+                         required="true" autoResize="false" rows="3"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         styleClass="textareaMaximo">
+          <f:validateLength minimum="1"  maximum="512" />
+        </p:inputTextarea>
+        <h:outputText id="contadorTemaProyecto" styleClass="gris" />
+      </h:panelGrid>
+
+
+      <h:outputLabel for="idcu_pr_3_lbl_sub_titulo_duracion_tiempo" value="#{properties.value('cu_pr_3_lbl_sub_titulo_duracion_tiempo')}" 
+                     styleClass="gris negrilla" /> 
+      <h:panelGroup>
+        <p:inputText value="#{cuPr1ProyectoFaces.investigadorProyecto.horasDedicacion}" onkeypress="return soloNumerosInpuText(event);"
+                     id="idcu_pr_3_lbl_sub_titulo_duracion_tiempo" required="true" maxlength="3" >
+          <p:ajax event="blur" listener="#{cuPr1ProyectoFaces.calcularValorHora}" 
+                  update="idcu_pr_3_lbl_sub_titulo_calculo_horas" />
+        </p:inputText>
+        <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_horas_semanales')}" styleClass="gris" /> 
+      </h:panelGroup>
+
+      <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_calculo_horas')}" styleClass="gris negrilla" /> 
+      <h:panelGroup>
+        <h:outputLabel id="idcu_pr_3_lbl_sub_titulo_calculo_horas" value="#{cuPr1ProyectoFaces.investigadorProyecto.calculoTotalHora}"
+                       styleClass="gris" >
+          <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_decimal')}" maxFractionDigits="1" />
+        </h:outputLabel>
+        <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_hora')}" styleClass="gris" /> 
+      </h:panelGroup>
+
+
+      <h:outputLabel for="idcu_pr_3_lbl_sub_titulo_valor_hora" value="#{properties.value('cu_pr_3_lbl_sub_titulo_valor_hora')}" 
+                     styleClass="gris negrilla" /> 
+      <p:inputText value="#{cuPr1ProyectoFaces.investigadorProyecto.valorHora}" disabled="#{!cuPr1ProyectoFaces.puedeEditarCampoTextoHora}" 
+                   onkeypress="return soloNumerosInpuText(event);"
+                   id="idcu_pr_3_lbl_sub_titulo_valor_hora" required="true" maxlength="12" >
+        <p:ajax event="blur" update="idcu_pr_3_lbl_sub_titulo_valor_hora" />
+        <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" maxFractionDigits="0" />
+      </p:inputText>
+
+      <h:outputLabel value="#{properties.value('cu_pr_3_lbl_ha_sido_investigado')}" styleClass="gris negrilla" />
+      <p:selectOneRadio id="investigador_3_anios" value="#{cuPr1ProyectoFaces.investigadorProyecto.investigado3anios}">  
+        <f:selectItem itemLabel="Sí" itemValue="Y" />  
+        <f:selectItem itemLabel="No" itemValue="N" />                  
+      </p:selectOneRadio>  
+      <h:outputLabel value="#{properties.value('cu_pr_3_lbl_se_encuntra_investigado')}" styleClass="gris negrilla"  />
+      <p:selectOneRadio id="invistador_actualmente" value="#{cuPr1ProyectoFaces.investigadorProyecto.investigadoAnual}">  
+        <f:selectItem itemLabel="Sí" itemValue="Y" />  
+        <f:selectItem itemLabel="No" itemValue="N" />                  
+      </p:selectOneRadio>   
+
+    </h:panelGrid>
+    <br />
+    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+    <br />
+    <div class="centrado">
+
+      <p:commandButton value="#{cuPr1ProyectoFaces.investigadorProyecto.idInvestigadorProyecto == null ?
+                                properties.value('cu_pr_3_lbl_btn_agregar') : properties.value('cu_pr_3_lbl_btn_actualizar_funcionario') }" 
+                       ajax="false"
+                       action="#{cuPr1ProyectoFaces.agregarInvestigador}" update="@form" />
+
+      <p:commandButton value="#{properties.value('cu_pr_3_lbl_btn_cancela_modi_funcionario')}" ajax="false"
+                       action="#{cuPr1ProyectoFaces.cancelarModificacion}" update="@form" 
+                       rendered="#{cuPr1ProyectoFaces.investigadorProyecto.idInvestigadorProyecto != null}" >
+
+      </p:commandButton>
+
+    </div>
+    <p:separator styleClass="separadorBorder" /> 
+    <br />
+
+    <p:dataTable id="idDataTableFuncionariosAgregados" var="_investigador"
+                 value="#{cuPr1ProyectoFaces.listaInvestigadoresProyecto}" 
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}"
+                 paginator="true" rowIndexVar="idFila" 
+                 paginatorPosition="bottom"
+                 resizableColumns="true"
+                 selection="#{cuPr1ProyectoFaces.investigadorProyectoEditar}" 
+                 selectionMode="single"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}">
+
+      <p:ajax event="rowSelect" listener="#{cuPr1ProyectoFaces.seleccionarInvestigadorPoyecto}" 
+              update=":tabViewProyectos:formAgregarTalentoHumanoFuncionarioProyecto :tabViewProyectos:formAgregarTalentoHumanoDelProyecto" />  
+      <p:ajax event="rowUnselect" listener="#{cuPr1ProyectoFaces.noSeleccionarInvestigadorPoyecto}" />
+
+      <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_tipo_inves')}" width="100">  
+        #{_investigador.tipoVinculacion.valor}
+      </p:column>              
+      <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_nom_y_apell')}">  
+        #{_investigador.identificacion} - #{_investigador.grado} - #{_investigador.nombreCompleto}
+      </p:column>
+      <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_unidadpoli')}" width="70">
+        #{_investigador.codigoUnidadPolicial}
+      </p:column>
+      <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_correo')}" >
+        #{_investigador.correo}
+      </p:column>
+      <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_num_tel')}" width="70" >
+        #{_investigador.telefono}
+      </p:column>
+      <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_estado')}" width="50" >
+        #{_investigador.descripcionActivo}
+      </p:column>
+      <p:column headerText="Horas" width="40" >  
+        <h:outputLabel value="#{_investigador.calculoTotalHora}" >
+          <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_decimal')}" maxFractionDigits="0" />
+        </h:outputLabel>                
+      </p:column> 
+
+      <p:column headerText="" width="80" >
+
+        <p:commandLink value="#{properties.value('cu_pr_3_lbl_btn_inactivar')}" 
+                       rendered="#{_investigador.activo eq 'Y' and cuPr1ProyectoFaces.isMostrarActivaInactivarInvestigador( _investigador )}"
+                       immediate="true" update="idDataTableFuncionariosAgregados" 
+                       action="#{cuPr1ProyectoFaces.inactivarInvestigador( _investigador, 'N' )}" />
+
+        <p:commandLink value="#{properties.value('cu_pr_3_lbl_btn_activar')}" 
+                       rendered="#{_investigador.activo eq 'N' and cuPr1ProyectoFaces.isMostrarActivaInactivarInvestigador( _investigador )}"
+                       update="idDataTableFuncionariosAgregados" immediate="true" 
+                       action="#{cuPr1ProyectoFaces.inactivarInvestigador( _investigador, 'Y' )}" />
+
+        -
+
+        <p:commandLink value="#{properties.value('cu_pr_3_lbl_btn_eliminar')}" 
+                       update="idDataTableFuncionariosAgregados" immediate="true"
+                       oncomplete="PF('varConfirmCambiarEstado').show()">  
+          <f:setPropertyActionListener value="#{_investigador}" target="#{cuPr1ProyectoFaces.investigadorProyectoEliminar}" />  
+        </p:commandLink> 
+
+      </p:column>
+
+      <f:facet name="footer">  
+        #{cuPr1ProyectoFaces.numeroRegistrosInvestigadoresProyecto} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+    </p:dataTable>
+
+    <ui:include src="include_accion_botones_abajo_talento_humano.xhtml" />
+
+  </h:form>
+
+  <p:confirmDialog widgetVar="varConfirmCambiarEstado" header="#{properties.value('cu_pr_3_lbl_titulo_confirmacion_publicar')}" 
+                   message="#{properties.value('cu_pr_3_lbl_titulo_confirmacion_msg_confirma_elimina_funcionario')}" > 
+
+    <h:form id="idForm_varConfirmCambiarEstado">
+
+      <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmCambiarEstado">
+        <div class="centrado">
+          <p:commandButton actionListener="#{cuPr1ProyectoFaces.eliminarRegistroInvestigador}" 
+                           value="#{properties.value('cu_pr_3_lbl_btn_confirma_si_publicar')}" immediate="true"
+                           oncomplete="varConfirmCambiarEstado.hide();"
+                           update=":tabViewProyectos:formAgregarTalentoHumanoDelProyecto:idDataTableFuncionariosAgregados" />  
+          <p:commandButton value="#{properties.value('cu_pr_3_lbl_btn_confirma_no_publicar')}" 
+                           onclick="varConfirmCambiarEstado.hide();" type="button" />       
+        </div>
+      </p:outputPanel>
+
+    </h:form>
+  </p:confirmDialog>
+
+
+</html>

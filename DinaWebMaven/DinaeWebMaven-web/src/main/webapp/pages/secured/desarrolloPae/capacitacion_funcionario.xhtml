@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    template="/templates/plantillaPrincipal.xhtml">
+    <ui:define
+        name="content">
+        <p:panel 
+            id="main"
+            styleClass="ui-fluid">
+            <h:form
+                id="frmlist"
+                prependId="false"
+                rendered="#{!capacitacionFuncionarioController.render}">
+                <h:outputText 
+                    value="#{bundle['capacitacionfuncionario.titulo.lbl']}"
+                    style="negrilla"/>
+                <p:separator />
+                <p:panel
+                    id="pnlbtns">
+                    <p:panelGrid
+                        columns="6"
+                        layout="grid" 
+                        columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+                        styleClass="ui-panelgrid-blank">
+                        <p:outputLabel
+                            value="#{bundle['siedueventoescuela.participante.identificacion']}:"
+                            styleClass="negrilla"/>
+                        <p:inputText
+                            required="true"
+                            value="#{capacitacionFuncionarioController.identificacion}"/>                      
+                        <p:commandButton 
+                            value="#{bundle['commons.btn.find']}"
+                            title="#{bundle['commons.btn.find']}"
+                            icon="ui-icon-search"
+                            style="border: none"
+                            actionListener="#{capacitacionFuncionarioController.onFind()}"                            
+                            update="main"/>
+                    </p:panelGrid>
+                </p:panel>                
+            </h:form>
+            <h:form
+                id="frmDetail"
+                prependId="false"
+                rendered="#{capacitacionFuncionarioController.render}">
+                <h:outputText 
+                    value="#{bundle['capacitacionfuncionario.titulo.lbl']}"
+                    styleClass="negrilla"/>
+                <p:separator />
+                <p:panelGrid
+                    columns="2"
+                    layout="grid" 
+                    columnClasses="ui-grid-col-2,ui-grid-col-10">
+                    <f:facet
+                        name="header">
+                        Datos del funcionario
+                    </f:facet>
+                    <p:outputLabel
+                        value="#{bundle['siedueventoescuela.participante.grado']}:"
+                        styleClass="negrilla"/>
+                    <h:outputText
+                        value="#{capacitacionFuncionarioController.datoPersona.grado}"/>
+                    <p:outputLabel
+                        value="#{bundle['siedueventoescuela.participante.nombres']}:"
+                        styleClass="negrilla"/>
+                    <h:outputText
+                        value="#{capacitacionFuncionarioController.datoPersona.nombre}"/>
+                    <p:outputLabel
+                        value="#{bundle['unidad']}:"
+                        styleClass="negrilla"/>
+                    <h:outputText
+                        value="#{capacitacionFuncionarioController.datoPersona.unidad}"/>
+                    <p:outputLabel
+                        value="#{bundle['siedueventoescuela.participante.cargo']}:"
+                        styleClass="negrilla"/>
+                    <h:outputText
+                        value="#{capacitacionFuncionarioController.datoPersona.cargo}"/>
+                </p:panelGrid>
+                <p:dataTable 
+                    id="dtList"
+                    value="#{capacitacionFuncionarioController.list}"
+                    var="record"
+                    paginator="true"
+                    paginatorPosition="bottom"
+                    rows="10"                                      
+                    reflow="true"
+                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                    rowsPerPageTemplate="10,50,100"
+                    style="font-size: smaller; margin-top: 15px">
+                    <f:facet
+                        name="header">
+                        #{bundle['capacitacionfuncionario.titulo.lbl']}
+                    </f:facet>
+                    <p:column 
+                        headerText="#{bundle['escuela']}"
+                        sortBy="#{record.pareEvee.eveeCapa.escuela.siglaFisica}"
+                        style="width: 8%; text-align: center">
+                        <h:outputText 
+                            value="#{record.pareEvee.eveeCapa.escuela.siglaFisica}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['programa']}"
+                        sortBy="#{record.pareEvee.eveeCapa.carrera.descripcion}">
+                        <h:outputText 
+                            value="#{record.pareEvee.eveeCapa.carrera.descripcion}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['unidad']}"
+                        sortBy="#{record.pareUdeUnidad.siglaFisica}"
+                        style="width: 7%; text-align: center">
+                        <h:outputText 
+                            value="#{record.pareUdeUnidad.siglaFisica}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['siedueventoescuela.fechainicio']}"
+                        sortBy="#{record.pareEvee.eveeFechaini}"
+                        style="width: 8%; text-align: center">
+                        <h:outputText 
+                            value="#{record.pareEvee.eveeFechaini}">
+                            <f:convertDateTime 
+                                type="date" 
+                                pattern="#{bundle['pattern.default.date']}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['siedueventoescuela.fechafin']}"
+                        sortBy="#{record.pareEvee.eveeFechafin}"
+                        style="width: 8%; text-align: center">
+                        <h:outputText 
+                            value="#{record.pareEvee.eveeFechafin}">
+                            <f:convertDateTime 
+                                type="date" 
+                                pattern="#{bundle['pattern.default.date']}"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['siedueventoescuela.cerrado']}"                        
+                        style="width: 6%; text-align: center">
+                        <h:outputText 
+                            value="#{record.pareEvee.eveeCerrado}"/>
+                    </p:column>                    
+                    <p:column 
+                        headerText="#{bundle['siedueventoescuela.participante.estado']}"
+                        sortBy="#{record.pareEstado}"
+                        style="width: 8%; text-align: center">
+                        <h:outputText 
+                            value="#{record.pareEstado}"/>
+                    </p:column>
+                </p:dataTable>
+                <p:panelGrid
+                    columns="2"
+                    layout="grid" 
+                    columnClasses="ui-grid-col-2, ui-grid-col-10" 
+                    styleClass="ui-panelgrid-blank"
+                    style="margin-top: 10px">                            
+                    <p:commandButton 
+                        id="btnCreate"
+                        value="#{bundle['commons.btn.back']}"
+                        title="#{bundle['commons.btn.back']}"
+                        icon="ui-icon-arrowreturnthick-1-w"
+                        actionListener="#{capacitacionFuncionarioController.onBack()}"
+                        update=":main"
+                        style="border: none"/>             
+                </p:panelGrid>
+            </h:form>
+        </p:panel>
+    </ui:define>
+</ui:composition>

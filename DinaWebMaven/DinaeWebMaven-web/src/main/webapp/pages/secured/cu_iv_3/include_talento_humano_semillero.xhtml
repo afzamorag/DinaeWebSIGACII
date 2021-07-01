@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <h:form id="forminclude_talento_humano_semillero" >
+
+    <br />
+
+    <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="N° de identificación" styleClass="gris negrilla" />
+      </h:panelGrid>
+
+      <h:panelGrid columns="2">
+        <p:inputText id="inputIdentificacionInv"  maxlength="15"
+                     styleClass="textMaximo, #{cuIv3GestionarSemillerosInvestigacionFaces.inputIdentificacion.valid?'':'inputInvalid'}" 
+                     binding="#{cuIv3GestionarSemillerosInvestigacionFaces.inputIdentificacion}" 
+                     value="#{cuIv3GestionarSemillerosInvestigacionFaces.identificacion}" />
+        <p:commandButton value="#{properties.value('general_lbl_btn_buscar')}" id="btnBuscarInvestigador"
+                         action="#{cuIv3GestionarSemillerosInvestigacionFaces.buscarInvestigador}" update="@form @form:tablaInvestigadorEvaluacion @form:idDataTableDatosTituloObtenido"/> 
+      </h:panelGrid>
+
+    </h:panelGrid>
+    <br />
+    <p:dataTable var="autor" value="#{cuIv3GestionarSemillerosInvestigacionFaces.investigadorSeleccionado}"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                 id="tablaInvestigadorEvaluacion"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}"                                     
+                 style="width: 100%;"
+                 resizableColumns="true" rowIndexVar="idFila"                                     
+                 rowStyleClass="filaParDataTable">
+
+      <p:column headerText="#{properties.value('cu_co_7_lbl_grado')}" width="100" style="color: white; font-size: 13px">
+        <h:outputText value="#{autor.grado}" styleClass="gris" style="font-size: 13px"/>
+      </p:column>
+      <p:column headerText="#{properties.value('cu_co_7_lbl_nombres_apellidos')}" style="color: white; font-size: 13px">
+        <h:outputText value="#{autor.nombreCompleto}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+      </p:column>
+      <p:column headerText="#{properties.value('cu_co_7_lbl_correo_electronico')}" width="250" style="color: white; font-size: 13px">
+        <h:outputText value="#{autor.correo}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+      </p:column>
+      <p:column headerText="Grado" width="100" style="color: white; font-size: 13px">
+        <h:outputText value="#{autor.grado}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+      </p:column>
+      <p:column headerText="Teléfono" width="100" style="color: white; font-size: 13px">
+        <h:outputText value="#{autor.telefono}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+      </p:column>
+    </p:dataTable>
+
+    <br />        
+
+    <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="Relación con el semillero" styleClass="gris negrilla" />
+      </h:panelGrid> 
+      <h:selectOneMenu value="#{cuIv3GestionarSemillerosInvestigacionFaces.relacionSemilleroSeleccion}" id="selectRelacionSemillero"
+                       styleClass="#{cuIv3GestionarSemillerosInvestigacionFaces.selectRelacionSemillero.valid?'':'inputInvalid'}" 
+                       binding="#{cuIv3GestionarSemillerosInvestigacionFaces.selectRelacionSemillero}" >  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{cuIv3GestionarSemillerosInvestigacionFaces.listaRelacionSemillero}" var="_rel" itemValue="#{_rel.idConstantes}" itemLabel="#{_rel.valor}"/>
+      </h:selectOneMenu>
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="Compañia" styleClass="gris negrilla" />
+      </h:panelGrid>            
+      <p:inputText maxlength="50" id="inputCompaniaRecursoSemillero" 
+                   styleClass="textMaximo, #{cuIv3GestionarSemillerosInvestigacionFaces.inputCompania.valid?'':'inputInvalid'}" 
+                   binding="#{cuIv3GestionarSemillerosInvestigacionFaces.inputCompania}"
+                   value="#{cuIv3GestionarSemillerosInvestigacionFaces.compania}" />
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="N° Curso o Promoción" styleClass="gris negrilla" />
+      </h:panelGrid>             
+      <p:inputText maxlength="30" id="inputCursoPromocionRecursoSemillero"
+                   value="#{cuIv3GestionarSemillerosInvestigacionFaces.cursoPromocion}"
+                   styleClass="textMaximo, #{cuIv3GestionarSemillerosInvestigacionFaces.inputCursoPromocion.valid?'':'inputInvalid'}" 
+                   binding="#{cuIv3GestionarSemillerosInvestigacionFaces.inputCursoPromocion}"/>
+
+      <h:outputLabel value="Fecha de inicio del programa académico" styleClass="gris negrilla" />     
+      <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es"
+                  value="#{cuIv3GestionarSemillerosInvestigacionFaces.fechaInicioPrograma}" 
+                  yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                  id="fechaInicioPrograma" showOn="button"
+                  navigator="true"/>  
+
+      <h:outputLabel value="Fecha final del programa académico" styleClass="gris negrilla" />            
+      <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es"
+                  value="#{cuIv3GestionarSemillerosInvestigacionFaces.fechaFinPrograma}" 
+                  yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                  id="fechaFinPrograma" showOn="button"
+                  navigator="true"/>
+
+      <h:outputLabel value="Vinculación" styleClass="gris negrilla" />
+      <h:selectOneMenu value="#{cuIv3GestionarSemillerosInvestigacionFaces.tipoVinculacion}" id="selectVinculacionSemillero">  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{cuIv3GestionarSemillerosInvestigacionFaces.listaTipoVinculacion}" var="_vic" itemValue="#{_vic.idConstantes}" itemLabel="#{_vic.valor}"/>
+      </h:selectOneMenu>
+
+    </h:panelGrid>
+
+    <p:dataTable id="idDataTableDatosTituloObtenido" var="_formacion"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 value="#{cuIv3GestionarSemillerosInvestigacionFaces.nivelFormacionFuncionaio}" 
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rowIndexVar="idFila" paginatorPosition="bottom" 
+                 resizableColumns="true"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true">
+
+      <p:column headerText="Titulo obtenido" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_formacion.tituloObtenido}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column headerText="Nivel académico" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_formacion.nivelAcademico}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column headerText="Area de saber" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_formacion.areaDelSaber}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column headerText="Fecha de finalización" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_formacion.fechaFinalizacion}" styleClass="alineadoIzquierda gris" style="font-size: 13px">
+          <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+        </h:outputLabel>  
+      </p:column>
+
+      <f:facet name="footer">  
+        #{fn:length( cuIv3GestionarSemillerosInvestigacionFaces.nivelFormacionFuncionaio )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable>        
+    <br />
+    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+    <br />
+    <p:separator styleClass="separadorBorder" /> 
+    <div class="centrado">        
+      <p:commandButton value="Agregar" action="#{cuIv3GestionarSemillerosInvestigacionFaces.guardarRecursoHumanoSemillero}" update="@form"/>            
+    </div>
+    <br />
+    <p:dataTable id="idDataTableDatosHumano" var="_recurso"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 value="#{cuIv3GestionarSemillerosInvestigacionFaces.listaRecursoHumanoSemilleroModel}" 
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rowIndexVar="idFila" paginatorPosition="bottom" 
+                 selection="#{cuIv3GestionarSemillerosInvestigacionFaces.recursoHumanoSeleccionado}"
+                 resizableColumns="true"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true">
+
+      <p:column selectionMode="multiple" style="width:15px" /> 
+
+      <p:column headerText="Relación con el semillero" width="100" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_recurso.tipoRelacionSemillero.valor}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column headerText="Grado" width="50" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_recurso.grado}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column headerText="Nombres y apellidos" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_recurso.nombres}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column headerText="Correo electrónico" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_recurso.correoElectronico}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>            
+
+      <p:column headerText="Número telefónico" style="color: white; font-size: 13px" width="70">  
+        <h:outputLabel value="#{_recurso.telefono}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column headerText="Vinculación" style="color: white; font-size: 13px" width="70">  
+        <h:outputLabel value="#{_recurso.tipoVinculacion.valor}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column headerText="Estado" width="70" style="color: white; font-size: 13px" >  
+        <h:outputLabel value="#{(_recurso.estado == 'A') ? 'ACTIVO' : 'INACTIVO'}" styleClass="gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column headerText="Fecha de ingreso" style="color: white; font-size: 13px" width="70">  
+        <h:outputLabel value="#{_recurso.fechaRegistro}" styleClass="gris" style="font-size: 13px"> 
+          <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+        </h:outputLabel>  
+      </p:column>
+
+      <f:facet name="footer">  
+        #{fn:length( cuIv3GestionarSemillerosInvestigacionFaces.listaSemilleroInvestigacionDTOJefeUnidadAprueba )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable>
+
+    <br />
+    <div class="centrado">          
+      <p:commandButton value="Activar / Inactivar participante" action="#{cuIv3GestionarSemillerosInvestigacionFaces.activarInactivarRecurso}" update="@form" />            
+    </div>
+
+  </h:form>
+</html>

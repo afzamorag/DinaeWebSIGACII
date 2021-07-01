@@ -1,0 +1,150 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+
+      <ui:define name="content">
+        <h:form id="formIngresoEvaluacionProyecto">  
+
+          <div class="fixed-menu">
+            <div class="right-col">
+              <h2 style="font: verdana;">
+                #{properties.value('cu_pr_12_lbl_titulo')}
+              </h2>
+            </div>
+          </div>
+
+          <br />
+          <h:outputLabel value="#{properties.value('cu_pr_12_lbl_info')}" styleClass="green negrilla"/>
+          <br /><br/>
+
+          <h:panelGrid columns="2" style="width: 100%;">  
+            <h:panelGrid columns="2" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                         columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento"> 
+              <h:outputLabel value="#{properties.value('cu_pr_12_lbl_titulo_proyecto')}" styleClass="gris negrilla" />  
+              <h:outputLabel value="#{cuPr12EvaluacionProyectosInvestigacionFaces.proyectoSeleccionado.tituloPropuesto}" styleClass="gris"/>  
+            </h:panelGrid>
+
+            <h:panelGrid columns="2" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                         columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento"> 
+              <h:outputLabel value="#{properties.value('cu_pr_12_lbl_codigo_proyecto')}" styleClass="gris negrilla" />  
+              <h:outputLabel value="#{cuPr12EvaluacionProyectosInvestigacionFaces.proyectoSeleccionado.codigoProyecto}" styleClass="gris"/> 
+            </h:panelGrid>
+          </h:panelGrid>  
+          <br />
+          <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" style="width: 100%;"
+                       id="idDataTableCriterios" var="_criterio" paginatorPosition="bottom" 
+                       rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true" 
+                       value="#{cuPr12EvaluacionProyectosInvestigacionFaces.listaCriteriosEvaluacion}" 
+                       rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                       resizableColumns="true"
+                       rowIndexVar="idFila">
+
+            <p:column width="30" headerText="#{properties.value('general_lbl_numero_tabla')}" style="text-align: center">  
+              #{idFila + 1}
+            </p:column> 
+
+            <p:column headerText="#{properties.value('cu_pr_12_lbl_popup_table_aspectos')}" width="400">  
+              #{_criterio.nombreCriterio}
+            </p:column> 
+
+            <p:column width="100" headerText="Nota">  
+              <p:inputText value="#{_criterio.evaluacion}" size="10" 
+                           onkeypress="return soloNumerosInpuText(event);" maxlength="4" >
+                <p:ajax event="blur" listener="#{cuPr12EvaluacionProyectosInvestigacionFaces.tomarTextoNota(_criterio)}" 
+                        update=":formIngresoEvaluacionProyecto idDataTableCriterios" />
+              </p:inputText>
+            </p:column>
+
+            <p:column width="100" headerText="Valor cualitativo" style="text-align: center">  
+              #{_criterio.cualificacion}
+            </p:column> 
+
+            <p:columnGroup type="footer">  
+              <p:row>  
+                <p:column colspan="2" footerText="Total" style="text-align:right; color:white; font-weight: bold"  />  
+                <p:column style="color:white; font-weight: bold" footerText="#{cuPr12EvaluacionProyectosInvestigacionFaces.calificacionTotal}" />  
+                <p:column style="color:white; font-weight: bold" footerText="#{cuPr12EvaluacionProyectosInvestigacionFaces.cualificacionTotal}" />
+              </p:row>  
+            </p:columnGroup>                                  
+          </p:dataTable>                            
+          <br />
+
+          <h:panelGrid columns="2" style="width: 100%;"
+                       rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                       columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento" >
+
+            <h:panelGrid columns="2">
+              <h:outputLabel value="*" style="color: red; font-weight: bold" />
+              <h:outputLabel value="Sugerencias y recomendaciones" styleClass="gris negrilla"/>
+            </h:panelGrid>
+            <h:panelGroup>
+              <p:inputTextarea value="#{cuPr12EvaluacionProyectosInvestigacionFaces.sugerencias}"
+                               id="textAreaSugerencias"
+                               maxlength="512" counter="contadorSuegerencias"
+                               counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                               styleClass="textareaMaximo" cols="100" rows="3" autoResize="false">
+                <f:validateLength minimum="0"  maximum="512" />
+              </p:inputTextarea>
+              <h:outputText id="contadorSuegerencias" styleClass="gris" />
+            </h:panelGroup>
+
+            <h:panelGrid columns="2">
+              <h:outputLabel value="*" style="color: red; font-weight: bold" />
+              <h:outputLabel value="N° de indentifiación" styleClass="gris negrilla" /> 
+            </h:panelGrid> 
+            <h:panelGrid columns="2">
+              <h:inputText value="#{cuPr12EvaluacionProyectosInvestigacionFaces.identificacion}" />
+              <p:commandButton value="#{properties.value('general_lbl_btn_buscar')}" id="btnBuscarInvestigador"
+                               action="#{cuPr12EvaluacionProyectosInvestigacionFaces.buscarInvestigador}" update="@form:tablaInvestigadorEvaluacion"/> 
+            </h:panelGrid>
+
+          </h:panelGrid>  
+
+          <br />
+          <p:dataTable var="autor" value="#{cuPr12EvaluacionProyectosInvestigacionFaces.investigadorSeleccionado}"
+                       rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                       id="tablaInvestigadorEvaluacion"
+                       emptyMessage="#{properties.value('general_mensaje_no_records_found')}"                                     
+                       style="width: 100%;"
+                       resizableColumns="true" rowIndexVar="idFila"                                     
+                       rowStyleClass="filaParDataTable">
+
+            <p:column headerText="#{properties.value('cu_co_7_lbl_grado')}" >
+              <h:outputText value="#{autor.grado}" />
+            </p:column>
+            <p:column headerText="#{properties.value('cu_co_7_lbl_nombres_apellidos')}" >
+              <h:outputText value="#{autor.nombreCompleto}" />
+            </p:column>
+            <p:column headerText="#{properties.value('cu_co_7_lbl_correo_electronico')}">
+              <h:outputText value="#{autor.correo}" />
+            </p:column>
+          </p:dataTable>
+
+          <br />
+          <p:separator styleClass="separadorBorder" /> 
+
+          <div class="centrado">
+
+            <p:commandButton id="cancelButton" value="Regresar" immediate="true" 
+                             action="#{cuPr12EvaluacionProyectosInvestigacionFaces.regresarBusqueda}"/>
+
+            <p:commandButton value="#{properties.value('general_lbl_btn_guardar')}" 
+                             id="btn1EvaluacionProyecto"
+                             rendered="#{cuPr12EvaluacionProyectosInvestigacionFaces.mostrarGuardar}"
+                             action="#{cuPr12EvaluacionProyectosInvestigacionFaces.guardarEvaluacionProyecto}" update="@form" />
+
+          </div>                       
+
+        </h:form>
+      </ui:define>
+    </ui:composition>
+  </body>
+</html>

@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+  <body>
+
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+      <ui:define name="content">
+        <div class="fixed-menu">
+          <div class="right-col">
+            <h2>
+              #{properties.value('cu_ne_1_lbl_tabview_titulo_pagina')}
+            </h2>
+          </div>
+        </div>
+        <h:panelGroup id="listaPeriodo" rendered="#{cuNe1PeriodoNecesidadesFaces.activeIndex=='0'}">
+          <ui:include src="include_listaPeriodosVigentes.xhtml"></ui:include>
+        </h:panelGroup>             
+        <h:panelGroup id="nuevoPeriodo" rendered="#{cuNe1PeriodoNecesidadesFaces.activeIndex=='1'}">
+          <ui:include src="include_agregarNuevoPeriodoVigente.xhtml"></ui:include>
+        </h:panelGroup>
+
+      </ui:define>
+    </ui:composition>
+
+  </body>
+</html>

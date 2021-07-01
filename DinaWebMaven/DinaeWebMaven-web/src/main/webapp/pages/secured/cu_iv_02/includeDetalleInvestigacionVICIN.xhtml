@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+  <h:form id="formInvestigacionesVICIN" >
+    <br/>
+    <p:dataTable id="tablaInvestigacionesVICIN" value="#{cuIv02ConsultarInvestigadores.listaInvestigadoresVICIN}"
+                 var="investigacion" rowIndexVar="idFila" 
+                 paginator="true" paginatorPosition="bottom"
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}"
+                 resizableColumns="true" rowKey="#{investigacion.idInvestigadorProyecto}">
+
+      <p:column width="30" headerText="No." >
+        <h:outputLabel value="#{idFila + 1}" styleClass="gris"/>
+      </p:column>
+      <p:column headerText="Fecha" width="90">
+        <h:outputText value="#{investigacion.proyecto.fechaRegistro}" styleClass="gris">
+          <f:convertDateTime pattern="dd/MM/yyyy" type="date"/>
+        </h:outputText>
+      </p:column>
+      <p:column headerText="Título de la investigación" >
+        <h:outputText value="#{investigacion.proyecto.tituloPropuesto}" styleClass="gris"/>
+      </p:column>
+      <p:column headerText="Tipo de vinculación" width="90">
+        <h:outputText value="#{investigacion.tipoVinculacion.valor}" styleClass="gris"/>
+      </p:column>
+      <p:column headerText="Tiempo dedicado" width="70" >
+        <h:outputText value="#{investigacion.horasDedicacion}" styleClass="gris"/>
+      </p:column>
+      <p:column headerText="Unidad policial" >
+        <h:outputText value="#{investigacion.proyecto.unidadPolicial.nombre}" styleClass="gris"/>
+      </p:column>
+      <p:column headerText="Estado" width="90" >
+        <h:outputText value="#{investigacion.proyecto.estado.valor}" styleClass="gris"/>
+      </p:column>
+    </p:dataTable>
+    <br />
+
+  </h:form>
+</html>
+

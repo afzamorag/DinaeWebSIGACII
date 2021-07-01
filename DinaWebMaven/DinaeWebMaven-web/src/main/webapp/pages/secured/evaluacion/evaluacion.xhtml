@@ -1,0 +1,272 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    template="/templates/plantillaPrincipal.xhtml">
+    <ui:define 
+        name="content">
+        <p:panel 
+            id="main"
+            styleClass="ui-fluid">
+            <h:form
+                id="frmList"
+                prependId="false">
+                <h:outputText 
+                    value="#{bundle['evaluacion.titulo.evaluacion']}"/>
+                <p:separator />
+                <p:panel 
+                    id="container">
+                    <p:panelGrid
+                        id="pgFiltro"
+                        layout="grid" 
+                        columns="4"
+                        columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" 
+                        styleClass="ui-panelgrid-blank">
+                        <!-- vigencia -->
+                        <p:outputLabel
+                            for="somVigencia"
+                            value="#{bundle['evaluacion.vigencia']}"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu 
+                                disabled="#{evaluacionController.selected.estadoEvaluacion == 'PENDIENTE'}"
+                                id="somVigencia" 
+                                value="#{evaluacionController.selected.pae.id}"
+                                required="true">
+                                <f:selectItem 
+                                    value="#{appController.noSelection}"/>
+                                <f:selectItems 
+                                    value="#{evaluacionController.vigencias}" 
+                                    var="vigencia" 
+                                    itemLabel="#{vigencia.vigencia}" 
+                                    itemValue="#{vigencia.id}" />
+                            </p:selectOneMenu>              
+                            <p:message
+                                for="somVigencia"/>
+                        </h:panelGroup>
+                        <!-- nombre evaluación -->
+                        <p:outputLabel
+                            for="somNombreEval"
+                            value="#{bundle['evaluacion.nombreEvaluacion']}"/>
+                        <h:panelGroup>
+                            <p:inputText 
+                                id="somNombreEval" 
+                                required="true"
+                                value="#{evaluacionController.selected.evalDescri}" 
+                                disabled="#{evaluacionController.selected.estadoEvaluacion == 'PENDIENTE'}" />           
+                            <p:message 
+                                for="somNombreEval"/>
+                        </h:panelGroup>
+                        <!-- proceso -->
+                        <p:outputLabel
+                            for="somProceso"
+                            value="#{bundle['evaluacion.proceso']}"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu 
+                                disabled="#{evaluacionController.selected.estadoEvaluacion == 'PENDIENTE'}" 
+                                id="somProceso" 
+                                value="#{evaluacionController.selected.proceso.id}"
+                                required="true">
+                                <p:ajax 
+                                    process="@this,somModalidad,somProgramaAcademico" 
+                                    update="smmPoblacionNivel,smmPoblacionGrado" 
+                                    listener="#{evaluacionController.cargarCategoriasEvaluacion()}" />
+                                <f:selectItem 
+                                    value="#{appController.noSelection}"/>
+                                <f:selectItems 
+                                    value="#{evaluacionController.procesos}" 
+                                    var="proceso" 
+                                    itemLabel="#{proceso.nombre}" 
+                                    itemValue="#{proceso.id}" />
+                            </p:selectOneMenu>              
+                            <p:message
+                                for="somProceso"/>
+                        </h:panelGroup>
+
+                        <!-- modalidad -->
+                        <p:outputLabel
+                            for="somModalidad"
+                            value="#{bundle['evaluacion.modalidad']}"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu 
+                                disabled="#{evaluacionController.selected.estadoEvaluacion == 'PENDIENTE'}" 
+                                id="somModalidad" 
+                                value="#{evaluacionController.selected.modalidad.id}" 
+                                required="false">
+                                <p:ajax 
+                                    process="@this,somProceso,somProgramaAcademico" 
+                                    update="smmPoblacionNivel,smmPoblacionGrado" 
+                                    listener="#{evaluacionController.cargarCategoriasEvaluacion()}" />
+                                <f:selectItem 
+                                    value="#{appController.noSelection}"/>
+                                <f:selectItems 
+                                    value="#{evaluacionController.modalidades}" 
+                                    var="modalidad" 
+                                    itemLabel="#{modalidad.nombre}" 
+                                    itemValue="#{modalidad.id}" />
+                            </p:selectOneMenu>              
+                            <p:message
+                                for="somModalidad"/>
+                        </h:panelGroup>
+
+                        <!-- nivel académico -->
+                        <p:outputLabel
+                            for="somNivelAcademico"
+                            value="#{bundle['evaluacion.nivelAcademico']}"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu 
+                                disabled="#{evaluacionController.selected.estadoEvaluacion == 'PENDIENTE'}" 
+                                id="somNivelAcademico" 
+                                value="#{evaluacionController.selected.evento.carrera.nivelAcademico.idNivelAcademico}"
+                                required="false">
+                                <p:ajax 
+                                    process="@this" 
+                                    update="somProgramaAcademico,smmPoblacionNivel,smmPoblacionGrado" 
+                                    listener="#{evaluacionController.cargarProgramasAcademicosPorNivel()}" />
+                                <f:selectItem 
+                                    value="#{appController.noSelection}"/>
+                                <f:selectItems 
+                                    value="#{evaluacionController.nivelesAcademicos}" 
+                                    var="nivelAcademico" 
+                                    itemLabel="#{nivelAcademico.descripcion}" 
+                                    itemValue="#{nivelAcademico.idNivelAcademico}" />
+                            </p:selectOneMenu>              
+                            <p:message
+                                for="somNivelAcademico"/>
+                        </h:panelGroup>
+                        <p:outputLabel
+                            for="somProgramaAcademico"
+                            value="#{bundle['evaluacion.programaAcademico']}"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu 
+                                disabled="#{evaluacionController.selected.estadoEvaluacion == 'PENDIENTE'}"
+                                id="somProgramaAcademico" 
+                                converter="carreraPKConverter" 
+                                value="#{evaluacionController.selected.evento.carrera.carrerasPK}" 
+                                required="false"
+                                filter="true"
+                                filterMatchMode="contains">
+                                <p:ajax 
+                                    process="@this,somProceso,somModalidad" 
+                                    update="smmPoblacionNivel,smmPoblacionGrado" 
+                                    listener="#{evaluacionController.cargarCategoriasEvaluacion()}" />
+                                <f:selectItem 
+                                    value="#{appController.noSelection}"/>
+                                <f:selectItems 
+                                    value="#{evaluacionController.programasAcademicos}" 
+                                    var="programa" 
+                                    itemLabel="#{programa.descripcion}" 
+                                    itemValue="#{programa.carrerasPK}"/>
+                            </p:selectOneMenu>              
+                            <p:message
+                                for="somProgramaAcademico"/>
+                        </h:panelGroup>
+                        <!-- población nivel -->
+                        <p:outputLabel
+                            for="smmPoblacionNivel"
+                            value="#{bundle['evaluacion.poblacionNivel']}"/>
+                        <h:panelGroup>
+                            <p:selectManyMenu 
+                                disabled="#{evaluacionController.selected.estadoEvaluacion == 'PENDIENTE'}" 
+                                id="smmPoblacionNivel" 
+                                value="#{evaluacionController.selected.categoriaPks}"         
+                                required="false" 
+                                converter="categoriaPKConverter" 
+                                showCheckbox="true" 
+                                scrollHeight="100" >
+                                <p:ajax  
+                                    process="@this" 
+                                    update="smmPoblacionGrado" 
+                                    listener="#{evaluacionController.cargarGradosPorCategorias()}" />
+                                <f:selectItems 
+                                    value="#{evaluacionController.categoriasEvaluacion}"   
+                                    var="nivel" 
+                                    itemLabel="#{nivel.descripcion}" 
+                                    itemValue="#{nivel.id}"/>
+                            </p:selectManyMenu>              
+                            <p:message 
+                                for="smmPoblacionNivel"/>
+                        </h:panelGroup>
+                        <!-- población grado -->
+                        <p:outputLabel
+                            for="smmPoblacionGrado"
+                            value="#{bundle['evaluacion.poblacionGrado']}"/>
+                        <h:panelGroup>
+                            <p:selectManyMenu 
+                                disabled="#{evaluacionController.selected.estadoEvaluacion == 'PENDIENTE'}" 
+                                id="smmPoblacionGrado" 
+                                value="#{evaluacionController.selected.gradoPKs}" 
+                                required="true" 
+                                converter="gradoPKConverter" 
+                                showCheckbox="true" 
+                                scrollHeight="100" >
+                                <f:selectItems 
+                                    value="#{evaluacionController.grados}" 
+                                    var="grado" 
+                                    itemLabel="#{grado.descripcion}" 
+                                    itemValue="#{grado.id}"/>
+                            </p:selectManyMenu>              
+                            <p:message 
+                                for="smmPoblacionGrado"/>
+                        </h:panelGroup>
+                        <!-- nombre numeroPreguntas -->
+                        <p:outputLabel
+                            for="somNroPreg"
+                            value="#{bundle['evaluacion.numeroPreguntas']}"/>
+                        <h:panelGroup>
+                            <p:inputText 
+                                disabled="#{evaluacionController.selected.estadoEvaluacion == 'PENDIENTE'}" 
+                                id="somNroPreg"
+                                value="#{evaluacionController.selected.evalNroPreg}" 
+                                required="true" 
+                                size="3" />     
+                            <p:message 
+                                for="somNroPreg"/>
+                        </h:panelGroup>
+                    </p:panelGrid>
+                    <f:facet
+                        name="footer">
+                        <p:panelGrid
+                            columns="4"
+                            layout="grid" 
+                            columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+                            styleClass="ui-panelgrid-blank">
+                            <p:commandButton 
+                                value="#{bundle['evaluacion.btn.add.preg']}"
+                                title="#{bundle['evaluacion.btn.add.preg']}"
+                                icon="ui-icon-document" 
+                                disabled="#{evaluacionController.selected.estadoEvaluacion != 'PENDIENTE'}"
+                                process="@this" 
+                                action="#{evaluacionController.agregarPregunta()}">
+                                <f:setPropertyActionListener 
+                                    value="evaluacion.xhtml?faces-redirect=true" 
+                                    target="#{evaluacionController.outcomeCancelarPregunta}" />
+                            </p:commandButton>
+                            <p:commandButton 
+                                value="#{bundle['commons.btn.back']}"
+                                title="#{bundle['commons.btn.back']}"
+                                icon="icon-reply-all" 
+                                action="buscarEvaluacion.xhtml?faces-redirect=true" 
+                                process="@this">
+                                <f:setPropertyActionListener 
+                                    value="LIST" 
+                                    target="#{evaluacionController.optionNavEnum}" />
+                            </p:commandButton>
+                            <p:commandButton 
+                                disabled="#{evaluacionController.selected.estadoEvaluacion == 'PENDIENTE'}"
+                                value="#{bundle['commons.btn.save']}"
+                                title="#{bundle['commons.btn.save']}"
+                                icon="ui-icon-disk" 
+                                actionListener="#{evaluacionController.guardarEvaluacion()}" 
+                                update="frmList"  >
+                            </p:commandButton>
+                        </p:panelGrid>
+                    </f:facet>
+                </p:panel>
+            </h:form>
+        </p:panel>
+    </ui:define>
+</ui:composition>

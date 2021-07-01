@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+               columnClasses="panelGridColumnaValor_30_porciento,panelGridColumnaValor_70_porciento">
+
+    <h:outputLabel  value="Función del proyecto" styleClass="gris negrilla"/>
+    <h:outputLabel value="#{includeInformacionInformeProyectoGenericoFaces.proyectoSeleccionado.funcionProyecto}" styleClass="gris"/>
+
+  </h:panelGrid>
+  <h:panelGrid columns="1" style="width:100%">
+    <ui:include src="../include_pantallas_genericas/include_informacion_informe_proyecto.xhtml"/>
+    <ui:include src="../include_pantallas_genericas/include_informacion_totales_proyecto.xhtml" />
+  </h:panelGrid>               
+</html>

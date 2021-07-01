@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <h:form id="formIncludeEstimulosSemillero" >
+
+    <br />
+    <h:outputLabel value="Estimulos o incentivos" styleClass="green negrilla" />
+    <br />
+    <p:dataTable id="idDataTableEstimulosSemillero" var="_estimulo"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 value="#{cuIv4ConsultarDetalleSemilleroFaces.listaEstimulosSemillero}" 
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rowIndexVar="idFila" paginatorPosition="bottom" 
+                 resizableColumns="true"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true">
+
+
+      <p:column headerText="#{properties.value('general_lbl_numero_tabla')}" width="15" style="color: white; font-size: 13px">                                
+        <h:outputLabel value="#{idFila + 1}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+      </p:column>
+
+      <p:column headerText="Motivo del otorgamiento" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_estimulo.motivoOtorgamiento}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column headerText="Describe el tipo de estimulo" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_estimulo.descripcionTipoEstimulo}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column headerText="Fecha" width="100" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_estimulo.fechaOtorgamiento}" styleClass="gris" style="font-size: 13px">                      
+          <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+        </h:outputLabel>   
+      </p:column>
+
+      <p:column headerText="Participantes" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_estimulo.participantes}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>                       
+
+      <f:facet name="footer">  
+        #{fn:length(cuIv4ConsultarDetalleSemilleroFaces.listaEstimulosSemillero)} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable>
+    <br />        
+  </h:form>
+</html>

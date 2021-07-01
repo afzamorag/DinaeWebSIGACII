@@ -1,0 +1,172 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/plantillaPrincipal.xhtml">
+
+    <ui:define name="content">
+
+
+        <p:panel id="main" styleClass="ui-fluid">
+
+
+            <h:form id="frmList" prependId="false">
+
+                <p:separator />
+
+                <p:panel header="#{bundle['evaluacion.titulo.detalle']}">
+                    <p:panelGrid id="pgFiltro" layout="grid" columns="4"
+                                 columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+                                 styleClass="ui-panelgrid-blank">
+
+                        <!-- vigencia -->
+                        <p:outputLabel for="somVigencia"
+                                       value="#{bundle['evaluacion.vigencia']}" />
+                        <h:panelGroup>
+                            <h:outputText id="somVigencia"
+                                          value="#{evaluacionController.selected.pae.vigencia}" />
+                            <p:message for="somVigencia" />
+                        </h:panelGroup>
+
+                        <!-- proceso -->
+                        <p:outputLabel for="somProceso"
+                                       value="#{bundle['evaluacion.proceso']}" />
+                        <h:panelGroup>
+                            <h:outputText id="somProceso"
+                                          value="#{evaluacionController.selected.proceso.nombre}" />
+                            <p:message for="somProceso" />
+                        </h:panelGroup>
+
+                        <!-- nivel académico -->
+                        <p:outputLabel for="somNivelAcademico"
+                                       value="#{bundle['evaluacion.nivelAcademico']}" />
+                        <h:panelGroup>
+                            <h:outputText id="somNivelAcademico"
+                                          value="#{evaluacionController.selected.evento.carrera.nivelAcademico.descripcion}" />
+                            <p:message for="somNivelAcademico" />
+                        </h:panelGroup>
+
+                        <p:outputLabel for="somProgramaAcademico"
+                                       value="#{bundle['evaluacion.programaAcademico']}" />
+                        <h:panelGroup>
+                            <h:outputText id="somProgramaAcademico"
+                                          value="#{evaluacionController.selected.evento.carrera.descripcion}" />
+                            <p:message for="somProgramaAcademico" />
+                        </h:panelGroup>
+
+                        <!-- modalidad -->
+                        <p:outputLabel for="somModalidad"
+                                       value="#{bundle['evaluacion.modalidad']}" />
+                        <h:panelGroup>
+                            <h:outputText id="somModalidad"
+                                          value="#{evaluacionController.selected.modalidad.nombre}" />
+                            <p:message for="somModalidad" />
+                        </h:panelGroup>
+
+                        <!-- nombre evaluación -->
+                        <p:outputLabel for="somNombreEval"
+                                       value="#{bundle['evaluacion.nombreEvaluacion']}" />
+                        <h:panelGroup>
+                            <h:outputText id="somNombreEval"
+                                          value="#{evaluacionController.selected.evalDescri}" />
+                            <p:message for="somNombreEval" />
+                        </h:panelGroup>
+
+                        <!-- población nivel -->
+                        <p:outputLabel for="somPoblacionNivel"
+                                       value="#{bundle['evaluacion.poblacionNivel']}" />
+                        <h:panelGroup id="somPoblacionNivel">
+                            <ui:repeat value="#{evaluacionController.selected.evalGrados}"
+                                       var="gradoEval">
+                                <h:outputText value="#{gradoEval.grado.categoria.descripcion}" /><br/>
+                            </ui:repeat>
+                            <p:message for="somPoblacionNivel" />
+                        </h:panelGroup>
+
+                        <!-- población grado -->
+                        <p:outputLabel for="somPoblacionGrado"
+                                       value="#{bundle['evaluacion.poblacionGrado']}" />
+                        <h:panelGroup id="somPoblacionGrado">
+                            <ui:repeat value="#{evaluacionController.selected.evalGrados}"
+                                       var="gradoEval">
+                                <h:outputText value="#{gradoEval.grado.descripcion}" /><br/>
+                            </ui:repeat>
+                            <p:message for="somPoblacionGrado" />
+                        </h:panelGroup>
+
+                        <!-- nombre numeroPreguntas -->
+                        <p:outputLabel for="somNroPreg"
+                                       value="#{bundle['evaluacion.numeroPreguntas']}" />
+                        <h:panelGroup>
+                            <h:outputText id="somNroPreg"
+                                          value="#{evaluacionController.selected.evalNroPreg}" />
+                            <p:message for="somNroPreg" />
+                        </h:panelGroup>
+
+                    </p:panelGrid>
+
+                    <f:facet name="footer">
+                        <p:panelGrid
+                            columns="4"
+                            layout="grid" 
+                            columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+                            styleClass="ui-panelgrid-blank">
+                            <p:commandButton value="#{bundle['evaluacion.btn.add.preg']}"
+                                             title="#{bundle['evaluacion.btn.add.preg']}" icon="icon-doc-add"
+                                             rendered="#{evaluacionController.selected.estadoEvaluacion == 'PENDIENTE'}"
+                                             process="@this pgFiltro" update="dtListPreguntas" action="#{evaluacionController.agregarPregunta()}" >
+                                <f:setPropertyActionListener value="detalleEvaluacion.xhtml?faces-redirect=true"
+                                                             target="#{evaluacionController.outcomeCancelarPregunta}" />
+                            </p:commandButton>
+                            <p:commandButton value="#{bundle['commons.btn.back']}"
+                                             title="#{bundle['commons.btn.back']}" icon="icon-reply-all"
+                                             action="buscarEvaluacion.xhtml?faces-redirect=true" process="@this" />
+                        </p:panelGrid>
+                    </f:facet>
+
+                </p:panel>
+
+                <p:dataTable id="dtListPreguntas"
+                             value="#{evaluacionController.selected.preguntasEvaluacion}"
+                             var="record" paginator="true" paginatorPosition="bottom" rows="10"
+                             reflow="true">
+                    <p:column headerText="#{bundle['commons.lbl.opciones']}"
+                              style="text-align: center">
+                        <p:commandLink value="#{bundle['commons.btn.remove']}"
+                                       title="#{bundle['commons.btn.remove']}" action="#{evaluacionController.eliminarPreguntaEvaluacion()}" update="dtListPreguntas"
+                                       rendered="#{evaluacionController.selected.estadoEvaluacion == 'PENDIENTE' or evaluacionController.selected.aplicada == 'N'}">
+                            <f:setPropertyActionListener value="#{record}" target="#{evaluacionController.preguntaEvaluacion}" />
+                            <!--p:confirm 
+                                header="{bundle['commons.cfmdlg.header']}" 
+                                message="{bundle['commons.cfmdlg.remove.message']}" 
+                                icon="ui-icon-alert" /-->
+                        </p:commandLink>
+                    </p:column>
+                    <p:column headerText="#{bundle['evaluacion.pregunta.aspecto']}"
+                              sortBy="#{record.aspecto.descripcion}">
+                        <h:outputText value="#{record.aspecto.descripcion}" />
+                    </p:column>
+                    <p:column headerText="#{bundle['evaluacion.pregunta.pregunta']}"
+                              sortBy="#{record.pregunta.descripcion}">
+                        <h:outputText value="#{record.pregunta.descripcion}" />
+                    </p:column>
+                    <p:column headerText="#{bundle['evaluacion.pregunta.competencia']}"
+                              sortBy="#{record.competencia.compDescri}">
+                        <h:outputText value="#{record.competencia.compDescri}" />
+                    </p:column>
+                    <p:column headerText="#{bundle['evaluacion.pregunta.valor']}"
+                              sortBy="#{record.valorPorcentaje}">
+                        <h:outputText value="#{record.valorPorcentaje}" />
+                    </p:column>
+                </p:dataTable>
+
+            </h:form>
+
+        </p:panel>
+
+    </ui:define>
+
+</ui:composition>

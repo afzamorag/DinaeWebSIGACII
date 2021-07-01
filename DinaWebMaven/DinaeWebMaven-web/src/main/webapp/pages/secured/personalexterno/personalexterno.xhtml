@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    template="/templates/plantillaPrincipal.xhtml">
+    <ui:define
+        name="content">
+        <p:panel 
+            id="main"
+            styleClass="ui-fluid">
+            <h:form
+                id="frmlist"
+                prependId="false"
+                rendered="#{personaExternaController.showList}">
+                <h:outputText 
+                    value="#{bundle['personalexterno.title.list']}"/>
+                <p:separator />
+                <p:panel
+                    id="pnlfiltro">
+                    <p:panelGrid
+                        layout="grid" 
+                        columns="2"
+                        columnClasses="ui-grid-col-2,ui-grid-col-10" 
+                        styleClass="ui-panelgrid-blank">
+                        <!-- fltidentificacionnro -->
+                        <p:outputLabel
+                            for="fltidentificacionnro"
+                            value="#{bundle['personalexterno.identificacion.numero']}"/>
+                        <h:panelGroup>
+                            <p:inputText 
+                                id="fltidentificacionnro" 
+                                value="#{personaExternaController.filtro.identificacionNro}" 
+                                maxlength="20"
+                                required="false"> 
+                                <f:validateRegex 
+                                    pattern="[a-zA-Z0-9]*"/>
+                            </p:inputText>
+                            <p:message
+                                for="fltidentificacionnro"/>
+                        </h:panelGroup>
+                        <!-- fltnombres -->
+                        <p:outputLabel
+                            for="fltnombres"
+                            value="#{bundle['personalexterno.nombres']}"/>
+                        <h:panelGroup>
+                            <p:inputText 
+                                id="fltnombres" 
+                                value="#{personaExternaController.filtro.nombres}" 
+                                maxlength="100"
+                                required="false"/>           
+                            <p:message
+                                for="fltnombres"/>
+                        </h:panelGroup>
+                        <!-- fltapellidos -->
+                        <p:outputLabel
+                            for="fltapellidos"
+                            value="#{bundle['personalexterno.apellidos']}"/>
+                        <h:panelGroup>
+                            <p:inputText 
+                                id="fltapellidos" 
+                                value="#{personaExternaController.filtro.apellidos}" 
+                                maxlength="100"
+                                required="false"/>           
+                            <p:message
+                                for="fltapellidos"/>
+                        </h:panelGroup>
+                    </p:panelGrid>
+                    <f:facet
+                        name="footer">
+                        <p:panelGrid
+                            columns="6"
+                            layout="grid" 
+                            columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+                            styleClass="ui-panelgrid-blank">
+                            <p:commandButton 
+                                value="#{bundle['commons.btn.find']}"
+                                title="#{bundle['commons.btn.find']}"
+                                icon="ui-icon-search"
+                                actionListener="#{personaExternaController.onLoadList()}"
+                                process="@this pnlfiltro"
+                                update="frmlist"
+                                style="border: none"/>
+                            <p:commandButton 
+                                id="btnCreate" 
+                                value="#{bundle['commons.btn.new']}"
+                                title="#{bundle['commons.btn.new']}"
+                                icon="ui-icon-document"
+                                actionListener="#{personaExternaController.onCreate()}"
+                                rendered="#{personaExternaController.validaRol}"
+                                update=":main"
+                                style="border: none"/>
+                        </p:panelGrid>
+                    </f:facet>
+                </p:panel>
+                <p:dataTable 
+                    id="dtList"
+                    value="#{personaExternaController.list}"
+                    var="record"
+                    paginator="true" 
+                    rows="10"
+                    selectionMode="single" 
+                    selection="#{personaExternaController.selected}" 
+                    rowKey="#{record.id}"
+                    reflow="true"> 
+                    <p:ajax 
+                        event="rowSelect" 
+                        listener="#{personaExternaController.onRowSelect}" 
+                        update=":main" />
+                    <p:column 
+                        headerText="#{bundle['personalexterno.identificacion.tipo']}"
+                        sortBy="#{record.identificacionTipo}"
+                        filterBy="#{record.identificacionTipo}"
+                        filterMatchMode="contains">
+                        <h:outputText 
+                            value="#{record.identificacionTipo}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['personalexterno.identificacion.numero']}"
+                        sortBy="#{record.identificacionNro}"
+                        filterBy="#{record.identificacionNro}"
+                        filterMatchMode="contains">
+                        <h:outputText 
+                            value="#{record.identificacionNro}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['personalexterno.nombres']}"
+                        sortBy="#{record.nombres}"
+                        filterBy="#{record.nombres}"
+                        filterMatchMode="contains">
+                        <h:outputText 
+                            value="#{record.nombres}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['personalexterno.apellidos']}"
+                        sortBy="#{record.apellidos}"
+                        filterBy="#{record.apellidos}"
+                        filterMatchMode="contains">
+                        <h:outputText
+                            value="#{record.apellidos}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+            <h:form
+                id="frmDetail"
+                prependId="false"
+                rendered="#{personaExternaController.showDetails}">
+                <h:outputText 
+                    value="#{bundle['personalexterno.title.detail']}"/>
+                <p:separator />
+                <p:panel
+                    id="pnlDetails">
+                    <p:panelGrid
+                        columns="4"
+                        layout="grid" 
+                        columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" 
+                        styleClass="ui-panelgrid-blank">
+                        <!-- identificacionTipo -->
+                        <p:outputLabel
+                            for="identificacionTipo"
+                            value="#{bundle['personalexterno.identificacion.tipo']}"
+                            style="font-weight: bold"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                value="#{personaExternaController.selected.identificacionTipo}"
+                                rendered="#{!personaExternaController.editable}"/>
+                            <p:selectOneMenu 
+                                id="identificacionTipo" 
+                                value="#{personaExternaController.selected.identificacionTipo}"
+                                filter="true"
+                                filterMatchMode="contains"
+                                required="true"
+                                rendered="#{personaExternaController.editable}">
+                                <f:selectItem 
+                                    noSelectionOption="true"/>
+                                <f:selectItems 
+                                    value="#{personaExternaController.tiposIdentificaciones}" 
+                                    var="identificacionTipo" 
+                                    itemLabel="#{identificacionTipo.label}" 
+                                    itemValue="#{identificacionTipo.value}" />
+                            </p:selectOneMenu>              
+                            <p:message  
+                                for="identificacionTipo"/>
+                        </h:panelGroup>
+                        <!-- identificacionNro -->
+                        <p:outputLabel
+                            for="identificacionNro"
+                            value="#{bundle['personalexterno.identificacion.numero']}"
+                            style="font-weight: bold"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                value="#{personaExternaController.selected.identificacionNro}"
+                                rendered="#{!personaExternaController.editable}"/>
+                            <p:inputText 
+                                id="identificacionNro" 
+                                value="#{personaExternaController.selected.identificacionNro}"
+                                required="true"
+                                maxlength="20"
+                                rendered="#{personaExternaController.editable}"> 
+                                <f:validateRegex 
+                                    pattern="[a-zA-Z0-9]*"/>                           
+                            </p:inputText>              
+                            <p:message  
+                                for="identificacionNro"/>
+                        </h:panelGroup>
+                        <!-- apellidos -->
+                        <p:outputLabel
+                            for="apellidos"
+                            value="#{bundle['personalexterno.apellidos']}"
+                            style="font-weight: bold"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                value="#{personaExternaController.selected.apellidos}"
+                                rendered="#{!personaExternaController.editable}"/>
+                            <p:inputText 
+                                id="apellidos" 
+                                value="#{personaExternaController.selected.apellidos}"
+                                required="true"
+                                maxlength="100"
+                                rendered="#{personaExternaController.editable}"> 
+                                <f:validateRegex 
+                                    pattern="[a-zA-Z\s]*"/>
+                            </p:inputText>                                       
+                            <p:message  
+                                for="apellidos"/>
+                        </h:panelGroup>
+                        <!-- nombres -->
+                        <p:outputLabel
+                            for="nombres"
+                            value="#{bundle['personalexterno.nombres']}"
+                            style="font-weight: bold"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                value="#{personaExternaController.selected.nombres}"
+                                rendered="#{!personaExternaController.editable}"/>
+                            <p:inputText 
+                                id="nombres" 
+                                value="#{personaExternaController.selected.nombres}"
+                                required="true"
+                                maxlength="100"
+                                rendered="#{personaExternaController.editable}"> 
+                                <f:validateRegex 
+                                    pattern="[a-zA-Z\s]*"/>
+                            </p:inputText>
+                            <p:message  
+                                for="nombres"/>
+                        </h:panelGroup>
+                        <!-- nacimientoPais -->
+                        <p:outputLabel
+                            for="nacimientoPais"
+                            value="#{bundle['personalexterno.nacimiento.pais']}"
+                            style="font-weight: bold"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                value="#{personaExternaController.selected.nacimientoPais.descPais}"
+                                rendered="#{!personaExternaController.editable}"/>
+                            <p:selectOneMenu 
+                                id="nacimientoPais" 
+                                value="#{personaExternaController.selected.nacimientoPais}"
+                                filter="true"
+                                filterMatchMode="contains"
+                                converter="lugarGeograficoConverter"
+                                required="true"
+                                rendered="#{personaExternaController.editable}">
+                                <p:ajax 
+                                    process="@this" 
+                                    update="nacimientoCiudad"/>
+                                <f:selectItem 
+                                    noSelectionOption="true"/>
+                                <f:selectItems 
+                                    value="#{appController.paises}" 
+                                    var="nacimientoPais" 
+                                    itemLabel="#{nacimientoPais.descPais}" 
+                                    itemValue="#{nacimientoPais}" />
+                            </p:selectOneMenu>              
+                            <p:message  
+                                for="nacimientoPais"/>
+                        </h:panelGroup>
+                        <!-- nacimientoCiudad -->
+                        <p:outputLabel
+                            for="nacimientoCiudad"
+                            value="#{bundle['personalexterno.nacimiento.ciudad']}"
+                            style="font-weight: bold"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                value="#{personaExternaController.selected.nacimientoCiudad.descMunicipio}"
+                                rendered="#{!personaExternaController.editable}"/>
+                            <p:selectOneMenu 
+                                id="nacimientoCiudad" 
+                                value="#{personaExternaController.selected.nacimientoCiudad}"
+                                filter="true"
+                                filterMatchMode="contains"
+                                converter="lugarGeograficoConverter"
+                                required="true"
+                                rendered="#{personaExternaController.editable}">
+                                <f:selectItem 
+                                    noSelectionOption="true"/>
+                                <f:selectItems 
+                                    value="#{appController.municipios(personaExternaController.selected.nacimientoPais.codPais)}" 
+                                    var="nacimientoCiudad" 
+                                    itemLabel="#{nacimientoCiudad.descDepartamento} - #{nacimientoCiudad.descMunicipio}" 
+                                    itemValue="#{nacimientoCiudad}" />
+                            </p:selectOneMenu>              
+                            <p:message  
+                                for="nacimientoCiudad"/>
+                        </h:panelGroup>
+                        <!-- residenciaPais -->
+                        <p:outputLabel
+                            for="residenciaPais"
+                            value="#{bundle['personalexterno.residencia.pais']}"
+                            style="font-weight: bold"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                value="#{personaExternaController.selected.residenciaPais.descPais}"
+                                rendered="#{!personaExternaController.editable}"/>
+                            <p:selectOneMenu 
+                                id="residenciaPais" 
+                                value="#{personaExternaController.selected.residenciaPais}"
+                                filter="true"
+                                filterMatchMode="contains"
+                                converter="lugarGeograficoConverter"
+                                required="true"
+                                rendered="#{personaExternaController.editable}">
+                                <p:ajax 
+                                    process="@this" 
+                                    update="residenciaCiudad"/>
+                                <f:selectItem 
+                                    noSelectionOption="true"/>
+                                <f:selectItems 
+                                    value="#{appController.paises}" 
+                                    var="residenciaPais" 
+                                    itemLabel="#{residenciaPais.descPais}" 
+                                    itemValue="#{residenciaPais}" />
+                            </p:selectOneMenu>              
+                            <p:message  
+                                for="residenciaPais"/>
+                        </h:panelGroup>
+                        <!-- residenciaCiudad -->
+                        <p:outputLabel
+                            for="residenciaCiudad"
+                            value="#{bundle['personalexterno.residencia.ciudad']}"
+                            style="font-weight: bold"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                value="#{personaExternaController.selected.residenciaCiudad.descMunicipio}"
+                                rendered="#{!personaExternaController.editable}"/>
+                            <p:selectOneMenu 
+                                id="residenciaCiudad" 
+                                value="#{personaExternaController.selected.residenciaCiudad}"
+                                filter="true"
+                                filterMatchMode="contains"
+                                converter="lugarGeograficoConverter"
+                                required="true"
+                                rendered="#{personaExternaController.editable}">
+                                <f:selectItem 
+                                    noSelectionOption="true"/>
+                                <f:selectItems 
+                                    value="#{appController.municipios(personaExternaController.selected.residenciaPais.codPais)}" 
+                                    var="residenciaCiudad" 
+                                    itemLabel="#{residenciaCiudad.descDepartamento} - #{residenciaCiudad.descMunicipio}"  
+                                    itemValue="#{residenciaCiudad}" />
+                            </p:selectOneMenu>              
+                            <p:message  
+                                for="residenciaCiudad"/>
+                        </h:panelGroup>
+                        <!-- residenciaBarrio -->
+                        <p:outputLabel
+                            for="residenciaBarrio"
+                            value="#{bundle['personalexterno.residencia.barrio']}"
+                            style="font-weight: bold"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                value="#{personaExternaController.selected.residenciaBarrio}"
+                                rendered="#{!personaExternaController.editable}"/>
+                            <p:inputText 
+                                id="residenciaBarrio" 
+                                value="#{personaExternaController.selected.residenciaBarrio}"
+                                required="true"
+                                maxlength="100"
+                                rendered="#{personaExternaController.editable}">
+                            </p:inputText>              
+                            <p:message  
+                                for="residenciaBarrio"/>
+                        </h:panelGroup>
+                        <!-- residenciaDireccion -->
+                        <p:outputLabel
+                            for="residenciaDireccion"
+                            value="#{bundle['personalexterno.residencia.direccion']}"
+                            style="font-weight: bold"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                value="#{personaExternaController.selected.residenciaDireccion}"
+                                rendered="#{!personaExternaController.editable}"/>
+                            <p:inputText 
+                                id="residenciaDireccion" 
+                                value="#{personaExternaController.selected.residenciaDireccion}"
+                                required="true"
+                                maxlength="100"
+                                rendered="#{personaExternaController.editable}">
+                            </p:inputText>              
+                            <p:message  
+                                for="residenciaDireccion"/>
+                        </h:panelGroup>
+                        <!-- estadoCivil -->
+                        <p:outputLabel
+                            for="estadoCivil"
+                            value="#{bundle['personalexterno.estado.civil']}"
+                            style="font-weight: bold"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                value="#{personaExternaController.validateCivilState(personaExternaController.selected.estadoCivil)}"
+                                rendered="#{!personaExternaController.editable}"/>
+                            <p:selectOneMenu 
+                                id="estadoCivil" 
+                                value="#{personaExternaController.selected.estadoCivil}"
+                                filter="true"
+                                filterMatchMode="contains"
+                                required="true"
+                                rendered="#{personaExternaController.editable}">
+                                <f:selectItem 
+                                    noSelectionOption="true"/>
+                                <f:selectItems 
+                                    value="#{personaExternaController.estadosCiviles}" 
+                                    var="estadoCivil" 
+                                    itemLabel="#{estadoCivil.label}" 
+                                    itemValue="#{estadoCivil.value}" />
+                            </p:selectOneMenu>              
+                            <p:message  
+                                for="estadoCivil"/>
+                        </h:panelGroup>
+                        <!-- entidadDependencia -->
+                        <p:outputLabel
+                            for="entidad"
+                            value="#{bundle['personalexterno.entidad.dependencia']}"
+                            style="font-weight: bold"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                value="#{personaExternaController.selected.entidadDependencia.entiNombre}"
+                                rendered="#{!personaExternaController.editable}"/>                    
+                            <p:selectOneMenu 
+                                id="entidad" 
+                                value="#{personaExternaController.selected.entidadDependencia}"
+                                filter="true"
+                                filterMatchMode="contains"
+                                required="true"
+                                rendered="#{personaExternaController.editable}"
+                                converter="entidadConverter">
+                                <f:selectItem 
+                                    noSelectionOption="true"/>
+                                <f:selectItems 
+                                    value="#{personaExternaController.entidades}" 
+                                    var="entidad" 
+                                    itemLabel="#{entidad.entiNombre}" 
+                                    itemValue="#{entidad}" />
+                            </p:selectOneMenu>              
+                            <p:message  
+                                for="entidad"/>
+                        </h:panelGroup>
+                        <!-- fechaNacimiento -->
+                        <p:outputLabel
+                            for="fechaNacimiento"
+                            value="#{bundle['personalexterno.nacimiento.fecha']}"
+                            style="font-weight: bold"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                value="#{personaExternaController.selected.fechaNacimiento}"
+                                rendered="#{!personaExternaController.editable}">
+                                <f:convertDateTime 
+                                    pattern="#{bundle['pattern.default.date']}"/>
+                            </h:outputText>
+                            <p:calendar 
+                                id="fechaNacimiento" 
+                                value="#{personaExternaController.selected.fechaNacimiento}"
+                                pattern="#{bundle['pattern.default.date']}"
+                                readonlyInput="true"
+                                navigator="true"
+
+                                required="true"
+                                rendered="#{personaExternaController.editable}"
+                                yearRange="#{personaExternaController.minDate}:#{personaExternaController.maxDate}"/>              
+                            <p:message
+                                for="fechaNacimiento"/>
+                        </h:panelGroup>
+                        <!-- sexo -->
+                        <p:outputLabel
+                            for="sexo"
+                            value="#{bundle['personalexterno.sexo']}"
+                            style="font-weight: bold"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                value="#{personaExternaController.validateSex(personaExternaController.selected.sexo)}"
+                                rendered="#{!personaExternaController.editable}"/>
+                            <p:selectOneMenu 
+                                id="sexo" 
+                                value="#{personaExternaController.selected.sexo}"
+                                filter="true"
+                                filterMatchMode="contains"
+                                required="true"
+                                rendered="#{personaExternaController.editable}">
+                                <f:selectItem 
+                                    noSelectionOption="true"/>
+                                <f:selectItems 
+                                    value="#{personaExternaController.sexos}" 
+                                    var="sexo" 
+                                    itemLabel="#{sexo.label}" 
+                                    itemValue="#{sexo.value}" />
+                            </p:selectOneMenu>              
+                            <p:message  
+                                for="sexo"/>
+                        </h:panelGroup>
+                        <!-- grupoSanguineo -->
+                        <p:outputLabel
+                            for="grupoSanguineo"
+                            value="#{bundle['personalexterno.grupo.sanguineo']}"
+                            style="font-weight: bold"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                value="#{personaExternaController.selected.grupoSanguineo}"
+                                rendered="#{!personaExternaController.editable}"/>
+                            <p:selectOneMenu 
+                                id="grupoSanguineo" 
+                                value="#{personaExternaController.selected.grupoSanguineo}"
+                                filter="true"
+                                filterMatchMode="contains"
+                                required="true"
+                                rendered="#{personaExternaController.editable}">
+                                <f:selectItem 
+                                    noSelectionOption="true"/>
+                                <f:selectItems 
+                                    value="#{personaExternaController.gruposSanguineos}" 
+                                    var="grupoSanguineo" 
+                                    itemLabel="#{grupoSanguineo.label}" 
+                                    itemValue="#{grupoSanguineo.value}" />
+                            </p:selectOneMenu>              
+                            <p:message  
+                                for="grupoSanguineo"/>
+                        </h:panelGroup>
+                        <!-- factorRH -->
+                        <p:outputLabel
+                            for="factorRH"
+                            value="#{bundle['personalexterno.factor.rh']}"
+                            style="font-weight: bold"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                value="#{personaExternaController.validateRHs(personaExternaController.selected.factorRH)}"
+                                rendered="#{!personaExternaController.editable}"/>
+                            <p:selectOneMenu 
+                                id="factorRH" 
+                                value="#{personaExternaController.selected.factorRH}"
+                                filter="true"
+                                filterMatchMode="contains"
+                                required="true"
+                                rendered="#{personaExternaController.editable}">
+                                <f:selectItem 
+                                    noSelectionOption="true"/>
+                                <f:selectItems 
+                                    value="#{personaExternaController.rhs}" 
+                                    var="factorRH" 
+                                    itemLabel="#{factorRH.label}" 
+                                    itemValue="#{factorRH.value}" />
+                            </p:selectOneMenu>              
+                            <p:message  
+                                for="factorRH"/>
+                        </h:panelGroup>  
+                        <p:outputLabel
+                            for="email"
+                            value="#{bundle['personalexterno.email']}"
+                            style="font-weight: bold"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                value="#{personaExternaController.selected.email}"
+                                rendered="#{!personaExternaController.editable}"/>
+                            <p:inputText 
+                                id="email" 
+                                value="#{personaExternaController.selected.email}"
+                                required="true"
+                                maxlength="100"
+                                rendered="#{personaExternaController.editable}"
+                                validatorMessage="Dirección de correo no valida">
+                                <f:validateRegex
+                                    pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                            </p:inputText>              
+                            <p:message  
+                                for="email"/>
+                        </h:panelGroup>
+                    </p:panelGrid>
+                    <f:facet
+                        name="footer">
+                        <p:panelGrid
+                            columns="12"
+                            layout="grid" 
+                            columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+                            styleClass="ui-panelgrid-blank">
+                            <p:commandButton 
+                                value="#{bundle['commons.btn.edit']}"
+                                title="#{bundle['commons.btn.edit']}"
+                                icon="ui-icon-pencil"
+                                actionListener="#{personaExternaController.onEdit()}"
+                                rendered="#{personaExternaController.enableEdit()}"
+                                update=":frmDetail"
+                                style="border: none"/>
+                            <p:commandButton 
+                                value="#{bundle['commons.btn.save']}"
+                                title="#{bundle['commons.btn.save']}"
+                                icon="ui-icon-disk"
+                                actionListener="#{personaExternaController.onSave()}"
+                                rendered="#{personaExternaController.editable}"
+                                process="@form"
+                                update=":frmDetail"
+                                style="border: none"/>
+                            <p:commandButton 
+                                value="#{bundle['commons.btn.cancel']}"
+                                title="#{bundle['commons.btn.cancel']}"
+                                icon="ui-icon-circle-close"
+                                actionListener="#{personaExternaController.onCancel()}"
+                                immediate="true"
+                                rendered="#{personaExternaController.editable}"
+                                update=":main"
+                                style="border: none"/>
+                            <p:commandButton 
+                                value="#{bundle['commons.btn.remove']}"
+                                title="#{bundle['commons.btn.remove']}"
+                                icon="ui-icon-trash"
+                                actionListener="#{personaExternaController.onDelete()}"
+                                rendered="#{personaExternaController.enableDelete()}"
+                                immediate="true"
+                                update=":main"
+                                style="border: none">
+                                <p:confirm 
+                                    header="#{bundle['commons.cfmdlg.header']}" 
+                                    message="#{bundle['commons.cfmdlg.remove.message']}" 
+                                    icon="ui-icon-alert" />
+                            </p:commandButton>
+                            <p:commandButton 
+                                value="#{bundle['commons.btn.back']}"
+                                title="#{bundle['commons.btn.back']}"
+                                icon="ui-icon-arrowreturn-1-w"
+                                actionListener="#{personaExternaController.onBackToList()}"
+                                rendered="#{!personaExternaController.editable}"
+                                update=":main"
+                                style="border: none"/>
+                        </p:panelGrid>
+                    </f:facet>
+                </p:panel>
+            </h:form>
+        </p:panel>
+    </ui:define>
+</ui:composition>

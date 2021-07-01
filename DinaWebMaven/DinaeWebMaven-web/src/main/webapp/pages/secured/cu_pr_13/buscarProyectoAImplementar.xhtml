@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <h:body>
+    <div class="body">
+      <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+        <ui:define name="content">
+          <div class="fixed-menu">
+            <!--VENTANA DE LISTA DE PERIODOS-->
+            <div class="right-col">
+              <h2 style="font: verdana;">
+                #{properties.value('cu_pr_13_lbl_titulo_buscar_proyecto')}
+              </h2>
+              <br/>
+              <h:form id="formBuscarProyecto" >
+                <br />
+                <h:panelGrid id="panelgridBuscarProyecto" columns="2" style="width: 100%" 
+                             rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                             columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+                  <h:outputLabel value="#{properties.value('cu_pr_13_lbl_palabra_clave')}" 
+                                 styleClass="gris negrilla" for="inputNumIdentificacionIv"/>
+                  <p:inputText id="inputNumIdentificacionIv"
+                               value="#{cuPr13HabilitarImplementacion.palabraClave}"
+                               maxlength="50" size="50" />
+
+                  <h:outputLabel value="#{properties.value('cu_pr_13_lbl_unidad_policial')}" 
+                                 styleClass="gris negrilla" for="selectUnidadPolicial"/>
+                  <h:selectOneMenu value="#{cuPr13HabilitarImplementacion.unidadPolicial}" styleClass="gris" id="selectUnidadPolicial">  
+                    <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+                    <f:selectItems value="#{cuPr13HabilitarImplementacion.listaItemsUnidadesPoliciales}" />
+                  </h:selectOneMenu>
+
+                  <h:outputLabel value="#{properties.value('cu_pr_13_lbl_codigo_proyecto')}" 
+                                 styleClass="gris negrilla" for="inputCodigoProyecto"/>
+                  <p:inputText id="inputCodigoProyecto" value="#{cuPr13HabilitarImplementacion.codigoProyecto}"
+                               maxlength="20" size="50"/>
+                  <h:outputLabel value="#{properties.value('cu_pr_13_lbl_fecha_presentacion_entre')}" 
+                                 styleClass="gris negrilla" for="calendarFechaPresentacionEntre" />
+                  <h:panelGroup>
+                    <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es" 
+                                value="#{cuPr13HabilitarImplementacion.fechaPresentacionEntre}" 
+                                yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                                id="calendarFechaPresentacionEntre" showOn="button"
+                                navigator="true" binding="#{componenteFechaIni}" />                             
+
+                    <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es"
+                                value="#{cuPr13HabilitarImplementacion.fechaPresentacionY}" 
+                                yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                                id="calendarFechaPresentacionY" showOn="button"
+                                navigator="true">
+                      <f:validator validatorId="validadorDeFechas" />
+                      <f:attribute name="componenteFechaIni" value="#{componenteFechaIni}" />
+                    </p:calendar>
+                  </h:panelGroup>
+                </h:panelGrid>
+                <br/>
+                <div class="centrado">
+                  <p:commandButton value="#{properties.value('cu_pr_13_lbl_btn_buscar_proyecto')}"
+                                   action="#{cuPr13HabilitarImplementacion.buscarProyectoAImplementar}" 
+                                   update="@form"/>
+                  <p:commandButton value="#{properties.value('cu_pr_13_lbl_btn_resetear_formulario')}"
+                                   action="#{cuPr13HabilitarImplementacion.resetearFormulario}" 
+                                   update="@form" immediate="true">
+                    <p:resetInput target="@form" />
+                  </p:commandButton>
+                </div>
+                <br/>
+                <p:separator styleClass="separadorBorder" /> 
+                <br/>
+                <p:dataTable var="proyecto" paginator="true" style="width: 100%"
+                             value="#{cuPr13HabilitarImplementacion.listaProyectosEncontrados}"
+                             rowIndexVar="idFila" paginatorPosition="bottom" id="tablaProyectosEncontrados"
+                             rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                             emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                             rows="#{properties.value('general_mensaje_filas_datatable_pagina')}"
+                             resizableColumns="true" selection="#{cuPr13HabilitarImplementacion.proyectoSeleccionado}" 
+                             selectionMode="single" rowKey="#{proyecto.id}">
+
+                  <p:ajax event="rowSelect" listener="#{cuPr13HabilitarImplementacion.irHabilitacionImplementacionProyecto}" 
+                          update="@form" />
+
+                  <p:column width="30" headerText="#{properties.value('cu_pr_13_lbl_column_numero')}" >
+                    <h:outputText value="#{idFila + 1}" />
+                  </p:column>
+
+                  <p:column headerText="#{properties.value('cu_pr_13_lbl_column_unidad_policial')}" >
+                    <h:outputText value="#{proyecto.unidadPolicialDTO.siglaFisicaYnombreUnidad}" />
+                  </p:column>
+
+                  <p:column headerText="#{properties.value('cu_pr_13_lbl_column_codigo_proyecto')}" width="120">
+                    <h:outputText value="#{proyecto.codigoProyecto}" />
+                  </p:column>
+
+                  <p:column headerText="#{properties.value('cu_pr_13_lbl_column_titulo_proyecto')}" >
+                    <h:outputText value="#{proyecto.tituloPropuesto}" />
+                  </p:column>
+
+                  <p:column width="100" headerText="#{properties.value('cu_ne_6_lbl_estado')}" >
+                    <h:outputText value="#{proyecto.estado}" />
+                  </p:column>
+
+                  <p:column width="80" headerText="#{properties.value('cu_pr_13_lbl_column_fecha_proyecto')}" >
+                    <h:outputText value="#{proyecto.fechaPresentacion}" >
+                      <f:convertDateTime pattern="dd/MM/yyyy" type="date"/>
+                    </h:outputText>
+                  </p:column>
+                  <f:facet name="footer">  
+                    #{fn:length(cuPr13HabilitarImplementacion.listaProyectosEncontrados)} #{properties.value('general_mensaje_footer_datatable_count')}
+                  </f:facet>
+                </p:dataTable>
+              </h:form>
+            </div>
+          </div>
+        </ui:define>
+      </ui:composition>
+    </div>
+  </h:body>
+</html>

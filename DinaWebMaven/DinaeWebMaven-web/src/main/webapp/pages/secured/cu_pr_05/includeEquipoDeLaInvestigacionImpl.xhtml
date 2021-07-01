@@ -1,0 +1,165 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+  <h:form id="formEquiposInvestigacion">
+    <br />
+    <h:panelGrid id="panelgridComponentesEquipo" columns="2" style="width: 100%" 
+                 rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_nombre_equipo')}" styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:panelGroup>
+        <p:inputTextarea value="#{presupuestoImplemetacionProyectoFaces.nombreEquipo}"
+                         id="textAreaNombreEquipo"
+                         maxlength="250" counter="contadorNombreEquipo"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         styleClass="textareaMaximo" cols="100" rows="3" autoResize="false">
+          <f:validateLength minimum="0"  maximum="250" />
+        </p:inputTextarea>
+        <h:outputText id="contadorNombreEquipo" styleClass="gris" />
+      </h:panelGroup>
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_origen')}" styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:selectOneMenu value="#{presupuestoImplemetacionProyectoFaces.origenEquipo}" id="selectOrigenEquipo" styleClass="gris">  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{presupuestoImplemetacionProyectoFaces.listaOrigenesFondos}"/>
+      </h:selectOneMenu>
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_valor')}" styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:inputText value="#{presupuestoImplemetacionProyectoFaces.valorEquipo}" onkeypress="return soloNumerosInpuText(event);"
+                   maxlength="12" id="inputValorEquipo">
+        <p:ajax event="blur" update="inputValorEquipo" />
+        <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" maxFractionDigits="2" />
+      </h:inputText>
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_fuente_evento')}" styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:selectOneMenu value="#{presupuestoImplemetacionProyectoFaces.fuenteEquipo}" id="selectFuenteEquipo" styleClass="gris">  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{presupuestoImplemetacionProyectoFaces.listaFuentesProyecto}" var="_fuente" itemValue="#{_fuente.idFuenteProyecto}" itemLabel="#{_fuente.nombreFuente}"/>
+      </h:selectOneMenu>
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_especificaciones')}" styleClass="gris negrilla" />
+      </h:panelGrid>
+      <h:panelGroup>
+        <p:inputTextarea value="#{presupuestoImplemetacionProyectoFaces.especificacionesEquipo}"
+                         id="textAreaEspecificaciones"
+                         maxlength="512" counter="contadorEspecificaciones"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         styleClass="textareaMaximo" autoResize="false">
+          <f:validateLength minimum="0"  maximum="512" />
+        </p:inputTextarea>
+        <h:outputText id="contadorEspecificaciones" styleClass="gris" />
+      </h:panelGroup>
+    </h:panelGrid>
+    <br/>
+    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+    <div class="centrado">
+      <p:commandButton value="#{properties.value('cu_pr_24_lbl_btn_agregar_comentario_retroalimentacion')}" 
+                       rendered="#{!presupuestoImplemetacionProyectoFaces.esModificaEquipo}" id="btn1"
+                       actionListener="#{presupuestoImplemetacionProyectoFaces.updateEquipoInvestigacion}" 
+                        process="@form"
+                       update="@form"/>
+
+      <p:commandButton value="#{properties.value('cu_iv_3_lbl_datatable_btn_modificar')}" 
+                       rendered="#{presupuestoImplemetacionProyectoFaces.esModificaEquipo}"
+                       actionListener="#{presupuestoImplemetacionProyectoFaces.updateEquipoInvestigacion}" 
+                        process="@form"
+                       update="@form"/>
+      
+      <p:commandButton value="#{properties.value('cu_tr_01_lbl_cancelar')}" 
+                       rendered="#{presupuestoImplemetacionProyectoFaces.esModificaEquipo}"
+                       actionListener="#{presupuestoImplemetacionProyectoFaces.cancelarModificarEquipos}" 
+                       process="@this"
+                       update="@form">
+      </p:commandButton>
+    </div>
+
+
+
+
+    <br/>
+    <div class="centrado">
+      <p:dataTable var="equipo" value="#{presupuestoImplemetacionProyectoFaces.listaEquiposInvestigacionModel}"
+                   rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                   id="tablaEquiposInvestigacion" selectionMode="single"
+                   emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                   selection="#{presupuestoImplemetacionProyectoFaces.equipo}"
+                   style="width: 100%;" paginator="true"
+                   resizableColumns="true" rowIndexVar="idFila"
+                   paginatorPosition="bottom"
+                   rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+        <p:ajax event="rowSelect" listener="#{presupuestoImplemetacionProyectoFaces.cargarDatosEquipo}"   
+                update="@form"/>  
+        <p:ajax event="rowUnselect" listener="#{presupuestoImplemetacionProyectoFaces.noSeleccionEquipos}" 
+                update="@form:tablaEquiposInvestigacion"/>  
+        <p:column headerText="#{properties.value('cu_pr_13_lbl_column_numero')}" width="15" style="color: white">
+          <h:outputText value="#{idFila + 1}" styleClass="gris" />
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_nombre_equipo')}" style="color: white">
+          <h:outputText value="#{equipo.nombreEquipo}" styleClass="alineadoIzquierda gris" />
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_especificaciones')}" style="color: white">
+          <h:outputText value="#{equipo.especificaciones}" styleClass="alineadoIzquierda gris" />
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_origen')}" width="90" style="color: white">
+          <h:outputText value="#{equipo.origen.valor}" styleClass="gris" />
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_7_lbl_valor_datatable')}" width="100" style="color: white">
+          <h:outputText value="#{equipo.valor}" styleClass="alineadoDerecha gris">                    
+            <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" />
+          </h:outputText>            
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_column_fuente_financiera')}" width="80" style="color: white">
+          <h:outputText value="#{equipo.fuenteProyecto.nombreFuente}" styleClass="gris" />
+        </p:column>
+        <p:column width="80" headerText="#{properties.value('cu_pr_19_lbl_tabla_acciones')}" style="color: white">
+
+          <div class="centrado">
+            <p:commandLink value="#{properties.value('cu_tr_01_lbl_btn_eliminar')}" 
+                           immediate="true"
+                           oncomplete="PF('varConfirmEliminarEquipo').show()">  
+              <f:setPropertyActionListener value="#{equipo}" target="#{presupuestoImplemetacionProyectoFaces.equipo}" />  
+            </p:commandLink>
+          </div>
+
+        </p:column>
+        <f:facet name="footer">  
+          #{fn:length( presupuestoImplemetacionProyectoFaces.listaEquiposInvestigacion )} #{properties.value('general_mensaje_footer_datatable_count')}
+        </f:facet>
+      </p:dataTable>
+    </div>
+    <p:confirmDialog widgetVar="varConfirmEliminarEquipo" header="#{properties.value('cu_tr_01_lbl_titulo_confirmacion_titulo')}" 
+                     message="#{properties.value('cu_pr_5_lbl_titulo_confirmacion_mensaje_eliminar_equipo')}" > 
+
+      <h:form id="idFormEliminarEquipo">
+
+        <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmEliminarEquipo">
+          <div class="centrado">
+            <p:commandButton actionListener="#{presupuestoImplemetacionProyectoFaces.eliminarEquipoInvestigacion}" 
+                             value="#{properties.value('cu_tr_01_lbl_btn_confirma_si')}" immediate="true"
+                             oncomplete="varConfirmEliminarEquipo.hide();"
+                             update=":tabView:formEquiposInvestigacion:tablaEquiposInvestigacion" />  
+            <p:commandButton value="#{properties.value('cu_tr_01_lbl_btn_confirma_no')}" 
+                             onclick="varConfirmEliminarEquipo.hide();" type="button" />       
+          </div>
+        </p:outputPanel>
+
+      </h:form>
+    </p:confirmDialog>
+  </h:form>
+</html>
+

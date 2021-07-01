@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+  <h:form id="formViajesRelacionadosInforme">
+    <br />
+    <h:outputLabel value="#{properties.value('cu_pr_14_tab_3_lbl_info')}" styleClass="green negrilla"/>
+    <br/><br/>
+    <div class="centrado">
+      <p:dataTable var="viaje" value="#{cuPr14AvancePresupuestoProyecto.listaViajesRelacionadosModel}"
+                   rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                   id="tablaViajesProyectosInforme"
+                   emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                   selection="#{cuPr14AvancePresupuestoProyecto.viajesSeleccionados}"                         
+                   style="width: 100%;" paginator="true"
+                   resizableColumns="true" rowIndexVar="idFila"
+                   paginatorPosition="bottom"
+                   disabledSelection="#{cuPr14AvancePresupuestoProyecto.soloLectura}"
+                   rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+        <p:column selectionMode="multiple" style="width:15px" disabledSelection="#{!viaje.seleccionable or cuPr14AvancePresupuestoProyecto.soloLectura}" />
+
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_column_numero')}" width="15" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{idFila + 1}" styleClass="gris" style="font-size: 13px" />
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_nombre_investigador_viajes')}" width="80" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{viaje.nombreInvestigadoresProyecto}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_column_grado')}" width="40" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{viaje.grado}" styleClass="gris" style="font-size: 13px"/>
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_evento_viaje')}" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{viaje.evento}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_ciudad_origen')}" width="100" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{viaje.nombreCiudadOrigen}" styleClass="gris" style="font-size: 13px" />
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_ciudad_destino')}" width="100" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{viaje.nombreCiudadDestino}" styleClass="gris" style="font-size: 13px"/>
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_costo_pasajes')}" width="55" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{viaje.costosPasajes}" styleClass="alineadoDerecha gris" style="font-size: 13px">                                                
+            <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" />
+          </h:outputLabel>  
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_costo_viaticos')}" width="55" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{viaje.costosViaticos}" styleClass="alineadoDerecha gris" style="font-size: 13px">                                               
+            <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" />
+          </h:outputLabel>  
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_fuente_viaje')}" width="60" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{viaje.nombreFuenteProyecto}" styleClass="gris" style="font-size: 13px"/>
+        </p:column>
+        <f:facet name="footer">  
+          #{fn:length( cuPr14AvancePresupuestoProyecto.listaViajesRelacionados )} #{properties.value('general_mensaje_footer_datatable_count')}
+        </f:facet>
+      </p:dataTable>
+    </div>
+    <br/>
+    <div class="centrado">
+      <p:commandButton value="#{properties.value('cu_pr_14_lbl_btn_regresar')}" id="idBtnRegresarProyecto"
+                       action="#{cuPr14AvancePresupuestoProyecto.regresar}" immediate="true"
+                       />
+
+      <p:commandButton value="#{properties.value('general_lbl_btn_guardar')}" 
+                       rendered="#{!cuPr14AvancePresupuestoProyecto.soloLectura}"
+                       action="#{cuPr14AvancePresupuestoProyecto.guardarViajesInforme}" 
+                       update="@form"/>        
+    </div>
+    <br/>
+
+  </h:form>
+</html>
+

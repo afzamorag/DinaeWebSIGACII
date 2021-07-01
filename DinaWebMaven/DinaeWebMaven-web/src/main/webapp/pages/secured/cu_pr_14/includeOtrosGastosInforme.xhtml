@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+  <h:form id="formOtrosGastosInforme">
+    <br />
+    <h:outputLabel value="#{properties.value('cu_pr_14_tab_4_lbl_info')}" styleClass="green negrilla"/>
+    <br/><br/>
+    <div class="centrado">
+      <p:dataTable var="otros" value="#{cuPr14AvancePresupuestoProyecto.listaOtrosGastosProyecto}"
+                   rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                   id="tablaOtrosGastosInforme"
+                   emptyMessage="#{properties.value('general_mensaje_no_records_found')}"                        
+                   style="width: 100%;" paginator="true"
+                   resizableColumns="true" rowIndexVar="idFila"
+                   paginatorPosition="bottom"
+                   rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_column_numero')}" width="15" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{idFila + 1}" styleClass="gris" style="font-size: 13px" />
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_tipo_rubro')}" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{cuPr14AvancePresupuestoProyecto.tomarValorConstante(otros.idTipoRubro)}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_14_lbl_tab_4_valor_gastado_periodo')}" width="180" style="color: white; font-size: 13px">
+          <h:inputText value="#{otros.valorGastadoInforme}" disabled="#{cuPr14AvancePresupuestoProyecto.soloLectura}"
+                       maxlength="18" id="inputValorOtrosGastosInforme" onkeypress="return soloNumerosInpuText(event);">  
+            <p:ajax event="blur" update="inputValorOtrosGastosInforme" />
+            <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" maxFractionDigits="2" />
+
+          </h:inputText>
+        </p:column>
+        <f:facet name="footer">  
+          #{fn:length( cuPr14AvancePresupuestoProyecto.listaOtrosGastosProyecto )} #{properties.value('general_mensaje_footer_datatable_count')}
+        </f:facet>
+      </p:dataTable>
+    </div>
+    <br/>
+    <div class="centrado">
+
+      <p:commandButton value="#{properties.value('cu_pr_14_lbl_btn_regresar')}" id="idBtnRegresarProyecto"
+                       action="#{cuPr14AvancePresupuestoProyecto.regresar}" immediate="true"/>
+
+      <p:commandButton value="#{properties.value('general_lbl_btn_guardar')}" 
+                       rendered="#{!cuPr14AvancePresupuestoProyecto.soloLectura}"
+                       action="#{cuPr14AvancePresupuestoProyecto.guardarOtrosGastosInforme}" 
+                       update="@form"/>        
+    </div>
+    <br/>
+
+  </h:form>
+</html>
+

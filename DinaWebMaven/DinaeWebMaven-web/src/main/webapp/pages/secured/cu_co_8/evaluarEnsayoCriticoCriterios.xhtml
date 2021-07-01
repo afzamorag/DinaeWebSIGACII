@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+
+      <ui:define name="content">
+        <div class="fixed-menu">
+          <div class="right-col">
+            <h2>
+              Evaluar ensayo
+            </h2>
+          </div>
+        </div>
+
+        <div width="100%">
+          <f:metadata>
+            <f:event type="preRenderView" listener="#{cuCo8EvaluacionEnsayoCriticoFaces.validarExistenciaCriteriosEvaluacion}"/>
+          </f:metadata>
+          <p:separator styleClass="separadorBorder" /> 
+          <h:form id="idFormularioEvaluacionEnsayo">
+
+            <br />
+            <br />
+            <h:panelGrid columns="2" width="100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                         columnClasses="panelGridColumnaValor_30_porciento,panelGridColumnaValor_70_porciento">
+
+              <h:outputLabel value="Titulo Ensayo" styleClass="gris negrilla"/>
+              <h:outputLabel value="#{cuCo8EvaluacionEnsayoCriticoFaces.ensayoItemSeleccionado.tituloEnsayo}" styleClass="gris"/>
+
+
+            </h:panelGrid>
+            <br />
+            <br />
+            <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}"  
+                         id="idDataTablePropuestas" var="_criterio" paginatorPosition="bottom" 
+                         rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true" 
+                         value="#{cuCo8EvaluacionEnsayoCriticoFaces.listaCriterioEvaluacionEnsayo}" 
+                         rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                         resizableColumns="true"
+                         rowIndexVar="idFila">
+
+              <p:column width="30" headerText="#{properties.value('cu_co_4_datatable_num')}" style="text-align: center">  
+                #{idFila + 1}
+              </p:column> 
+
+              <p:column headerText="#{properties.value('cu_co_4_datatable_criterio')}" >  
+                #{_criterio.nombreCriterio}
+              </p:column> 
+
+              <p:column width="70" headerText="#{properties.value('cu_co_4_datatable_val_maximo')}" style="text-align: center">  
+                #{_criterio.valor.toString()}%
+              </p:column> 
+
+              <p:column width="100" headerText="#{properties.value('cu_co_4_datatable_valor')}">  
+                <p:inputText value="#{_criterio.evaluacion}" size="10" disabled="#{cuCo8EvaluacionEnsayoCriticoFaces.deshabilitarEdicionEnviar}"
+                             onkeypress="return validarNumero2Decimales(event, this);" required="true" maxlength="5" >
+                  <p:ajax event="blur" listener="#{cuCo8EvaluacionEnsayoCriticoFaces.recargarValorTotal}" 
+                          update=":idFormularioEvaluacionEnsayo" />
+                </p:inputText>
+                <!--<h:outputLabel value="" rendered="" />-->
+              </p:column>
+
+              <p:columnGroup type="footer">  
+                <p:row>  
+                  <p:column colspan="2" footerText="Total" style="text-align:right; color:white; font-weight: bold"  />  
+                  <p:column footerText="100%" style="color:white; font-weight: bold"/>  
+                  <p:column style="color:white; font-weight: bold" footerText="#{cuCo8EvaluacionEnsayoCriticoFaces.evaluacionTotal}%" />  
+                </p:row>  
+              </p:columnGroup>  
+
+            </p:dataTable>
+
+            <br />
+            <br />
+
+            <h:panelGrid columns="2" width="100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                         columnClasses="panelGridColumnaValor_30_porciento,panelGridColumnaValor_70_porciento">
+
+              <h:outputLabel value="Comentarios" styleClass="gris negrilla"/>
+              <h:panelGroup>
+                <p:inputTextarea value="#{cuCo8EvaluacionEnsayoCriticoFaces.comentarioProyecto.comentario}"  
+                                 id="idComentariosEvaluacion" disabled="#{cuCo8EvaluacionEnsayoCriticoFaces.deshabilitarEdicionEnviar}"
+                                 maxlength="500" counter="contComentarios" 
+                                 counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                                 styleClass="textareaMaximo" cols="100" rows="3" autoResize="false">
+                  <f:validateLength minimum="0"  maximum="500" />
+                </p:inputTextarea>
+                <h:outputText id="contComentarios" styleClass="gris" />
+              </h:panelGroup>
+
+            </h:panelGrid>
+
+            <p:separator styleClass="separadorBorder" /> 
+            <div class="centrado">
+              <p:commandButton value="#{properties.value('cu_co_7_lbl_btn_regresar')}"
+                               id="btnRegresarListado" immediate="true" actionListener="#{cuCo8EvaluacionEnsayoCriticoFaces.regresar}"/>
+
+              <p:commandButton value="#{properties.value('cu_co_7_lbl_btn_guardar')}" rendered="#{!cuCo8EvaluacionEnsayoCriticoFaces.deshabilitarEdicionEnviar}"
+                               id="btnGuardarEvaluacionEnsayo" action="#{cuCo8EvaluacionEnsayoCriticoFaces.guardarEvaluacion}"
+                               update="@form" process="@form"/>    
+
+            </div>
+
+          </h:form>
+        </div>
+      </ui:define>
+    </ui:composition>
+  </body>
+</html>

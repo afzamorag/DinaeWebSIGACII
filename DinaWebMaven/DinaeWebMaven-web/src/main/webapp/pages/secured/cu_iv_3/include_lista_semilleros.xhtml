@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+  <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+               id="idDataTableConvocatorias" var="_semillero" 
+               value="#{cuIv3GestionarSemillerosInvestigacionFaces.listaSemilleroInvestigacionDTO}" 
+               rowIndexVar="idFila" rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+               paginator="true" 
+               resizableColumns="true"
+               rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+               paginatorPosition="bottom">
+    <p:column width="30" headerText="#{properties.value('cu_iv_3_lbl_datatable_num')}">  
+      #{idFila + 1}  
+    </p:column>
+    <p:column headerText="#{properties.value('cu_iv_3_lbl_datatable_nombre_semillero')}">
+      #{_semillero.nombre}
+    </p:column>
+    <p:column width="250" headerText="#{properties.value('cu_iv_3_lbl_datatable_uniadad_poli')}">  
+      #{_semillero.nombreUnidadPolicial}
+    </p:column>
+    <p:column width="70" headerText="#{properties.value('cu_iv_3_lbl_datatable_fecha_creacion')}">
+      <h:outputLabel value="#{_semillero.fechaRegistro}">
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha_hora')}" locale="es_CO" />
+      </h:outputLabel>    
+    </p:column>
+    <p:column width="80" headerText="#{properties.value('cu_iv_3_lbl_datatable_estado')}">  
+      #{_semillero.estadoEntreFecha}
+    </p:column>
+    <p:column width="80" headerText="#{properties.value('cu_iv_3_lbl_datatable_btn_modificar')}">  
+      <p:commandButton value="#{properties.value('cu_iv_3_lbl_datatable_btn_modificar')}" immediate="true"
+                       action="#{cuIv3GestionarSemillerosInvestigacionFaces.modificarSemillero( _semillero )}" />
+    </p:column> 
+    <f:facet name="footer">
+      #{fn:length(cuIv3GestionarSemillerosInvestigacionFaces.listaSemilleroInvestigacionDTO)} #{properties.value('general_mensaje_footer_datatable_count')}
+      <br/>
+      <p:commandLink action="#{cuIv3GestionarSemillerosInvestigacionFaces.nuevoSemillero}" immediate="true"
+                     value="#{properties.value('cu_iv_3_lbl_datatable_link_agregar_semillero')}" />
+    </f:facet>
+  </p:dataTable>
+</html>

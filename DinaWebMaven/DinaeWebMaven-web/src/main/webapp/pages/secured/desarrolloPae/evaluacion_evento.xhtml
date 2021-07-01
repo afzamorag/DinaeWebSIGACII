@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    <p:panel 
+        id="main"
+        styleClass="ui-fluid">
+        <h:form
+            id="frmDetail"
+            prependId="false">
+            <h:outputText 
+                value="#{bundle['siedueventoescuela.evaluacion.titulo']}"
+                styleClass="negrilla"/>
+            <p:separator />                
+            <p:dataTable 
+                id="dtList"
+                value="#{sieduEventoEscuelaController.listEvaluacionEvento}"
+                var="record"   
+                style="font-size: smaller; margin-top: 15px">
+                <f:facet
+                    name="header">
+                    #{bundle['siedueventoescuela.evaluacion.titulo']}
+                </f:facet>                    
+                <p:column 
+                    headerText="#{bundle['evaluacion.pregunta.aspecto']}"
+                    style="width: 20%; text-align: justify">
+                    <h:outputText 
+                        value="#{record.aspecto}"/>
+                </p:column>
+                <p:column 
+                    headerText="#{bundle['evaluacion.pregunta.competencia']}"                       
+                    style="width: 20%; text-align: justify">
+                    <h:outputText 
+                        value="#{record.competencia}"/>
+                </p:column>
+                <p:column 
+                    headerText="#{bundle['evaluacion.pregunta.pregunta']}"                        
+                    style="width: 44%; text-align: justify">
+                    <h:outputText 
+                        value="#{record.pregunta}">                            
+                    </h:outputText>
+                </p:column>
+                <p:column 
+                    headerText="#{bundle['siedueventoescuela.evaluacion.calificacion.lbl']}"                        
+                    style="width: 8%; text-align: center">
+                    <h:outputText 
+                        value="#{record.calificacion}">                            
+                    </h:outputText>
+                </p:column>                    
+                <p:column 
+                    headerText="#{bundle['siedueventoescuela.evaluacion.porcentaje.lbl']}"                        
+                    style="width: 8%; text-align: center">
+                    <h:outputText 
+                        value="#{record.porcentaje}">                            
+                    </h:outputText>
+                </p:column>
+                <f:facet
+                    name="footer">
+                    <h:outputText value="La calificación general del evento es: #{sieduEventoEscuelaController.selected.eveeCalificacionEvento}" 
+                                  style="text-align: left"
+                                  />
+                </f:facet>
+            </p:dataTable>                
+        </h:form>
+    </p:panel>
+</ui:composition>

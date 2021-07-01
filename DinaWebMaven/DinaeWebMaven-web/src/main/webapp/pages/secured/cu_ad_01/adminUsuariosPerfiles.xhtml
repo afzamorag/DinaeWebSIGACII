@@ -1,0 +1,368 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <h:body>
+        <div class="body">
+            <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+                <ui:define name="content">
+                    <div class="fixed-menu">
+                        <div class="right-col">
+                            <h2 style="font: verdana;">Administrar usuarios y perfiles</h2>
+                            <br/>
+                            <p:tabView orientation="top" activeIndex="#{cuAd01TipoUsuarioAdministrador.idTabSeleccionado}" id="tabGeneral">
+
+                                <p:ajax event="tabChange" listener="#{cuAd01TipoUsuarioAdministrador.onTabChange}" update="tabGeneral" />  
+
+                                <p:tab id="idTabPerfiles" title="Administrar perfiles">
+                                    <h:form id="formAdminCriteriosEvaluacion" >
+                                        <h:panelGrid id="panelgridAdminUsuariosPerfiles" columns="2" style="width: 100%" 
+                                                     rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                                                     columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+                                            <h:outputLabel value="Tipo usuario administrar" styleClass="gris negrilla"/>
+
+                                            <p:selectOneRadio id="radioTipoUsuarioAdministrar" styleClass="gris" value="#{cuAd01TipoUsuarioAdministrador.tipoUsuarioAdministrar}">  
+
+                                                <f:selectItem itemLabel="Usuarios de unidad" itemValue="U" />  
+                                                <f:selectItem itemLabel="Usuarios de VICIN" itemValue="V" />
+                                                <f:selectItem itemLabel="Rol específico" itemValue="RE" />
+                                                <f:selectItem itemLabel="Identificación" itemValue="CC" />
+
+                                                <p:ajax update="@form" listener="#{cuAd01TipoUsuarioAdministrador.accionRadio}"/>
+
+                                            </p:selectOneRadio>
+
+                                            <h:panelGrid columns="2" id="panelGridAsteriscoUnidad" rendered="#{cuAd01TipoUsuarioAdministrador.tipoUsuarioAdministrar == 'U'}">
+                                                <h:outputLabel value="*" style="color: red; font-weight: bold" id="marcaObligatoriedadUnidad"/>
+                                                <h:outputLabel value="Unidad policial" styleClass="gris negrilla" />            
+                                            </h:panelGrid>
+
+                                            <h:selectOneMenu styleClass="gris" value="#{cuAd01TipoUsuarioAdministrador.unidadPolicialValue}" id="selectUnidadPolicialRoles"
+                                                             rendered="#{cuAd01TipoUsuarioAdministrador.tipoUsuarioAdministrar == 'U'}" >  
+                                                <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+                                                <f:selectItems value="#{cuAd01TipoUsuarioAdministrador.listaUnidadesPolicialesActivas}" var="_unidad"  
+                                                               itemValue="#{_unidad.idUnidadPolicial}-#{_unidad.idTipoUnidad}-#{_unidad.siglaFisicaUnidad} - #{_unidad.nombre}" itemLabel="#{_unidad.siglaFisicaUnidad} - #{_unidad.nombre}"/>
+                                                <p:ajax event="change" update="@form" 
+                                                        listener="#{cuAd01TipoUsuarioAdministrador.cargarRolesTipoUnidadPolicial}"/>
+                                            </h:selectOneMenu>
+
+                                            <h:outputLabel value="Rol" for="idrolBusqueda" styleClass="gris negrilla" rendered="#{cuAd01TipoUsuarioAdministrador.tipoUsuarioAdministrar == 'RE'}" />            
+                                            <h:panelGrid id="panelGridRolEspecifico" >                                        
+                                                <h:selectOneMenu styleClass="gris" value="#{cuAd01TipoUsuarioAdministrador.idRolSeleccionadoBusqueda}"
+                                                                 id="idrolBusqueda" required="true" rendered="#{cuAd01TipoUsuarioAdministrador.tipoUsuarioAdministrar == 'RE'}" >  
+                                                    <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+                                                    <f:selectItems value="#{cuAd01TipoUsuarioAdministrador.rolesBusqueda}" />
+                                                    <p:ajax event="change" update="@this tablaBusquedaRoles" 
+                                                            listener="#{cuAd01TipoUsuarioAdministrador.buscarRolBusqueda}"/>
+                                                </h:selectOneMenu>
+
+                                            </h:panelGrid>
+
+                                            <h:outputLabel />
+                                            <h:outputLabel value="Identificación" for="idBusquedaIdentifica" styleClass="gris negrilla" rendered="#{cuAd01TipoUsuarioAdministrador.tipoUsuarioAdministrar == 'CC'}" /> 
+                                            <h:panelGrid id="panelGridBusquedaIdentifica" columns="2" rendered="#{cuAd01TipoUsuarioAdministrador.tipoUsuarioAdministrar == 'CC'}">
+                                                <p:inputText styleClass="gris" value="#{cuAd01TipoUsuarioAdministrador.identificacionBusqueda}"
+                                                             id="idBusquedaIdentifica" required="true" 
+                                                             rendered="#{cuAd01TipoUsuarioAdministrador.tipoUsuarioAdministrar == 'CC'}" />
+
+                                                <p:commandButton ajax="false" value="Buscar" 
+                                                                 action="#{cuAd01TipoUsuarioAdministrador.buscarIdentificacionBusqueda()}"/>
+
+                                            </h:panelGrid>
+
+                                        </h:panelGrid>                                                                                                
+
+                                        <br />
+                                        <h:panelGrid columns="2" style="width: 100%" 
+                                                     rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                                                     rendered="#{cuAd01TipoUsuarioAdministrador.tipoUsuarioAdministrar == 'U'}"
+                                                     columnClasses="panelGridColumnaLabel_50_porciento,panelGridColumnaValor_50_porciento">
+
+                                            <p:commandLink rendered="#{cuAd01TipoUsuarioAdministrador.seleccionoUnidadPolicialValue and cuAd01TipoUsuarioAdministrador.mostrarAgregarJefeUnidadPolicial}" value="Agregar Jefe de la Unidad Policial"
+                                                           oncomplete="PF('wvformPopupJefeUnidad').show();" update=":tabGeneral:formAdminCriteriosEvaluacion:formPopupJefeUnidad"
+                                                           actionListener="#{cuAd01TipoUsuarioAdministrador.popupAdicionarJefeUnidad}"/>
+
+                                            <p:commandLink rendered="#{cuAd01TipoUsuarioAdministrador.seleccionoUnidadPolicialValue and cuAd01TipoUsuarioAdministrador.mostrarAgregarJefeGrupoInvestigacion}" value="Agregar Jefe del Grupo de Investigación en la Unidad" 
+                                                           oncomplete="PF('wvformPopupJefeGrupoInvestigacion').show();" update=":tabGeneral:formAdminCriteriosEvaluacion:formPopupJefeGrupoInvestigacion"
+                                                           actionListener="#{cuAd01TipoUsuarioAdministrador.popupAdicionarJefeGrupoInvestigacion}" />
+
+                                        </h:panelGrid>
+                                        <p:dataTable var="_rol" value="#{cuAd01TipoUsuarioAdministrador.listaUsuariosAdministativosUnidadModel}"
+                                                     rendered="#{cuAd01TipoUsuarioAdministrador.tipoUsuarioAdministrar == 'U'}"
+                                                     rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                                                     id="tablaRolesEspecificosUnidad"
+                                                     selection="#{cuAd01TipoUsuarioAdministrador.usuarioModificarRolAdmin}"
+                                                     selectionMode="single"
+                                                     emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                                                     style="font-size: small ; border: 1px solid black"
+                                                     paginator="true"
+                                                     resizableColumns="true" rowIndexVar="idFila"
+                                                     paginatorPosition="bottom"
+                                                     rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+                                            <p:ajax event="rowSelect" listener="#{cuAd01TipoUsuarioAdministrador.cargarDatosUsuarioModificar}"   
+                                                    update="@form"/>  
+                                            <p:ajax event="rowUnselect" listener="#{cuAd01TipoUsuarioAdministrador.noSeleccionUsuarioRol}" 
+                                                    update="@form:tablaRolesEspecificosUnidad"/>  
+
+                                            <p:column headerText="#{properties.value('cu_pr_5_lbl_column_numero')}" width="25" style="color: white">
+                                                <h:outputText value="#{idFila + 1}" styleClass="gris" />
+                                            </p:column>
+                                            <p:column headerText="Rol" style="color: white">
+                                                <h:outputText value="#{_rol.nombreRol}" styleClass="alineadoIzquierda gris" />
+                                            </p:column>
+                                            <p:column headerText="Grado" width="110" style="color: white">
+                                                <h:outputText value="#{_rol.gradoUsuario}" styleClass="alineadoIzquierda gris" />
+                                            </p:column>
+                                            <p:column headerText="Identificación" width="110" style="color: white">
+                                                <h:outputText value="#{_rol.identificacionUsuario}" styleClass="alineadoIzquierda gris" />
+                                            </p:column>
+                                            <p:column headerText="Nombre"  style="color: white">
+                                                <h:outputText value="#{_rol.nombreCompletoUsuario}" styleClass="gris" />
+                                            </p:column>
+                                            <f:facet name="footer">  
+                                                #{fn:length( cuAd01TipoUsuarioAdministrador.listaUsuariosAdministativosUnidad )} #{properties.value('general_mensaje_footer_datatable_count')}
+                                            </f:facet>
+                                        </p:dataTable>
+
+                                        <br/><br/>
+                                        <h:outputLabel value="Perfiles de investigación:" styleClass="green negrilla" />
+                                        <p:dataTable var="_roles" 
+                                                     value="#{cuAd01TipoUsuarioAdministrador.listaUsuariosRolesModel}"                                                                                                  
+                                                     rendered="#{cuAd01TipoUsuarioAdministrador.tipoUsuarioAdministrar == 'U' or cuAd01TipoUsuarioAdministrador.tipoUsuarioAdministrar == 'V'}"                                                                                                          
+                                                     rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                                                     id="tablaRolesGeneralesUnidad"
+                                                     emptyMessage="#{properties.value('general_mensaje_no_records_found')}"                                                     
+                                                     paginator="true" 
+                                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"                                                    
+                                                     rowsPerPageTemplate="10,50,100"
+                                                     reflow="true"
+                                                     style="font-size: small ; border: 1px solid black"
+                                                     resizableColumns="true" rowIndexVar="idFila" 
+                                                     paginatorPosition="bottom"
+                                                     rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"                                                     
+                                                     selectionMode="single">
+
+                                            <p:ajax event="rowSelect" listener="#{cuAd01TipoUsuarioAdministrador.cargarDatosUsuarioModificarRoles}"   
+                                                    update="@form"/>  
+                                            <p:ajax event="rowUnselect" listener="#{cuAd01TipoUsuarioAdministrador.noSeleccionUsuarioRoles}" 
+                                                    update="@form:tablaRolesGeneralesUnidad"/>  
+
+                                            <p:column headerText="#{properties.value('cu_pr_5_lbl_column_numero')}" width="25" style="color: white">
+                                                <h:outputText value="#{idFila + 1}" styleClass="gris" />
+                                            </p:column>                                    
+                                            <p:column headerText="Grado" width="60" style="color: white">
+                                                <h:outputText value="#{_roles.gradoUsuario}" styleClass="alineadoIzquierda gris" />
+                                            </p:column>
+                                            <p:column headerText="Identificación" width="110" style="color: white">
+                                                <h:outputText value="#{_roles.identificacionUsuario}" styleClass="alineadoIzquierda gris" />
+                                            </p:column>
+                                            <p:column headerText="Nombre" width="160" style="color: white">
+                                                <h:outputText value="#{_roles.nombreCompletoUsuario}" styleClass="gris" />
+                                            </p:column>
+                                            <p:column headerText="Perfiles" style="color: white">
+                                                <h:outputText value="#{_roles.rolesTexto}" styleClass="alineadoIzquierda gris" escape="false" />
+                                            </p:column>
+                                            <p:column 
+                                                headerText="Opciones" style="color: black">
+                                                <p:commandLink 
+                                                    title="opciones"
+                                                    action="#{cuAd01TipoUsuarioAdministrador.cargarDatosUsuarioModificarRoles}">
+                                                    <f:setPropertyActionListener 
+                                                        value="#{_roles}" 
+                                                        target="#{cuAd01TipoUsuarioAdministrador.usuarioSeleccionadoModificarRoles}" />
+                                                    <h:outputText  
+                                                        value="Modificar" />
+                                                </p:commandLink>
+                                            </p:column>
+                                            
+                                            <f:facet name="footer">  
+                                                #{fn:length( cuAd01TipoUsuarioAdministrador.listaUsuariosRoles )} #{properties.value('general_mensaje_footer_datatable_count')}
+                                            </f:facet>
+                                        </p:dataTable> 
+
+                                        <br/><br/>
+                                        <h:outputLabel value="Educación Continua:" styleClass="green negrilla" />
+                                        <p:dataTable var="_rolesEduco" 
+                                                     value="#{cuAd01TipoUsuarioAdministrador.listaUsuariosUnidadEducoModel}"                                             
+                                                     rowKey="#{_rolesEduco.rolesTexto}"
+                                                     rendered="#{cuAd01TipoUsuarioAdministrador.tipoUsuarioAdministrar == 'U' or cuAd01TipoUsuarioAdministrador.tipoUsuarioAdministrar == 'V'}"
+                                                     selection="#{cuAd01TipoUsuarioAdministrador.usuarioSeleccionadoModificarRoles}" 
+                                                     selectionMode="single"
+                                                     rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                                                     id="tablaRolesGeneralesUnidadEduco"
+                                                     emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                                                     style="font-size: small ; border: 1px solid black" 
+                                                     paginator="true"
+                                                     resizableColumns="true" rowIndexVar="idFila"                                                                                         
+                                                     paginatorPosition="bottom"
+                                                     rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">   
+                                            <p:ajax event="rowSelect" listener="#{cuAd01TipoUsuarioAdministrador.cargarDatosUsuarioModificarRoles}"   
+                                                    update="@form"/>  
+                                            <p:ajax event="rowUnselect" listener="#{cuAd01TipoUsuarioAdministrador.noSeleccionUsuarioRoles}" 
+                                                    update="@form:tablaRolesGeneralesUnidadEduco"/> 
+                                            <p:column headerText="#{properties.value('cu_pr_5_lbl_column_numero')}" width="25" style="color: white">
+                                                <h:outputText value="#{idFila + 1}" styleClass="gris" />
+                                            </p:column>                                    
+                                            <p:column headerText="Grado" width="60" style="color: white">
+                                                <h:outputText value="#{_rolesEduco.gradoUsuario}" styleClass="alineadoIzquierda gris" />
+                                            </p:column>
+                                            <p:column headerText="Identificación" width="110" style="color: white">
+                                                <h:outputText value="#{_rolesEduco.identificacionUsuario}" styleClass="alineadoIzquierda gris" />
+                                            </p:column>
+                                            <p:column headerText="Nombre" width="160" style="color: white">
+                                                <h:outputText value="#{_rolesEduco.nombreCompletoUsuario}" styleClass="gris" />
+                                            </p:column>
+                                            <p:column headerText="Perfiles" style="color: white">
+                                                <h:outputText value="#{_rolesEduco.rolesTexto}" styleClass="alineadoIzquierda gris" escape="false" />
+                                            </p:column> 
+                                             <p:column 
+                                                headerText="Opciones" style="color: black">
+                                                <p:commandLink 
+                                                    title="opciones"
+                                                    action="#{cuAd01TipoUsuarioAdministrador.cargarDatosUsuarioModificarRoles}">
+                                                    <f:setPropertyActionListener 
+                                                        value="#{_rolesEduco}" 
+                                                        target="#{cuAd01TipoUsuarioAdministrador.usuarioSeleccionadoModificarRoles}" />
+                                                    <h:outputText  
+                                                        value="Modificar" />
+                                                </p:commandLink>
+                                            </p:column>
+                                            <f:facet name="footer">  
+                                                #{fn:length( cuAd01TipoUsuarioAdministrador.listaUsuariosRolesEduco)} #{properties.value('general_mensaje_footer_datatable_count')}
+                                            </f:facet>
+                                        </p:dataTable>
+                                        <p:dataTable var="_rol" value="#{cuAd01TipoUsuarioAdministrador.listaUsuariosBusquedaRolesModel}"                                             
+                                                     rendered="#{cuAd01TipoUsuarioAdministrador.tipoUsuarioAdministrar == 'RE' or cuAd01TipoUsuarioAdministrador.tipoUsuarioAdministrar == 'CC'}"
+                                                     rowKey="#{_roles.rolesTexto}"                                             
+                                                     rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                                                     id="tablaBusquedaRoles"
+                                                     emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                                                     style="font-size: small ; border: 1px solid black"
+                                                     paginator="true"
+                                                     resizableColumns="true" 
+                                                     rowIndexVar="idFila"                                                                                         
+                                                     paginatorPosition="bottom"
+                                                     rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+                                            <p:column headerText="Rol" style="color: white">
+                                                <h:outputText value="#{_rol.nombreRol}" styleClass="alineadoIzquierda gris" />
+                                            </p:column>
+                                            <p:column headerText="Grado" width="110" style="color: white">
+                                                <h:outputText value="#{_rol.gradoUsuario}" styleClass="alineadoIzquierda gris" />
+                                            </p:column>
+                                            <p:column headerText="Unidad Policial" width="200" style="color: white">
+                                                <h:outputText value="#{_rol.codigoUnidadPolicial} - #{_rol.nombreUnidad}" styleClass="alineadoIzquierda gris" />
+                                            </p:column>
+                                            <p:column headerText="Identificación" width="110" style="color: white">
+                                                <h:outputText value="#{_rol.identificacionUsuario}" styleClass="alineadoIzquierda gris" />
+                                            </p:column>
+                                            <p:column headerText="Nombre"  style="color: white">
+                                                <h:outputText value="#{_rol.nombreCompletoUsuario}" styleClass="gris" />
+                                            </p:column>
+
+                                            <f:facet name="footer">  
+                                                #{cuAd01TipoUsuarioAdministrador.listaUsuariosBusquedaRolesModel.numeroRegistro} #{properties.value('general_mensaje_footer_datatable_count')}
+                                            </f:facet>
+                                        </p:dataTable>
+                                        <br /><br />
+
+                                        <div class="centrado">
+
+                                            <p:commandLink value="#{cuAd01TipoUsuarioAdministrador.tipoUsuarioAdministrar == 'U' ? 'Agregar nuevo usuario en la unidad' : 'Agregar nuevo usuario VICIN' }" id="linkAgregarNuevoUsuario"
+                                                           rendered="#{cuAd01TipoUsuarioAdministrador.tipoUsuarioAdministrar == 'U' or cuAd01TipoUsuarioAdministrador.tipoUsuarioAdministrar == 'V'}"
+                                                           disabled="#{cuAd01TipoUsuarioAdministrador.tipoUsuarioAdministrar == 'U' and cuAd01TipoUsuarioAdministrador.unidadPolicialValue == '-1'}"
+                                                           immediate="true" style="font-size: 13px"
+                                                           action="#{cuAd01TipoUsuarioAdministrador.irCrearUsuario((cuAd01TipoUsuarioAdministrador.tipoUsuarioAdministrar == 'V'))}">
+                                            </p:commandLink>
+
+                                        </div>
+
+                                        <p:dialog id="formPopupJefeUnidad" header="Adicionar nuevo Jefe Unidad" 
+                                                  widgetVar="wvformPopupJefeUnidad" resizable="false" modal="true" width="750">                                       
+
+                                            <ui:include src="include_popup_jefe_unidad.xhtml" />
+
+                                        </p:dialog>
+
+                                        <p:dialog id="formPopupJefeGrupoInvestigacion" header="Adicionar nuevo Jefe Grupo Investigación" 
+                                                  widgetVar="wvformPopupJefeGrupoInvestigacion" resizable="false" modal="true" width="750">                                       
+
+                                            <ui:include src="include_popup_jefe_grupo_investigacion.xhtml" />
+
+                                        </p:dialog>
+
+                                    </h:form>
+                                </p:tab>
+                                <p:tab id="idTabUsuarios" title="Consultar Usuario Unidad">
+
+                                    <h:form>
+
+                                        <h:panelGrid columns="2" style="width: 100%" 
+                                                     rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                                                     rendered="#{cuAd01TipoUsuarioAdministrador.vistaFuncionarioAdministraUsuarioUnidad == null}"
+                                                     columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+                                            <h:outputLabel value="Identificación" styleClass="gris negrilla" /> 
+                                            <h:panelGrid id="panelGridBusquedaIdentifica" columns="2">
+                                                <p:inputText styleClass="gris" value="#{cuAd01TipoUsuarioAdministrador.identificacionBusquedaAdministraUsuarioUnidad}"
+                                                             id="idBusquedaIdentifica" required="true"  />
+
+                                                <p:commandButton ajax="false" value="Buscar" action="#{cuAd01TipoUsuarioAdministrador.buscarUsuarioPorIdentificacion()}"/>
+
+                                            </h:panelGrid>
+
+                                        </h:panelGrid> 
+
+                                        <br />
+                                        <h:panelGrid columns="2" style="width: 100%" 
+                                                     rowClasses="filaParPanelGridPar,filaParPanelGridImPar" rendered="#{cuAd01TipoUsuarioAdministrador.vistaFuncionarioAdministraUsuarioUnidad != null}"
+                                                     columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+                                            <h:outputLabel value="Identificación" styleClass="gris negrilla" />
+                                            <h:outputLabel value="#{cuAd01TipoUsuarioAdministrador.vistaFuncionarioAdministraUsuarioUnidad.identificacion}" styleClass="gris" />
+
+                                            <h:outputLabel value="Nombres y apellidos" styleClass="gris negrilla" /> 
+                                            <h:outputLabel value="#{cuAd01TipoUsuarioAdministrador.vistaFuncionarioAdministraUsuarioUnidad.nombreCompleto}" styleClass="gris" />
+
+                                            <h:outputLabel value="Grado" styleClass="gris negrilla" /> 
+                                            <h:outputLabel value="#{cuAd01TipoUsuarioAdministrador.vistaFuncionarioAdministraUsuarioUnidad.grado}" styleClass="gris" />
+
+                                            <h:outputLabel value="Cargo" styleClass="gris negrilla" /> 
+                                            <h:outputLabel value="#{cuAd01TipoUsuarioAdministrador.vistaFuncionarioAdministraUsuarioUnidad.cargo}" styleClass="gris" />
+
+                                            <h:outputLabel value="Unidad Policial Actual" styleClass="gris negrilla" /> 
+                                            <h:panelGroup>
+                                                <h:outputLabel rendered="#{cuAd01TipoUsuarioAdministrador.unidadPolicialAdministraUsuarioUnidad != null}" value="#{cuAd01TipoUsuarioAdministrador.unidadPolicialAdministraUsuarioUnidad.siglaFisicaYnombreUnidad}" styleClass="gris" />
+                                                <h:outputLabel rendered="#{cuAd01TipoUsuarioAdministrador.unidadPolicialAdministraUsuarioUnidad == null}" value="NO REGISTRA" styleClass="gris" />
+                                            </h:panelGroup>                                             
+
+                                        </h:panelGrid> 
+
+                                        <br />
+                                        <p:separator styleClass="separadorBorder" /> 
+                                        <div class="centrado">
+
+                                            <p:commandButton ajax="false"
+                                                             rendered="#{cuAd01TipoUsuarioAdministrador.vistaFuncionarioAdministraUsuarioUnidad != null}"
+                                                             value="Nueva búsqueda" action="#{cuAd01TipoUsuarioAdministrador.nuevaBusquedaAdministrausuarioUnidad}"/>
+                                        </div>                                        
+
+                                    </h:form>
+
+                                </p:tab>
+                            </p:tabView>  
+                        </div>
+                    </div>                                        
+
+                </ui:define>
+            </ui:composition>
+        </div>
+    </h:body>
+</html>
+

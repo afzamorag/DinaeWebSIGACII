@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+  <h:form id="formPersonalInvestiga">
+    <br />
+    <h:outputLabel value="#{properties.value('cu_pr_14_tab_0_lbl_info')}" styleClass="green negrilla"/>
+    <br /><br/>
+    <div class="centrado">
+      <p:dataTable id="tablaPersonalInvestigacion" var="personal" 
+                   value="#{cuPr14AvancePresupuestoProyectoImpl.listaInvestigadoresProyecto}"
+                   rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                   emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                   paginator="true" paginatorPosition="bottom" rowIndexVar="idFila"
+                   resizableColumns="true"
+                   rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+        <p:column width="15" headerText="#{properties.value('cu_pr_13_lbl_column_numero')}" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{idFila + 1}" styleClass="gris" style="font-size: 13px" />
+        </p:column>
+        <p:column width="70" headerText="#{properties.value('cu_pr_3_lbl_sub_titulo_tipo_investi')}" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{personal.tipoVinculacion.valor}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+        </p:column>
+        <p:column width="70" headerText="#{properties.value('cu_iv_3_lbl_datatable_jefe_grado')}" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{personal.grado}" styleClass="gris" style="font-size: 13px" />
+        </p:column>
+        <p:column headerText="#{properties.value('cu_iv_3_lbl_datatable_jefe_nombres_app')}" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{personal.nombreCompleto}" styleClass="alineadoIzquierda gris" style="font-size: 13px" />
+        </p:column>
+        <p:column width="70" headerText="#{properties.value('cu_iv_3_lbl_datatable_jefe_unidadpoli')}" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{personal.unidadPolicial.siglaFisica}" styleClass="gris" style="font-size: 13px" />
+        </p:column>
+        <p:column width="60"  headerText="#{properties.value('cu_pr_5_lbl_column_dedicacion')}" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{cuPr14AvancePresupuestoProyectoImpl.tomarHorasInvestigadorCompromiso(personal)}" styleClass="gris" style="font-size: 13px" />
+        </p:column>
+        <p:column width="65" headerText="#{properties.value('cu_pr_5_lbl_column_valor_especie')}" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{cuPr14AvancePresupuestoProyectoImpl.calcularValoresInvestigador(personal, 1)}" styleClass="alineadoDerecha gris" style="font-size: 13px" />
+        </p:column>
+        <p:column width="65" headerText="#{properties.value('cu_pr_5_lbl_column_valor_efectivo')}" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{cuPr14AvancePresupuestoProyectoImpl.calcularValoresInvestigador(personal, 0)}" styleClass="alineadoDerecha gris" style="font-size: 13px" />
+        </p:column>
+        <p:column width="100" headerText="#{properties.value('cu_pr_5_lbl_column_fuente_financiera')}" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{personal.fuenteProyecto.nombreFuente}" styleClass="gris" style="font-size: 13px" />
+        </p:column>
+        <f:facet name="footer">  
+          #{fn:length( cuPr14AvancePresupuestoProyectoImpl.listaInvestigadoresProyecto )} #{properties.value('general_mensaje_footer_datatable_count')}
+        </f:facet>
+      </p:dataTable>
+      <br />
+
+      <div class="centrado">
+
+        <p:commandButton value="#{properties.value('cu_pr_14_lbl_btn_regresar')}" id="idBtnRegresarProyecto"
+                         action="#{cuPr14AvancePresupuestoProyectoImpl.regresar}" immediate="true"/>
+
+      </div>
+    </div>
+  </h:form>
+</html>
+

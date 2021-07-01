@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+  <h:form id="formOtrasInvestigaciones" >
+    <br/>
+    <p:dataTable id="tablaInvestigaciones" value="#{cuIv01GestionarInvestigadoresFaces.listaOtrasInvestigaciones}"
+                 var="investigacion" rowIndexVar="idFila" 
+                 paginator="true" paginatorPosition="bottom"
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}"
+                 resizableColumns="true" rowKey="#{investigacion.idInvestigacionDesarrollada}"
+                 selection="#{cuIv01GestionarInvestigadoresFaces.investigacionSeleccionada}" 
+                 selectionMode="single">
+
+      <p:ajax event="rowSelect" listener="#{cuIv01GestionarInvestigadoresFaces.seleccionarInvestigacion}" 
+              update="@form" />  
+
+      <p:column width="30" headerText="#{properties.value('cu_iv_01_lbl_column_numero')}" >
+        <h:outputLabel value="#{idFila + 1}" styleClass="gris"/>
+      </p:column>
+      <p:column headerText="#{properties.value('cu_iv_01_lbl_titulo_investigacion')}" >
+        <h:outputText value="#{investigacion.tituloInvestigacion}" styleClass="gris"/>
+      </p:column>
+      <p:column headerText="#{properties.value('cu_iv_01_lbl_resumen_investigacion')}" >
+        <h:outputText value="#{investigacion.resumen}" styleClass="gris"/>
+      </p:column>
+      <p:column headerText="#{properties.value('cu_iv_01_lbl_institucion_investigacion')}" >
+        <h:outputText value="#{investigacion.institucion}" styleClass="gris"/>
+      </p:column>
+      <p:column headerText="#{properties.value('cu_iv_01_lbl_fecha_inicio')}" >
+        <h:outputText value="#{investigacion.fechaInicio}" styleClass="gris">
+          <f:convertDateTime pattern="dd/MM/yyyy" type="date"/>
+        </h:outputText>
+      </p:column>
+      <p:column headerText="#{properties.value('cu_iv_01_lbl_fecha_fin')}" >
+        <h:outputText value="#{investigacion.fechaFin}" styleClass="gris">
+          <f:convertDateTime pattern="dd/MM/yyyy" type="date"/>
+        </h:outputText>
+      </p:column>
+    </p:dataTable>
+    <br />
+    <h:panelGrid id="panelgridOtrasInvestigaciones" columns="2" style="width: 100%" 
+                 rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_titulo_investigacion')}" 
+                     styleClass="gris negrilla" for="textAreaTituloInvestigacion"/>
+      <h:panelGroup>
+        <p:inputTextarea value="#{cuIv01GestionarInvestigadoresFaces.tituloInvestigacion}"
+                         id="textAreaTituloInvestigacion" styleClass="textareaMaximo"
+                         maxlength="512" counter="contadorTituloInvestigacion"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         required="true" autoResize="false">
+          <f:validateLength minimum="1"  maximum="512" />
+        </p:inputTextarea>
+        <h:outputText id="contadorTituloInvestigacion" styleClass="gris" />
+      </h:panelGroup>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_resumen_investigacion')}" 
+                     styleClass="gris negrilla" for="textAreaResumenInvestigacion"/>
+      <h:panelGroup>
+        <p:inputTextarea value="#{cuIv01GestionarInvestigadoresFaces.resumenInvestigacion}"
+                         id="textAreaResumenInvestigacion" styleClass="textareaMaximo"
+                         maxlength="2000" counter="contadorResumenInvestigacion"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         required="true" autoResize="false">
+          <f:validateLength minimum="1"  maximum="2000" />
+        </p:inputTextarea>
+        <h:outputText id="contadorResumenInvestigacion" styleClass="gris" />
+      </h:panelGroup>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_institucion_investigacion')}" 
+                     styleClass="gris negrilla" for="inputInstitucionInvestigacion"/>
+      <p:inputText id="inputInstitucionInvestigacion" required="true"
+                   value="#{cuIv01GestionarInvestigadoresFaces.institucionInvestigacion}"
+                   maxlength="100" size="100" />
+    </h:panelGrid>
+    <h:panelGrid id="panelgridInvestigacionesFechas" columns="4" 
+                 rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 style="width: 100%;">
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_fecha_inicio')}" 
+                     styleClass="gris negrilla" for="calendarFechaInicio" style="width: 20%;"/>
+      <p:calendar value="#{cuIv01GestionarInvestigadoresFaces.fechaInicio}" 
+                  id="calendarFechaInicio" showOn="button" style="width: 30%;" 
+                  navigator="true" binding="#{componenteFechaIni}" locale="es"
+                  maxdate="#{cuIv01GestionarInvestigadoresFaces.fechaActual}"
+                  yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" />
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_fecha_fin')}" 
+                     styleClass="gris negrilla" for="calendarFechaFin" style="width: 20%;"/>
+      <p:calendar value="#{cuIv01GestionarInvestigadoresFaces.fechaFin}" style="width: 30%;" 
+                  id="calendarFechaFin" showOn="button" navigator="true" readonlyInput="false"
+                  locale="es" maxdate="#{cuIv01GestionarInvestigadoresFaces.fechaActual}"
+                  yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" >
+        <f:validator validatorId="validadorDeFechas" />
+        <f:attribute name="componenteFechaIni" value="#{componenteFechaIni}" />
+      </p:calendar>
+
+    </h:panelGrid>
+    <br/>
+    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+    <div class="centrado">
+      <p:commandButton value="#{properties.value('cu_iv_01_lbl_btn_add_investigacion')}" 
+                       rendered="#{cuIv01GestionarInvestigadoresFaces.mostrarBotonGuardarInvestigacion}"
+                       action="#{cuIv01GestionarInvestigadoresFaces.registrarInvestigacion}" 
+                       update=":tabView:formOtrasInvestigaciones"/>
+      <p:commandButton value="#{properties.value('cu_iv_01_lbl_btn_update_investigacion')}" 
+                       rendered="#{!cuIv01GestionarInvestigadoresFaces.mostrarBotonGuardarInvestigacion}"
+                       action="#{cuIv01GestionarInvestigadoresFaces.registrarInvestigacion}" 
+                       update="@form"/>
+    </div>
+
+  </h:form>
+</html>
+

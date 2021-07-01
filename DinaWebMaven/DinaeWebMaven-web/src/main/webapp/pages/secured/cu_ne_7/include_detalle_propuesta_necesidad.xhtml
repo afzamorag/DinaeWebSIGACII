@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+  <body>
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+      <ui:define name="content">
+
+        <h:form id="idForm_cu_ne_7_detalle_propuestas_necesidades"  styleClass="site">
+
+          <ui:include src="include_detalle_propuesta_necesidad_datos.xhtml" />                     
+
+          <br />
+          <br />
+          <p:separator styleClass="separadorBorder" /> 
+          <div class="centrado">
+            <p:commandButton value="#{properties.value('cu_ne_7_regresar_generico')}" 
+                             action="#{cuNe7PropuestaNecesidadFaces.regresar}" 
+                             immediate="true" styleClass="button"/>
+            <p:commandButton value="#{properties.value('cu_ne_7_btn_copiar_propuesta')}" rendered="#{cuNe7PropuestaNecesidadFaces.mostrarBtnCopiar}"
+                             action="#{cuNe7PropuestaNecesidadFaces.copiarPropuestaNecesidad}" 
+                             immediate="true" styleClass="button"/>
+          </div>
+          <br />
+          <br />
+
+        </h:form>
+      </ui:define>
+    </ui:composition>
+  </body>
+</html>

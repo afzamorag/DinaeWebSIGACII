@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <br />
+  <h:outputLabel value="Eventos:" styleClass="green negrilla"/>  
+  <br />
+  <h:outputLabel value="Seleccione uno de los eventos del listado para modificar los datos o consultar el detalle" styleClass="gris"/>
+  <br />
+
+  <h:panelGrid columns="4" style="width: 100%">
+
+    <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento" >
+
+      <h:outputLabel styleClass="gris negrilla" value="Tipo de evento:" />                            
+      <h:selectOneMenu value="#{cuPr18IngresaModificarEventoInvestigacionFaces.idTipoEventoSeleccionadoBusqueda}"  
+                       styleClass="gris">
+        <f:selectItem itemValue="" itemLabel="--Seleccione--"/>
+        <f:selectItems value="#{cuPr18IngresaModificarEventoInvestigacionFaces.listaTipoEventoItem}"  />                                  
+      </h:selectOneMenu>
+
+    </h:panelGrid>
+    <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento" >
+
+      <h:outputLabel styleClass="gris negrilla" value="Año:" />                            
+      <h:selectOneMenu value="#{cuPr18IngresaModificarEventoInvestigacionFaces.anioSeleccionadoBusqueda}"  
+                       styleClass="gris">
+        <f:selectItem itemValue="" itemLabel="--Seleccione--"/>
+        <f:selectItems value="#{cuPr18IngresaModificarEventoInvestigacionFaces.listaAniosEventosItem}"  />                                  
+      </h:selectOneMenu>
+
+    </h:panelGrid>
+
+    <h:panelGroup>
+      <p:commandButton value="Buscar" update="@form"
+                       action="#{cuPr18IngresaModificarEventoInvestigacionFaces.buscarEvento}" />
+
+      <p:commandButton value="Ver todos" update="@form"
+                       action="#{cuPr18IngresaModificarEventoInvestigacionFaces.verTodos}" />
+    </h:panelGroup>        
+
+  </h:panelGrid>                
+
+  <br />
+  <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+               id="idDataTablelistaConvocatoriaFinanciacion" var="_evento" 
+               value="#{cuPr18IngresaModificarEventoInvestigacionFaces.listaEventoInvestigacion}" 
+               resizableColumns="true"
+               rowIndexVar="idFila" rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+               paginator="true"                 
+               rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+               paginatorPosition="bottom">
+
+    <p:column width="25" headerText="#{properties.value('cu_ne_6_lbl_numero')}">  
+      <h:outputLabel value="#{idFila + 1}" />  
+    </p:column>
+
+    <p:column width="100" headerText="Tipo de evento">  
+      <h:outputLabel value="#{_evento.valor}" />  
+    </p:column>
+
+    <p:column headerText="Nombre del evento">  
+      <h:outputLabel value="#{_evento.nombre}" />  
+    </p:column>
+
+    <p:column width="170" headerText="Fechas">  
+      <h:outputLabel value="#{_evento.fechaInicio}">
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+      </h:outputLabel>    
+      <h:outputLabel value=" - " />  
+      <h:outputLabel value="#{_evento.fechaFin}">
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+      </h:outputLabel>    
+    </p:column>
+
+    <p:column width="80" headerText="Modificar">  
+      <p:commandButton value="Modificar" 
+                       immediate="true"                              
+                       action="#{cuPr18IngresaModificarEventoInvestigacionFaces.modificarEvento( _evento.idEventoInvestigacion )}" />
+    </p:column>
+    <p:column width="80" headerText="Consultar">  
+      <p:commandButton value="Consultar" 
+                       immediate="true"                              
+                       action="#{cuPr18IngresaModificarEventoInvestigacionFaces.consultarEvento( _evento.idEventoInvestigacion )}" />
+    </p:column>
+
+  </p:dataTable>
+
+  <br />
+  <p:separator styleClass="separadorBorder" /> 
+  <div class="centrado">
+    <p:commandLink value="Agregar nuevo evento" 
+                   action="#{cuPr18IngresaModificarEventoInvestigacionFaces.registrarNuevoEvento}" 
+                   immediate="true" />
+  </div>
+  <br />
+  <br />
+
+</html>

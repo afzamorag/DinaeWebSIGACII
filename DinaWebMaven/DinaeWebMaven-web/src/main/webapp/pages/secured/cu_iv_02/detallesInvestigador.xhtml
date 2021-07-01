@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+  <h:head>
+    <title>Facelet Title</title>
+    <style>
+      .tituloTabSeleccionado {
+        color: #56A700;
+        font-size: small;
+      }
+    </style>
+  </h:head>
+  <h:body>
+    <div class="body">
+      <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+        <ui:define name="content">
+          <div class="fixed-menu">
+            <!--VENTANA DE LISTA DE PERIODOS-->
+            <div class="right-col">
+              <h2 style="font: verdana;">Información del investigador</h2>
+
+              <br/>
+              <br/>
+              <p:tabView id="tabViewInvestigador" orientation="top" >
+
+                <p:tab id="tabInformacionBasica" title="#{properties.value('cu_iv_01_lbl_titulo_tab_informacion_basica')}">
+                  <ui:include src="includeDetalleInformacionBasica.xhtml"/>
+                </p:tab>
+                <p:tab id="tabInvestigacionesVICIN" title="Investigaciones con VICIN">
+                  <ui:include src="includeDetalleInvestigacionVICIN.xhtml"/>
+                </p:tab>
+                <p:tab id="tabOtrasInvestigaciones" title="#{properties.value('cu_iv_01_lbl_titulo_tab_otras_investigaciones')}">
+                  <ui:include src="includeDetalleInvOtrasInvestigaciones.xhtml"/>
+                </p:tab>
+                <p:tab id="tabPublicaciones" title="#{properties.value('cu_iv_01_lbl_titulo_tab_publicaciones')}">
+                  <ui:include src="includeDetallePublicaciones.xhtml" />
+                </p:tab>
+              </p:tabView>
+              <br />
+              <p:separator styleClass="separadorBorder" /> 
+              <div class="centrado">
+                <p:commandButton value="Regresar" id="botonRegresarBusqueda"
+                                 action="#{cuIv02ConsultarInvestigadores.regresarConsultarInvestigadores}"
+                                 accesskey="" immediate="true" />
+              </div>      
+            </div>
+          </div>
+        </ui:define>
+      </ui:composition>
+    </div>
+  </h:body>
+</html>
+

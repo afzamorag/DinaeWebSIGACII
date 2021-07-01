@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+  <p:dataTable var="_actividadplan" value="#{cuPr21RegistrarPlanDeTrabajo.listaActividadesPlanImplementacion}"
+               rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+               id="tablaActividades" style="width: 100%; text-align: center;font-size: small;"
+               emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+               paginator="true" paginatorPosition="bottom" 
+               resizableColumns="true" rowIndexVar="idFila"
+               rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+    <p:column headerText="#{properties.value('cu_pr_21_lbl_column_numero')}" width="25">
+      #{idFila + 1}
+    </p:column>
+    <p:column headerText="#{properties.value('cu_pr_21_lbl_column_actividad')}" >
+      #{_actividadplan.actividad}
+    </p:column>
+    <p:column headerText="#{properties.value('cu_pr_21_lbl_column_objetivo_actividad')}" >
+      #{_actividadplan.objetivo}
+    </p:column>
+    <p:column headerText="#{properties.value('cu_pr_21_lbl_column_estrategia_actividad')}" >
+      #{_actividadplan.estrategia}
+    </p:column>
+    <p:column headerText="#{properties.value('cu_pr_21_lbl_column_fecha_inicio_actividad')}" 
+              width="70">
+      <h:outputLabel value="#{_actividadplan.fechaInicio}" >
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+      </h:outputLabel>
+    </p:column>
+    <p:column headerText="#{properties.value('cu_pr_21_lbl_column_fecha_fin_actividad')}" 
+              width="70">
+      <h:outputLabel value="#{_actividadplan.fechaFin}" >
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+      </h:outputLabel>
+    </p:column>
+    <p:column headerText="#{properties.value('cu_pr_21_lbl_column_impacto_actividad')}" >
+      #{_actividadplan.impactoInstitucional}
+    </p:column>
+    <p:column headerText="#{properties.value('cu_pr_21_lbl_column_difusion_actividad')}" >
+      #{_actividadplan.difusion}
+    </p:column>
+    <p:column headerText="#{properties.value('cu_pr_21_lbl_column_soporte_actividad')}" >
+      #{_actividadplan.soporteEntregar}
+    </p:column>        
+    <p:column headerText="" width="120" >
+
+      <p:commandLink value="#{properties.value('cu_pr_3_lbl_btn_eliminar')}" 
+                     update="tablaActividades" immediate="true"
+                     oncomplete="PF('varConfirmEliminarActividadImpl').show()">  
+        <f:setPropertyActionListener value="#{_actividadplan}" target="#{cuPr21RegistrarPlanDeTrabajo.actividadesPlanImplementacionEliminar}" />  
+      </p:commandLink> 
+      <h:outputLabel value=" || " />
+      <p:commandLink value="Editar" immediate="true" update="@form" action="#{cuPr21RegistrarPlanDeTrabajo.seleccionActividad()}">  
+        <f:setPropertyActionListener value="#{_actividadplan}" target="#{cuPr21RegistrarPlanDeTrabajo.actividadesPlanImplementacion}" />  
+      </p:commandLink> 
+    </p:column>
+    <f:facet name="footer">  
+      #{fn:length( cuPr21RegistrarPlanDeTrabajo.listaActividadesPlanImplementacion)} #{properties.value('general_mensaje_footer_datatable_count')}
+    </f:facet>
+  </p:dataTable>
+
+</html>

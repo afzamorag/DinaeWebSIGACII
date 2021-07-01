@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <h:form id="forminclude_consulta_agregar_indicadores_proyecto" >
+
+
+    <h:outputLabel value="#{properties.value('cu_pr_1_lbl_datatable_indicadores_generales')}" styleClass="green negrilla" />
+    <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 var="_indicador" 
+                 value="#{cuPr11ConsultarDetalleCompromisoFaces.listaIndicadoresProyectoGeneral}" 
+                 paginatorPosition="bottom" styleClass="tabla" rowIndexVar="idFila"
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 resizableColumns="true"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true"  >
+
+      <p:column width="3" headerText="#{properties.value('cu_pr_1_lbl_datatable_num')}"> 
+        #{idFila + 1}
+      </p:column>  
+
+      <p:column width="100" headerText="#{properties.value('cu_pr_1_lbl_datatable_nombre_del_indicador')}">  
+        #{_indicador.nombreIndicador}
+      </p:column>
+
+      <p:column width="200" headerText="#{properties.value('cu_pr_1_lbl_datatable_descripcion_del_indicador')}">  
+        <h:panelGroup>
+          #{_indicador.nombreNumerador}
+          <p:separator styleClass="separadorBorder" /> 
+          #{_indicador.nombreDenominador}
+        </h:panelGroup>
+      </p:column> 
+
+      <p:column width="40" headerText="#{properties.value('cu_pr_7_lbl_valor_datatable')}">  
+        #{_indicador.valorOperacionSinDecimalToString}%
+      </p:column>
+
+      <f:facet name="footer">  
+        #{fn:length( cuPr11ConsultarDetalleCompromisoFaces.listaIndicadoresProyectoGeneral )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable> 
+
+
+    <br />
+    <h:outputLabel value="#{properties.value('cu_pr_1_lbl_otros_indicadores')}" styleClass="green negrilla" />
+    <br />
+    <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 var="_indicador"  id="dtcargarListaIndicadoresProyectoOtros"                     
+                 paginatorPosition="bottom" rowIndexVar="idFila"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true"  
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 resizableColumns="true"
+                 value="#{cuPr11ConsultarDetalleCompromisoFaces.listaIndicadoresCompromisoProyectoOtros}"  >
+
+      <p:column width="3" headerText="#{properties.value('cu_pr_1_lbl_datatable_num')}"> 
+        #{idFila + 1}
+      </p:column>  
+
+      <p:column width="100" headerText="#{properties.value('cu_pr_1_lbl_datatable_nombre_del_indicador')}">  
+        #{_indicador.indicadoresProyecto.nombreIndicador}
+      </p:column>
+
+      <p:column width="200" headerText="#{properties.value('cu_pr_1_lbl_datatable_descripcion_del_indicador')}">  
+        <h:panelGroup>
+          #{_indicador.indicadoresProyecto.nombreNumerador}=#{_indicador.valorNumerador}
+          <p:separator styleClass="separadorBorder" /> 
+          #{_indicador.indicadoresProyecto.nombreDenominador}=#{_indicador.valorDenominador}
+        </h:panelGroup>
+      </p:column>
+      <p:column width="40" headerText="#{properties.value('cu_pr_7_lbl_valor_datatable')}">  
+        #{_indicador.valorOperacionSinDecimalToString}%
+      </p:column>
+
+      <f:facet name="footer">  
+        #{fn:length( cuPr11ConsultarDetalleCompromisoFaces.listaIndicadoresCompromisoProyectoOtros )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable> 
+  </h:form>
+</html>

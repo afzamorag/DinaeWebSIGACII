@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <h:form id="form_include_informacion_basica_semillero" >
+
+    <br />
+    <h:outputLabel value="#{properties.value('cu_pr_1_lbl_porravo_ingrese_datos_info_basica')}" styleClass="green" />
+
+    <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+      <h:outputLabel value="#{properties.value('cu_iv_3_lbl_tab_infobasica_nombresemillero')}" styleClass="gris negrilla" 
+                     for="idcu_iv_3_lbl_tab_infobasica_nombresemillero" />
+      <p:inputText value="#{cuIv3GestionarSemillerosInvestigacionFaces.semilleroInvestigacionSeleccionado.nombre}"  
+                   id="idcu_iv_3_lbl_tab_infobasica_nombresemillero" styleClass="textMaximo" required="true"
+                   maxlength="50" />
+
+      <h:outputLabel value="#{properties.value('cu_iv_3_lbl_tab_infobasica_mision')}" styleClass="gris negrilla" 
+                     for="idcu_iv_3_lbl_tab_infobasica_mision" />
+      <h:panelGrid columns="1" style="width: 100%">
+        <p:inputTextarea value="#{cuIv3GestionarSemillerosInvestigacionFaces.semilleroInvestigacionSeleccionado.misionSemillero}"  
+                         id="idcu_iv_3_lbl_tab_infobasica_mision"
+                         maxlength="512" counter="contador_idcu_iv_3_lbl_tab_infobasica_mision" 
+                         required="true" autoResize="false" rows="2"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         styleClass="textareaMaximo">
+          <f:validateLength minimum="1"  maximum="512" />
+        </p:inputTextarea>
+        <h:outputText id="contador_idcu_iv_3_lbl_tab_infobasica_mision" styleClass="gris" />
+      </h:panelGrid>
+
+      <h:outputLabel value="#{properties.value('cu_iv_3_lbl_tab_infobasica_vision')}" styleClass="gris negrilla" 
+                     for="idcu_iv_3_lbl_tab_infobasica_vision" />
+      <h:panelGrid columns="1" style="width: 100%">
+        <p:inputTextarea value="#{cuIv3GestionarSemillerosInvestigacionFaces.semilleroInvestigacionSeleccionado.visionSemillero}"  
+                         id="idcu_iv_3_lbl_tab_infobasica_vision"
+                         maxlength="512" counter="contador_idcu_iv_3_lbl_tab_infobasica_vision" 
+                         required="true" autoResize="false" rows="2"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         styleClass="textareaMaximo">
+          <f:validateLength minimum="1"  maximum="512" />
+        </p:inputTextarea>
+        <h:outputText id="contador_idcu_iv_3_lbl_tab_infobasica_vision" styleClass="gris" />
+      </h:panelGrid>
+
+      <h:outputLabel value="#{properties.value('cu_iv_3_lbl_tab_infobasica_obj_general')}" styleClass="gris negrilla" 
+                     for="idcu_iv_3_lbl_tab_infobasica_obj_general" />
+      <h:panelGrid columns="1" style="width: 100%">
+        <p:inputTextarea value="#{cuIv3GestionarSemillerosInvestigacionFaces.semilleroInvestigacionSeleccionado.objetivoGeneral}"  
+                         id="idcu_iv_3_lbl_tab_infobasica_obj_general"
+                         maxlength="512" counter="contador_idcu_iv_3_lbl_tab_infobasica_obj_general" 
+                         required="true" autoResize="false" rows="2"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         styleClass="textareaMaximo">
+          <f:validateLength minimum="1"  maximum="512" />
+        </p:inputTextarea>
+        <h:outputText id="contador_idcu_iv_3_lbl_tab_infobasica_obj_general" styleClass="gris" />
+      </h:panelGrid>
+
+      <h:outputLabel value="#{properties.value('cu_iv_3_lbl_tab_infobasica_obj_especi')}" styleClass="gris negrilla" 
+                     for="idcu_iv_3_lbl_tab_infobasica_obj_especi" />
+      <h:panelGrid columns="1" style="width: 100%">
+        <p:inputTextarea value="#{cuIv3GestionarSemillerosInvestigacionFaces.semilleroInvestigacionSeleccionado.objetivoEspecifico}"  
+                         id="idcu_iv_3_lbl_tab_infobasica_obj_especi"
+                         maxlength="512" counter="contador_idcu_iv_3_lbl_tab_infobasica_obj_especi" 
+                         required="true" autoResize="false" rows="2"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         styleClass="textareaMaximo">
+          <f:validateLength minimum="1"  maximum="512" />
+        </p:inputTextarea>
+        <h:outputText id="contador_idcu_iv_3_lbl_tab_infobasica_obj_especi" styleClass="gris" />
+      </h:panelGrid>
+
+      <h:outputLabel value="#{properties.value('cu_iv_3_lbl_tab_infobasica_metodologia_trab')}" styleClass="gris negrilla" 
+                     for="idcu_iv_3_lbl_tab_infobasica_metodologia_trab" />
+      <h:panelGrid columns="1" style="width: 100%">
+        <p:inputTextarea value="#{cuIv3GestionarSemillerosInvestigacionFaces.semilleroInvestigacionSeleccionado.metodologiaTrabajo}"  
+                         id="idcu_iv_3_lbl_tab_infobasica_metodologia_trab"
+                         maxlength="512" counter="contador_idcu_iv_3_lbl_tab_infobasica_metodologia_trab" 
+                         required="true" autoResize="false" rows="2"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         styleClass="textareaMaximo">
+          <f:validateLength minimum="1"  maximum="512" />
+        </p:inputTextarea>
+        <h:outputText id="contador_idcu_iv_3_lbl_tab_infobasica_metodologia_trab" styleClass="gris" />
+      </h:panelGrid>
+
+      <h:outputLabel value="#{properties.value('cu_iv_3_lbl_tab_infobasica_producto_esperado')}" styleClass="gris negrilla" 
+                     for="idcu_iv_3_lbl_tab_infobasica_producto_esperado" />
+      <h:panelGrid columns="1" style="width: 100%">
+        <p:inputTextarea value="#{cuIv3GestionarSemillerosInvestigacionFaces.semilleroInvestigacionSeleccionado.productoOresultado}"  
+                         id="idcu_iv_3_lbl_tab_infobasica_producto_esperado"
+                         maxlength="512" counter="contador_idcu_iv_3_lbl_tab_infobasica_producto_esperado" 
+                         required="true" autoResize="false" rows="2"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         styleClass="textareaMaximo">
+          <f:validateLength minimum="1"  maximum="512" />
+        </p:inputTextarea>
+        <h:outputText id="contador_idcu_iv_3_lbl_tab_infobasica_producto_esperado" styleClass="gris" />
+      </h:panelGrid>
+
+      <h:outputLabel for="idcu_iv_3_lbl_tab_infobasica_pertenece_red_semill" 
+                     value="#{properties.value('cu_iv_3_lbl_tab_infobasica_pertenece_red_semill')}" styleClass="gris negrilla" />
+      <p:selectOneRadio id="idcu_iv_3_lbl_tab_infobasica_pertenece_red_semill" required="true"
+                        value="#{cuIv3GestionarSemillerosInvestigacionFaces.semilleroInvestigacionSeleccionado.perteneceRedSemillero}">  
+        <f:selectItem itemLabel="Sí" itemValue="Y" />  
+        <f:selectItem itemLabel="No" itemValue="N" />                  
+      </p:selectOneRadio>  
+
+      <h:outputLabel value="#{properties.value('cu_iv_3_lbl_tab_infobasica_nombre_red_ndo_pertenece')}" styleClass="gris negrilla" 
+                     for="idcu_iv_3_lbl_tab_infobasica_nombre_red_ndo_pertenece" />
+      <h:panelGrid columns="1" style="width: 100%">
+        <p:inputTextarea value="#{cuIv3GestionarSemillerosInvestigacionFaces.semilleroInvestigacionSeleccionado.nombreRedNodoPertenece}"  
+                         id="idcu_iv_3_lbl_tab_infobasica_nombre_red_ndo_pertenece"
+                         maxlength="512" counter="contador_ididcu_iv_3_lbl_tab_infobasica_nombre_red_ndo_pertenece" 
+                         required="true" autoResize="false" rows="2"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         styleClass="textareaMaximo">
+          <f:validateLength minimum="1"  maximum="512" />
+        </p:inputTextarea>
+        <h:outputText id="contador_ididcu_iv_3_lbl_tab_infobasica_nombre_red_ndo_pertenece" styleClass="gris" />
+      </h:panelGrid>
+
+    </h:panelGrid>
+
+    <p:dataTable id="idDataTableDatos" var="_dato"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 value="#{cuIv3GestionarSemillerosInvestigacionFaces.listaSemilleroInvestigacionDTOJefeUnidadAprueba}" 
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rowIndexVar="idFila" paginatorPosition="bottom" 
+                 resizableColumns="true"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true">
+
+      <p:column width="70" headerText="#{properties.value('cu_pr_7_lbl_horas_investiga_dt_grado')}" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_dato.jefeUnidadGrado}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column headerText="#{properties.value('cu_iv_3_lbl_datatable_jefe_nombres_app')}" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_dato.jefeUnidadNombreCompleto}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column headerText="#{properties.value('cu_iv_3_lbl_datatable_jefe_unidadpoli')}" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_dato.jefeNombreUnidadUnidadPolicial}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column width="80" headerText="#{properties.value('cu_iv_3_lbl_datatable_jefe_cargo')}" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_dato.jefeUnidadCargo}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column width="200" headerText="#{properties.value('cu_iv_3_lbl_datatable_jefe_correo')}" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_dato.jefeUnidadCorreo}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column width="80" headerText="#{properties.value('cu_iv_3_lbl_datatable_jefe_telefono')}" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_dato.jefeUnidadTelefono}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <f:facet name="footer">  
+        #{fn:length( cuIv3GestionarSemillerosInvestigacionFaces.listaSemilleroInvestigacionDTOJefeUnidadAprueba )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable>
+
+    <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+      <h:outputLabel for="idcu_iv_3_lbl_tab_infobasica_fechainicio" 
+                     value="#{properties.value('cu_iv_3_lbl_tab_infobasica_fechainicio')}" 
+                     styleClass="gris negrilla" />            
+      <p:calendar pattern="#{properties.value('general_formato_fecha')}" 
+                  locale="es" 
+                  yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                  navigator="true" showOn="button" styleClass="gris" 
+                  value="#{cuIv3GestionarSemillerosInvestigacionFaces.semilleroInvestigacionSeleccionado.fechaInicio}" 
+                  id="idcu_iv_3_lbl_tab_infobasica_fechainicio" required="true" />    
+
+      <h:outputLabel for="idcu_iv_3_lbl_tab_infobasica_fechafin" 
+                     value="#{properties.value('cu_iv_3_lbl_tab_infobasica_fechafin')}" 
+                     styleClass="gris negrilla" />            
+      <p:calendar pattern="#{properties.value('general_formato_fecha')}" 
+                  locale="es" 
+                  yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                  navigator="true" showOn="button" styleClass="gris" 
+                  value="#{cuIv3GestionarSemillerosInvestigacionFaces.semilleroInvestigacionSeleccionado.fechaFin}" 
+                  id="idcu_iv_3_lbl_tab_infobasica_fechafin" required="true" />    
+
+    </h:panelGrid>
+
+    <br />
+    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+    <div class="centrado">
+
+      <p:commandButton value="#{properties.value('cu_iv_3_lbl_btn_guardainfobasica')}"
+                       action="#{cuIv3GestionarSemillerosInvestigacionFaces.guardarSemillero}"
+                       ajax="false"
+                       update="@form" />
+    </div>
+  </h:form>
+</html>

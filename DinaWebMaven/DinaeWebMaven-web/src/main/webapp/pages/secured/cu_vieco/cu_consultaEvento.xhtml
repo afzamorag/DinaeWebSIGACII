@@ -1,0 +1,594 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+  <body>
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+      <ui:define name="content">
+        <!--CONSULTA EVENTOS-->
+        <h:panelGroup id="idPanelGroupListaEventosEscuela">                     
+          <h:form id="buscarEvento" styleClass="site">  
+
+            <div class="fixed-menu">
+              <div class="right-col">
+                <h2>
+                  Capacitación Escuela
+                </h2>
+              </div>
+            </div>
+            <br> </br>
+            <p:panelGrid style="width:880px" >
+              <f:facet name="header">
+                <p:row>
+                  <p:column colspan="2">
+                    <h:outputLabel value="Parámetros de búsqueda" styleClass="green negrilla" />
+                  </p:column>
+                </p:row>
+              </f:facet>
+              <p:row>
+                <p:column styleClass="ui-widget-header">  
+                  <h:outputText value="Escuela" styleClass="green negrilla" />
+                </p:column>
+                <p:column style="font-weight: bold;">
+                  <p:selectOneMenu id="idListaSelectItemEscuela"  
+                                   effect="fade" style="width:680px"
+                                   filter="true" filterMatchMode="contains"
+                                   value="#{cuPruebasFaces.listaEscuelaItemSeleccionada}">
+                    <f:selectItem itemLabel="Seleccione" itemValue="" />
+                    <f:selectItems  value="#{cuPruebasFaces.listaEscuelasItem}" />
+                    <p:ajax listener="#{cuPruebasFaces.handlePrograma()}"/>
+                  </p:selectOneMenu>
+                </p:column>
+              </p:row>
+              <p:row>
+                <p:column styleClass="ui-widget-header">
+                  <h:outputText value="Nivel académico" styleClass="green negrilla" />
+                </p:column>
+                <p:column style="font-weight: bold;">
+                  <p:selectOneMenu  id="idListaSelectItemNivelAcademico"
+                                    effect="fade" style="width:200px" 
+                                    filter="true" filterMatchMode="contains"
+                                    value="#{cuPruebasFaces.nivelAcademicoItemSelecionado}">  
+                    <f:selectItem itemLabel="Seleccione" itemValue=""/> 
+                    <f:selectItems  value="#{cuPruebasFaces.nivelAcademicoItem}" />
+                    <p:ajax listener="#{cuPruebasFaces.handlePrograma()}"/>
+                  </p:selectOneMenu>
+                </p:column>
+              </p:row>
+              <p:row>
+                <p:column styleClass="ui-widget-header">
+                  <h:outputText value="Metodologia" styleClass="green negrilla" /> 
+                </p:column>
+                <p:column style="font-weight: bold;">
+                  <p:selectOneMenu id="idListaSelectItemDominio"
+                                   effect="fade"  style="width:200px"
+                                   value="#{cuPruebasFaces.dominioItemSeleccionado}">
+                    <f:selectItem itemLabel="Seleccione" itemValue=""/> 
+                    <f:selectItems  value="#{cuPruebasFaces.dominioItem}" /> 
+                    <p:ajax listener="#{cuPruebasFaces.handlePrograma()}"/>
+                  </p:selectOneMenu>
+                </p:column>
+              </p:row>
+              <p:row>
+                <p:column styleClass="ui-widget-header">
+                  <h:outputText value="Vigencia" styleClass="green negrilla" />
+                </p:column>
+                <p:column style="font-weight: bold;">
+                  <p:selectOneMenu  id="idListaSelectItemVigencia"
+                                    effect="fade"  style="width:200px" 
+                                    value="#{cuPruebasFaces.vigenciaItemSeleccionado}" >  
+                    <f:selectItem itemLabel="Seleccione" itemValue=""/>  
+                    <f:selectItems value="#{cuPruebasFaces.listaDominioVigenciaItem}"/> 
+                    <p:ajax update="idListaSelectItemPrograma" listener="#{cuPruebasFaces.handlePrograma()}"/>
+                  </p:selectOneMenu>
+                </p:column>
+              </p:row>
+              <p:row>
+                <p:column styleClass="ui-widget-header">
+                  <h:outputText value="Nombre del programa" styleClass="green negrilla" />
+                </p:column>
+                <p:column style="font-weight: bold;" colspan="2">
+                  <p:selectOneMenu id="idListaSelectItemPrograma" panelStyle="width:180px"
+                                   effect="fade" style="width:680px"
+                                   filter="true" filterMatchMode="contains"
+                                   value="#{cuPruebasFaces.programaSeleccionado1}" >
+                    <f:selectItem itemLabel="Seleccione" itemValue="" />
+                    <f:selectItems  value="#{cuPruebasFaces.listaProgramaItem}"/> 
+                  </p:selectOneMenu>
+                </p:column>                                
+              </p:row>
+            </p:panelGrid>
+
+            <br></br>
+            <div class="centrado">
+              <p:commandButton value="BUSCAR" 
+                               action="#{cuPruebasFaces.buscarEventoEscuela}"                                              
+                               update=":idpruebas_eventos_encontrados" 
+                               process="@form" /> 
+              <p:commandButton value="LIMPIAR"                                                  
+                               action="#{cuPr08ConsultarTrabajosYProyectos.initReturnCU}" 
+                               update="@form" immediate="true"/>
+            </div>
+
+          </h:form>
+
+
+
+          <br> </br>                     
+          <p:dataTable var="_eventoEscuela" value="#{cuPruebasFaces.listaEventoEscuelaModel}"
+                       rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                       id="idpruebas_eventos_encontrados"
+                       emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                       style="width:900px;" paginator="true"
+                       selectionMode="single"
+                       selection="#{cuPruebasFaces.eventoSeleccionado}"
+                       rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                       resizableColumns="true" rowIndexVar="idFila"
+                       paginatorPosition="bottom"
+                       rowKey="#{_eventoEscuela.idEventoEscuela}">
+            <p:ajax event="rowSelect" listener="#{cuPruebasFaces.parametroUpdateEventoEscuela}" oncomplete="PF('dlg1').show();"
+                    /> 
+            <p:column style="width:260px" headerText="Programa">
+              <h:outputText value="#{_eventoEscuela.programa }" />
+            </p:column>
+            <p:column style="width:95px" headerText="Estrategia">
+              <h:outputText value="#{_eventoEscuela.estrategia}" />
+            </p:column>
+            <p:column style="width:40px" headerText="Nro Evento">
+              <h:outputText value="#{_eventoEscuela.nroEvento}" />
+            </p:column>
+            <p:column style="width:65px" headerText="Fecha Inicio">
+              <h:outputText value="#{_eventoEscuela.fechaInicio}" />
+            </p:column>
+            <p:column style="width:65px" headerText="Fecha Fin">
+              <h:outputText value="#{_eventoEscuela.fechaFin}" />
+            </p:column>
+            <p:column style="width:50px" headerText="Cerrado">
+              <h:outputText value="#{_eventoEscuela.cerrado}" />
+            </p:column>
+            <p:column style="width:60px" headerText="Trimestre">
+              <h:outputText value="#{_eventoEscuela.trimestre}" />
+            </p:column>
+            <f:facet name="footer">
+              #{cuPruebasFaces.listaEventoEscuelaModel.numeroRegistro} #{properties.value('general_mensaje_footer_datatable_count')}
+            </f:facet>
+          </p:dataTable>
+
+
+
+          <br></br>
+
+          <p:accordionPanel>
+            <p:tab title="Objetivos del programa">
+              <h:panelGrid columns="2" cellpadding="10">
+                <p:inputTextarea rows="4" cols="145"/>
+              </h:panelGrid>
+            </p:tab>
+            <p:tab title="Justificación del programa">
+              <h:panelGrid columns="2" cellpadding="10">
+                <p:inputTextarea rows="4" cols="145"/>
+              </h:panelGrid>
+            </p:tab>
+            <p:tab title="Programa dirigido a">
+              <h:panelGrid columns="2" cellpadding="10">             
+                <p:inputTextarea rows="4" cols="145"/>
+              </h:panelGrid>
+            </p:tab>
+            <p:tab title="Competencias del programa">
+              <h:panelGrid columns="2" cellpadding="10">             
+                <p:selectOneListbox id="basic"  style="width:850px">
+                  <f:selectItem itemLabel="Lider comunitario" itemValue="1" />
+                  <f:selectItem itemLabel="Proyector social" itemValue="2" />
+                </p:selectOneListbox>
+              </h:panelGrid>
+            </p:tab>
+          </p:accordionPanel>
+
+          <br></br>                
+          <br></br>
+
+          <p:dialog  id="infEvento" header="Información de la capacitación" widgetVar="dlg1" modal="true" height="680" width="1350">
+            <div id="header" class="header">
+              <a class="logo" href="/"><img src="#{request.contextPath}/images/logo.png" alt="Logo Policía Nacional" /></a>            
+              <div class="title">
+                <b>POLICÍA NACIONAL DE COLOMBIA</b><br />
+                <span>DIRECCIÓN NACIONAL DE ESCUELAS</span><br />
+                <span>SISTEMA DE INFORMACIÓN PARA LA GESTIÓN ACADÉMICA</span>                                
+              </div>
+            </div>                        
+            <p:accordionPanel dynamic="true">                                
+              <p:tab title="Información desarrollo del programa">
+                <h:panelGroup>
+                  <h:form id="desGeneralEvento">
+                    <p:panelGrid>
+                      <p:row>
+                        <p:column  colspan="2" styleClass="panelGridColumnaValor_33_porciento">
+                          <h:outputText value="Entidad que dicta la capacitación" styleClass="green negrilla" style="width:400px"/>   
+                        </p:column>
+                        <p:column colspan="2" styleClass="panelGridColumnaValor_33_porciento">
+                          <h:outputText value="Unidad que Desarrolla la Capacitacion" styleClass="green negrilla" style="width:400px"/>    
+                        </p:column>
+                        <p:column  colspan="2" styleClass="panelGridColumnaValor_33_porciento">
+                          <h:outputText value="Unidad que Registra la Capacitacion" styleClass="green negrilla" style="width:400px"/>
+                        </p:column>
+                      </p:row>        
+                      <p:row>
+                        <p:column colspan="2">
+                          <p:selectOneMenu  id="idListaSelectItemEntidadDicta" required="true"
+                                            effect="fade" style="width:200px" 
+                                            filter="true" filterMatchMode="contains"
+                                            value="#{cuPruebasFaces.listaEntidadItemSeleccionado}">  
+                            <f:selectItem itemLabel="Seleccione" itemValue=""/> 
+                            <f:selectItems  value="#{cuPruebasFaces.entidadItem}" />
+                          </p:selectOneMenu>  
+                        </p:column>
+                        <p:column colspan="2">
+                          <p:selectOneMenu id="idListaSelectItemUnidadDesarrolla1" panelStyle="width:180px" required="true"
+                                           effect="fade"  style="width:400px" filter="true" filterMatchMode="contains"
+                                           value="#{cuPruebasFaces.listaUnidadesItemSeleccionado}">
+                            <f:selectItem itemLabel="Seleccione"/>
+                            <f:selectItems value="#{cuPruebasFaces.listaUnidadesItem}" />
+                          </p:selectOneMenu>   
+                        </p:column>
+                        <p:column  colspan="2" >
+                          <p:selectOneMenu id="idListaSelectItemUnidadRegistra"  panelStyle="width:180px" required="true"
+                                           effect="fade"  style="width:400px" filter="true" filterMatchMode="contains">
+                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                            <f:selectItems value="#{cuPruebasFaces.listaEscuelasItem}"/>                                                                
+                          </p:selectOneMenu>
+                        </p:column>            
+                      </p:row>
+                      <p:row>
+                        <p:column colspan="2">
+                          <h:outputText value="Financiación" styleClass="green negrilla" style="width:350px"/>   
+                        </p:column>
+                        <p:column colspan="2">
+                          <h:outputText value="Número de contrato" styleClass="green negrilla" style="width:350px"/>    
+                        </p:column>
+                        <p:column >
+                          <h:outputText value="Costo de la Capacitacion" styleClass="green negrilla" style="width:220px"/>
+                        </p:column>
+                        <p:column>
+                          <h:outputText value="Total días" styleClass="green negrilla" style="width:175px"/>
+                        </p:column>
+                      </p:row>        
+                      <p:row>
+                        <p:column colspan="2">
+                          <p:selectOneMenu  id="idListaSelectItemFinanciacion" required="true"
+                                            effect="fade"  style="width:200px" 
+                                            value="#{cuPruebasFaces.finaciacionItemSeleccionado}" >  
+                            <f:selectItem itemLabel="Seleccione" itemValue=""/>  
+                            <f:selectItems value="#{cuPruebasFaces.listaDominioFinanciacionItem}"/> 
+
+                          </p:selectOneMenu>  
+                        </p:column>
+                        <p:column colspan="2">
+                          <p:selectOneMenu id="idListaSelectItemContrato" panelStyle="width:180px" required="false"
+                                           effect="fade" var="t" style="width:400px">
+                                           <!--value="#{cuPruebasFaces.listaPresupuestoItemSeleccionado}">-->
+                            <f:selectItem itemLabel="Seleccione" itemValue=""/>                                                                
+                          </p:selectOneMenu>   
+                        </p:column>
+                        <p:column style="font-weight: bold;">
+                          <p:inputText  value="#{cuPruebasFaces.costoSeleccionado}" autocomplete="on" id="idCosto" style="width:175px" required="true"/> 
+                        </p:column>
+                        <p:column style="font-weight: bold;">
+                          <p:inputText  value="#{cuPruebasFaces.totalDiasSeleccionado}"  autocomplete="on" id="idTotalDias" style="width:175px" required="true"/> 
+                        </p:column>
+                      </p:row>
+                      <p:row>
+                        <p:column colspan="2" style="font-weight: bold;">
+                          <h:outputText value="Convenio" styleClass="green negrilla" style="width:250px"/>
+                        </p:column>                                                
+
+
+                        <p:column colspan="2" style="font-weight: bold;">
+                          <h:outputText value="Ciudad" styleClass="green negrilla" style="width:250px"/>
+                        </p:column> 
+                        <p:column style="font-weight: bold;">
+                          <h:outputText value="Fecha inicio" styleClass="green negrilla" style="width:250px"/>
+                        </p:column>
+                        <p:column  style="font-weight: bold;">
+                          <h:outputText value="Fecha fin" styleClass="green negrilla" style="width:120px"/>
+                        </p:column>
+                      </p:row>
+                      <p:row>
+                        <p:column colspan="2" style="font-weight: bold;">
+                          <p:selectOneMenu  id="idListaSelectItemConvenio1"
+                                            effect="fade"  style="width:200px" required="true"
+                                            value="#{cuPruebasFaces.listaConvenioItemSeleccionado}" >  
+                            <f:selectItem itemLabel="Seleccione" itemValue=""/>  
+                            <f:selectItems value="#{cuPruebasFaces.listaDominioConvenioItem}"/> 
+                          </p:selectOneMenu>             
+                        </p:column>
+                        <p:column colspan="2" style="font-weight: bold;">
+                          <p:selectOneMenu  id="idListaSelectItemCiudad1" required="true"
+                                            effect="fade"  style="width:200px" 
+                                            value="#{cuPruebasFaces.listaSieduLugarDeptoMunSeleccionado}" >  
+                            <f:selectItem itemLabel="Seleccione" itemValue=""/>  
+                            <f:selectItems value="#{cuPruebasFaces.sieduLugarDeptoMunItem}"/> 
+                          </p:selectOneMenu>  
+                        </p:column> 
+                        <p:column style="font-weight: bold;">
+                          <p:calendar required="true" id="restricted" value="#{cuPruebasFaces.fechaInicioSeleccionado}" mindate="4/1/14" maxdate="sysdate"/>
+                        </p:column>
+                        <p:column  style="font-weight: bold;">
+                          <p:calendar required="true" id="restricted1" value="#{cuPruebasFaces.fechaFinSeleccionado}" mindate="4/1/14" maxdate="sysdate"/>
+                        </p:column>
+                      </p:row>
+                      <p:row>
+                        <p:column colspan="6">
+                          <p:spacer height="20"/>
+                        </p:column>
+                      </p:row> 
+                      <p:row>
+                        <p:column colspan="6">
+                          <div class="centrado">
+                            <p:commandButton value="GUARDAR" 
+                                             actionListener="#{cuPruebasFaces.actualizarEventoEscuela}"                                              
+                                             />
+                            <p:button value="EDITAR">
+                            </p:button>
+                            <p:button value="CANCELAR">
+                            </p:button>
+                          </div>                                            
+                        </p:column>
+                      </p:row>
+                      <p:row>
+                        <p:column colspan="6">
+                          <p:spacer height="5"/>
+                        </p:column>
+                      </p:row>
+                      <p:row>
+                        <p:column colspan="6" styleClass="ui-widget-header">
+                          <p:spacer height="3"/>
+                        </p:column>
+                      </p:row>                                     
+                      <p:row>
+                        <p:column style="font-weight: bold;">
+                          <h:outputText value="Cerrado" styleClass="green negrilla" style="width:250px"/>
+                        </p:column>
+                        <p:column style="font-weight: bold;">
+                          <h:outputText value="Convocados" styleClass="green negrilla" style="width:250px"/>
+                        </p:column> 
+                        <p:column style="font-weight: bold;">
+                          <h:outputText value="Presentados" styleClass="green negrilla" style="width:250px"/>
+                        </p:column>
+                        <p:column  style="font-weight: bold;">
+                          <h:outputText value="Aprobados" styleClass="green negrilla" style="width:120px"/>
+                        </p:column>
+                        <p:column style="font-weight: bold;">
+                          <h:outputText value="No aprobados" styleClass="green negrilla" style="width:250px"/>
+                        </p:column>
+                        <p:column  style="font-weight: bold;">
+                          <h:outputText value="Desertados" styleClass="green negrilla" style="width:120px"/>
+                        </p:column>
+                      </p:row>
+                      <p:row>
+                        <p:column>
+                          <p:inputText   readonly="true" autocomplete="on" id="idEventoCerrado" style="width:175px"/> 
+                        </p:column> 
+                        <p:column>
+                          <p:inputText   readonly="true" autocomplete="on" id="idEventoConvocado" style="width:175px"/> 
+                        </p:column> 
+                        <p:column>
+                          <p:inputText   readonly="true" autocomplete="on" id="idEventoPresentado" style="width:175px"/> 
+                        </p:column> 
+                        <p:column>
+                          <p:inputText   readonly="true" autocomplete="on" id="idEventoAprobado" style="width:175px"/> 
+                        </p:column> 
+                        <p:column>
+                          <p:inputText   readonly="true" autocomplete="on" id="idEventoNoAprobado" style="width:175px"/> 
+                        </p:column> 
+                        <p:column>
+                          <p:inputText   readonly="true" autocomplete="on" id="idEventoDesertado" style="width:175px"/> 
+                        </p:column> 
+                      </p:row>
+                    </p:panelGrid>
+                  </h:form> 
+                </h:panelGroup>
+              </p:tab>
+              <p:tab title="Información convocatoria del programa">
+                <h:form>
+                  <p:dataTable var=" " value=" " style="width:1260px">
+                    <p:column headerText="Unidad" styleClass="panelGridColumnaValor_25_porciento" >
+                      <p:inputText readonly="true"   autocomplete="on" id="idUnidadseleccionado" style="width:280px"/>                                            
+                    </p:column>
+                    <p:column headerText="Tipo Comunicacion Oficial" styleClass="panelGridColumnaValor_25_porciento">
+                      <p:inputText readonly="true"  autocomplete="on" id="idTipoComunicado" style="width:280px"/>
+                    </p:column>
+                    <p:column headerText="Nro Comunicacion Oficial" styleClass="panelGridColumnaValor_25_porciento">
+                      <p:inputText readonly="true" autocomplete="on" id="idConvocadosNroComunicacionOficial" style="width:280px"/>
+                    </p:column>
+                    <p:column  headerText="Nro. Convocados" styleClass="panelGridColumnaValor_8_porciento">
+                      <p:inputText  readonly="true" autocomplete="on" id="idConvocadosNroConvocados" style="width:80px"/>
+                    </p:column>
+                    <p:column headerText="Nro. Presentados" styleClass="panelGridColumnaValor_8_porciento">
+                      <p:inputText  readonly="true" autocomplete="on" id="idConvocadosNroPresentados" style="width:80px"/>
+                    </p:column> 
+                    <p:column headerText="Editar" styleClass="panelGridColumnaValor_8_porciento">
+                      <div class="centrado">
+                        <p:button value="EDITAR">
+                        </p:button>   
+                      </div>
+                    </p:column>
+                    <f:facet name="footer">
+                      <p:commandButton  value="AGREGAR" oncomplete="PF('nuevaConvocatoria').show()"/>
+                    </f:facet>
+                  </p:dataTable>
+                  <br></br>                               
+                </h:form>
+              </p:tab>
+              <p:tab title="Información participantes del programa">                            
+
+                <p:dataTable var="_participanteEvento" value="#{cuPruebasFaces.listadoParticipanteEventoModel}" 
+                             style="width:1260px"
+                             id="participantesEventoEscuela"
+                             rowKey="#{_participanteEvento.idParticipaEvento}">
+                  <f:facet name="header">                                       
+                    <p:outputPanel>
+                      <h:outputText value="Identificacion participante:" />
+                      <p:inputText autocomplete="on" id="idParticipanteIdentificacionInput" 
+                                   style="width:120px" value="#{cuPruebasFaces.identificacionParticipante}"/> 
+                      <p:commandButton value="GUARDAR" 
+                                       action="#{cuPruebasFaces.insertParticipantes}"
+                                       update="participantesEventoEscuela"/>
+                    </p:outputPanel> 
+                  </f:facet>                             
+                  <p:column headerText="Identificacion" styleClass="panelGridColumnaValor_12_porciento" >
+                    <h:outputText value="#{_participanteEvento.identificacion}"/> 
+                  </p:column>
+                  <p:column headerText="Grado" styleClass="panelGridColumnaValor_5_porciento">
+                    <h:outputText value="#{_participanteEvento.alfabetico}"/> 
+                  </p:column>
+                  <p:column headerText="Nombres y Apellidos" styleClass="panelGridColumnaValor_25_porciento">
+                    <h:outputText value="#{_participanteEvento.nombreApellido}"/>
+                  </p:column>
+                  <p:column headerText="Perfil" styleClass="panelGridColumnaValor_5_porciento">
+                    <h:outputText value="#{_participanteEvento.cumplePerfil}"/>
+                  </p:column>
+                  <p:column headerText="Cargo" styleClass="panelGridColumnaValor_33_porciento">
+                    <h:outputText value="#{_participanteEvento.nombreApellido}"/>
+                  </p:column>
+                  <p:column headerText="Estado" styleClass="panelGridColumnaValor_12_porciento">
+                    <h:outputText value="#{_participanteEvento.estado}"/>
+                  </p:column> 
+                  <p:column headerText="Unidad" styleClass="panelGridColumnaValor_8_porciento">
+                    <h:outputText value="#{_participanteEvento.siglaFisica}"/>                                                                                  
+                  </p:column>
+                </p:dataTable>
+                <br></br>                                
+
+                <br></br>                            
+              </p:tab>
+              <p:tab title="Información docentes del programa">
+
+                <p:dataTable var=" " value=" " style="width:1260px">
+                  <f:facet name="header">                                       
+                    <p:outputPanel>
+                      <h:outputText value="Identificación docente:       " />
+                      <p:inputText autocomplete="on" id="idDocenteIdentificacionInput" style="width:120px" placeholder="Número documento"/>  
+                      <h:outputText value="       "/>
+                      <p:button value="AGREGAR">
+                      </p:button>
+                    </p:outputPanel> 
+                  </f:facet>
+                  <p:column headerText="Identificacion" styleClass="panelGridColumnaValor_12_porciento" >
+                    <p:inputText   autocomplete="on" id="idDocenteIdentificacion" style="width:120px"/>                                             
+                  </p:column>
+                  <p:column headerText="Grado" styleClass="panelGridColumnaValor_5_porciento">
+                    <p:inputText    autocomplete="on" id="idDocenteGrado" style="width:50px"/> 
+                  </p:column>
+                  <p:column headerText="Nombres y Apellidos" styleClass="panelGridColumnaValor_25_porciento">
+                    <p:inputText    autocomplete="on" id="idDocenteApellidosNombres" style="width:280px"/>
+                  </p:column>
+                  <p:column headerText="Tema" styleClass="panelGridColumnaValor_25_porciento">
+                    <p:selectOneMenu id="idListaSelectItemDocenteTema" panelStyle="width:180px"
+                                     effect="fade" var="t" style="width:290px" filter="true" filterMatchMode="contains">
+                      <f:selectItem itemLabel="Seleccione" itemValue="" />
+                    </p:selectOneMenu>
+                  </p:column>
+                  <p:column headerText="Subtema" styleClass="panelGridColumnaValor_30_porciento">
+                    <p:selectOneMenu id="idListaSelectItemDocenteSubtema" panelStyle="width:180px"
+                                     effect="fade" var="t" style="width:360px" filter="true" filterMatchMode="contains">
+                      <f:selectItem itemLabel="Seleccione" itemValue="" />
+                    </p:selectOneMenu>
+                  </p:column>
+                </p:dataTable>                              
+
+              </p:tab>
+              <p:tab title="Información inasistencia del programa">
+
+                <div class="centrado">
+                  <p:dataTable var=" " value=" " style="width:900px">
+                    <f:facet name="header">                                       
+                      <p:outputPanel>
+                        <h:outputText value="Identificación inasistente:       " />
+                        <p:inputText autocomplete="on" id="idInasistenteIdentificacionInput" style="width:120px" placeholder="Número documento"/>  
+                        <h:outputText value="       "/>
+                        <p:button value="AGREGAR">
+                        </p:button>
+                      </p:outputPanel> 
+                    </f:facet>
+                    <p:column headerText="Identificacion" styleClass="panelGridColumnaLabel_10_porciento" >
+                      <p:inputText   autocomplete="on" id="idInasisteIdentificacion" style="width:100px"/>                                             
+                    </p:column>
+                    <p:column headerText="Grado" styleClass="panelGridColumnaValor_5_porciento">                                                    
+                      <p:inputText    autocomplete="on" id="idInasisteGrado" style="width:50px"/>                                    
+                    </p:column>
+                    <p:column headerText="Nombres y Apellidos" styleClass="panelGridColumnaValor_25_porciento">
+                      <p:inputText    autocomplete="on" id="idInasisteApellidosNombres" style="width:300px"/>
+                    </p:column>
+                    <p:column headerText="Fecha" styleClass="panelGridColumnaValor_17_porciento">
+                      <p:calendar id="restricted4" value="#{calendarView.date6}" mindate="4/1/14" maxdate="sysdate"/>
+                    </p:column>
+                    <p:column headerText="Horas" styleClass="panelGridColumnaValor_7_porciento">
+                      <p:inputText    autocomplete="on" id="idInasisteHoras" style="width:70px"/>
+                    </p:column>
+                  </p:dataTable>
+                </div>
+                <br></br>
+                <div class="centrado">
+                  <p:button value="GUARDAR">
+                  </p:button>
+                  <p:button value="CANCELAR">
+                  </p:button>
+                </div>
+
+              </p:tab>
+            </p:accordionPanel>                        
+            <div class="footer">
+              <div class="footer-line">                                    
+              </div>
+            </div> 
+          </p:dialog>
+
+
+          <p:dialog id="infConvocatoria" header="Datos de la convocatoria" widgetVar="nuevaConvocatoria" modal="true" height="140" width="1280">
+
+            <p:dataTable var=" " value=" " style="width:1260px">
+
+              <p:column headerText="Unidad" styleClass="panelGridColumnaValor_25_porciento" >
+                <p:selectOneMenu id="idListaSelectItemEscuela"  
+                                 effect="fade" style="width:320px"
+                                 filter="true" filterMatchMode="contains"
+                                 value="#{cuPruebasFaces.listaUnidadesConvocatoriaItemSeleccionado}">
+                  <f:selectItem itemLabel="Seleccione" itemValue="" />
+                  <f:selectItems  value="#{cuPruebasFaces.listaUnidadesItem}" />                                      
+                </p:selectOneMenu>
+              </p:column>
+              <p:column headerText="Tipo Comunicacion Oficial" styleClass="panelGridColumnaValor_25_porciento">
+                <p:selectOneMenu id="idListaSelectItemConvocatoriaTipoComunicado" panelStyle="width:180px"
+                                 effect="fade" style="width:280px"
+                                 value="#{cuPruebasFaces.listaDominioTipoDocumentoItemSeleccionado}" >                                                 
+                  <f:selectItem itemLabel="Seleccione" itemValue="" />
+                  <f:selectItems  value="#{cuPruebasFaces.listaDominioTipoDocumentoItem}" />  
+                </p:selectOneMenu> 
+              </p:column>
+              <p:column headerText="Nro Comunicacion Oficial" styleClass="panelGridColumnaValor_25_porciento">
+                <p:inputText value="#{cuPruebasFaces.numeroDocumentoConvocatoria}" autocomplete="on" id="idConvocadosNroComunicacionOficial" style="width:280px"/>
+              </p:column>
+              <p:column headerText="Nro. Convocados" styleClass="panelGridColumnaValor_8_porciento">
+                <p:inputText  value="#{cuPruebasFaces.numeroConvocados}" autocomplete="on" id="idConvocadosNroConvocados" style="width:80px"/>
+              </p:column>
+              <p:column headerText="Nro. Presentados" styleClass="panelGridColumnaValor_8_porciento">
+                <p:inputText  value="#{cuPruebasFaces.numeroPresentados}" autocomplete="on" id="idConvocadosNroPresentados" style="width:80px"/>
+              </p:column> 
+              <f:facet name="footer">
+                <div class="centrado">
+                  <p:commandButton value="GUARDAR" 
+                                   actionListener="#{cuPruebasFaces.insertConvocatoria()}"/>
+                  <p:button value="CANCELAR">
+                  </p:button>
+                </div>
+              </f:facet>
+            </p:dataTable>
+            <br></br>                                           
+          </p:dialog>
+
+        </h:panelGroup>
+      </ui:define>
+    </ui:composition> 
+  </body>
+</html>

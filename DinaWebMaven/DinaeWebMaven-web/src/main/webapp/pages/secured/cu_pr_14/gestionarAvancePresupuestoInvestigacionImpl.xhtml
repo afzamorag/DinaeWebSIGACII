@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <h:body>
+    <div class="body">
+      <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+        <ui:define name="content">
+          <h:form id="idFormularioGralCuPr14">
+            <div class="fixed-menu">
+              <div class="right-col">
+                <h2 style="font: verdana;">
+                  #{cuPr14AvancePresupuestoProyectoImpl.tituloCU}
+                </h2>
+              </div>
+            </div>
+
+
+            <h:panelGrid columns="2" style="width:100%;" columnClasses="panelGridColumnaValor_60_porciento, panelGridColumnaLabel_40_porciento">
+
+              <h:panelGrid columns="2">
+                <h:outputText value="#{properties.value('cu_pr_14_lbl_titulo_proyecto')}: " styleClass="gris negrilla" style="text-align: right;" />
+                <h:outputText value="#{cuPr14AvancePresupuestoProyectoImpl.implementacionProyecto.proyecto.tituloPropuesto}" styleClass="gris" style="text-align: left"/>
+              </h:panelGrid>
+
+
+              <h:panelGrid columns="2">
+                <h:outputText value="#{properties.value('cu_pr_14_lbl_periodo_informe')}: " styleClass="gris negrilla" style="text-align: right;" />
+                <h:panelGrid columns="3">
+                  <h:outputText value="#{cuPr14AvancePresupuestoProyectoImpl.informeAvanceImplementacion.fechaInicio}" styleClass="gris" style="text-align: right">                                                             
+                    <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+                  </h:outputText>
+                  <h:outputText style="text-align: center" value="-" />
+                  <h:outputText value="#{cuPr14AvancePresupuestoProyectoImpl.informeAvanceImplementacion.fechaFin}" styleClass="gris" style="text-align: right">                                                             
+                    <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+                  </h:outputText> 
+                </h:panelGrid>
+              </h:panelGrid>
+            </h:panelGrid>
+
+          </h:form>
+          <br/>
+          <br/>
+          <p:tabView id="tabWrapperCuPr14" activeIndex="#{cuPr14AvancePresupuestoProyectoImpl.tabSeleccionado}">
+            <p:ajax event="tabChange" listener="#{cuPr14AvancePresupuestoProyectoImpl.onTabChange}" update=":tabWrapperCuPr14"/> 
+            <p:tab id="tabPersonalInvestiga" title="#{properties.value('cu_pr_14_lbl_tab_personal_investigacion')}">                                           
+              <ui:include src="includePersonalInvestigacionImpl.xhtml" />                                                       
+            </p:tab>
+            <p:tab id="tabEquiposInvestiga" title="#{properties.value('cu_pr_14_lbl_tab_equipos_investigacion')}">
+              <ui:include src="includeEquipoInvestigacionInformeImpl.xhtml" />                            
+            </p:tab>
+            <p:tab id="tabEventosRelaciona" title="#{properties.value('cu_pr_14_lbl_tab_eventos_relacionados')}">
+              <ui:include src="includeEventosRelaciondosInformeImpl.xhtml" />
+            </p:tab>
+            <p:tab id="tabViajesRelaciona" title="#{properties.value('cu_pr_14_lbl_tab_viajes_relacionados')}">
+              <ui:include src="includeViajesRelacionadosInformeImpl.xhtml" />
+            </p:tab>  
+            <p:tab id="tabOtrosInforme" title="#{properties.value('cu_pr_14_lbl_tab_otros')}">
+              <ui:include src="includeOtrosGastosInformeImpl.xhtml" />
+            </p:tab>
+            <p:tab id="tabPresupuestoEjecutado" title="#{properties.value('cu_pr_14_lbl_tab_presupuesto_global_ejecutado')}">
+              <h:panelGrid columns="1" width="100%" rendered="#{cuPr14AvancePresupuestoProyectoImpl.importPresupuestoPage != null}">
+                <ui:include src="#{cuPr14AvancePresupuestoProyectoImpl.importPresupuestoPage}" />
+              </h:panelGrid>
+
+              <h:form id="formTabAvancePresupuesto">
+                <div class="centrado">                            
+                  <p:commandButton value="#{properties.value('cu_pr_14_lbl_btn_regresar')}" id="idBtnRegresarProyecto"
+                                   action="#{cuPr14AvancePresupuestoProyectoImpl.regresar}" immediate="true"/>                                  
+
+                </div>
+
+              </h:form>
+
+            </p:tab> 
+          </p:tabView>                    
+
+        </ui:define>
+      </ui:composition>
+    </div>
+  </h:body>
+</html>

@@ -1,0 +1,131 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <h:body>
+    <h:form id="formResultadoInvestigacion">
+      <h:panelGrid columns="2" style="width:100%" id="panelgridResultadosInvestigacionField" 
+                   rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                   columnClasses="panelGridColumnaValor_30_porciento,panelGridColumnaValor_70_porciento">
+        <h:panelGrid columns="2">
+          <h:outputLabel value="*" style="color: red; font-weight: bold" />
+          <h:outputLabel value="#{properties.value('cu_pr_10_lbl_tab3_tipo_producto')}: " styleClass="gris negrilla" style="text-align: right" />
+        </h:panelGrid>                
+        <h:selectOneMenu id="idListaTipoProducto" styleClass="include_listado_propuesta" class="gris" 
+                         value="#{cuPr10RegistroInformeFinal.idTipoProducto}" >  
+          <f:selectItem itemLabel="--Todos--" itemValue="" />
+          <f:selectItems value="#{cuPr10RegistroInformeFinal.listaTipoProducto}"/>
+        </h:selectOneMenu>
+
+        <h:panelGrid columns="2">
+          <h:outputLabel value="*" style="color: red; font-weight: bold" />
+          <h:outputLabel value="#{properties.value('cu_pr_10_lbl_tab3_desc')}: " styleClass="gris negrilla" style="text-align: right" />
+        </h:panelGrid>                   
+        <h:panelGroup>
+          <p:inputTextarea value="#{cuPr10RegistroInformeFinal.descripcionResultadoInvestiga}"  
+                           id="descripcionResultadoInvestiga"
+                           maxlength="512" counter="contadorDescipcion" 
+                           cols="100" rows="3" autoResize="false"
+                           counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                           styleClass="textareaMaximo">
+            <f:validateLength minimum="0"  maximum="512" />                        
+          </p:inputTextarea>
+          <h:outputText id="contadorDescipcion" styleClass="gris" />
+        </h:panelGroup>
+      </h:panelGrid>
+      <br />
+      <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+      <br />            
+      <p:separator styleClass="separadorBorder" /> 
+      <div class="centrado">
+        <p:commandButton value="#{properties.value('cu_pr_10_lbl_tab3_btn_agregar')}" rendered="#{!cuPr10RegistroInformeFinal.esModificacion}"
+                         action="#{cuPr10RegistroInformeFinal.guardar(2)}"
+                         update="@form"/>
+        <p:commandButton value="#{properties.value('cu_pr_10_lbl_tab3_btn_modificar')}" rendered="#{cuPr10RegistroInformeFinal.esModificacion}"
+                         action="#{cuPr10RegistroInformeFinal.guardar(2)}"
+                         update="@form"/>
+        <p:commandButton value="#{properties.value('cu_pr_10_lbl_tab3_btn_cancelar')}" rendered="#{cuPr10RegistroInformeFinal.esModificacion}"
+                         action="#{cuPr10RegistroInformeFinal.cancelarModificacion}"
+                         update="@form"/>
+
+      </div>
+      <br />
+      <p:dataTable var="ri" paginator="true" style="width: 100%"
+                   value="#{cuPr10RegistroInformeFinal.listaResultadosInvestigacionModel}"
+                   rowIndexVar="idFila" paginatorPosition="bottom" id="dataTableResultaInvestiga"
+                   rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                   emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                   rows="#{properties.value('general_mensaje_filas_datatable_pagina')}"
+                   resizableColumns="true"
+                   selection="#{cuPr10RegistroInformeFinal.resultadosInvestigacion}" 
+                   selectionMode="single">
+
+        <p:ajax event="rowSelect" listener="#{cuPr10RegistroInformeFinal.cargarDatosResultadosInvestigacion}" 
+                update="@form" />  
+        <p:ajax event="rowUnselect" listener="#{cuPr10RegistroInformeFinal.noSeleccionResultadosInvestigacion}" 
+                update="dataTableResultaInvestiga"/>  
+
+        <p:column width="20" headerText="#{properties.value('cu_pr_10_lbl_tab3_tabla_num')}"  style="color:white; text-align: center">  
+          <h:outputText value="#{idFila + 1}"  styleClass="gris"/>
+        </p:column> 
+
+        <p:column width="200" headerText="#{properties.value('cu_pr_10_lbl_tab3_tabla_tipo_producto')}" style="color:white;">  
+          <h:outputText value="#{ri.idTipoProducto.valor}"  styleClass="gris"/>
+        </p:column> 
+
+        <p:column headerText="#{properties.value('cu_pr_10_lbl_tab3_tabla_desc')}" style="color:white;">  
+          <h:outputText value="#{ri.descripcion}"  styleClass="gris"/>
+        </p:column> 
+
+        <p:column width="80" headerText="#{properties.value('cu_pr_19_lbl_tabla_acciones')}" style="color:white;">  
+          <div class="centrado">
+            <p:commandLink value="#{properties.value('cu_pr_10_lbl_tab3_btn_eliminar')}" 
+                           immediate="true"
+                           oncomplete="PF('varConfirmEliminarResultadosAlcanzados').show()">  
+              <f:setPropertyActionListener value="#{ri}" target="#{cuPr10RegistroInformeFinal.resultadosInvestigacion}" />  
+            </p:commandLink>
+          </div>
+        </p:column>
+        <f:facet name="footer">  
+          #{fn:length(cuPr10RegistroInformeFinal.resultadosInvestigacionList)} #{properties.value('general_mensaje_footer_datatable_count')}
+        </f:facet>
+      </p:dataTable>
+      <br />
+
+      <p:separator styleClass="separadorBorder" /> 
+      <div class="centrado">
+
+        <p:commandButton value="#{properties.value('cu_pr_3_lbl_btn_regresar')}" id="idBtnRegresarProyecto"
+                         action="#{cuPr10RegistroInformeFinal.regresarCuPr19()}" immediate="true"/>
+
+      </div>
+
+    </h:form>
+
+
+    <p:confirmDialog widgetVar="varConfirmEliminarResultadosAlcanzados" header="#{properties.value('cu_pr_2_lbl_titulo_confirmacion_titulo')}" 
+                     message="¿Está seguro que desea eliminar el resultado de la investigacion seleccionado?" closeOnEscape="true" > 
+
+      <h:form id="idForm_varResultadosAlcanzados">
+
+        <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmEliminarResultadosAlcanzados">
+          <div class="centrado">
+            <p:commandButton actionListener="#{cuPr10RegistroInformeFinal.eliminarResultadosInvestigacion}" 
+                             value="#{properties.value('cu_pr_7_lbl_btn_confirma_si')}" immediate="true"
+                             oncomplete="varConfirmEliminarResultadosAlcanzados.hide();"
+                             update=":tabWrapper:formResultadoInvestigacion:dataTableResultaInvestiga" />  
+            <p:commandButton value="#{properties.value('cu_pr_7_lbl_btn_confirma_no')}" 
+                             onclick="varConfirmEliminarResultadosAlcanzados.hide();" type="button" />       
+          </div>
+        </p:outputPanel>
+
+      </h:form>
+    </p:confirmDialog>
+
+  </h:body>
+</html>

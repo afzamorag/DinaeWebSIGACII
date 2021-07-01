@@ -1,0 +1,450 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+    
+            <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+                <ui:define name="content">
+                    <p:panel 
+                        id="main"
+                        header="#{properties.value('cu_me_02_lbl_titulo_cu')}" 
+                        styleClass="ui-fluid">
+                        <p:messages autoUpdate="false" 
+                                    id="msg" 
+                                    showDetail="true"/>
+                        <h:form id="idform_crear_propuesta_banco">
+                            <!--h:outputText 
+                              value="#{properties.value('cu_me_02_lbl_titulo_cu')}"/>
+                            <p:separator /-->
+                            <p:panel id="pnlfiltro"
+                                     styleClass="ui-fluid">
+                                <p:panelGrid id="pgBusqueda" 
+                                             columns="2"
+                                             layout="grid" 
+                                             columnClasses="ui-grid-col-2,ui-grid-col-6" 
+                                             styleClass="ui-panelgrid-blank">
+                                    <p:outputLabel for="cu_me_02_lbl_area" 
+                                                   value="#{properties.value('cu_me_02_lbl_area')}:" 
+                                                   styleClass="gris negrilla"/>
+                                    <p:selectOneMenu rendered="true" 
+                                                     id="cu_me_02_lbl_area"                                  
+                                                     value="#{cuMe2PropuestaBanco.idAreaCienciaTecnologia}" 
+                                                     required="false" >  
+                                        <f:selectItem itemLabel="SELECCIONE" itemValue="" noSelectionOption="true"/>  
+                                        <f:selectItems value="#{cuMe2PropuestaBanco.areas}" 
+                                                       var="area" 
+                                                       itemLabel="#{area.nombre}" 
+                                                       itemValue="#{area.idAreaCienciaTecnologia}"/> 
+                                        <p:ajax event="change" 
+                                                update="cu_me_02_lbl_linea" 
+                                                process="@this" 
+                                                immediate="true" />
+                                    </p:selectOneMenu>
+                                    <p:outputLabel for="cu_me_02_lbl_linea" 
+                                                   value="#{properties.value('cu_me_02_lbl_linea')}:" 
+                                                   styleClass="gris negrilla"/>
+                                    <p:selectOneMenu rendered="true" 
+                                                     id="cu_me_02_lbl_linea"                                  
+                                                     value="#{cuMe2PropuestaBanco.idLinea}" 
+                                                     required="false" >  
+                                        <f:selectItem itemLabel="SELECCIONE" itemValue="" noSelectionOption="true"/>  
+                                        <f:selectItems value="#{cuMe2PropuestaBanco.lineas}" 
+                                                       var="linea" 
+                                                       itemLabel="#{linea.nombre}" 
+                                                       itemValue="#{linea.idLinea}" />
+                                    </p:selectOneMenu>
+                                    <p:outputLabel for="cu_me_02_lbl_palabra_clave" 
+                                                   value="#{properties.value('cu_me_02_lbl_palabra_clave')}:" 
+                                                   styleClass="gris negrilla"/>
+                                    <p:inputText id="cu_me_02_lbl_palabra_clave" 
+                                                 value="#{cuMe2PropuestaBanco.palabraClave}" 
+                                                 required="false"/>
+                                </p:panelGrid>
+                                <f:facet name="footer">
+                                    <p:panelGrid id="btns"
+                                                 columns="6"
+                                                 layout="grid" 
+                                                 columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+                                                 styleClass="ui-panelgrid-blank">
+                                        <p:commandButton value="#{properties.value('cu_me_02_lbl_buscar')}" 
+                                                         style="border:none"
+                                                         actionListener="#{cuMe2PropuestaBanco.buscarInvestigaciones()}" 
+                                                         update="idDataTableInvestigaciones, messages, msg, btns" />  
+                                        <p:commandButton id="btnNuevo" 
+                                                         value="#{properties.value('cu_me_02_lbl_nuevo')}" 
+                                                         rendered="#{cuMe2PropuestaBanco.busco}" 
+                                                         oncomplete="PF('editarForm').show()" 
+                                                         style="border:none"
+                                                         update="editarForm, msg" 
+                                                         actionListener="#{cuMe2PropuestaBanco.nuevo()}" /> 
+                                    </p:panelGrid>
+                                </f:facet>
+                            </p:panel>
+                            <br />
+                            <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                                         id="idDataTableInvestigaciones" 
+                                         var="necesidad" 
+                                         value="#{cuMe2PropuestaBanco.necesidadesBanco}" 
+                                         rowIndexVar="idFila" 
+                                         rows="15" 
+                                         paginator="true" 
+                                         rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaImparDataTable'}"
+                                         resizableColumns="true" 
+                                         rowKey="#{necesidad.identificadorBancoNecesidad}"
+                                         paginatorPosition="bottom" 
+                                         rendered="true"
+                                         selection="#{cuMe2PropuestaBanco.necesidadBancoSeleccionada}" 
+                                         styleClass="tabla"
+                                         style="margin-top:10px"> 
+                                <f:facet name="header">
+                                    Propuestas de investigación en el banco de necesidades
+                                </f:facet>
+                                <p:column headerText="#{properties.value('cu_me_02_lbl_area')}">
+                                    <h:outputText value="#{necesidad.linea.areaCienciaTecnologia.nombre}" />
+                                </p:column>
+                                <p:column headerText="#{properties.value('cu_me_02_lbl_linea')}">
+                                    <h:outputText value="#{necesidad.linea.nombre}" />
+                                </p:column>
+                                <p:column headerText="#{properties.value('cu_me_02_lbl_titulo')}">
+                                    <h:outputText value="#{necesidad.titulo}" />
+                                </p:column>
+                                <p:column headerText="#{properties.value('cu_me_02_lbl_estado')}">
+                                    <h:outputText value="#{necesidad.estadoTexto}" />
+                                </p:column>
+                                <p:column headerText="#{properties.value('cu_me_02_lbl_opciones')}">
+                                    <p:commandButton value="Ver" 
+                                                     oncomplete="PF('editarForm').show()" 
+                                                     update="editarForm"
+                                                     immediate="true" 
+                                                     action="#{cuMe2PropuestaBanco.editar(necesidad)}" 
+                                                     style="border: none"  /> 
+                                </p:column>
+                            </p:dataTable>
+                        </h:form>
+                        <p:growl id="growl2" sticky="true" showDetail="true" life="3000" />
+                        <p:dialog id="editarForm" 
+                                  header="#{properties.value('cu_me_02_lbl_investigacion_banco')}" 
+                                  widgetVar="editarForm" 
+                                  fitViewport="false" 
+                                  responsive="true"
+                                  appendTo="main"
+                                  width="1200" 
+                                  showHeader="true" 
+                                  modal="true"
+                                  positionType="absolute"
+                                  closable="false">
+                            <h:form id="formaEditar">
+                                <p:panel id="pnldetallesBanco"                         
+                                         header="Información general propuesta"
+                                         styleClass="ui-fluid">
+                                    <p:panelGrid columns="4"                               
+                                                 layout="grid" 
+                                                 columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" 
+                                                 styleClass="ui-panelgrid-blank">
+                                        <p:outputLabel for="cu_me_02_lbl_unidad_proponente" 
+                                                       value="#{properties.value('cu_me_02_lbl_unidad_proponente')}:" 
+                                                       styleClass="gris negrilla"/>
+                                        <p:inputText id="cu_me_02_lbl_unidad_proponente"  
+                                                     value="#{cuMe2PropuestaBanco.necesidadBancoSeleccionada.unidad.nombre}"  
+                                                     required="false"
+                                                     readonly="true"
+                                                     label="#{cuMe2PropuestaBanco.necesidadBancoSeleccionada.unidad.nombre}"/>
+                                        <!--p:selectOneMenu rendered="true" disabled="#{cuMe2PropuestaBanco.editando==0}"
+                                                         id="cu_me_02_lbl_unidad_proponente"                                     
+                                                         value="#{cuMe2PropuestaBanco.necesidadBancoSeleccionada.unidad.idUnidadPolicial}" 
+                                                         required="true" >  
+                                          <f:selectItems value="#{appController.unidadesPoliciales()}" 
+                                                         var="unidad" itemLabel="#{unidad.siglaFisicaYnombreUnidad}" 
+                                                         itemValue="#{unidad.idUnidadPolicial}"/>    
+                                        </p:selectOneMenu-->
+                                        <p:outputLabel for="cu_me_02_lbl_fecha_propuesta" 
+                                                       value="#{properties.value('cu_me_02_lbl_fecha_propuesta')}:" 
+                                                       styleClass="gris negrilla" />
+                                        <p:calendar pattern="#{properties.value('general_formato_fecha')}" 
+                                                    locale="es" 
+                                                    readonly="true"
+                                                    disabled="true"
+                                                    value="#{cuMe2PropuestaBanco.necesidadBancoSeleccionada.fechaPropuesta}" 
+                                                    id="cu_me_02_lbl_fecha_propuesta" required="true">
+                                        </p:calendar>
+                                        <p:outputLabel for="cu_me_02_lbl_area2" 
+                                                       value="#{properties.value('cu_me_02_lbl_area')}:" 
+                                                       styleClass="gris negrilla"/>
+                                        <p:selectOneMenu rendered="true"  
+                                                         disabled="#{cuMe2PropuestaBanco.editando==0}"
+                                                         id="cu_me_02_lbl_area2"                                     
+                                                         value="#{cuMe2PropuestaBanco.necesidadBancoSeleccionada.linea.areaCienciaTecnologia.idAreaCienciaTecnologia}" 
+                                                         required="true" 
+                                                         filter="true"
+                                                         filterMatchMode="contains">
+                                            <f:selectItem itemLabel="SELECCIONE" itemValue="" />  
+                                            <f:selectItems value="#{cuMe2PropuestaBanco.areas}" 
+                                                           var="area" 
+                                                           itemLabel="#{area.nombre}" 
+                                                           itemValue="#{area.idAreaCienciaTecnologia}" />  
+                                            <p:ajax event="change" 
+                                                    update="cu_me_02_lbl_linea2" 
+                                                    process="@this" 
+                                                    immediate="true" />
+                                        </p:selectOneMenu>
+                                        <p:outputLabel for="cu_me_02_lbl_linea2" 
+                                                       value="#{properties.value('cu_me_02_lbl_linea')}:" 
+                                                       styleClass="gris negrilla"/>
+                                        <p:selectOneMenu rendered="true" 
+                                                         disabled="#{cuMe2PropuestaBanco.editando==0}" 
+                                                         id="cu_me_02_lbl_linea2"                                    
+                                                         value="#{cuMe2PropuestaBanco.necesidadBancoSeleccionada.linea.idLinea}" 
+                                                         required="true"                                    
+                                                         filter="true"
+                                                         filterMatchMode="contains">
+                                            <f:selectItem itemLabel="SELECCIONE" itemValue="" />    
+                                            <f:selectItems value="#{cuMe2PropuestaBanco.lineas2}" 
+                                                           var="linea" 
+                                                           itemLabel="#{linea.nombre}" 
+                                                           itemValue="#{linea.idLinea}"  />
+                                        </p:selectOneMenu>
+                                    </p:panelGrid>
+                                    <p:panelGrid id="pgEdicion" 
+                                                 columns="2"                               
+                                                 layout="grid" 
+                                                 columnClasses="ui-grid-col-2,ui-grid-col-10" 
+                                                 styleClass="ui-panelgrid-blank">
+                                        <p:outputLabel for="cu_me_02_lbl_tema_propuesto" 
+                                                       value="#{properties.value('cu_me_02_lbl_tema_propuesto')}:" 
+                                                       styleClass="gris negrilla"/>
+                                        <h:panelGroup>
+                                        <p:inputTextarea id="cu_me_02_lbl_tema_propuesto" 
+                                                         value="#{cuMe2PropuestaBanco.necesidadBancoSeleccionada.tema}" 
+                                                         maxlength="500" 
+                                                         rows="2"
+                                                         autoResize="true"
+                                                         required="true" 
+                                                         readonly="#{cuMe2PropuestaBanco.editando==0}"/>
+                                        <p:message
+                                            for="cu_me_02_lbl_tema_propuesto"/>
+                                        </h:panelGroup>
+                                        <p:outputLabel for="cu_me_02_lbl_titulo" 
+                                                       value="#{properties.value('cu_me_02_lbl_titulo')}:" 
+                                                       styleClass="gris negrilla"/>
+                                        <h:panelGroup>                                  
+                                        <p:inputTextarea id="cu_me_02_lbl_titulo" 
+                                                         value="#{cuMe2PropuestaBanco.necesidadBancoSeleccionada.titulo}" 
+                                                         maxlength="200" 
+                                                         rows="2"
+                                                         autoResize="true"
+                                                         required="true" 
+                                                         readonly="#{cuMe2PropuestaBanco.editando==0}"/>
+                                        <p:message
+                                            for="cu_me_02_lbl_titulo"/>
+                                        </h:panelGroup>
+                                        <p:outputLabel for="cu_me_02_lbl_resultados_esperados" 
+                                                       value="#{properties.value('cu_me_02_lbl_resultados_esperados')}:" 
+                                                       styleClass="gris negrilla"/>
+                                        <h:panelGroup>
+                                        <p:inputTextarea id="cu_me_02_lbl_resultados_esperados" 
+                                                         value="#{cuMe2PropuestaBanco.necesidadBancoSeleccionada.resultadoEsperado}" 
+                                                         maxlength="1000"  
+                                                         rows="2"
+                                                         autoResize="true"
+                                                         required="true" 
+                                                         readonly="#{cuMe2PropuestaBanco.editando==0}"/> 
+                                        <p:message
+                                            for="cu_me_02_lbl_resultados_esperados"/>
+                                        </h:panelGroup>
+                                        <p:outputLabel for="cu_me_02_lbl_fuentes_informacion" 
+                                                       value="#{properties.value('cu_me_02_lbl_fuentes_informacion')}:" 
+                                                       styleClass="gris negrilla"/>
+                                        <h:panelGroup>
+                                        <p:inputTextarea id="cu_me_02_lbl_fuentes_informacion" 
+                                                         value="#{cuMe2PropuestaBanco.necesidadBancoSeleccionada.fuenteInformacion}" 
+                                                         maxlength="1000" 
+                                                         rows="2"
+                                                         autoResize="true"
+                                                         required="true" 
+                                                         readonly="#{cuMe2PropuestaBanco.editando==0}"/>
+                                         <p:message
+                                            for="cu_me_02_lbl_fuentes_informacion"/>
+                                        </h:panelGroup>
+                                        <p:outputLabel for="cu_me_02_lbl_actividades_propuestas" 
+                                                       value="#{properties.value('cu_me_02_lbl_actividades_propuestas')}:" 
+                                                       styleClass="gris negrilla"/>
+                                        <h:panelGroup>
+                                        <p:inputTextarea id="cu_me_02_lbl_actividades_propuestas" 
+                                                         value="#{cuMe2PropuestaBanco.necesidadBancoSeleccionada.posibleActividad}" 
+                                                         maxlength="1000" 
+                                                         rows="2"
+                                                         autoResize="true"
+                                                         required="true" 
+                                                         readonly="#{cuMe2PropuestaBanco.editando==0}"/>
+                                        <p:message
+                                            for="cu_me_02_lbl_actividades_propuestas"/>
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                    <p:panelGrid
+                                        id="pnlUpload"
+                                        columns="3"
+                                        layout="grid" 
+                                        columnClasses="ui-grid-col-2,ui-grid-col-5,ui-grid-col-5" 
+                                        styleClass="ui-panelgrid-blank">
+                                        <p:outputLabel for="cu_me_02_lbl_archivo_anexo" 
+                                                       value="#{bundle['banconecesidad.archivoanexo.lbl']}"
+                                                       styleClass="gris negrilla"/> 
+                                        <p:fileUpload 
+                                            id="cu_me_02_lbl_archivo_anexo"
+                                            fileUploadListener="#{cuMe2PropuestaBanco.handleFileUpload}" 
+                                            mode="advanced"
+                                            auto="true" 
+                                            required="true"                                            
+                                            allowTypes="/(\.|\/)(pdf)$/" update="documentonombre, growl2"
+                                            value="#{bundle['commons.btn.upload']}"
+                                            rendered="#{!cuMe2PropuestaBanco.renderBtnFile}"/>           
+                                        <h:outputText
+                                            rendered="#{!cuMe2PropuestaBanco.renderBtnFile}"
+                                            id="documentonombre"
+                                            value="#{cuMe2PropuestaBanco.necesidadBancoSeleccionada.nombreArchivo}"/>
+                                        <p:commandLink 
+                                            ajax="false"
+                                            rendered="#{cuMe2PropuestaBanco.renderBtnFile}"
+                                            onclick="PrimeFaces.monitorDownload(start, stop);" 
+                                            title="#{bundle['commons.btn.download']}">
+                                            <h:outputText                                            
+                                                value="#{cuMe2PropuestaBanco.necesidadBancoSeleccionada.nombreArchivo}"/>
+                                            <p:fileDownload 
+                                                value="#{cuMe2PropuestaBanco.archivo}"/>
+                                        </p:commandLink>
+                                    </p:panelGrid>
+                                </p:panel>
+                                <p:panel id="pnlFuncionariosProponen"
+                                         header="Funcionarios que proponen"
+                                         styleClass="ui-fluid"
+                                         style="margin-top:20px">
+                                    <p:panelGrid columns="3"                                                           
+                                                 layout="grid" 
+                                                 columnClasses="ui-grid-col-3,ui-grid-col-3,ui-grid-col-2" 
+                                                 styleClass="ui-panelgrid-blank">
+                                        <p:outputLabel for="cu_me_02_lbl_documento_funcionario_proponente" 
+                                                       value="#{properties.value('cu_me_02_lbl_documento_funcionario_proponente')}:" 
+                                                       styleClass="gris negrilla"/>
+                                        <p:inputText value="#{cuMe2PropuestaBanco.documentoFuncionario}" 
+                                                     id="cu_me_02_lbl_documento_funcionario_proponente"                                
+                                                     readonly="#{cuMe2PropuestaBanco.editando==0}" />
+                                        <p:commandButton value="#{properties.value('cu_me_02_lbl_agregar')}"  
+                                                         immediate="false" 
+                                                         update="idDataTableFuncionarios, cu_me_02_lbl_documento_funcionario_proponente" 
+                                                         process="@this,cu_me_02_lbl_documento_funcionario_proponente" 
+                                                         style="border:none"
+                                                         actionListener="#{cuMe2PropuestaBanco.agregarFuncionario()}" 
+                                                         rendered="#{cuMe2PropuestaBanco.editando!=0}" />  
+                                    </p:panelGrid>
+                                    <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                                                 id="idDataTableFuncionarios" 
+                                                 var="funcionario" 
+                                                 value="#{cuMe2PropuestaBanco.funcionarios}" 
+                                                 rowIndexVar="idFila" 
+                                                 rows="15" 
+                                                 paginator="true" 
+                                                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaImparDataTable'}"
+                                                 resizableColumns="true" 
+                                                 rowKey="#{funcionario.persona.persPers}"
+                                                 paginatorPosition="bottom" 
+                                                 rendered="true"
+                                                 selection="#{cuMe2PropuestaBanco.funcionarioSeleccionado}" 
+                                                 selectionMode="single" 
+                                                 styleClass="tabla" 
+                                                 style="margin-top:10px">
+                                        <f:facet name="header">
+                                            Funcionarios que propenen
+                                        </f:facet>
+                                        <p:column headerText="#{properties.value('cu_me_02_lbl_grado')}">
+                                            <h:outputText value="#{funcionario.persona.persGrado}" />
+                                        </p:column>
+                                        <p:column headerText="#{properties.value('cu_me_02_lbl_nombre')}">
+                                            <h:outputText value="#{funcionario.persona.persNombres} #{funcionario.persona.persApellidos}" />
+                                        </p:column>
+                                        <p:column headerText="#{properties.value('cu_me_02_lbl_correo')}">
+                                            <h:outputText value="#{funcionario.persona.persCorreo}" />
+                                        </p:column>
+                                        <p:column headerText="#{properties.value('cu_me_02_lbl_telefono')}">
+                                            <h:outputText value="#{funcionario.persona.persTelefono}" />
+                                        </p:column>
+                                        <p:column headerText="#{properties.value('cu_me_02_lbl_cargo')}">
+                                            <h:outputText value="#{funcionario.persona.persCargo}" />
+                                        </p:column>
+                                        <p:column headerText="#{properties.value('cu_me_02_lbl_unidad')}">
+                                            <h:outputText value="#{funcionario.persona.unidad.descripcionDependencia}" />
+                                        </p:column>
+                                        <p:column headerText="#{properties.value('cu_me_02_lbl_opciones')}" rendered="#{cuMe2PropuestaBanco.editando!=0}">                                    
+                                            <p:commandButton value="#{properties.value('cu_me_01_lbl_eliminar')}" 
+                                                             disabled="#{cuMe2PropuestaBanco.editando==0}" 
+                                                             immediate="true" 
+                                                             style="border:none" 
+                                                             oncomplete="PF('confirmEliminar').show()" >
+                                                <f:setPropertyActionListener value="#{funcionario}" target="#{cuMe2PropuestaBanco.funcionarioSeleccionado}" /> 
+                                            </p:commandButton>
+                                        </p:column>
+                                    </p:dataTable>
+                                    <f:facet name="footer">
+                                        <p:panelGrid
+                                            columns="6"
+                                            layout="grid" id="btns"
+                                            columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+                                            styleClass="ui-panelgrid-blank">
+                                            <p:commandButton value="#{properties.value('cu_me_02_lbl_guardar')}" 
+                                                             update="idform_crear_propuesta_banco:idDataTableInvestigaciones,pnldetallesBanco, pnlFuncionariosProponen" 
+                                                             process="@this, formaEditar" 
+                                                             style="border:none"
+                                                             actionListener="#{cuMe2PropuestaBanco.guardar}" 
+                                                             rendered="#{cuMe2PropuestaBanco.editando!=0}"                                                             
+                                                             oncomplete="validacionCamposDialog(xhr, status, args, PF('editarForm'))"/>
+                                            <p:commandButton value="#{properties.value('cu_me_02_lbl_editar')}" 
+                                                             update="formaEditar, msg" 
+                                                             immediate="true" 
+                                                             process="@this" 
+                                                             style="border:none" 
+                                                             rendered="#{cuMe2PropuestaBanco.editando==0 and 
+                                                                         cuMe2PropuestaBanco.necesidadBancoSeleccionada.estado!='S'}"
+                                                             actionListener="#{cuMe2PropuestaBanco.editar}" 
+                                                             ajax="true" />  
+                                            <p:commandButton value="#{properties.value('cu_me_02_lbl_volver')}" 
+                                                             oncomplete="PF('editarForm').hide();"                                                             
+                                                             style="border:none"
+                                                             immediate="true" />                 
+                                        </p:panelGrid>
+                                    </f:facet>                    
+                                </p:panel>
+                            </h:form>
+                        </p:dialog>
+                        <p:confirmDialog widgetVar="confirmEliminar" 
+                                         header="#{properties.value('cu_me_01_titulo_alerta')}" 
+                                         appendTo="main"
+                                         message="#{properties.value('cu_me_01_lbl_confirmacion_eliminar')}" > 
+                            <h:form id="idFormEliminar">
+                                <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmEliminarFuenteFinanciera">
+                                    <p:panelGrid
+                                        columns="2"
+                                        layout="grid" 
+                                        columnClasses="ui-grid-col-2,ui-grid-col-2" 
+                                        styleClass="ui-panelgrid-blank">
+                                        <p:commandButton actionListener="#{cuMe2PropuestaBanco.eliminar()}" 
+                                                         style="border: none"
+                                                         value="#{properties.value('cu_pr_7_lbl_btn_confirma_si')}" 
+                                                         immediate="true"
+                                                         oncomplete="PF('confirmEliminar').hide();" 
+                                                         update="messages, formaEditar:idDataTableFuncionarios" />  
+                                        <p:commandButton value="#{properties.value('cu_pr_7_lbl_btn_confirma_no')}"  
+                                                         style="border: none"
+                                                         onclick="PF('confirmEliminar').hide();" 
+                                                         type="button" />       
+                                    </p:panelGrid>
+                                </p:outputPanel>
+                            </h:form>
+                        </p:confirmDialog>
+                    </p:panel>
+                </ui:define>
+            </ui:composition>
+</html>
+
+

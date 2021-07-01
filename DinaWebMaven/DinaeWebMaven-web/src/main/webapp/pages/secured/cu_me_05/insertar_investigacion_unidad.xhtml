@@ -1,0 +1,482 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+        <ui:define name="content">
+            <p:panel 
+                id="main"
+                styleClass="ui-fluid"
+                header="#{properties.value('cu_me_05_lbl_titulo_cu')}">
+                <h:form id="idform_parametrizar_investigacion_unidad">  
+                    <p:panel>
+                        <p:messages autoUpdate="false" 
+                                    id="msg" 
+                                    showDetail="false"/>
+                        <p:panelGrid id="pgBusqueda" 
+                                     columns="2" 
+                                     layout="grid" 
+                                     columnClasses="ui-grid-col-2,ui-grid-col-8" 
+                                     styleClass="ui-panelgrid-blank">
+                            <p:outputLabel for="cu_me_05_lbl_unidad" 
+                                           value="#{properties.value('cu_me_05_lbl_unidad')}:" 
+                                           styleClass="gris negrilla"
+                                           rendered="#{cuMe5PropuestaPorUnidad.validaRol}"/>
+                            <p:selectOneMenu id="cu_me_05_lbl_unidad" 
+                                             value="#{cuMe5PropuestaPorUnidad.idUnidadPolicial}" 
+                                             required="false"
+                                             filter="true"
+                                             filterMatchMode="contains"
+                                             rendered="#{cuMe5PropuestaPorUnidad.validaRol}">                                
+                                <f:selectItem itemLabel=" SELECCIONE " itemValue="" /> 
+                                <f:selectItems value="#{appController.unidadesPoliciales()}" 
+                                               var="unidadConvoca" 
+                                               itemLabel="#{unidadConvoca.siglaFisicaYnombreUnidad}" 
+                                               itemValue="#{unidadConvoca.idUnidadPolicial}"/> 
+                            </p:selectOneMenu>
+                            <p:outputLabel for="cu_me_05_lbl_vigencia" 
+                                           value="#{properties.value('cu_me_05_lbl_vigencia')}:" 
+                                           styleClass="gris negrilla"/>
+                            <p:selectOneMenu rendered="true" 
+                                             id="cu_me_05_lbl_vigencia" 
+                                             value="#{cuMe5PropuestaPorUnidad.vigencia}" 
+                                             required="false" >
+                                <f:selectItem itemLabel=" SELECCIONE " itemValue="" /> 
+                                <f:selectItems value="#{cuMe5PropuestaPorUnidad.vigencias}"  />
+                            </p:selectOneMenu>                                                   
+                        </p:panelGrid>
+                        <f:facet
+                            name="footer">
+                            <p:panelGrid
+                                columns="6"
+                                layout="grid" 
+                                columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+                                styleClass="ui-panelgrid-blank">
+                                <p:commandButton value="#{properties.value('cu_me_05_lbl_buscar')}" 
+                                                 style="border:none" 
+                                                 process="@form"
+                                                 actionListener="#{cuMe5PropuestaPorUnidad.buscarProgramaInvestigacion()}" 
+                                                 update="msg, idDatatablePropuestas, messages" />  
+                            </p:panelGrid>
+                        </f:facet>
+                    </p:panel>
+                    <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                                 id="idDatatablePropuestas" 
+                                 var="propuesta" 
+                                 value="#{cuMe5PropuestaPorUnidad.propuestasAsignadas}" 
+                                 rowIndexVar="idFila" 
+                                 rows="15" 
+                                 paginator="true" 
+                                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaImparDataTable'}"
+                                 resizableColumns="true" 
+                                 rowKey="#{propuesta.sieduPropuestaAsignadaPK}"
+                                 paginatorPosition="bottom" 
+                                 rendered="true">
+                        <f:facet
+                            name="header">
+                            Investigaciones programadas por unidad
+                        </f:facet>
+                        <p:column headerText="#{properties.value('cu_me_05_lbl_vigencia')}" style="text-align: center">
+                            <h:outputText value="#{propuesta.sieduPropuestaAsignadaPK.vigencia}" />
+                        </p:column>
+                        <p:column headerText="#{properties.value('cu_me_05_lbl_modalidad')}">
+                            <h:outputText value="#{propuesta.modalidad.descripcion}" />
+                        </p:column>
+                        <p:column headerText="#{properties.value('cu_me_05_lbl_titulo')}">
+                            <h:outputText value="#{propuesta.propuestaNecesidad.titulo}" />
+                        </p:column>
+                        <p:column headerText="#{properties.value('cu_me_05_lbl_area')}">
+                            <h:outputText value="#{propuesta.propuestaNecesidad.linea.areaCienciaTecnologia.nombre}" />
+                        </p:column>
+                        <p:column headerText="#{properties.value('cu_me_05_lbl_linea')}">
+                            <h:outputText value="#{propuesta.propuestaNecesidad.linea.nombre}" />
+                        </p:column>
+                        <p:column headerText="#{properties.value('cu_me_05_lbl_banco')}" style="text-align: center">
+                            <h:outputText value="#{propuesta.propuestaNecesidad.idBancoNecesidad==null?'NO':'SI'}" />
+                        </p:column>
+                        <p:column headerText="#{properties.value('cu_me_05_lbl_estado')}">
+                            <h:outputText value="#{propuesta.propuestaNecesidad.constantes.valor}" />
+                        </p:column>
+                        <p:column headerText="#{properties.value('cu_me_05_lbl_opciones')}">
+                            <p:commandButton value="Ver" 
+                                             oncomplete="PF('editarForm').show()" 
+                                             update="editarForm"                                             
+                                             immediate="false" 
+                                             action="#{cuMe5PropuestaPorUnidad.ver( propuesta )}" 
+                                             style="border: none" 
+                                             rendered="#{propuesta.propuestaNecesidad.idBancoNecesidad == null
+                                                         or propuesta.propuestaNecesidad.idBancoNecesidad > 0}"/>                 
+                            <!--     disabled="#{!(propuesta.propuestaNecesidad.constantes.idConstantes==2007 or propuesta.propuestaNecesidad.constantes.idConstantes==2008)}" -->
+
+                                <!--  disabled="#{!(propuesta.propuestaNecesidad.constantes.idConstantes==2007 or propuesta.propuestaNecesidad.constantes.idConstantes==2008)}" > -->
+                        </p:column>
+                    </p:dataTable>                    
+                </h:form>
+            </p:panel>
+            <p:dialog  header="#{properties.value('cu_me_05_lbl_titulo_cu')}" 
+                       id="editarForm"
+                       widgetVar="editarForm" 
+                       fitViewport="false" 
+                       positionType="absolute"
+                       responsive="true" 
+                       width="1200"
+                       showHeader="true" 
+                       modal="true" 
+                       closable="false">
+                <h:form id="verForm">
+                    <p:panel>
+                        <p:panelGrid columns="4"
+                                     layout="grid" 
+                                     columnClasses="ui-grid-col-2,ui-grid-col-5,ui-grid-col-1,ui-grid-col-4" 
+                                     styleClass="ui-panelgrid-blank"
+                                     style="margin-top:10px">
+                            <p:outputLabel for="cu_me_05_lbl_unidad" 
+                                           value="#{properties.value('cu_me_05_lbl_unidad')}:" 
+                                           styleClass="gris negrilla"/>
+                            <p:inputText id="cu_me_05_lbl_unidad"  
+                                         value="#{cuMe5PropuestaPorUnidad.propuestaSeleccionada.unidadPolicial.nombre}" 
+                                         required="false"
+                                         readonly="true"
+                                         label="#{cuMe5PropuestaPorUnidad.propuestaSeleccionada.unidadPolicial.nombre}"/>
+                            <p:outputLabel for="cu_me_05_lbl_fecha" 
+                                           value="#{properties.value('cu_me_05_lbl_fecha')}:" 
+                                           styleClass="gris negrilla" />
+                            <p:inputText id="cu_me_05_lbl_fecha"  
+                                         value="#{cuMe5PropuestaPorUnidad.propuestaSeleccionada.fechaEnvio}"                                     
+                                         required="false"
+                                         readonly="true"
+                                         label="#{cuMe5PropuestaPorUnidad.propuestaSeleccionada.unidadPolicial.nombre}">
+                                <f:convertDateTime type="date" 
+                                                   pattern="#{bundle['pattern.default.date']}"/>
+                            </p:inputText>
+                            <p:outputLabel 
+                                for="cu_me_05_lbl_area" 
+                                value="#{properties.value('cu_me_05_lbl_area')}:" 
+                                styleClass="gris negrilla"/>
+                            <p:inputText 
+                                value="#{cuMe5PropuestaPorUnidad.propuestaSeleccionada.linea.areaCienciaTecnologia.nombre}"  
+                                required="false"
+                                readonly="true"
+                                label="#{cuMe5PropuestaPorUnidad.propuestaSeleccionada.linea.areaCienciaTecnologia.nombre}"
+                                rendered="#{!cuMe5PropuestaPorUnidad.renderButtonGuardar}"/>
+                            <p:selectOneMenu 
+                                rendered="#{cuMe5PropuestaPorUnidad.renderButtonGuardar}"
+                                id="cu_me_05_lbl_area" 
+                                value="#{cuMe5PropuestaPorUnidad.propuestaSeleccionada.linea.areaCienciaTecnologia.idAreaCienciaTecnologia}" 
+                                required="true">  
+                                <f:selectItems 
+                                    value="#{cuMe5PropuestaPorUnidad.areas}" 
+                                    var="area" 
+                                    itemLabel="#{area.nombre}" 
+                                    itemValue="#{area.idAreaCienciaTecnologia}"/>  
+                                <p:ajax 
+                                    event="change" 
+                                    update="cu_me_05_lbl_linea" 
+                                    process="@this" 
+                                    immediate="true"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel 
+                                for="cu_me_05_lbl_linea" 
+                                value="#{properties.value('cu_me_05_lbl_linea')}:" 
+                                styleClass="gris negrilla"/>
+                            <p:inputText 
+                                value="#{cuMe5PropuestaPorUnidad.propuestaSeleccionada.linea.nombre}"
+                                required="false"
+                                readonly="true"
+                                label="#{cuMe5PropuestaPorUnidad.propuestaSeleccionada.linea.nombre}"
+                                rendered="#{!cuMe5PropuestaPorUnidad.renderButtonGuardar}"/>
+                            <p:selectOneMenu 
+                                rendered="#{cuMe5PropuestaPorUnidad.renderButtonGuardar}" 
+                                id="cu_me_05_lbl_linea"
+                                value="#{cuMe5PropuestaPorUnidad.propuestaSeleccionada.linea.idLinea}" 
+                                required="true" >  
+                                <f:selectItems 
+                                    value="#{cuMe5PropuestaPorUnidad.lineas2}" 
+                                    var="linea" 
+                                    itemLabel="#{linea.nombre}" 
+                                    itemValue="#{linea.idLinea}"/>
+                            </p:selectOneMenu>
+                        </p:panelGrid>
+                        <p:panelGrid id="pgEdicion" 
+                                     columns="2"
+                                     layout="grid" 
+                                     columnClasses="ui-grid-col-2,ui-grid-col-10" 
+                                     styleClass="ui-panelgrid-blank">
+                            <p:outputLabel for="cu_me_02_lbl_tema_propuesto" 
+                                           value="#{properties.value('cu_me_02_lbl_tema_propuesto')}:" 
+                                           styleClass="gris negrilla"/>
+                            <p:inputTextarea id="cu_me_02_lbl_tema_propuesto" 
+                                             value="#{cuMe5PropuestaPorUnidad.propuestaSeleccionada.tema}" 
+                                             maxlength="500" 
+                                             rows="2"
+                                             autoResize="true"
+                                             required="true" 
+                                             readonly="#{!cuMe5PropuestaPorUnidad.renderButtonGuardar}"/>
+                            <p:outputLabel for="cu_me_05_lbl_titulo" 
+                                           value="#{properties.value('cu_me_05_lbl_titulo')}:" 
+                                           styleClass="gris negrilla"/>
+                            <p:inputTextarea id="cu_me_05_lbl_titulo" 
+                                             value="#{cuMe5PropuestaPorUnidad.propuestaSeleccionada.titulo}" 
+                                             maxlength="200" 
+                                             rows="2"
+                                             autoResize="true"
+                                             required="true" 
+                                             readonly="#{!cuMe5PropuestaPorUnidad.renderButtonGuardar}"/> 
+                            <p:outputLabel for="cu_me_02_lbl_resultados_esperados" 
+                                           value="#{properties.value('cu_me_02_lbl_resultados_esperados')}:" 
+                                           styleClass="gris negrilla"/>
+                            <p:inputTextarea id="cu_me_02_lbl_resultados_esperados" 
+                                             value="#{cuMe5PropuestaPorUnidad.propuestaSeleccionada.resultadoEsperado}" 
+                                             maxlength="1000"  
+                                             rows="2"
+                                             autoResize="true"
+                                             required="true" 
+                                             readonly="#{!cuMe5PropuestaPorUnidad.renderButtonGuardar}"/> 
+                            <p:outputLabel for="cu_me_02_lbl_fuentes_informacion" 
+                                           value="#{properties.value('cu_me_02_lbl_fuentes_informacion')}:" 
+                                           styleClass="gris negrilla"/>
+                            <p:inputTextarea id="cu_me_02_lbl_fuentes_informacion" 
+                                             value="#{cuMe5PropuestaPorUnidad.propuestaSeleccionada.fuenteInformacion}" 
+                                             maxlength="1000" 
+                                             rows="2"
+                                             autoResize="true"
+                                             required="true" 
+                                             readonly="#{!cuMe5PropuestaPorUnidad.renderButtonGuardar}"/> 
+                            <p:outputLabel for="cu_me_02_lbl_actividades_propuestas" 
+                                           value="#{properties.value('cu_me_02_lbl_actividades_propuestas')}:" 
+                                           styleClass="gris negrilla"/>
+                            <p:inputTextarea id="cu_me_02_lbl_actividades_propuestas" 
+                                             value="#{cuMe5PropuestaPorUnidad.propuestaSeleccionada.posibleActividad}" 
+                                             maxlength="1000" 
+                                             rows="2"
+                                             autoResize="true"
+                                             required="true" 
+                                             readonly="#{!cuMe5PropuestaPorUnidad.renderButtonGuardar}"/>
+                        </p:panelGrid>
+                        <p:panelGrid
+                            id="pnlUpload"
+                            columns="3"
+                            layout="grid" 
+                            columnClasses="ui-grid-col-2,ui-grid-col-5,ui-grid-col-5" 
+                            styleClass="ui-panelgrid-blank">
+                            <p:outputLabel for="cu_me_05_lbl_archivo_anexo" 
+                                           value="#{bundle['banconecesidad.archivoanexo.lbl']}"
+                                           styleClass="gris negrilla"/> 
+                            <p:fileUpload 
+                                id="cu_me_05_lbl_archivo_anexo"
+                                fileUploadListener="#{cuMe5PropuestaPorUnidad.handleFileUpload}" 
+                                mode="advanced"
+                                auto="true" 
+                                required="true"                                            
+                                allowTypes="/(\.|\/)(pdf)$/" 
+                                update="documentonombre"
+                                value="#{bundle['commons.btn.upload']}"
+                                rendered="#{cuMe5PropuestaPorUnidad.renderButtonGuardar}"/>           
+                            <h:outputText
+                                rendered="#{cuMe5PropuestaPorUnidad.renderButtonGuardar}"
+                                id="documentonombre"
+                                value="#{cuMe5PropuestaPorUnidad.propuestaSeleccionada.nombreArchivo}"/>
+                            <p:commandLink 
+                                ajax="false"
+                                rendered="#{!cuMe5PropuestaPorUnidad.renderButtonGuardar}"
+                                onclick="PrimeFaces.monitorDownload(start, stop);" 
+                                title="#{bundle['commons.btn.download']}">
+                                <h:outputText                                            
+                                    value="#{cuMe5PropuestaPorUnidad.propuestaSeleccionada.nombreArchivo}"/>
+                                <p:fileDownload 
+                                    value="#{cuMe5PropuestaPorUnidad.archivo}"/>
+                            </p:commandLink>
+                        </p:panelGrid>
+                        <p:panelGrid columns="3"
+                                     layout="grid" 
+                                     columnClasses="ui-grid-col-2,ui-grid-col-3,ui-grid-col-2" 
+                                     styleClass="ui-panelgrid-blank"
+                                     rendered="#{cuMe5PropuestaPorUnidad.propuestaSeleccionada.idBancoNecesidad == null and cuMe5PropuestaPorUnidad.renderButtonGuardar==true}"
+                                     style="margin-top:10px">
+                            <h:outputLabel for="cu_me_05_lbl_funcionario" 
+                                           value="#{properties.value('cu_me_05_lbl_funcionario')}:" 
+                                           styleClass="gris negrilla"/>
+                            <p:inputText value="#{cuMe5PropuestaPorUnidad.documentoFuncionario}" 
+                                         id="cu_me_05_lbl_funcionario" 
+                                         styleClass="gris" />
+                            <p:commandButton value="#{properties.value('cu_me_02_lbl_agregar')}" 
+                                             update="idDataTableFuncionarios, cu_me_05_lbl_funcionario" 
+                                             process="@this,cu_me_05_lbl_funcionario" 
+                                             style="border:none"
+                                             actionListener="#{cuMe5PropuestaPorUnidad.agregarFuncionario()}"/>  
+                        </p:panelGrid>
+                        <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                                     id="idDataTableFuncionarios" 
+                                     var="funcionario" 
+                                     value="#{cuMe5PropuestaPorUnidad.funcionariosNecesidad}" 
+                                     rowIndexVar="idFila" 
+                                     rows="15" 
+                                     paginator="true" 
+                                     rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                                     resizableColumns="true" 
+                                     rowKey="#{funcionario.identificacion}"
+                                     paginatorPosition="bottom" 
+                                     rendered="true"
+                                     styleClass="tabla" 
+                                     style="margin-top:20px">
+                            <f:facet
+                                name="header">
+                                Funcionarios que proponen la investigación
+                            </f:facet>
+                            <p:column headerText="#{properties.value('cu_me_02_lbl_grado')}">
+                                <h:outputText value="#{funcionario.grado}" />
+                            </p:column>
+                            <p:column headerText="#{properties.value('cu_me_02_lbl_nombre')}">
+                                <h:outputText value="#{funcionario.nombreCompleto}" />                             
+                            </p:column>
+                            <p:column headerText="#{properties.value('cu_me_02_lbl_correo')}">
+                                <h:outputText value="#{funcionario.correo}" />
+                            </p:column>
+                            <p:column headerText="#{properties.value('cu_me_02_lbl_telefono')}">
+                                <h:outputText value="#{funcionario.telefono}" />
+                            </p:column>
+                            <p:column headerText="#{properties.value('cu_me_02_lbl_cargo')}">
+                                <h:outputText value="#{funcionario.cargo}" />
+                            </p:column>
+                            <p:column headerText="#{properties.value('cu_me_02_lbl_unidad')}">
+                                <h:outputText value="#{cuMe5PropuestaPorUnidad.buscarUnidadFuncionario(funcionario.identificacion)}" />
+                            </p:column>
+                            <p:column headerText="#{properties.value('cu_me_02_lbl_opciones')}"
+                                      rendered="#{cuMe5PropuestaPorUnidad.propuestaSeleccionada.idBancoNecesidad == null
+                                                  and (cuMe5PropuestaPorUnidad.propuestaSeleccionada.constantes.idConstantes==2007 or cuMe5PropuestaPorUnidad.propuestaSeleccionada.idPropuestaNecesidad == null) 
+                                                  and cuMe5PropuestaPorUnidad.renderButtonGuardar}">
+                                <p:commandButton value="Eliminar" 
+                                                 immediate="true" 
+                                                 style="border:none" oncomplete="PF('confirmEliminar').show()" >
+                                    <f:setPropertyActionListener value="#{funcionario}" 
+                                                                 target="#{cuMe5PropuestaPorUnidad.funcionarioSeleccionado}" /> 
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                        <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                                     id="idDataTableComentarios" 
+                                     var="comentario" 
+                                     value="#{cuMe5PropuestaPorUnidad.comentarios}" 
+                                     rowIndexVar="idFila" 
+                                     rows="15" 
+                                     paginator="true" 
+                                     rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                                     resizableColumns="true" 
+                                     rowKey="#{comentario.idComentarioNecesidad}"
+                                     paginatorPosition="bottom" 
+                                     rendered="true"
+                                     styleClass="tabla" 
+                                     style="margin-top:20px">
+                            <f:facet
+                                name="header">
+                                Observaciones realizadas por la Vicerrectoría de Investigación
+                            </f:facet>
+                            <p:column headerText="#{properties.value('cu_me_05_lbl_fecha')}">
+                                <h:outputText value="#{comentario.fecha}">
+                                    <f:convertDateTime type="date" 
+                                                       pattern="#{bundle['pattern.default.date']}"/>
+                                </h:outputText>
+                            </p:column>                                
+                            <p:column headerText="#{properties.value('cu_me_05_lbl_observacion')}">
+                                <h:outputText value="#{comentario.comentario}" />
+                            </p:column>
+                            <p:column headerText="#{properties.value('cu_me_05_lbl_creado_por')}">
+                                <h:outputText value="#{comentario.autor}" />
+                            </p:column>
+                        </p:dataTable>
+                        <f:facet
+                            name="footer">
+                            <p:panelGrid
+                                columns="6"
+                                layout="grid" 
+                                columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+                                styleClass="ui-panelgrid-blank"
+                                style="margin-top:10px">                            
+                                <p:commandButton value="#{properties.value('cu_me_05_lbl_editar')}"                                                  
+                                                 rendered="#{cuMe5PropuestaPorUnidad.renderButtonEditar}"                                                   
+                                                 style="border:none"                                                 
+                                                 actionListener="#{cuMe5PropuestaPorUnidad.editar()}" 
+                                                 update="verForm">
+                                </p:commandButton>
+                                <p:commandButton value="#{properties.value('cu_me_05_lbl_guardar')}" 
+                                                 process="@form" 
+                                                 style="border:none" 
+                                                 actionListener="#{cuMe5PropuestaPorUnidad.guardar()}"                                                   
+                                                 update="verForm, idform_parametrizar_investigacion_unidad:idDatatablePropuestas"
+                                                 rendered="#{cuMe5PropuestaPorUnidad.renderButtonGuardar}"
+                                                 oncomplete="validacionCamposDialog(xhr, status, args, PF('editarForm'))" >
+                                </p:commandButton>
+                                <p:commandButton value="#{properties.value('cu_me_05_lbl_volver')}" 
+                                                 oncomplete="PF('editarForm').hide();" 
+                                                 style="border:none"                                            
+                                                 immediate="true">
+                                </p:commandButton>
+                                <p:commandButton value="Confirmar" 
+                                                 immediate="true" 
+                                                 style="border:none" 
+                                                 oncomplete="PF('confirmEnviar').show()"  
+                                                 ajax="true"
+                                                 rendered="#{cuMe5PropuestaPorUnidad.propuestaSeleccionada.constantes.idConstantes==2007
+                                                             and cuMe5PropuestaPorUnidad.renderButtonEditar}">                                                 
+                                </p:commandButton>
+                            </p:panelGrid>
+                        </f:facet>
+                    </p:panel>
+                </h:form>
+            </p:dialog>
+            <p:confirmDialog widgetVar="confirmEnviar" 
+                             header="#{properties.value('cu_me_01_titulo_alerta')}" 
+                             global="true"
+                             message="#{properties.value('cu_me_05_lbl_confirmacion_enviar')}" >
+                <h:form id="idFormEnviar">
+                    <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmEnviar">
+                        <p:panel>
+                            <p:panelGrid
+                                columns="2"
+                                layout="grid" 
+                                columnClasses="ui-grid-col-2,ui-grid-col-2" 
+                                styleClass="ui-panelgrid-blank">
+                                <p:commandButton actionListener="#{cuMe5PropuestaPorUnidad.enviarAVicin()}" 
+                                                 style="border:none"
+                                                 value="#{properties.value('cu_pr_7_lbl_btn_confirma_si')}" 
+                                                 immediate="true"
+                                                 oncomplete="PF('confirmEnviar').hide();PF('editarForm').hide()"   
+                                                 update="verForm, messages, idform_parametrizar_investigacion_unidad:idDatatablePropuestas"/>  
+                                <p:commandButton value="#{properties.value('cu_pr_7_lbl_btn_confirma_no')}" style="border:none"
+                                                 onclick="PF('confirmEnviar').hide();" type="button" />       
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:outputPanel>
+                </h:form>
+            </p:confirmDialog>
+            <p:confirmDialog widgetVar="confirmEliminar" header="#{properties.value('cu_me_01_titulo_alerta')}" global="true"
+                             message="#{properties.value('cu_me_05_lbl_confirmacion_eliminar')}" >
+                <h:form id="idFormEliminar">
+                    <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmEliminar">
+                        <p:panel>
+                            <p:panelGrid
+                                columns="2"
+                                layout="grid" 
+                                columnClasses="ui-grid-col-2,ui-grid-col-2" 
+                                styleClass="ui-panelgrid-blank">
+                                <p:commandButton actionListener="#{cuMe5PropuestaPorUnidad.eliminarFuncionario()}" 
+                                                 style="border:none"
+                                                 value="#{properties.value('cu_pr_7_lbl_btn_confirma_si')}" 
+                                                 immediate="true"
+                                                 oncomplete="PF('confirmEliminar').hide();"
+                                                 update="verForm:idDataTableFuncionarios, messages" />  
+                                <p:commandButton value="#{properties.value('cu_pr_7_lbl_btn_confirma_no')}" 
+                                                 style="border:none"
+                                                 onclick="PF('confirmEliminar').hide();" 
+                                                 type="button" />       
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:outputPanel>
+                </h:form>
+            </p:confirmDialog>
+        </ui:define>
+    </ui:composition>
+</html>

@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}"  id="idDataTablePeriodos" var="_periodo" value="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.listaPeriodoModel}" 
+               rowIndexVar="idFila" rows="15" paginator="true" 
+               paginatorPosition="bottom" selection="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.periodoSeleccionado}" 
+               selectionMode="single">
+
+    <p:ajax event="rowSelect" listener="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.enviarPropuestaSeleccionPeriodo}" update=":idForm_cu_ne_6_gestiona_evaluar_propuestas_necesidades" />  
+    <p:ajax event="rowUnselect" listener="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.noSeleccionPeriodo}" update=":idForm_cu_ne_6_gestiona_evaluar_propuestas_necesidades" />  
+
+    <p:column headerText="#{properties.value('cu_ne_2_lbl_numero')}">  
+      <h:outputLabel value="#{idFila + 1}" />  
+    </p:column>  
+
+    <p:column headerText="#{properties.value('cu_ne_2_lbl_descripcion')}">  
+      <h:outputLabel value="#{_periodo.descripcion}" />  
+    </p:column> 
+
+    <p:column headerText="#{properties.value('cu_ne_2_lbl_periodo')}">  
+      <h:outputLabel value="#{_periodo.anio}" />  
+    </p:column>  
+
+    <p:column headerText="#{properties.value('cu_ne_2_lbl_fecha_limite')}">
+      <h:outputLabel value="#{_periodo.fechaFin}">
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+      </h:outputLabel>    
+    </p:column>
+
+  </p:dataTable> 
+
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+  <body>
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+      <ui:define name="content">
+
+        <h:form id="propuestas" styleClass="site">
+          <div class="fixed-menu">
+            <!--VENTANA DE LISTA DE PERIODOS-->
+            <div class="right-col">
+              <h2>
+                #{properties.value('cu_ne_5_titulo')}
+              </h2>
+            </div>
+          </div>                
+          <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                       columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+            <h:outputText value="#{properties.value('cu_ne_5_unidad_policial')}" styleClass="gris negrilla"/>
+            <h:outputText value="#{cuNe5JefeLoteNecesidadesFaces.loginFaces.perfilUsuarioDTO.unidadPolicial.nombre}" styleClass="gris"/>
+
+            <h:outputText value="#{properties.value('cu_ne_5_cantidad_propuestas')}" styleClass="gris negrilla"/>
+            <h:outputText value="#{cuNe5JefeLoteNecesidadesFaces.periodoSeleccionado.cantidad}" styleClass="gris"/>
+
+            <h:outputText value="#{properties.value('cu_ne_5_periodo')}" styleClass="gris negrilla"/>
+            <h:outputText value="#{cuNe5JefeLoteNecesidadesFaces.periodoSeleccionado.anio}" styleClass="gris"/>
+
+          </h:panelGrid>
+
+          <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}"   
+                       var="prop" id="tablapropuestas" value="#{cuNe5JefeLoteNecesidadesFaces.listaPropuestaModel}"
+                       paginator="true" rowIndexVar="idFila" selectionMode="single" paginatorPosition="bottom" 
+                       rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                       selection="#{cuNe5JefeLoteNecesidadesFaces.propuestaSeleccionada}" 
+                       rows="#{properties.value('general_mensaje_filas_datatable_pagina')}">
+
+            <p:ajax event="rowSelect" listener="#{cuNe5JefeLoteNecesidadesFaces.verDatallePropuestaNecesidad}" />  
+            <p:ajax event="rowUnselect" listener="#{cuNe5JefeLoteNecesidadesFaces.noSeleccionPropuesta}" update=":propuestas"/>  
+
+            <p:column width="5%" headerText="#{properties.value('cu_ne_5_lista_n')}">  
+              #{idFila+1}               
+            </p:column>
+
+            <p:column width="60%" headerText="#{properties.value('cu_ne_5_lista_tema')}">  
+              #{prop.tema}                  
+            </p:column>
+
+            <p:column width="10%" headerText="#{properties.value('cu_ne_5_lista_area')}" >  
+              #{prop.linea.areaCienciaTecnologia.nombre}
+            </p:column>
+
+            <p:column width="10%" headerText="#{properties.value('cu_ne_5_lista_linea')}"> 
+              #{prop.linea.nombre}
+            </p:column>
+
+            <p:column width="10%"  headerText="#{properties.value('cu_ne_5_lista_select_estado')}" disabledSelection="true" >  
+              <h:selectOneMenu id="listaEstados"  value="#{prop.idContantes}"  styleClass="gris">
+                <f:selectItem itemValue="" itemLabel="--Seleccione--"/>
+                <f:selectItems value="#{cuNe5JefeLoteNecesidadesFaces.constantesLineaItem}"  />  
+                <p:ajax update=":propuestas:enviarVicin,:propuestas:tablapropuestas,:propuestas:enviarGrupoInvestigacion" 
+                        listener="#{cuNe5JefeLoteNecesidadesFaces.handleVerificarActivarBotonVicin()}"/>
+              </h:selectOneMenu>                
+            </p:column>
+
+            <p:column width="5%" headerText="#{properties.value('cu_ne_5_linea_select_comentario')}">  
+              <p:inputTextarea  id="comentario"  value="#{prop.comentario}" 
+                                rendered="#{cuNe5JefeLoteNecesidadesFaces.propuestaNoAceptada(prop.idContantes)}"
+                                maxlength="512" 
+                                required="true"
+                                counter="contadorDescripcion"  
+                                counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}">
+                <p:ajax listener="#{cuNe5JefeLoteNecesidadesFaces.handledFijarComentario(prop, prop.comentario)}" />
+
+              </p:inputTextarea>
+              <br/>
+              <h:outputText id="contadorDescripcion" />                            
+            </p:column>
+
+            <f:facet name="footer">  
+              #{fn:length(
+                cuNe5JefeLoteNecesidadesFaces.listaPropuestaNecesidad
+                )}
+              #{properties.value('general_mensaje_footer_datatable_count')}
+            </f:facet>
+          </p:dataTable>
+          <br />
+          <br />
+          <p:separator styleClass="separadorBorder" /> 
+          <div class="centrado">
+            <p:commandButton value="#{properties.value('cu_ne_5_lnl_regresar')}" 
+                             action="#{navigationFaces.redirectCuNe02Redirect}" 
+                             immediate="true" />
+            <p:commandButton id="enviarVicin"  disabled="#{cuNe5JefeLoteNecesidadesFaces.inactivarBotonVicin}"  
+                             value="#{properties.value('cu_ne_5_btn_enviar_vicin')}"
+                             action="#{cuNe5JefeLoteNecesidadesFaces.enviarVicin()}" styleClass="button"/>
+            <p:commandButton id="enviarGrupoInvestigacion" value="#{properties.value('cu_ne_5_btn_enviar_ginvestigacion')}" 
+                             action="#{cuNe5JefeLoteNecesidadesFaces.enviarGrupoInvestigacion()}"
+                             update="@form"
+                             disabled="#{!cuNe5JefeLoteNecesidadesFaces.inactivarBotonVicin}"  
+                             styleClass="button"/>
+          </div>
+
+        </h:form>
+      </ui:define>
+    </ui:composition>
+  </body>
+</html>

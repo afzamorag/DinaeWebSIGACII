@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"> 
+
+
+  <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+               columnClasses="panelGridColumnaValor_30_porciento,panelGridColumnaValor_70_porciento" id="pginclude_informacion_informe_proyecto">
+
+    <h:outputLabel  value="#{properties.value('cu_ne_2_lbl_tema_propuesta')}" styleClass="gris negrilla"/>
+    <h:outputLabel value="#{administracionProyectoVersionFaces.proyectoSeleccionado.tema}" styleClass="gris"/>
+
+    <h:outputLabel  value="#{properties.value('cu_pr_7_lbl_subtitulo_titulo_pro')}" styleClass="gris negrilla"/>
+    <h:outputLabel value="#{administracionProyectoVersionFaces.proyectoSeleccionado.tituloPropuesto}" styleClass="gris"/>
+
+    <h:outputLabel  value="#{properties.value('cu_pr_11_lbl_codigo_del_proyecto')}" styleClass="gris negrilla"/>
+    <h:outputLabel value="#{administracionProyectoVersionFaces.proyectoSeleccionado.codigoProyecto}" styleClass="gris"/>
+
+    <h:outputLabel  value="#{properties.value('cu_pr_7_lbl_subtitulo_areaciencia')}" styleClass="gris negrilla"/>
+    <h:outputLabel value="#{administracionProyectoVersionFaces.proyectoSeleccionado.nombreArea}" styleClass="gris"/>
+
+    <h:outputLabel  value="#{properties.value('cu_pr_7_lbl_subtitulo_linea')}" styleClass="gris negrilla"/>
+    <h:outputLabel value="#{administracionProyectoVersionFaces.proyectoSeleccionado.nombreLinea}" styleClass="gris"/>
+
+    <h:outputLabel  value="#{properties.value('cu_pr_7_lbl_subtitulo_funcionpro')}" styleClass="gris negrilla"/>
+    <h:outputLabel value="#{administracionProyectoVersionFaces.proyectoSeleccionado.funcionProyecto}" styleClass="gris"/>
+
+    <h:outputLabel  value="#{properties.value('cu_pr_7_lbl_subtitulo_fecha_ini')}" styleClass="gris negrilla"/>
+    <h:outputLabel value="#{administracionProyectoVersionFaces.proyectoSeleccionado.fechaEstimadaInicio}" styleClass="gris">
+      <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+    </h:outputLabel> 
+
+    <h:outputLabel  value="#{properties.value('cu_pr_7_lbl_subtitulo_fecha_fin')}" styleClass="gris negrilla"/>
+    <h:outputLabel value="#{administracionProyectoVersionFaces.proyectoSeleccionado.fechaEstimadaFinalizacion}" styleClass="gris">
+      <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+    </h:outputLabel> 
+
+  </h:panelGrid>
+
+</html>

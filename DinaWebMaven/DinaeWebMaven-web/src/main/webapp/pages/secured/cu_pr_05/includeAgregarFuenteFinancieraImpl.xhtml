@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+  <h:form id="formAgregarFuenteFinanciera" >
+    <br />
+    <h:panelGrid id="panelgridComponentes" columns="2" style="width: 100%" 
+                 rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+      <h:outputLabel value="#{properties.value('cu_pr_5_lbl_nombre_fuente')}" styleClass="gris negrilla" for="textAreaNombreFuente" />
+      <p:inputText value="#{presupuestoImplemetacionProyectoFaces.nombreFuenteFinanciera}" required="true" 
+                   id="textAreaNombreFuente" maxlength="100" size="50" />           
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_tipo_fuente')}" 
+                       styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:selectOneMenu id="selectTipoFuente" value="#{presupuestoImplemetacionProyectoFaces.tipoFuente}" styleClass="gris">
+        <f:selectItem itemLabel="-- Seleccione un tipo de fuente --" itemValue="-1" />
+        <f:selectItems value="#{presupuestoImplemetacionProyectoFaces.listaTipoFuente}"/>
+      </h:selectOneMenu>
+    </h:panelGrid>
+    <br/>
+    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+    <div class="centrado">
+      <p:commandButton value="#{properties.value('cu_pr_24_lbl_btn_agregar_comentario_retroalimentacion')}" 
+                       rendered="#{!presupuestoImplemetacionProyectoFaces.esModificacion}"
+                       actionListener="#{presupuestoImplemetacionProyectoFaces.guardar(0)}" 
+                        process="@form"
+                       update="@form"/>
+
+
+      <p:commandButton value="#{properties.value('cu_iv_3_lbl_datatable_btn_modificar')}" 
+                       rendered="#{presupuestoImplemetacionProyectoFaces.esModificacion}"
+                       actionListener="#{presupuestoImplemetacionProyectoFaces.guardar(0)}" 
+                        process="@form"
+                       update="@form"/>
+
+      <p:commandButton value="#{properties.value('cu_tr_01_lbl_cancelar')}" 
+                       rendered="#{presupuestoImplemetacionProyectoFaces.esModificacion}"
+                       actionListener="#{presupuestoImplemetacionProyectoFaces.cancelarModificacionFuente}" 
+                       process="@this"
+                       update="@form">                
+      </p:commandButton>
+
+    </div>
+    <br/>
+    <div class="centrado">
+      <p:dataTable var="fuente" paginator="true" style="width: 100%"
+                   value="#{presupuestoImplemetacionProyectoFaces.listaFuentesFinancierasModel}"
+                   rowIndexVar="idFila" paginatorPosition="bottom" id="tablaFuentesFinancieras"
+                   rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                   emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                   rows="#{properties.value('general_mensaje_filas_datatable_pagina')}"
+                   resizableColumns="true"
+                   selection="#{presupuestoImplemetacionProyectoFaces.fuenteProyectoDTO}" 
+                   selectionMode="single">
+
+        <p:ajax event="rowSelect" listener="#{presupuestoImplemetacionProyectoFaces.cargarDatosFuenteProyecto}" 
+                update="@form" />  
+        <p:ajax event="rowUnselect" listener="#{presupuestoImplemetacionProyectoFaces.noSeleccionFuenteProyecto}" 
+                update="tablaFuentesFinancieras"/>  
+
+        <p:column width="30" headerText="#{properties.value('cu_pr_13_lbl_column_numero')}" style="color: white">
+          <h:outputLabel value="#{idFila + 1}" styleClass="gris"/>
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_nombre_fuente')}" style="color: white">
+          <h:outputLabel value="#{fuente.nombreFuente}" styleClass="alineadoIzquierda gris"/>
+        </p:column>
+        <p:column width="100" headerText="#{properties.value('cu_pr_5_lbl_column_tipo_fuente')}" style="color: white">
+          <h:outputLabel value="#{fuente.valorTipoFuente}" styleClass="gris"/>
+        </p:column>
+        <p:column width="100" headerText="#{properties.value('cu_pr_19_lbl_tabla_acciones')}" style="color: white">
+
+          <div class="centrado">
+            <p:commandLink value="#{properties.value('cu_tr_01_lbl_btn_eliminar')}" 
+                           immediate="true" rendered="#{fuente.muestraLink}"
+                           oncomplete="PF('varConfirmEliminarFuenteFinanciera').show()">  
+              <f:setPropertyActionListener value="#{fuente}" target="#{presupuestoImplemetacionProyectoFaces.fuenteProyectoDTO}" />  
+            </p:commandLink>
+          </div>
+        </p:column>  
+
+        <f:facet name="footer">  
+          #{fn:length( presupuestoImplemetacionProyectoFaces.listaFuentesProyecto  )} #{properties.value('general_mensaje_footer_datatable_count')}
+        </f:facet>
+      </p:dataTable>
+    </div>
+    <p:confirmDialog widgetVar="varConfirmEliminarFuenteFinanciera" header="#{properties.value('cu_tr_01_lbl_titulo_confirmacion_titulo')}" 
+                     message="#{properties.value('cu_pr_5_lbl_titulo_confirmacion_mensaje_eliminar_fuente')}" > 
+
+      <h:form id="idFormEliminarFuenteFinanciera">
+
+        <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmEliminarFuenteFinanciera">
+          <div class="centrado">
+            <p:commandButton actionListener="#{presupuestoImplemetacionProyectoFaces.eliminarFuenteFinanciera}" 
+                             value="#{properties.value('cu_tr_01_lbl_btn_confirma_si')}" immediate="true"
+                             oncomplete="varConfirmEliminarFuenteFinanciera.hide();"
+                             update=":tabView:formAgregarFuenteFinanciera:tablaFuentesFinancieras" />  
+            <p:commandButton value="#{properties.value('cu_tr_01_lbl_btn_confirma_no')}" 
+                             onclick="varConfirmEliminarFuenteFinanciera.hide();" type="button" />       
+          </div>
+        </p:outputPanel>
+
+      </h:form>
+    </p:confirmDialog>
+  </h:form>
+</html>

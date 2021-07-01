@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+  <h:body>
+    <div class="body">
+      <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+        <ui:define name="content">
+          <div class="fixed-menu">
+            <!--VENTANA DE LISTA DE PERIODOS-->
+            <div class="right-col">
+              <h2 style="font: verdana;">Administrar parámetros del sistema</h2>
+              <br/>
+              <h:form id="formAdminParamSistema" >
+                <h:panelGrid id="panelgridformAdminParamSistema" columns="2" style="width: 100%" 
+                             rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                             columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+                  <h:outputLabel value="Tipo parámetro administrar" 
+                                 styleClass="gris negrilla"/>
+
+                  <h:selectOneMenu styleClass="gris" value="#{cuAd02AdministrarParametrosSistemaFaces.idParametroSeleccionado}" id="selectTipoParametros">  
+                    <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+                    <f:selectItems value="#{cuAd02AdministrarParametrosSistemaFaces.listaTipoParametrosView}"/>
+                    <p:ajax event="change" update="@this tablaParametrosSistemaTipo" 
+                            listener="#{cuAd02AdministrarParametrosSistemaFaces.cargarDatosParametroSistemaSeleccionado()}"/>
+                  </h:selectOneMenu>
+                </h:panelGrid>
+                <br />
+
+                <p:dataTable var="_param" value="#{cuAd02AdministrarParametrosSistemaFaces.tablaGenericaParametrosListModel}"                                             
+                             rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                             id="tablaParametrosSistemaTipo"
+                             selection="#{cuAd02AdministrarParametrosSistemaFaces.parametrosSeleccionado}"
+                             selectionMode="single"
+                             emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                             style="width: 100%;" paginator="true"
+                             resizableColumns="true" rowIndexVar="idFila"
+                             paginatorPosition="bottom"
+                             rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+                  <p:ajax event="rowSelect" listener="#{cuAd02AdministrarParametrosSistemaFaces.cargarDatosParametroModificar}"   
+                          update=":formAdminParamSistema:formPopup" oncomplete="PF('formCreateUpdateParams').show();"/>  
+                  <p:ajax event="rowUnselect" listener="#{cuAd02AdministrarParametrosSistemaFaces.noSeleccionParametro}" 
+                          update="@form:tablaParametrosSistemaTipo"/>  
+
+                  <p:column headerText="#{properties.value('cu_pr_5_lbl_column_numero')}" width="25" style="color: white">
+                    <h:outputText value="#{idFila + 1}" styleClass="gris" />
+                  </p:column>
+                  <p:column headerText="Valor" style="color: white" >
+                    <h:outputText value="#{_param.valor}" styleClass="alineadoIzquierda gris" />
+                  </p:column>
+                  <p:column headerText="Estado" style="color: white" >
+                    <h:outputText value="#{_param.estado}" styleClass="alineadoIzquierda gris" />
+                  </p:column>
+                  <f:facet name="footer">  
+                    #{fn:length( cuAd02AdministrarParametrosSistemaFaces.tablaGenericaParametrosList )} #{properties.value('general_mensaje_footer_datatable_count')}
+                    <br />
+                    <p:commandLink action="#{cuAd02AdministrarParametrosSistemaFaces.inicializarPopup}" update=":formAdminParamSistema:formPopup"
+                                   immediate="true"
+                                   oncomplete="PF('formCreateUpdateParams').show();" value="Agregar nuevo valor"
+                                   disabled="#{cuAd02AdministrarParametrosSistemaFaces.idParametroSeleccionado == null || cuAd02AdministrarParametrosSistemaFaces.idParametroSeleccionado == -1}">           
+                    </p:commandLink>
+                  </f:facet>
+                </p:dataTable>    
+
+                <p:dialog id="formPopup" header="#{cuAd02AdministrarParametrosSistemaFaces.tituloPopup}" 
+                          widgetVar="formCreateUpdateParams" resizable="false" modal="true" 
+                          width="#{cuAd02AdministrarParametrosSistemaFaces.sizePopup}">                                       
+                  <ui:include src="#{cuAd02AdministrarParametrosSistemaFaces.popupParametroSeleccionado}" />                                     
+                </p:dialog>  
+
+
+              </h:form>
+            </div>
+          </div>
+
+          <script type="text/javascript">
+            function postAction(xhr, status, args) {
+              if (args.validationFailed || !args.fieldValidation) {
+                PF('formCreateUpdateParams').jq.effect("shake", {times: 5}, 100);
+              } else {
+                PF('formCreateUpdateParams').hide();
+                $('#formPopup').fadeOut();
+              }
+            }
+          </script>
+
+        </ui:define>
+      </ui:composition>
+    </div>
+  </h:body>
+</html>
+

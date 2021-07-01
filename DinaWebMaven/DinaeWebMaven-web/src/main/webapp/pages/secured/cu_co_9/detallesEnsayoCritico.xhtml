@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+
+      <ui:define name="content">
+        <div class="fixed-menu">
+          <div class="right-col">
+            <h2>
+              Informacion del ensayo
+            </h2>
+          </div>
+        </div>
+        <div width="100%">
+          <p:separator styleClass="separadorBorder" /> 
+          <h:form id="idFormIngregarEnsayoCritico">
+            <h:panelGrid columns="2" width="100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" cellspacing="10"
+                         columnClasses="panelGridColumnaValor_30_porciento,panelGridColumnaValor_70_porciento">
+
+
+              <h:outputLabel value="#{properties.value('cu_co_7_lbl_titulo_ensayo')} " styleClass="gris negrilla" style="text-align: right" />
+              <h:outputLabel value="#{cuCo9ConsultarDetallesEnsayoCriticoFaces.ensayoCritico.tituloEnsayo} " styleClass="gris" />
+
+              <h:outputLabel value="#{properties.value('cu_co_7_lbl_resumen')} " styleClass="gris negrilla" style="text-align: right" />
+              <h:outputLabel value="#{cuCo9ConsultarDetallesEnsayoCriticoFaces.ensayoCritico.resumenEnsayo} " styleClass="gris" />
+
+              <h:outputLabel value="#{properties.value('cu_co_7_lbl_palabras_clave')} " styleClass="gris negrilla" style="text-align: right" />
+              <h:outputLabel value="#{cuCo9ConsultarDetallesEnsayoCriticoFaces.ensayoCritico.palabrasClaveEnsayo} " styleClass="gris" />
+
+              <h:outputLabel value="#{properties.value('cu_co_7_lbl_abstract')} " styleClass="gris negrilla" style="text-align: right" />
+              <h:outputLabel value="#{cuCo9ConsultarDetallesEnsayoCriticoFaces.ensayoCritico.abstractEnsayo} " styleClass="gris" />
+
+              <h:outputLabel value="#{properties.value('cu_co_7_lbl_keywords')} " styleClass="gris negrilla" style="text-align: right" />
+              <h:outputLabel value="#{cuCo9ConsultarDetallesEnsayoCriticoFaces.ensayoCritico.keywordsEnsayo} " styleClass="gris" />
+
+              <h:outputLabel value="#{properties.value('cu_co_7_lbl_introduccion')} " styleClass="gris negrilla" style="text-align: right" />
+              <h:outputLabel value="#{cuCo9ConsultarDetallesEnsayoCriticoFaces.ensayoCritico.introduccionEnsayo} " styleClass="gris"/>
+
+              <h:outputLabel value="#{properties.value('cu_co_7_lbl_desarrollo_ensayo')} " styleClass="gris negrilla" style="text-align: right" />
+              <h:outputText value="#{cuCo9ConsultarDetallesEnsayoCriticoFaces.desarrolloEnsayo}" escape="false" styleClass="gris"/>
+
+              <h:outputLabel value="#{properties.value('cu_co_7_lbl_archivo_ensayo')} " styleClass="gris negrilla" style="text-align: right" />
+              <p:commandLink ajax="false" immediate="true" id="idCommanLinkDescargaArchivoDetalle" >
+                <h:outputLabel value="#{cuCo9ConsultarDetallesEnsayoCriticoFaces.ensayoCritico.nombreArchivoOriginal}" />
+                <p:fileDownload value="#{cuCo9ConsultarDetallesEnsayoCriticoFaces.downloadContentProperty}" />
+              </p:commandLink>
+
+
+              <h:outputLabel value="#{properties.value('cu_co_7_lbl_conlusiones_recomendaciones')} " styleClass="gris negrilla" style="text-align: right" />
+              <h:outputLabel value="#{cuCo9ConsultarDetallesEnsayoCriticoFaces.ensayoCritico.conclusionesEnsayo} " styleClass="gris" />
+
+
+
+              <h:outputLabel value="#{properties.value('cu_co_7_lbl_propuesta')} " styleClass="gris negrilla" style="text-align: right" />
+              <h:outputLabel value="#{cuCo9ConsultarDetallesEnsayoCriticoFaces.ensayoCritico.propuestaEnsayo} " styleClass="gris" />
+
+
+              <h:outputLabel value="#{properties.value('cu_co_7_lbl_bibliografia_cybergrafia')} " styleClass="gris negrilla" style="text-align: right" />
+              <h:outputLabel value="#{cuCo9ConsultarDetallesEnsayoCriticoFaces.ensayoCritico.bibliografiaEnsayo} " styleClass="gris" />
+
+            </h:panelGrid>
+            <br />
+            <br />
+            <p:dataTable var="autor" value="#{cuCo9ConsultarDetallesEnsayoCriticoFaces.listaAutor}"
+                         rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                         id="tablaAutorDetalle"
+                         emptyMessage="#{properties.value('general_mensaje_no_records_found')}"                                     
+                         style="width: 100%;"
+                         resizableColumns="true"
+                         rowStyleClass="filaParDataTable">
+              <p:column width="60" headerText="#{properties.value('cu_co_7_lbl_grado')}" >
+                <h:outputText value="#{autor.grado}" />
+              </p:column>
+              <p:column headerText="#{properties.value('cu_co_7_lbl_nombres_apellidos')}" >
+                <h:outputText value="#{autor.nombreCompleto}" />
+              </p:column>
+              <p:column headerText="#{properties.value('cu_co_7_lbl_correo_electronico')}">
+                <h:outputText value="#{autor.correo}" />
+              </p:column>
+              <p:column headerText="Unidad Policial">
+                <h:outputText value="#{autor.unidadPolicial.nombre}" />
+              </p:column>
+            </p:dataTable>
+
+            <br />
+            <p:commandLink ajax="false" immediate="true" value="Generar Formato" rendered="#{cuCo9ConsultarDetallesEnsayoCriticoFaces.mostrarBtnGenerarFormato}" >
+              <p:fileDownload value="#{cuCo9ConsultarDetallesEnsayoCriticoFaces.generarFormato}" />
+            </p:commandLink>
+            <br />
+            <p:separator styleClass="separadorBorder" /> 
+            <div class="centrado">
+              <p:commandButton value="#{properties.value('cu_co_7_lbl_btn_regresar')}"
+                               id="btnRegresarDetalle" immediate="true" action="#{cuCo9ConsultarDetallesEnsayoCriticoFaces.regresar}"/>
+
+              <p:commandButton value="Ingresar Evaluacion" rendered="#{cuCo9ConsultarDetallesEnsayoCriticoFaces.mostrarBtnEvaluacion}"
+                               id="btnEvaluarDetalle" action="#{cuCo9ConsultarDetallesEnsayoCriticoFaces.irEvaluacion}"/>
+
+            </div>
+
+          </h:form>
+        </div>
+      </ui:define>
+    </ui:composition>
+  </body>
+</html>

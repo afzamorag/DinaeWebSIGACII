@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <h:form id="form_include_agregar_indicadores_proyecto" >
+
+    <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+      <h:outputLabel value="#{properties.value('cu_pr_1_lbl_datatable_indicadores_generales')}" styleClass="green negrilla" />
+      <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                   var="_indicador" 
+                   value="#{cuPr7RegistrarAvanceInvestigacionFaces.listaIndicadoresProyectoGeneral}" 
+                   paginatorPosition="bottom" styleClass="tabla" rowIndexVar="idFila"
+                   rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                   resizableColumns="true"
+                   rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true"  >
+
+        <p:column width="3" headerText="#{properties.value('cu_pr_1_lbl_datatable_num')}"> 
+          #{idFila + 1}
+        </p:column>  
+
+        <p:column width="100" headerText="#{properties.value('cu_pr_1_lbl_datatable_nombre_del_indicador')}">  
+          #{_indicador.nombreIndicador}
+        </p:column>
+
+        <p:column width="200" headerText="#{properties.value('cu_pr_1_lbl_datatable_descripcion_del_indicador')}">  
+          <h:panelGroup>
+            #{_indicador.nombreNumerador} = <h:outputLabel value="#{cuPr7RegistrarAvanceInvestigacionFaces.getValorIndicadorGeneral('NUMERADOR', idFila + 1 ) }" >
+              <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_decimal')}" maxFractionDigits="0" />
+            </h:outputLabel>
+            <p:separator styleClass="separadorBorder" /> 
+            #{_indicador.nombreDenominador} = <h:outputLabel value="#{cuPr7RegistrarAvanceInvestigacionFaces.getValorIndicadorGeneral('DENOMINADOR', idFila + 1 ) }" >
+              <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_decimal')}" maxFractionDigits="0" />
+            </h:outputLabel>
+          </h:panelGroup>
+        </p:column> 
+
+        <p:column width="40" headerText="#{properties.value('cu_pr_7_lbl_valor_datatable')}">  
+          #{cuPr7RegistrarAvanceInvestigacionFaces.getValorOperacionSinDecimalToString( idFila + 1 )}%
+        </p:column>
+
+        <f:facet name="footer">  
+          #{fn:length( cuPr7RegistrarAvanceInvestigacionFaces.listaIndicadoresProyectoGeneral )} #{properties.value('general_mensaje_footer_datatable_count')}
+        </f:facet>
+
+      </p:dataTable> 
+    </h:panelGrid>
+
+    <p:separator styleClass="separadorBorder" /> 
+
+    <h:outputLabel value="#{properties.value('cu_pr_1_lbl_otros_indicadores')}" styleClass="green negrilla" />
+    <br />
+    <h:panelGroup rendered="#{cuPr7RegistrarAvanceInvestigacionFaces.mostrarBtnAgregarIndicadorOtro}">
+
+      <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" id="pgformularioDetalleIndicador"
+                   columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaLabel_70_porciento">
+
+        <h:outputLabel value="#{cuPr7RegistrarAvanceInvestigacionFaces.indicadoresCompromisoProyectoSeleccionado.indicadoresProyecto.nombreIndicador}" />
+
+        <h:panelGrid columns="1" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar"
+                     columnClasses="panelGridColumnaLabel_50_porciento,panelGridColumnaLabel_50_porciento">
+
+          <h:panelGrid columns="4">
+            <h:outputLabel value="#{cuPr7RegistrarAvanceInvestigacionFaces.indicadoresCompromisoProyectoSeleccionado.indicadoresProyecto.nombreNumerador}" />
+            <p:spacer width="80" height="10" />
+            <h:outputLabel for="idcu_pr_7_lbl_valor_del_dato_denominador" value="#{properties.value('cu_pr_7_lbl_valor_del_dato')}" styleClass="gris negrilla" />
+            <p:inputText onkeypress="return soloNumerosInpuText(event);" 
+                         size="10" maxlength="12" required="true" id="idcu_pr_7_lbl_valor_del_dato_denominador"
+                         value="#{cuPr7RegistrarAvanceInvestigacionFaces.indicadoresCompromisoProyectoSeleccionado.valorNumerador}" /> 
+          </h:panelGrid>
+
+          <p:separator styleClass="separadorBorder" /> 
+
+          <h:panelGrid columns="4">
+            <h:outputLabel value="#{cuPr7RegistrarAvanceInvestigacionFaces.indicadoresCompromisoProyectoSeleccionado.indicadoresProyecto.nombreDenominador}" />
+            <p:spacer width="80" height="10" />
+            <h:outputLabel for="idcu_pr_7_lbl_valor_del_dato_numerador" value="#{properties.value('cu_pr_7_lbl_valor_del_dato')}" styleClass="gris negrilla" />
+            <p:inputText onkeypress="return soloNumerosInpuText(event);" 
+                         size="10" maxlength="12" required="true" id="idcu_pr_7_lbl_valor_del_dato_numerador"
+                         value="#{cuPr7RegistrarAvanceInvestigacionFaces.indicadoresCompromisoProyectoSeleccionado.valorDenominador}" />  
+          </h:panelGrid>
+        </h:panelGrid>
+
+
+      </h:panelGrid>
+
+      <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+      <div class="centrado">
+
+        <p:commandButton immediate="true" value="#{properties.value('cu_pr_7_lbl_btn_cancelar_indicador_in')}"                          
+                         action="#{cuPr7RegistrarAvanceInvestigacionFaces.cancelarIndicadoresProyecto}"
+                         update="@form" />
+
+        <p:commandButton value="#{properties.value('cu_pr_7_lbl_btn_guardar_indicador_in')}"                             
+                         action="#{cuPr7RegistrarAvanceInvestigacionFaces.guardarIndicadoresProyecto}"
+                         update="@form" />
+
+      </div>
+    </h:panelGroup>
+    <br />
+    <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 var="_indicador"  id="dtcargarListaIndicadoresProyectoOtros"
+                 value="#{cuPr7RegistrarAvanceInvestigacionFaces.listaIndicadoresCompromisoProyectoOtros}" 
+                 paginatorPosition="bottom" rowIndexVar="idFila"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true"  
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 resizableColumns="true"
+                 disabledSelection="#{cuPr7RegistrarAvanceInvestigacionFaces.soloConsulta}"
+                 selection="#{cuPr7RegistrarAvanceInvestigacionFaces.indicadoresCompromisoProyectoSeleccionado}" 
+                 selectionMode="single" >
+
+      <p:ajax event="rowSelect" listener="#{cuPr7RegistrarAvanceInvestigacionFaces.seleccionarIndicadorProyecto}"/>  
+      <p:ajax event="rowUnselect" listener="#{cuPr7RegistrarAvanceInvestigacionFaces.noSeleccionarIndicadorProyecto}" update="@form" />  
+
+      <p:column width="3" headerText="#{properties.value('cu_pr_1_lbl_datatable_num')}"> 
+        #{idFila + 1}
+      </p:column>  
+
+      <p:column width="100" headerText="#{properties.value('cu_pr_1_lbl_datatable_nombre_del_indicador')}">  
+        #{_indicador.indicadoresProyecto.nombreIndicador}
+      </p:column>
+
+      <p:column width="200" headerText="#{properties.value('cu_pr_1_lbl_datatable_descripcion_del_indicador')}">  
+        <h:panelGroup>
+          #{_indicador.indicadoresProyecto.nombreNumerador}=#{_indicador.valorNumerador}
+          <p:separator styleClass="separadorBorder" /> 
+          #{_indicador.indicadoresProyecto.nombreDenominador}=#{_indicador.valorDenominador}
+        </h:panelGroup>
+      </p:column>
+      <p:column width="40" headerText="#{properties.value('cu_pr_7_lbl_valor_datatable')}">  
+        #{_indicador.valorOperacionSinDecimalToString}%
+      </p:column>
+
+      <f:facet name="footer">  
+        #{cuPr7RegistrarAvanceInvestigacionFaces.numeroFilasListaIndicadorProyectoOtros} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable> 
+
+  </h:form>
+
+  <p:confirmDialog widgetVar="varConfirmEliminarOtroIndicador" header="#{properties.value('cu_pr_1_lbl_titulo_confirmacion_eliminar_titulo_indica')}" 
+                   message="#{properties.value('cu_pr_1_lbl_titulo_confirmacion_mensaje_eliminar_indicador')}" > 
+
+    <h:form id="idForm_varConfirmEliminarOtroIndicador">
+
+      <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmEliminarOtroIndicador">
+        <div class="centrado">
+          <p:commandButton actionListener="#{cuPr7RegistrarAvanceInvestigacionFaces.eliminarIndicadorOtro}" 
+                           value="#{properties.value('cu_pr_1_lbl_btn_confirma_si_publicar_indica')}" immediate="true"
+                           oncomplete="varConfirmEliminarOtroIndicador.hide();"
+                           update=":tabViewAvanceProyectos:form_include_agregar_indicadores_proyecto:dtcargarListaIndicadoresProyectoOtros" />  
+          <p:commandButton value="#{properties.value('cu_pr_1_lbl_btn_confirma_no_publicar_indica')}" 
+                           onclick="varConfirmEliminarOtroIndicador.hide();" type="button" />       
+        </div>
+      </p:outputPanel>
+
+    </h:form>
+  </p:confirmDialog>
+
+</html>

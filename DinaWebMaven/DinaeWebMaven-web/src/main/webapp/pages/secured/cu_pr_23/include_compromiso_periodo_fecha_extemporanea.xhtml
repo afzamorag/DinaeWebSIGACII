@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <h:form id="forminclude_compromiso_periodo_fecha_extemporanea" >
+
+    <br />
+    <h:panelGrid id="pgfecha_extemporanea" columns="2" style="width: 100%" 
+                 rowClasses="filaParPanelGridPar,filaParPanelGridImPar"  
+                 columnClasses="panelGridColumnaValor_30_porciento,panelGridColumnaValor_70_porciento">
+
+      <h:outputLabel  for="id_unidades_poli_extemporaneo" value="#{properties.value('cu_ne_6_lbl_unidad_policial')}:" styleClass="gris negrilla"/>
+      <h:selectOneMenu id="id_unidades_poli_extemporaneo" class="gris"
+                       value="#{cuPr23GestionarCompromisoProyectos.excepcionesCompromisoSeleccionado.unidadPolicial.idUnidadPolicial}" 
+                       required="true" >  
+        <f:selectItem itemLabel="--Todos--" itemValue="" />  
+        <f:selectItems value="#{cuPr23GestionarCompromisoProyectos.listaItemsUnidadesPoliciales}" var="_item" />  
+        <p:ajax update="idDataTableDatosExcepcionesRegistradasUnidad idnombre_compromiso_extemporaneo" listener="#{cuPr23GestionarCompromisoProyectos.handleFiltroUnidadPolicialChange}" />
+      </h:selectOneMenu>
+
+      <h:outputLabel for="idnombre_compromiso_extemporaneo" value="Nombre del compromiso" styleClass="gris negrilla"/>
+      <h:selectOneMenu id="idnombre_compromiso_extemporaneo" class="gris" 
+                       value="#{cuPr23GestionarCompromisoProyectos.idCompromisoPeriodoSeleccionado}" required="true" >  
+        <f:selectItem itemLabel="--Todos--" itemValue="" />  
+        <f:selectItems value="#{cuPr23GestionarCompromisoProyectos.listaItemTipoCompromiso}" var="_item" /> 
+      </h:selectOneMenu>
+
+      <h:outputLabel value="Nueva Fecha de límite para la unidad" for="idfecha" styleClass="gris negrilla" />  
+      <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es"
+                  yearRange="#{properties.value('general_calendar_rango_anio_fecha')}"  
+                  showButtonPanel="true" navigator="true" required="true"
+                  id="idfecha" value="#{cuPr23GestionarCompromisoProyectos.excepcionesCompromisoSeleccionado.fechaLimite}" showOn="button" />  
+
+      <h:outputLabel value="Justificación:" styleClass="gris negrilla" for="idcu_descripcion_archivo" />
+      <h:panelGrid columns="1" style="width: 100%">
+        <p:inputTextarea value="#{cuPr23GestionarCompromisoProyectos.excepcionesCompromisoSeleccionado.justificacion}"  
+                         id="idcu_descripcion_archivo"
+                         maxlength="512" counter="contadorInputeTextArea" 
+                         required="true" cols="100" rows="3" autoResize="false"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         styleClass="textareaMaximo">
+          <f:validateLength minimum="1"  maximum="512" />
+        </p:inputTextarea>
+        <h:outputText id="contadorInputeTextArea" styleClass="gris" />
+      </h:panelGrid>
+
+      <h:outputLabel value="#{properties.value('cu_pr_7_lbl_evidencia_archivo_soporte')}" 
+                     styleClass="gris negrilla" for="id_evidencia_archivo_soporte" />
+      <h:panelGrid columns="1">
+        <h:outputLabel id="idNombreArchivoCargado" styleClass="green"
+                       value="#{cuPr23GestionarCompromisoProyectos.nombreArchivoSubido}" />
+        <p:fileUpload id="id_evidencia_archivo_soporte" dragDropSupport="true" 
+                      fileUploadListener="#{cuPr23GestionarCompromisoProyectos.handleFileUpload}" 
+                      fileLimit="1" 
+                      label="#{properties.value('cu_pr_7_lbl_examinar')}" update="idNombreArchivoCargado" multiple="false"
+                      fileLimitMessage="#{properties.value('cu_pr_7_lbl_mensaje_maximo_numero_archivo')}"
+                      uploadLabel="#{properties.value('cu_pr_7_lbl_subiendo')}" 
+                      invalidFileMessage="#{properties.value('cu_pr_7_lbl_archivo_invalido')}"
+                      invalidSizeMessage="#{properties.value('cu_pr_7_lbl_tamanio_invalido_archivo')}" 
+                      allowTypes="#{properties.value('cu_pr_7_lbl_formatos_archivos_soportados')}"
+                      mode="advanced" auto="false" cancelLabel="#{properties.value('cu_ne_2_lbl_cancelar')}"  />
+      </h:panelGrid>
+
+    </h:panelGrid>
+    <br />
+
+    <p:separator styleClass="separadorBorder" /> 
+    <div class="centrado">
+
+      <p:commandButton id="idBtnGuardarCompromiso" value="#{properties.value('cu_ne_6_lbl_publiar')}" 
+                       update="forminclude_compromiso_periodo_fecha_extemporanea"   
+                       action="#{cuPr23GestionarCompromisoProyectos.guardarExcecionFechaComtemporanea}" />  
+
+    </div>
+
+    <br />
+    <p:dataTable id="idDataTableDatosExcepcionesRegistradasUnidad" var="_dato"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 value="#{cuPr23GestionarCompromisoProyectos.listaExcepcionesCompromiso}" 
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rowIndexVar="idFila" paginatorPosition="bottom" 
+                 resizableColumns="true"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true">
+
+      <p:column width="20" headerText="#{properties.value('cu_pr_7_lbl_tab_actividesde_realizada_num')}">  
+        <h:outputLabel value="#{ idFila + 1}" />  
+      </p:column>  
+
+      <p:column width="155" headerText="Nombre del compromiso">  
+        <h:outputLabel value="#{_dato.nombreCompromisoPeriodoOcompromisoProyecto}" />  
+      </p:column>
+
+      <p:column width="70" headerText="Nueva Fecha Limite">
+        <h:outputLabel value="#{_dato.fechaLimite}">
+          <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+        </h:outputLabel>   
+
+      </p:column>
+
+      <p:column headerText="Justificación">  
+        <h:outputLabel value="#{_dato.justificacion}" />  
+      </p:column>
+
+      <p:column width="200" headerText="#{properties.value('cu_pr_7_lbl_evidencia_archivo_soporte')}">  
+        <p:commandLink ajax="false" immediate="true" id="idCommanLinkDescargaArchivo" >
+          <h:outputLabel value="#{_dato.nombreArchivo}" />
+          <f:setPropertyActionListener value="#{_dato}" target="#{cuPr23GestionarCompromisoProyectos.excepcionesCompromisoDescargaSeleccionado}" />  
+          <p:fileDownload value="#{cuPr23GestionarCompromisoProyectos.downloadContentProperty}" />
+        </p:commandLink>
+      </p:column>
+
+      <f:facet name="footer">  
+        #{fn:length( cuPr23GestionarCompromisoProyectos.listaExcepcionesCompromiso )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable>
+
+
+  </h:form>
+</html>

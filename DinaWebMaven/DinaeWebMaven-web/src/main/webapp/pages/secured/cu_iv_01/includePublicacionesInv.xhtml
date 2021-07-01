@@ -1,0 +1,187 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+  <h:form id="formPublicaciones" >
+    <br/>
+    <p:dataTable var="publicacion" value="#{cuIv01GestionarInvestigadoresFaces.listaPublicaciones}"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                 id="tablaPublicaciones" selectionMode="single"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                 selection="#{cuIv01GestionarInvestigadoresFaces.publicacionSeleccionada}"
+                 style="width: 100%;" paginator="true"
+                 resizableColumns="true" rowIndexVar="idFila"
+                 paginatorPosition="bottom" rowKey="#{publicacion.idPublicacionInvestigador}"
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+      <p:ajax event="rowSelect" listener="#{cuIv01GestionarInvestigadoresFaces.seleccionarPublicacion}"
+              update="@form"/>  
+      <p:column headerText="#{properties.value('cu_iv_01_lbl_column_numero')}" width="25">
+        <h:outputText value="#{idFila + 1}" />
+      </p:column>
+      <p:column headerText="#{properties.value('cu_iv_01_lbl_column_tipo_publicacion')}" width="100" >
+        <h:outputText value="#{publicacion.tipoPublicacion.valor}" />
+      </p:column>
+      <p:column headerText="#{properties.value('cu_iv_01_lbl_column_titulo_publicacion')}" >
+        <h:outputText value="#{publicacion.tituloPublicacion}" />
+      </p:column>
+      <p:column headerText="#{properties.value('cu_iv_01_lbl_column_resumen_publicacion')}" >
+        <h:outputText value="#{publicacion.resumenPublicacion}" />
+      </p:column>
+      <p:column headerText="#{properties.value('cu_iv_01_lbl_column_fecha_publicacion')}" width="100" >
+        <h:outputText value="#{publicacion.fechaPublicacion}" >
+          <f:convertDateTime pattern="dd/MM/yyyy" type="date"/>
+        </h:outputText>
+      </p:column>
+      <f:facet name="footer">  
+        #{fn:length( cuIv01GestionarInvestigadoresFaces.listaPublicaciones)} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+    </p:dataTable>
+    <br />
+    <h:panelGrid id="panelgridPublicaciones" columns="2" style="width: 100%" 
+                 rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_tipo_publicacion')}" 
+                     styleClass="gris negrilla" for="selectTipoPublicacion"/>
+      <h:selectOneMenu value="#{cuIv01GestionarInvestigadoresFaces.tipoPublicacion}" styleClass="gris" id="selectTipoPublicacion">  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{cuIv01GestionarInvestigadoresFaces.listaItemsTipoPublicacion}" />
+        <p:ajax listener="#{cuIv01GestionarInvestigadoresFaces.filtrarCamposPorTipoDePublicacion}"
+                update="@form" />    
+      </h:selectOneMenu>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_titulo_publicacion')}" 
+                     styleClass="gris negrilla" for="textAreaTituloPublicacion"/>
+      <h:panelGroup>
+        <p:inputTextarea value="#{cuIv01GestionarInvestigadoresFaces.tituloPublicacion}"
+                         id="textAreaTituloPublicacion" styleClass="textareaMaximo"
+                         maxlength="256" counter="contadorTituloPublicacion"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         required="true" autoResize="false">
+          <f:validateLength minimum="1"  maximum="256" />
+        </p:inputTextarea>
+        <h:outputText id="contadorTituloPublicacion" styleClass="gris" />
+      </h:panelGroup>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_resumen_publicacion')}" 
+                     styleClass="gris negrilla" for="textAreaResumenPublicacion"/>
+      <h:panelGroup>
+        <p:inputTextarea value="#{cuIv01GestionarInvestigadoresFaces.resumenPublicacion}"
+                         id="textAreaResumenPublicacion" styleClass="textareaMaximo"
+                         maxlength="256" counter="contadorResumenPublicacion"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         required="true" autoResize="false">
+          <f:validateLength minimum="1"  maximum="256" />
+        </p:inputTextarea>
+        <h:outputText id="contadorResumenPublicacion" styleClass="gris" />
+      </h:panelGroup>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_fecha_publicacion')}" 
+                     styleClass="gris negrilla" for="calendarFechaPublicacion"
+                     rendered="#{cuIv01GestionarInvestigadoresFaces.mostrarCuandoEsOtro}"/>
+      <p:calendar value="#{cuIv01GestionarInvestigadoresFaces.fechaPublicacion}" 
+                  id="calendarFechaPublicacion" showOn="button"
+                  rendered="#{cuIv01GestionarInvestigadoresFaces.mostrarCuandoEsOtro}"
+                  navigator="true" readonlyInput="false"
+                  locale="es" maxdate="#{cuIv01GestionarInvestigadoresFaces.fechaActual}"
+                  yearRange="#{properties.value('general_calendar_rango_anio_fecha')}"/>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_pais_publicacion')}" 
+                     styleClass="gris negrilla" for="selectPaisPublicacion"    
+                     rendered="#{cuIv01GestionarInvestigadoresFaces.mostrarCuandoEsOtro}"/>
+      <h:selectOneMenu styleClass="gris" value="#{cuIv01GestionarInvestigadoresFaces.paisPublicacion}" id="selectPaisPublicacion"
+                       rendered="#{cuIv01GestionarInvestigadoresFaces.mostrarCuandoEsOtro}">  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{cuIv01GestionarInvestigadoresFaces.listaItemsPaises}" />
+      </h:selectOneMenu>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_codigo_ISSN_publicacion')}" 
+                     styleClass="gris negrilla" for="inputCodigoISSN"
+                     rendered="#{cuIv01GestionarInvestigadoresFaces.mostrarCuandoEsRevista}"/>
+      <p:inputText id="inputCodigoISSN" required="true" styleClass="gris textGrande"
+                   value="#{cuIv01GestionarInvestigadoresFaces.codigoISSN}" maxlength="20"
+                   rendered="#{cuIv01GestionarInvestigadoresFaces.mostrarCuandoEsRevista}"/>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_nombre_publicacion')}" 
+                     styleClass="gris negrilla" for="inputNombreRevista"
+                     rendered="#{cuIv01GestionarInvestigadoresFaces.mostrarCuandoEsRevista}"/>
+      <p:inputText id="inputNombreRevista" required="true" styleClass="gris textGrande"
+                   value="#{cuIv01GestionarInvestigadoresFaces.nombreRevista}" maxlength="100"
+                   rendered="#{cuIv01GestionarInvestigadoresFaces.mostrarCuandoEsRevista}"/>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_volumen_publicacion')}" 
+                     styleClass="gris negrilla" for="inputVolumenRevista"
+                     rendered="#{cuIv01GestionarInvestigadoresFaces.mostrarCuandoEsRevista}"/>
+      <p:inputText id="inputVolumenRevista" required="true" styleClass="gris textGrande"
+                   value="#{cuIv01GestionarInvestigadoresFaces.volumenRevista}" maxlength="20"
+                   rendered="#{cuIv01GestionarInvestigadoresFaces.mostrarCuandoEsRevista}"/>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_fasciculo_publicacion')}" 
+                     styleClass="gris negrilla" for="inputFasciculoRevista"
+                     rendered="#{cuIv01GestionarInvestigadoresFaces.mostrarCuandoEsRevista}"/>
+      <p:inputText id="inputFasciculoRevista" required="true" styleClass="gris textGrande"
+                   value="#{cuIv01GestionarInvestigadoresFaces.fasciculoRevista}" maxlength="20"
+                   rendered="#{cuIv01GestionarInvestigadoresFaces.mostrarCuandoEsRevista}"/>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_serie_publicacion')}" 
+                     styleClass="gris negrilla" for="inputSerieRevista"
+                     rendered="#{cuIv01GestionarInvestigadoresFaces.mostrarCuandoEsRevista}"/>
+      <p:inputText id="inputSerieRevista" required="true" styleClass="gris textGrande"
+                   value="#{cuIv01GestionarInvestigadoresFaces.serieRevista}" maxlength="20"
+                   rendered="#{cuIv01GestionarInvestigadoresFaces.mostrarCuandoEsRevista}"/>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_pag_inicio_publicacion')}" 
+                     styleClass="gris negrilla" for="inputPagInicioRevista"
+                     rendered="#{cuIv01GestionarInvestigadoresFaces.mostrarCuandoEsRevista}"/>
+      <p:inputText id="inputPagInicioRevista" required="true" styleClass="gris" maxlength="6"
+                   value="#{cuIv01GestionarInvestigadoresFaces.pagInicioRevista}" onkeypress="return soloNumerosInpuText(event);"
+                   rendered="#{cuIv01GestionarInvestigadoresFaces.mostrarCuandoEsRevista}"/>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_codigo_ISBN_publicacion')}" 
+                     styleClass="gris negrilla" for="inputCodigoISBN" 
+                     rendered="#{cuIv01GestionarInvestigadoresFaces.mostrarCuandoEsLibro}"/>
+      <p:inputText id="inputCodigoISBN" required="true" styleClass="gris textGrande" maxlength="20"
+                   value="#{cuIv01GestionarInvestigadoresFaces.codigoISBN}"
+                   rendered="#{cuIv01GestionarInvestigadoresFaces.mostrarCuandoEsLibro}"/>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_nombre_libro')}" 
+                     styleClass="gris negrilla" for="inputNombreLibro"
+                     rendered="#{cuIv01GestionarInvestigadoresFaces.mostrarCuandoEsLibro}"/>
+      <p:inputText id="inputNombreLibro" required="true" maxlength="100" styleClass="gris textGrande"
+                   value="#{cuIv01GestionarInvestigadoresFaces.nombreLibro}" 
+                   rendered="#{cuIv01GestionarInvestigadoresFaces.mostrarCuandoEsLibro}"/>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_editorial')}" 
+                     styleClass="gris negrilla" for="inputEditorialLibro"
+                     rendered="#{cuIv01GestionarInvestigadoresFaces.mostrarCuandoEsLibro}"/>
+      <p:inputText id="inputEditorialLibro" required="true" maxlength="100" styleClass="gris textGrande"
+                   value="#{cuIv01GestionarInvestigadoresFaces.editorialLibro}" 
+                   rendered="#{cuIv01GestionarInvestigadoresFaces.mostrarCuandoEsLibro}"/>
+
+      <h:outputLabel value="#{properties.value('cu_iv_01_lbl_pag_inicio_libro')}" 
+                     styleClass="gris negrilla" for="inputPagIniciolLibro"
+                     rendered="#{cuIv01GestionarInvestigadoresFaces.mostrarCuandoEsCapituloEnLibro}"/>
+      <p:inputText id="inputPagIniciolLibro" required="true" maxlength="6" styleClass="gris textGrande"
+                   value="#{cuIv01GestionarInvestigadoresFaces.pagInicioLibro}" onkeypress="return soloNumerosInpuText(event);"
+                   rendered="#{cuIv01GestionarInvestigadoresFaces.mostrarCuandoEsCapituloEnLibro}"/>
+
+    </h:panelGrid>
+    <br/>
+    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+    <div class="centrado">
+      <p:commandButton value="#{properties.value('cu_iv_01_lbl_btn_add_publicacion')}" 
+                       rendered="#{cuIv01GestionarInvestigadoresFaces.mostrarBotonGuardar}"
+                       action="#{cuIv01GestionarInvestigadoresFaces.registrarPublicacionesInvestigador}" 
+                       update="@form"/>
+      <p:commandButton value="#{properties.value('cu_iv_01_lbl_btn_update_investigacion')}" 
+                       rendered="#{!cuIv01GestionarInvestigadoresFaces.mostrarBotonGuardar}"
+                       action="#{cuIv01GestionarInvestigadoresFaces.registrarPublicacionesInvestigador}" 
+                       update="@form"/>
+    </div>
+
+  </h:form>
+</html>
+

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    <h:form
+        id="frmInasistente"
+        prependId="false"> 
+        <h:outputText 
+            value="#{bundle['siedueventoescuela.inasistente.title']}: #{sieduEventoEscuelaController.selected.eveeCapa.carrera.descripcion}"
+            styleClass="negrilla"/>
+        <p:separator />
+        <p:panel
+            rendered="#{sieduEventoEscuelaController.renderButtom}">
+            <p:panelGrid
+                id="pnlInasistencia"
+                layout="grid" 
+                columns="6"
+                columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-3,ui-grid-col-1" 
+                styleClass="ui-panelgrid-blank"> 
+                <p:outputLabel                        
+                    value="#{bundle['siedueventoescuela.inasistente.identificacion']}"
+                    for="nroIdentificacionInasistente"/>
+                <h:panelGroup>
+                    <p:inputText 
+                        id="nroIdentificacionInasistente"
+                        value="#{sieduInasistenteEventoController.identificacion}"
+                        required="true"/>
+                    <p:message
+                        for="nroIdentificacionInasistente"/>
+                </h:panelGroup>
+                <p:outputLabel
+                    value="#{bundle['siedueventoescuela.inasistente.fecha']}"
+                    for="fechaInasistencia"/>
+                <h:panelGroup>
+                    <p:calendar 
+                        id="fechaInasistencia" 
+                        pattern="#{bundle['pattern.default.date']}"
+                        value="#{sieduInasistenteEventoController.selected.inaeFecha}"            
+                        label="#{bundle['siedueventoescuela.inasistente.fecha']}"
+                        readonlyInput="true"
+                        required="true"
+                        mindate="#{sieduEventoEscuelaController.selected.eveeFechaini}" 
+                        maxdate="#{sieduEventoEscuelaController.selected.eveeFechafin}">
+                    </p:calendar>
+                    <p:message
+                        for="fechaInasistencia"/>
+                </h:panelGroup>
+                <p:outputLabel
+                    id="tiempoInasistelbl"
+                    value="#{bundle['siedueventoescuela.inasistente.tiempo']}"
+                    for="tiempoInasiste"/>
+                <h:panelGroup>
+                    <p:inputText
+                        id="tiempoInasiste"
+                        value="#{sieduInasistenteEventoController.selected.inaeTiempo}"
+                        required="true">
+                        <p:ajax
+                            event="blur"
+                            process="@this"
+                            update="tiempoInasiste tiempoInasistelbl tiempoInasistemsg"/>
+                        <f:validateLongRange
+                            minimum="1"
+                            maximum="480"/>
+                    </p:inputText>
+                    <p:message
+                        id="tiempoInasistemsg"
+                        for="tiempoInasiste"/>
+                </h:panelGroup>  
+            </p:panelGrid>
+            <f:facet
+                name="footer">
+                <p:panelGrid
+                    columns="1"
+                    layout="grid" 
+                    columnClasses="ui-grid-col-2" 
+                    styleClass="ui-panelgrid-blank">                            
+                    <p:commandButton 
+                        id="btnCreateInasistente"
+                        value="#{bundle['commons.btn.add']}"
+                        title="#{bundle['commons.btn.add']}"
+                        icon="ui-icon-plus"
+                        actionListener="#{sieduInasistenteEventoController.onSave()}"
+                        process="@form"
+                        update=":tvDatos:frmInasistente :tvDatos:frmListInasistente"/>            
+                </p:panelGrid>
+            </f:facet>
+        </p:panel>
+    </h:form>
+    <p:separator/>
+    <h:form
+        id="frmListInasistente"
+        prependId="false">
+        <p:panel>
+            <p:dataTable 
+                id="dtListInasistente"
+                value="#{sieduInasistenteEventoController.list}"
+                var="record"
+                paginator="true" 
+                paginatorPosition="bottom"
+                rows="10"        
+                selection="#{sieduInasistenteEventoController.selected}" 
+                rowKey="#{record.inaeInae}"
+                reflow="true"
+                editable="true"
+                rowIndexVar="index"
+                style="font-size: smaller">
+                <p:column 
+                    headerText="#{bundle['commons.lbl.numero']}"
+                    style="text-align: center; width: 4%">
+                    <h:outputText 
+                        value="#{index + 1}"/>
+                </p:column>
+                <p:column
+                    headerText="#{bundle['siedueventoescuela.participante.grado']}"
+                    style="text-align: center; width: 7%">
+                    <h:outputText 
+                        value="#{record.inaePare.parePers.persGrado}"/>
+                </p:column>                 
+                <p:column 
+                    headerText="#{bundle['siedueventoescuela.inasistente.identificacion']}">
+                    <h:outputText 
+                        value="#{record.inaePare.parePers.persNroid}"/>
+                </p:column>                 
+                <p:column  headerText="#{bundle['siedueventoescuela.inasistente.nombre']}" 
+                           sortBy="#{record.inaePare.parePers.persNombres} #{record.inaePare.parePers.persApellidos}"
+                           style="text-align: center; width: 40%">
+                    <h:outputText 
+                        value="#{record.inaePare.parePers.persNombres} #{record.inaePare.parePers.persApellidos}"/>
+                </p:column>      
+                <p:column 
+                    headerText="#{bundle['siedueventoescuela.inasistente.fecha']}"
+                    style="text-align: center; width: 10%">
+                    <h:outputText value="#{record.inaeFecha}">
+                        <f:convertDateTime type="date" pattern="#{bundle['pattern.default.date']}"/>
+                    </h:outputText>         
+                </p:column>         
+                <p:column 
+                    headerText="#{bundle['siedueventoescuela.inasistente.tiempomin']}"
+                    style="text-align: center; width: 10%">
+                    <h:outputText value="#{record.inaeTiempo}"/>          
+                </p:column> 
+                <p:column headerText="#{bundle['commons.lbl.delete']}"
+                          rendered="#{sieduEventoEscuelaController.renderButtom}"
+                          style="text-align: center; width: 10%">
+                    <h:panelGroup>
+                        <p:commandLink value="#{bundle['commons.btn.remove']}" 
+                                       title="#{bundle['commons.btn.remove']}" 
+                                       actionListener="#{sieduInasistenteEventoController.onDelete(record)}"
+                                       immediate="true"
+                                       update=":tvDatos:frmListInasistente">
+                            <f:setPropertyActionListener value="#{record}" target="#{sieduInasistenteEventoController.selected}"/>
+                            <p:confirm 
+                                header="#{bundle['commons.cfmdlg.header']}" 
+                                message="#{bundle['commons.cfmdlg.remove.message']}" 
+                                icon="ui-icon-alert" />
+                        </p:commandLink>
+                    </h:panelGroup>
+                </p:column>
+            </p:dataTable> 
+        </p:panel>
+    </h:form>
+</ui:composition>

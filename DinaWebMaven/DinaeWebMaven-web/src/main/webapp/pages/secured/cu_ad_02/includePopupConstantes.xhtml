@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <h:form id="formConstantes">
+    <h:panelGrid id="panelgridAdminParamSistemaConstantes" columns="2" style="width: 100%" 
+                 rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_40_porciento,panelGridColumnaValor_60_porciento">
+
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="Valor" for="inputValorParam" styleClass="gris negrilla" />
+      </h:panelGrid>
+      <h:inputText value="#{cuAd02AdministrarParametrosSistemaFaces.valorConstante}" id="inputValorParam" styleClass="gris"
+                   size="50"/>        
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="Estado" for="selectEstadoConstanteParam" styleClass="gris negrilla" />
+      </h:panelGrid>
+      <h:selectOneMenu value="#{cuAd02AdministrarParametrosSistemaFaces.estadoConstante}" id="selectEstadoConstanteParam" styleClass="gris">
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="" />
+        <f:selectItem itemLabel="ACTIVO" itemValue="ACTIVO" />
+        <f:selectItem itemLabel="INACTIVO" itemValue="INACTIVO" />
+      </h:selectOneMenu>
+
+
+      <f:facet name="footer">
+        <div class="centrado">
+          <br />
+          <p:commandButton value="#{properties.value('general_lbl_btn_guardar')}" 
+                           rendered="#{!cuAd02AdministrarParametrosSistemaFaces.modificarConstante}" id="btnGuardarConstantesParam"
+                           actionListener="#{cuAd02AdministrarParametrosSistemaFaces.guardarModificarConstante}" 
+                           process="@form"
+                           update=":formAdminParamSistema:tablaParametrosSistemaTipo"
+                           oncomplete="postAction(xhr, status, args)"/>
+
+          <p:commandButton value="#{properties.value('general_lbl_btn_modificar')}" 
+                           rendered="#{cuAd02AdministrarParametrosSistemaFaces.modificarConstante}"
+                           actionListener="#{cuAd02AdministrarParametrosSistemaFaces.guardarModificarConstante}" 
+                           process="@form"
+                           update=":formAdminParamSistema:tablaParametrosSistemaTipo"
+                           oncomplete="postAction(xhr, status, args)" />
+
+          <p:commandButton value="#{properties.value('general_lbl_btn_cancelar')}" 
+                           rendered="#{cuAd02AdministrarParametrosSistemaFaces.modificarConstante}"
+                           action="#{cuAd02AdministrarParametrosSistemaFaces.inicializarDatosConstantes}" 
+                           update=":formAdminParamSistema:formPopup"
+                           oncomplete="PF('formCreateUpdateParams').hide();"/>
+
+        </div>                
+      </f:facet>
+
+    </h:panelGrid>
+
+  </h:form>
+</html>

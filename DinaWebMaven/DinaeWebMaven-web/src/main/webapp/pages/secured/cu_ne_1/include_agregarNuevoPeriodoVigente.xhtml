@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <h:panelGroup >
+
+    <h:form id="formAgregarPeriodo" styleClass="site"> 
+
+      <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                   columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento" >
+
+        <h:outputLabel value="#{properties.value('cu_ne_1_lbl_periodo')}:"   styleClass="gris negrilla" />
+        <h:outputText id="periodoActual" value="#{cuNe1PeriodoNecesidadesFaces.periodo}"   styleClass="gris" />
+
+        <h:outputLabel for="descripcion" value ="#{properties.value('cu_ne_1_lbl_descripcion')}: "  styleClass="gris negrilla"/>
+        <h:panelGrid columns="1" style="width: 100%">
+          <p:inputTextarea id="descripcion" requiredMessage="Ingrese la descripcion" value="#{cuNe1PeriodoNecesidadesFaces.descripción}" 
+                           required="true" maxlength="500" counter="contadorTema" 
+                           title=" maximo 500" counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}" 
+                           readonly="#{cuNe1PeriodoNecesidadesFaces.deshabilitarComponentes()}" styleClass="textareaMaximo"  >
+            <f:validateLength minimum="1" maximum="500" /> 
+          </p:inputTextarea>
+          <h:outputText id="contadorTema" />
+        </h:panelGrid>
+
+        <h:outputLabel for="cantidadPropuesta"  value="#{properties.value('cu_ne_1_lbl_cantidadPropuesta')}:"   styleClass="gris negrilla"/>
+        <p:inputText id="cantidadPropuesta" 
+                     value="#{cuNe1PeriodoNecesidadesFaces.cantidadPropuestaUnidad}" 
+                     required="true" 
+                     readonly="#{cuNe1PeriodoNecesidadesFaces.deshabilitarComponentes()}"
+                     title=" maximo 2">
+          <f:convertNumber integerOnly="true" type="number" maxIntegerDigits="1"/>
+          <f:validateLength maximum="2" minimum="1"/>
+        </p:inputText>
+
+      </h:panelGrid>
+
+      <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento" >
+
+        <h:outputLabel  value="#{properties.value('cu_ne_1_lbl_Periodo_Fechas')}:"  styleClass="gris negrilla" />
+        <h:panelGrid columns="2" >
+          <h:outputLabel for="fInicio" value="#{properties.value('cu_ne_1_lbl_fechaInicio')}:"  styleClass="gris negrilla" />
+          <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es" showOn="button" 
+                      yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" 
+                      showButtonPanel="true" navigator="true" requiredMessage="Ingrese la fecha inicial"  
+                      value="#{cuNe1PeriodoNecesidadesFaces.fechaInicio}"  id="fInicio" required="true"  
+                      disabled="#{cuNe1PeriodoNecesidadesFaces.deshabilitarComponentes()}"  />    
+
+          <h:outputLabel for="fFinal" value="#{properties.value('cu_ne_1_lbl_fechaFinal')}:"  styleClass="gris negrilla"/>
+          <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es" showOn="button" 
+                      yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" 
+                      showButtonPanel="true" navigator="true" requiredMessage="Ingrese la fecha final"  
+                      value="#{cuNe1PeriodoNecesidadesFaces.fechaFinal}"  required="true"  id="fFinal"/>      
+
+        </h:panelGrid>
+
+        <h:outputLabel value="Reporte" styleClass="gris negrilla" rendered="#{cuNe1PeriodoNecesidadesFaces.mostrarLinkReporteNecesidades}" />
+        <p:commandLink ajax="false" immediate="true" 
+                       rendered="#{cuNe1PeriodoNecesidadesFaces.mostrarLinkReporteNecesidades}">
+          <h:outputLabel value="#{cuNe1PeriodoNecesidadesFaces.periodoSelect.nombreArchivoFisicoPropuestaNecesidadReporte}" />
+          <p:fileDownload value="#{cuNe1PeriodoNecesidadesFaces.downloadContentProperty}" />
+        </p:commandLink>
+
+      </h:panelGrid>
+
+      <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                   columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento" >
+
+        <h:outputLabel value="Unidad policial: "  styleClass="gris negrilla"  />
+        <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}"  
+                     var="_unidad" value="#{cuNe1PeriodoNecesidadesFaces.listaUnidadesPolicialesDTOperiodo}" 
+                     rowIndexVar="idFila"
+                     id="idDTlistaUnidadesPolicialesDTOperiodo"
+                     paginator="true" 
+                     rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                     paginatorPosition="bottom" styleClass="tabla"
+                     resizableColumns="true"
+                     rows="#{properties.value('general_mensaje_filas_datatable_pagina')}">
+
+          <p:column width="30" headerText="#{properties.value('cu_ne_1_lbl_lista_periodo_n')}">                         
+            <h:outputText value="#{idFila+1}" />
+          </p:column> 
+          <p:column headerText="Nombre">                         
+            <h:outputText value="#{_unidad.siglaFisicaYnombreUnidad}" />
+          </p:column> 
+          <p:column headerText="Correo"> 
+            <h:outputText value="#{_unidad.mail}" />
+          </p:column> 
+          <p:column width="100" headerText="Tipo">                         
+            <h:outputText value="#{_unidad.nombreTipoUnidad}" />
+          </p:column> 
+          <p:column width="50" headerText=" - ">
+            <p:selectBooleanCheckbox value="#{_unidad.seleccionado}">
+              <p:ajax event="change" update="idDTlistaUnidadesPolicialesDTOperiodo" />
+            </p:selectBooleanCheckbox>
+          </p:column> 
+          <f:facet name="footer">
+            <h:panelGroup>
+              <h:outputText value="Registros seleccionados: #{cuNe1PeriodoNecesidadesFaces.contadorUnidadesSeleccionadas}"/>
+            </h:panelGroup>                        
+          </f:facet>
+        </p:dataTable>
+      </h:panelGrid>
+
+
+      <br />
+      <br />
+      <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+      <p:separator styleClass="separadorBorder" /> 
+      <h:panelGrid columns="3" style="margin: 0 auto;" >
+        <p:commandButton value="#{properties.value('cu_ne_7_regresar_generico')}" 
+                         action="#{cuNe1PeriodoNecesidadesFaces.regresar()}"
+                         ajax="false"
+                         immediate="true" styleClass="button"/>
+        <p:commandButton value="#{properties.value('cu_ne_1_lbl_btn_guardar')}" action="#{cuNe1PeriodoNecesidadesFaces.guardar}"  update=":formAgregarPeriodo,:formListaPeriodo:tablaPeriodo" rendered="#{cuNe1PeriodoNecesidadesFaces.periodoSelect==null}" styleClass="button"/>
+        <p:commandButton  value="#{cuNe1PeriodoNecesidadesFaces.periodoSelect.estado=='T'? properties.value('cu_ne_1_lbl_btn_guardar'):properties.value('cu_ne_1_lbl_btn_publicar')}" action="#{cuNe1PeriodoNecesidadesFaces.modificar()}"  update=":formAgregarPeriodo,:formListaPeriodo:tablaPeriodo" rendered="#{cuNe1PeriodoNecesidadesFaces.periodoSelect!=null}" styleClass="button" />
+        <p:commandButton value="#{properties.value('cu_ne_1_lbl_btn_publicar')}" action="#{cuNe1PeriodoNecesidadesFaces.publicarPeriodo}"  update=":formAgregarPeriodo,:formListaPeriodo:tablaPeriodo"  rendered="#{cuNe1PeriodoNecesidadesFaces.periodoSelect.estado!='P'}" styleClass="button"/>
+
+
+
+      </h:panelGrid>  
+    </h:form>        
+  </h:panelGroup>
+
+</html>

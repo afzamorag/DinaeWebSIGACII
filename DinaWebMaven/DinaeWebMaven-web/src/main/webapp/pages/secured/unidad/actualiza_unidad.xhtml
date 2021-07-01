@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+      <ui:define name="content">
+
+        <h:form>
+
+          <div class="fixed-menu">                        
+            <div class="right-col">
+              <h2>
+                Actualizar Unidad Policial
+              </h2>
+            </div>
+          </div>
+          <br />
+          <br />
+          <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                       columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento" >
+
+            <h:outputLabel styleClass="gris negrilla" value="Nombre" for="id_nombre_unidad_policial" />
+            <p:inputText required="true" styleClass="textMaximo" 
+                         value="#{administraUnidadPolicialFaces.unidadPolicialSeleccionada.nombre}" 
+                         id="id_nombre_unidad_policial" />
+
+            <h:outputLabel styleClass="gris negrilla" value="Sigla física" />
+            <p:inputText styleClass="textPequenio" value="#{administraUnidadPolicialFaces.unidadPolicialSeleccionada.siglaFisica}"  />
+
+            <h:outputLabel styleClass="gris negrilla" value="Dirección" />
+            <p:inputText styleClass="textMaximo" value="#{administraUnidadPolicialFaces.unidadPolicialSeleccionada.direccion}"  />
+
+            <h:outputLabel styleClass="gris negrilla" value="Correo"  />
+            <p:inputText styleClass="textMaximo" value="#{administraUnidadPolicialFaces.unidadPolicialSeleccionada.mail}"  />
+
+            <h:outputLabel styleClass="gris negrilla" value="Telefono" />
+            <p:inputText styleClass="textPequenio" value="#{administraUnidadPolicialFaces.unidadPolicialSeleccionada.direccion}"  />
+
+            <h:outputLabel styleClass="gris negrilla" value="Sigla depende" />
+            <p:inputText styleClass="textPequenio" value="#{administraUnidadPolicialFaces.unidadPolicialSeleccionada.siglaDepende}" />
+
+            <h:outputLabel styleClass="gris negrilla" value="Sigla papa" />
+            <p:inputText styleClass="textPequenio" value="#{administraUnidadPolicialFaces.unidadPolicialSeleccionada.siglaPapa}" />
+
+            <h:outputLabel styleClass="gris negrilla" value="Tipo Unidad" />
+            <p:selectOneRadio  styleClass="gris" value="#{administraUnidadPolicialFaces.unidadPolicialSeleccionada.tipoUnidad.idTipoUnidad}">  
+              <f:selectItem itemLabel="Escuela" itemValue="1" />  
+              <f:selectItem itemLabel="Otro" itemValue="2" />                                                
+
+            </p:selectOneRadio>
+
+            <h:outputLabel styleClass="gris negrilla" value="Activo" />
+            <p:selectOneRadio  styleClass="gris" value="#{administraUnidadPolicialFaces.unidadPolicialSeleccionada.activo}">  
+              <f:selectItem itemLabel="SI" itemValue="Y" />  
+              <f:selectItem itemLabel="NO" itemValue="N" />                                                
+
+            </p:selectOneRadio>
+
+          </h:panelGrid>
+          <br />
+          <br />
+          <div class="centrado">
+
+            <p:commandButton value="#{properties.value('cu_co_1_lbl_btn_regresar')}" 
+                             action="#{administraUnidadPolicialFaces.regresar}" 
+                             immediate="true" />
+
+            <p:commandButton value="#{properties.value('cu_co_1_lbl_btn_guardar')}" 
+                             update="@form"                                         
+                             action="#{administraUnidadPolicialFaces.actualizarUnidad}" />
+
+          </div>
+
+        </h:form>
+
+      </ui:define>
+    </ui:composition>
+
+  </body>
+</html>

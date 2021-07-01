@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"      
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core"> 
+
+
+  <h:form id="forminclude_consulta_resultados_alcanzados_proyecto" >
+    <br />
+    <p:dataTable var="_dato"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 value="#{cuPr11ConsultarDetalleCompromisoFaces.listaResultadosAlcanzadosProyectoDTO}" 
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rowIndexVar="idFila" paginatorPosition="bottom" 
+                 resizableColumns="true"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true">
+
+      <p:column width="20" headerText="#{properties.value('cu_pr_7_lbl_tab_actividesde_realizada_num')}">  
+        <h:outputLabel value="#{ idFila + 1}" />  
+      </p:column>  
+
+      <p:column headerText="#{properties.value('cu_pr_7_lbl_tab_resultado_alcanzado_resultad')}">  
+        <h:outputLabel value="#{_dato.resultadoAlcanzado}" />  
+      </p:column>
+
+      <f:facet name="footer">  
+        #{fn:length( cuPr11ConsultarDetalleCompromisoFaces.listaResultadosAlcanzadosProyectoDTO )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable>
+  </h:form>     
+
+</html>

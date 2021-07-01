@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    template="../../../templates/plantillaPrincipal.xhtml">
+    <ui:define name="content">
+        <p:panel>
+            <h:form
+                id="frmConvocatoria"
+                prependId="false">
+                <div class="fixed-menu">
+                    <!--VENTANA DE LISTA DE PERIODOS-->
+                    <div class="right-col">
+                        <h2 style="font: verdana;">
+                            #{properties.value('cu_pr_5_lbl_titulo_registra_presupuesto')}
+                        </h2>
+
+                        <h:outputLabel value="Titulo del proyecto: " styleClass="gris negrilla" />
+                        <h:outputText value="#{registrarPresupuesto.proyectoSeleccionado.tituloPropuesto}" 
+                                      styleClass="gris"/>
+                        <br/>
+                        <br/>
+                        <p:tabView id="tabView" orientation="top" activeIndex="#{registrarPresupuesto.idTabSeleccionado}">
+
+                            <p:ajax event="tabChange" listener="#{registrarPresupuesto.onTabChange}" update=":tabView"/> 
+
+                            <p:tab id="tabFuentesFinancieras" title="#{properties.value('cu_pr_5_lbl_titulo_tab_fuentes_financieras')}">
+                                <h:panelGroup rendered="#{registrarPresupuesto.soloConsulta}">
+                                    <ui:include src="include_lista_lista_fuentes_financieras.xhtml"/>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{!registrarPresupuesto.soloConsulta}">
+                                    <ui:include src="includeAgregarFuenteFinanciera.xhtml"/>
+                                </h:panelGroup>                                    
+                            </p:tab>
+                            <p:tab id="tabPersonalInvestigacion" title="#{properties.value('cu_pr_14_lbl_tab_personal_investigacion')}">
+                                <ui:include src="includePersonalDeLaInvestigacion.xhtml"/>
+                            </p:tab>
+                            <p:tab id="tabEquiposInvestigacion" title="#{properties.value('cu_pr_14_lbl_tab_equipos_investigacion')}">
+                                <h:panelGroup rendered="#{registrarPresupuesto.soloConsulta}">
+                                    <ui:include src="include_lista_equipo_de_la_investigacion.xhtml" />
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{!registrarPresupuesto.soloConsulta}">
+                                    <ui:include src="includeEquipoDeLaInvestigacion.xhtml" />
+                                </h:panelGroup>
+                            </p:tab>
+                            <p:tab id="tabEventosRelacionados" title="#{properties.value('cu_pr_14_lbl_tab_eventos_relacionados')}">
+                                <h:panelGroup rendered="#{registrarPresupuesto.soloConsulta}">
+                                    <ui:include src="include_lista_eventos_relacionados.xhtml" />
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{!registrarPresupuesto.soloConsulta}">
+                                    <ui:include src="includeEventosRelacionados.xhtml" />
+                                </h:panelGroup>
+                            </p:tab>
+
+                            <p:tab id="tabViajesRelacionados" title="#{properties.value('cu_pr_5_lbl_titulo_tab_viajes_relacionados')}">
+                                <h:panelGroup rendered="#{registrarPresupuesto.soloConsulta}">
+                                    <ui:include src="include_lista_viajes_relacionados.xhtml" />
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{!registrarPresupuesto.soloConsulta}">
+                                    <ui:include src="includeViajesRelacionados.xhtml" />
+                                </h:panelGroup>
+                            </p:tab>
+                            <p:tab id="tabOtrosGastosProyecto" title="#{properties.value('cu_pr_14_lbl_tab_otros')}">
+                                <h:panelGroup rendered="#{registrarPresupuesto.soloConsulta}">
+                                    <ui:include src="include_lista_otros_gastos.xhtml" />
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{!registrarPresupuesto.soloConsulta}">
+                                    <ui:include src="includeOtrosGastos.xhtml" />
+                                </h:panelGroup>
+                            </p:tab>
+
+                            <p:tab id="tabPresupuestoGlobal" title="#{properties.value('cu_pr_5_lbl_titulo_tab_presupuesto_global')}">
+                                <h:panelGrid width="100%" columns="1" rendered="#{registrarPresupuesto.importPresupuestoPage != null}">
+                                    <ui:include src="#{registrarPresupuesto.importPresupuestoPage}" />
+                                </h:panelGrid>
+                            </p:tab>
+                        </p:tabView>
+
+                        <br/>
+                        <p:separator styleClass="separadorBorder" /> 
+                        <div class="centrado">
+                            <p:commandButton value="#{properties.value('cu_pr_14_lbl_btn_regresar')}" 
+                                             id="idBtnRegresarProyecto"
+                                             action="#{registrarPresupuesto.regresar}"                                             
+                                             immediate="true"  >                              
+                            </p:commandButton>
+                        </div>                            
+                    </div>
+                </div>
+            </h:form>
+        </p:panel>
+    </ui:define>
+</ui:composition>
+
+
+
+
+

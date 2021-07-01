@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <h:form id="forminclude_informacion_basica" >
+
+
+    <ui:include src="/pages/secured/include_pantallas_genericas/include_informacion_informe_proyecto.xhtml" />
+    <ui:include src="/pages/secured/include_pantallas_genericas/include_informacion_totales_proyecto.xhtml" />
+
+    <br />
+    <p:commandLink value="Ver Informe de avance final" 
+                   immediate="true" 
+                   action="#{cuPr11ConsultarDetalleCompromisoFaces.invocarCuPr7}">  
+    </p:commandLink>
+
+    <br />
+    <br />
+    <h:outputLabel  value="Archivo del informe final" styleClass="green negrilla"/>
+    <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaValor_30_porciento,panelGridColumnaValor_70_porciento">
+
+      <h:outputLabel value="Descripción del informe final" styleClass="gris negrilla" 
+                     rendered="#{cuPr11ConsultarDetalleCompromisoFaces.informeAvanceSeleccionado.nombreArchivo != null}"/>
+      <h:outputLabel  value="#{cuPr11ConsultarDetalleCompromisoFaces.informeAvanceSeleccionado.tipoContenidoArchivo}" 
+                      rendered="#{cuPr11ConsultarDetalleCompromisoFaces.informeAvanceSeleccionado.nombreArchivo != null}" 
+                      styleClass="gris"/>            
+
+      <h:outputLabel value="Archivo" styleClass="gris negrilla" 
+                     rendered="#{cuPr11ConsultarDetalleCompromisoFaces.informeAvanceSeleccionado.nombreArchivo != null}"/>
+      <p:commandLink ajax="false" immediate="true" id="idCommanLinkDescargaArchivo" 
+                     rendered="#{cuPr11ConsultarDetalleCompromisoFaces.informeAvanceSeleccionado.nombreArchivo != null}">
+        <h:outputLabel value="#{cuPr11ConsultarDetalleCompromisoFaces.informeAvanceSeleccionado.nombreArchivo}" />
+        <p:fileDownload value="#{cuPr11ConsultarDetalleCompromisoFaces.downloadContentPropertyInfomeAvanceSeleccionado}" />
+      </p:commandLink>
+
+    </h:panelGrid>
+
+    <br />
+    <h:outputLabel  value="Resultados de la investigación" styleClass="green negrilla"/>
+    <p:dataTable var="ri" paginator="true" style="width: 100%"
+                 value="#{cuPr11ConsultarDetalleCompromisoFaces.listaResultadosInvestigacion}"
+                 rowIndexVar="idFila" paginatorPosition="bottom" id="dataTableResultaInvestiga"
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}"
+                 resizableColumns="true">
+
+      <p:column width="20" headerText="#{properties.value('cu_pr_10_lbl_tab3_tabla_num')}"  style="color:white; text-align: center">  
+        <h:outputText value="#{idFila + 1}"  styleClass="gris"/>
+      </p:column> 
+
+      <p:column width="200" headerText="#{properties.value('cu_pr_10_lbl_tab3_tabla_tipo_producto')}" style="color:white;">  
+        <h:outputText value="#{ri.idTipoProducto.valor}"  styleClass="gris"/>
+      </p:column> 
+
+      <p:column headerText="#{properties.value('cu_pr_10_lbl_tab3_tabla_desc')}" style="color:white;">  
+        <h:outputText value="#{ri.descripcion}"  styleClass="gris"/>
+      </p:column> 
+
+      <f:facet name="footer">  
+        #{fn:length(cuPr11ConsultarDetalleCompromisoFaces.listaResultadosInvestigacion)} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+    </p:dataTable>
+
+  </h:form>
+</html>

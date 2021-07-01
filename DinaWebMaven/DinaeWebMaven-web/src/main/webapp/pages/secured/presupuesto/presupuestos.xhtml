@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<ui:composition 
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:p="http://primefaces.org/ui"
+  template="/templates/plantillaPrincipal.xhtml">
+  <ui:define
+    name="content">
+    <p:panel 
+      id="main"
+      styleClass="ui-fluid">
+      <h:form
+        id="frmlist"
+        prependId="false">
+        <h:outputText 
+          value="#{bundle['capacitacion.title.list']}"/>
+        <p:separator />
+        <p:panel
+          id="pnlfiltro">
+          <p:panelGrid
+            layout="grid" 
+            columns="2"
+            columnClasses="ui-grid-col-2,ui-grid-col-10" 
+            styleClass="ui-panelgrid-blank">
+            <!-- vigencia -->
+            <p:outputLabel
+              id="fltvigencialbl"
+              for="fltvigencia"
+              value="#{bundle['vigencia']}"/>
+            <h:panelGroup>
+              <p:selectOneMenu 
+                id="fltvigencia" 
+                value="#{presupuestoController.filtro.pae}" 
+                converter="paeConverter"
+                filter="true"
+                filterMatchMode="contains"
+                required="true">
+                <p:ajax
+                  process="@this"
+                  listener="#{presupuestoController.onLoadList()}"
+                  update="pnlfiltrobtns fltvigencialbl fltvigencia fltvigenciamsg dtlist"/>
+                <f:selectItem 
+                  noSelectionOption="true"/>
+                <f:selectItems 
+                  value="#{presupuestoController.vigencias}" 
+                  var="pae" 
+                  itemLabel="#{pae.vigencia}" 
+                  itemValue="#{pae}" />
+              </p:selectOneMenu>              
+              <p:message
+                id="fltvigenciamsg"
+                for="fltvigencia"/>
+            </h:panelGroup>
+            <!-- escuela -->
+            <p:outputLabel
+              rendered="#{presupuestoController.validaRol}"
+              id="fltescuelalbl"
+              for="fltescuela"
+              value="#{bundle['escuela']}"/>
+            <h:panelGroup 
+              rendered="#{presupuestoController.validaRol}">
+              <p:selectOneMenu 
+                id="fltescuela" 
+                value="#{presupuestoController.filtro.escuela}" 
+                required="false">
+                <p:ajax
+                  process="@this"
+                  listener="#{presupuestoController.onLoadList()}"
+                  update="pnlfiltrobtns fltescuelalbl fltescuela fltescuelamsg dtlist"/>
+                <p:ajax
+                  process="@this"
+                  listener="#{presupuestoController.onLoadList()}"
+                  update="pnlfiltrobtns dtlist"/>
+                <f:selectItem 
+                  noSelectionOption="true"/>
+                <f:selectItems 
+                  value="#{presupuestoController.escuelas}" 
+                  var="escuela" 
+                  itemLabel="#{escuela.descripcionDependencia}" 
+                  itemValue="#{escuela.consecutivo}" />
+              </p:selectOneMenu>              
+              <p:message
+                id="fltescuelamsg"
+                for="fltescuela"/>
+            </h:panelGroup>
+          </p:panelGrid>
+          <f:facet
+            name="footer">
+            <p:panelGrid
+              id="pnlfiltrobtns"
+              columns="12"
+              layout="grid" 
+              columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+              styleClass="ui-panelgrid-blank">
+              <p:commandButton 
+                value="#{bundle['commons.btn.find']}"
+                title="#{bundle['commons.btn.find']}"
+                icon="ui-icon-search"
+                actionListener="#{presupuestoController.onLoadList()}"
+                process="@this pnlfiltro"
+                update="frmlist"/>
+            </p:panelGrid>
+          </f:facet>
+        </p:panel>
+        <p:dataTable 
+          id="dtlist"
+          value="#{presupuestoController.list}"
+          var="record"
+          paginator="true" 
+          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+          rows="10"
+          rowsPerPageTemplate="10,50,100"
+          reflow="true"> 
+          <p:column 
+            headerText="#{bundle['capacitacion.escuela']}"
+            sortBy="#{record.escuela.descripcionDependencia}">
+            <p:commandLink 
+              title="#{bundle['commons.lbl.view.detail']}"
+              action="#{presupuestoController.onRowSelect()}">
+              <f:setPropertyActionListener 
+                value="#{record}" 
+                target="#{presupuestoController.selected}" />
+              <h:outputText 
+                value="#{record.escuela.descripcionDependencia}"/>
+            </p:commandLink>
+          </p:column>
+          <p:column 
+            headerText="#{bundle['capacitacion.proceso']}"
+            sortBy="#{record.proceso.nombre}">
+            <p:commandLink 
+              title="#{bundle['commons.lbl.view.detail']}"
+              action="#{presupuestoController.onRowSelect()}">
+              <f:setPropertyActionListener 
+                value="#{record}" 
+                target="#{presupuestoController.selected}" />
+              <h:outputText 
+                value="#{record.proceso.nombre}"/>
+            </p:commandLink>
+          </p:column>
+          <p:column 
+            headerText="#{bundle['capacitacion.estrategia']}"
+            sortBy="#{record.estrategia.nombre}">
+            <p:commandLink 
+              title="#{bundle['commons.lbl.view.detail']}"
+              action="#{presupuestoController.onRowSelect()}">
+              <f:setPropertyActionListener 
+                value="#{record}" 
+                target="#{presupuestoController.selected}" />
+              <h:outputText 
+                value="#{record.estrategia.nombre}"/>
+            </p:commandLink>
+          </p:column>
+          <p:column 
+            headerText="#{bundle['capacitacion.carrera']}"
+            sortBy="#{record.carrera.titulo}">
+            <p:commandLink 
+              title="#{bundle['commons.lbl.view.detail']}"
+              action="#{presupuestoController.onRowSelect()}">
+              <f:setPropertyActionListener 
+                value="#{record}" 
+                target="#{presupuestoController.selected}" />
+              <h:outputText 
+                value="#{record.carrera.nivelAcademico.descripcion} - #{record.carrera.titulo}"/>
+            </p:commandLink>
+          </p:column>
+          <p:column 
+            headerText="#{bundle['capacitacion.necesidad']}"
+            sortBy="#{record.necesidad}">
+            <p:commandLink 
+              title="#{bundle['commons.lbl.view.detail']}"
+              action="#{presupuestoController.onRowSelect()}">
+              <f:setPropertyActionListener 
+                value="#{record}" 
+                target="#{presupuestoController.selected}" />
+              <h:outputText 
+                value="#{record.necesidad}"/>
+            </p:commandLink>
+          </p:column>
+          <p:column 
+            headerText="#{bundle['capacitacion.estado']}"
+            sortBy="#{record.estado}">
+            <p:commandLink 
+              title="#{bundle['commons.lbl.view.detail']}"
+              action="#{presupuestoController.onRowSelect()}">
+              <f:setPropertyActionListener 
+                value="#{record}" 
+                target="#{presupuestoController.selected}" />
+              <h:outputText 
+                value="#{record.estado}"/>
+            </p:commandLink>
+          </p:column>
+        </p:dataTable>
+      </h:form>
+    </p:panel>
+  </ui:define>
+</ui:composition>

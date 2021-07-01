@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    template="/templates/plantillaPrincipal.xhtml">
+    <ui:define
+        name="content">
+        <p:panel 
+            id="main"
+            styleClass="ui-fluid">
+            <h:form
+                id="frmlist"
+                prependId="false">
+                <h:outputText 
+                    value="#{bundle['capacitacionfuncionario.titulo.lbl']}"
+                    style="negrilla"/>
+                <p:separator />
+                <p:panel
+                    id="pnlbtns">
+                    <p:panelGrid 
+                        columns="2"
+                        layout="grid"
+                        columnClasses="ui-grid-col-2,ui-grid-col-10"
+                        styleClass="ui-panelgrid-blank">
+                        <p:outputLabel   
+                            for="fltescuela"
+                            value="#{bundle['escuela']}"
+                            styleClass="negrilla"
+                            rendered="#{horasDocenteCapacitacionController.renderComponent}"/>
+                        <h:panelGroup
+                            rendered="#{horasDocenteCapacitacionController.renderComponent}">
+                            <p:selectOneMenu                            
+                                value="#{horasDocenteCapacitacionController.escuela}"               
+                                required="#{!horasDocenteCapacitacionController.renderComponent}"
+                                id="fltescuela"
+                                filter="true"
+                                filterMatchMode="contains">
+                                <f:selectItem 
+                                    noSelectionOption="true"/>
+                                <f:selectItems 
+                                    value="#{appController.escuelas()}" 
+                                    var="escuela" 
+                                    itemLabel="#{escuela.descripcionDependencia}" 
+                                    itemValue="#{escuela.consecutivo}"/>
+                            </p:selectOneMenu>
+                            <p:message
+                                for="fltescuela"/>
+                        </h:panelGroup>
+                        <p:outputLabel
+                            for="dateFechaInicioConsulta"
+                            value="#{bundle['horasDocente.fechainicial.lbl']}" 
+                            styleClass="negrilla"/>
+                        <h:panelGroup>
+                            <p:calendar 
+                                pattern="#{bundle['pattern.default.date']}" 
+                                locale="es" 
+                                style="text-align: center"
+                                id="dateFechaInicioConsulta"                               
+                                navigator="true"                             
+                                value="#{horasDocenteCapacitacionController.fechaInicioConsulta}"
+                                required="true">
+                            </p:calendar>
+                            <p:message
+                                for="dateFechaInicioConsulta"/>
+                        </h:panelGroup>
+                        <p:outputLabel
+                            for="dateFechaFinConsulta"
+                            value="#{bundle['horasDocente.fechafinal.lbl']}"
+                            styleClass="negrilla"/>
+                        <h:panelGroup>
+                            <p:calendar 
+                                pattern="#{bundle['pattern.default.date']}" 
+                                locale="es" 
+                                style="text-align: center"
+                                id="dateFechaFinConsulta"                                
+                                navigator="true"                             
+                                value="#{horasDocenteCapacitacionController.fechaFinConsulta}"
+                                required="true">
+                            </p:calendar>
+                            <p:message
+                                for="dateFechaFinConsulta"/>
+                        </h:panelGroup>
+                        <p:outputLabel
+                            for="dateFechaCreaConsulta"
+                            value="#{bundle['horasDocente.fecharegistro.lbl']}"
+                            styleClass="negrilla"/>
+                        <h:panelGroup>
+                            <p:calendar 
+                                pattern="#{bundle['pattern.default.date']}" 
+                                locale="es" 
+                                style="text-align: center"
+                                id="dateFechaCreaConsulta"                                
+                                navigator="true" 
+                                required="true"
+                                value="#{horasDocenteCapacitacionController.fechaCreaConsulta}">
+                            </p:calendar>
+                            <p:message
+                                for="dateFechaCreaConsulta"/>
+                        </h:panelGroup>
+                        <p:outputLabel
+                            value="#{bundle['identificacion']}"
+                            styleClass="negrilla"/>
+                        <p:inputText
+                            value="#{horasDocenteCapacitacionController.identificacion}"/>
+                    </p:panelGrid>
+                    <p:panelGrid 
+                        columns="2"
+                        layout="grid"
+                        columnClasses="ui-grid-col-2,ui-grid-col-2"                     
+                        style="margin-top: 10px"
+                        styleClass="ui-panelgrid-blank">
+                        <p:commandButton 
+                            id="btnBuscar"
+                            value="#{properties.value('general_lbl_btn_buscar')}" 
+                            actionListener="#{horasDocenteCapacitacionController.findListByFecha()}" 
+                            style="border: none"
+                            icon="ui-icon-search"
+                            update=":main"/> 
+                    </p:panelGrid>
+                </p:panel> 
+                <p:dataTable 
+                    id="dtList"
+                    value="#{horasDocenteCapacitacionController.list}"
+                    var="record"
+                    paginator="true"
+                    paginatorPosition="bottom"
+                    rows="25"                                      
+                    reflow="true"
+                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                    rowsPerPageTemplate="25,50,100"
+                    style="font-size: smaller; margin-top: 15px">
+                    <f:facet
+                        name="header">
+                        #{bundle['siedueventoescuela.docente.title.table']}
+                    </f:facet>
+                    <p:column 
+                        headerText="#{bundle['escuela']}"                        
+                        style="width: 15%; text-align: center">
+                        <h:outputText 
+                            value="#{record.escuela}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['siedueventoescuela.docente.identificacion']}"                        
+                        style="width: 15%; text-align: left">
+                        <h:outputText 
+                            value="#{record.identificacion}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['siedueventoescuela.docente.nombre']}"                        
+                        style="width: 40%; text-align: left">
+                        <h:outputText 
+                            value="#{record.docente}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['sieduevhoraentoescuela.docente.hora']}"                        
+                        style="width: 15%; text-align: center">
+                        <h:outputText 
+                            value="#{record.hora}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['commons.lbl.opciones']}"                        
+                        style="width: 15%; text-align: center"
+                        rendered="false">
+                        <h:outputText 
+                            value="#{bundle['commons.lbl.view.detail']}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+
+        </p:panel>
+    </ui:define>
+</ui:composition>

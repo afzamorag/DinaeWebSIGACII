@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+  <h:form id="formPersonalInvestigacion">
+    <br />
+    <h:outputLabel value="#{properties.value('cu_pr_5_lbl_subtitulo_personal_investigacion')}" styleClass="green negrilla"/>
+    <br />
+    <br />
+    <div class="centrado">
+      <p:dataTable id="tablaPersonalInvestigacion" var="personal" 
+                   value="#{presupuestoImplemetacionProyectoFaces.listaInvestigadoresProyecto}"
+                   rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                   emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                   paginator="true" paginatorPosition="bottom" rowIndexVar="idFila"
+                   resizableColumns="true"
+                   rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+        <p:column width="15" headerText="#{properties.value('cu_pr_13_lbl_column_numero')}" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{idFila + 1}" styleClass="gris" style="font-size: 13px" />
+        </p:column>
+        <p:column width="70" headerText="#{properties.value('cu_pr_3_lbl_sub_titulo_tipo_investi')}" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{personal.tipoVinculacion.valor}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+        </p:column>
+        <p:column width="70" headerText="#{properties.value('cu_iv_3_lbl_datatable_jefe_grado')}" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{personal.grado}" styleClass="gris" style="font-size: 13px" />
+        </p:column>
+        <p:column width="80" headerText="#{properties.value('cu_iv_3_lbl_datatable_jefe_nombres_app')}" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{personal.nombreCompleto}" styleClass="alineadoIzquierda gris" style="font-size: 13px" />
+        </p:column>
+        <p:column width="60" headerText="#{properties.value('cu_iv_3_lbl_datatable_jefe_unidadpoli')}" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{personal.unidadPolicial.siglaFisica}" styleClass="gris" style="font-size: 13px" />
+        </p:column>
+        <p:column width="60"  headerText="#{properties.value('cu_pr_5_lbl_column_dedicacion')}" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{personal.horasTotalesImplementacion}" styleClass="gris" style="font-size: 13px" />
+        </p:column>
+        <p:column width="60" headerText="#{properties.value('cu_pr_5_lbl_column_valor_especie')}" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{personal.valorEspecie}" styleClass="alineadoDerecha gris" style="font-size: 13px">
+            <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" />
+          </h:outputLabel>
+        </p:column>
+        <p:column width="60" headerText="#{properties.value('cu_pr_5_lbl_column_valor_efectivo')}" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{personal.valorEfectivo}" styleClass="alineadoDerecha gris" style="font-size: 13px">
+            <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" />
+          </h:outputLabel>
+        </p:column>
+        <p:column width="130" headerText="#{properties.value('cu_pr_5_lbl_column_fuente_financiera')}" style="color: white; font-size: 13px">
+          <h:selectOneMenu value="#{personal.fuenteAsociada}" id="selectFuentesInvestigador" styleClass="gris" 
+                           disabled="#{presupuestoImplemetacionProyectoFaces.soloConsulta}">  
+            <f:selectItem itemLabel="-- Seleccione --" itemValue="NOVALUE" />
+            <f:selectItems value="#{presupuestoImplemetacionProyectoFaces.listaFuentesProyectoItems}"/>
+            <p:ajax listener="#{presupuestoImplemetacionProyectoFaces.guardarFuenteSeleccionada(idFila, personal.idInvestigadorProyecto)}" update="@form" process="@this" />
+          </h:selectOneMenu>                    
+        </p:column>
+        <f:facet name="footer">  
+          #{fn:length( presupuestoImplemetacionProyectoFaces.listaInvestigadoresProyecto )} #{properties.value('general_mensaje_footer_datatable_count')}
+        </f:facet>
+      </p:dataTable>
+    </div>
+  </h:form>
+</html>
+

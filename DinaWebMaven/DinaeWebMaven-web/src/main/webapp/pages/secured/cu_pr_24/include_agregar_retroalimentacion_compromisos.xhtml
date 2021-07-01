@@ -1,0 +1,219 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <body>
+        <ui:composition 
+            template="../../../templates/plantillaPrincipal.xhtml">
+            <ui:define 
+                name="content">
+                <div class="fixed-menu">
+                    <div class="right-col">
+                        <h2>
+                            #{properties.value('cu_pr_24_lbl_datatable_agre_retor')}
+                        </h2>
+                    </div>
+                </div> 
+                <h:form id="id_include_agregar_retroalimentacion_compromisos">
+                    <h:panelGrid columns="2" 
+                                 style="width: 100%" 
+                                 rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento" >
+                        <h:outputLabel value="#{properties.value('cu_pr_25_lbl_datatable_titulo_proyec')}:" 
+                                       styleClass="gris negrilla"/>
+                        <h:outputLabel value="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.tituloProyecto}" 
+                                       styleClass="gris"/>
+                        <h:outputLabel value="#{properties.value('cu_pr_25_lbl_datatable_compromiso')}:" 
+                                       styleClass="gris negrilla"/>
+                        <h:outputLabel value="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.compromisoProyectoDTOSeleccionado.compromiso}" 
+                                       styleClass="gris"/>
+                    </h:panelGrid>
+                    <br />
+                    <h:outputLabel value="#{properties.value('cu_pr_25_lbl_datatable_comentarios')}:" 
+                                   styleClass="green negrilla"/>
+                    <h:panelGrid columns="2" 
+                                 style="width: 100%" 
+                                 rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento" >
+                        <h:outputLabel for="idcu_pr_22_subtitulo_item" 
+                                       value="#{properties.value('cu_pr_22_subtitulo_item')}:" 
+                                       styleClass="gris negrilla"/>
+                        <h:selectOneMenu styleClass="gris" 
+                                         id="idcu_pr_22_subtitulo_item" 
+                                         value="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.itemComentarioSeleccionado}" 
+                                         required="true" >  
+                            <f:selectItem itemLabel="--Todos--" 
+                                          itemValue="" />  
+                            <f:selectItems value="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.listaItemItemComentario}" 
+                                           var="_item" />  
+                        </h:selectOneMenu>
+                        <h:outputLabel for="idcu_pr_22_subtitulo_comentario" 
+                                       value="#{properties.value('cu_pr_22_subtitulo_comentario')}:" 
+                                       styleClass="gris negrilla"/>
+                        <h:panelGrid columns="1">
+                            <p:inputTextarea value="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.comentarioCompromisoProyectoSeleccionado.comentario}" 
+                                             maxlength="3000" 
+                                             required="true" 
+                                             counter="contadorcomentario" 
+                                             id="idcu_pr_22_subtitulo_comentario"
+                                             counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}" 
+                                             autoResize="true"
+                                             styleClass="textareaMaximo"  
+                                             title="#{properties.value('cu_pr_22_subtitulo_comentario')}, maximo 3000 caracteres"
+                                             cols="100" rows="5" >
+                                <f:validateLength minimum="1" 
+                                                  maximum="3000" />
+                            </p:inputTextarea>
+                            <h:outputText id="contadorcomentario" 
+                                          styleClass="gris" />
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" 
+                                   styleClass="red tamanioText11px" />
+                    <p:separator styleClass="separadorBorder" /> 
+                    <div class="centrado">
+                        <p:commandButton value="#{properties.value('cu_pr_24_lbl_btn_agregar_comentario_retroalimentacion')}" 
+                                         process="@this,idcu_pr_22_subtitulo_item,idcu_pr_22_subtitulo_comentario"
+                                         action="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.guardarComentarioCompromiso}" 
+                                         update=":id_include_agregar_retroalimentacion_compromisos" />
+                        <p:commandButton value="#{properties.value('cu_pr_22_btn_cancela_modifica')}"
+                                         rendered="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.comentarioCompromisoProyectoSeleccionado.idComentarioCompromisoProyecto != null}"
+                                         action="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.cancelarModificarComentario}" 
+                                         update=":id_include_agregar_retroalimentacion_compromisos"
+                                         ajax="false" 
+                                         immediate="true" />
+                    </div>
+                    <br />
+                    <br />
+                    <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}"  
+                                 id="idDataTableComentarios" 
+                                 var="_comentario" 
+                                 paginatorPosition="bottom" 
+                                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                                 paginator="true" 
+                                 value="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.listaComentarioCompromisoProyectoSeleccionado}" 
+                                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                                 resizableColumns="true"
+                                 rowIndexVar="idFila">
+                        <p:column width="120" 
+                                  headerText="#{properties.value('cu_pr_22_subtitulo_item')}">  
+                            #{_comentario.valorItem}
+                        </p:column>
+                        <p:column width="150" 
+                                  headerText="#{properties.value('cu_pr_2_lbl_subtitulo_fecha_comentario')}">
+                            <h:outputLabel value="#{_comentario.fechaRegistro}">
+                                <f:convertDateTime pattern="#{properties.value('general_formato_fecha_hora')}" 
+                                                   locale="es_CO" />
+                            </h:outputLabel>    
+                        </p:column>
+                        <p:column headerText="#{properties.value('cu_pr_22_subtitulo_comentario')}">  
+                            #{_comentario.comentario}
+                        </p:column>
+                        <p:column width="80" 
+                                  headerText="#{properties.value('cu_pr_22_btn_modificar')}">  
+                            <p:commandButton value="#{properties.value('cu_pr_22_btn_modificar')}"
+                                             action="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.modificarComentario( _comentario )}" 
+                                             immediate="true"
+                                             ajax="false" />
+                        </p:column>
+                                    <!--<p:column width="100" headerText="#{properties.value('cu_pr_22_datatable_comenatrio_enviar')}">  
+                                        <p:selectBooleanCheckbox value="#{_comentario.enviarComentarioCheck}" immediate="true"
+                                                                 valueChangeListener="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.selecccionarComentarioEnviar}">  
+                                        </p:selectBooleanCheckbox>
+                                    </p:column>-->
+                    </p:dataTable>
+                    <br />
+                    <h:panelGrid id="idpagrespuestaretroalimenacion" 
+                                 columns="2" style="width: 100%" 
+                                 rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento" >
+                        <h:outputLabel for="idcu_pr_24_lbl_resulltado_retroalimentacion" 
+                                       value="#{properties.value('cu_pr_24_lbl_resulltado_retroalimentacion')}:" 
+                                       styleClass="gris negrilla"/>
+                        <p:selectOneRadio styleClass="gris" id="idcu_pr_24_lbl_resulltado_retroalimentacion"                                          
+                                          value="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.compromisoProyectoDTOSeleccionado.idResultadoRetroalimentacion}" 
+                                          required="true" >                              
+                            <f:selectItems value="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.listaItemResultadoRetroalimentacion}" 
+                                           var="_item" />  
+                            <p:ajax update="idpagrespuestaretroalimenacion idcu_pr_24_lbl_btn_guardar_aceptar_cumplimiento idcu_pr_24_lbl_btn_guardar_enviar_correcciones_uni_pol" 
+                                    listener="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.handleResultadoRetroalimentacionChange}" />  
+                        </p:selectOneRadio>
+                        <h:outputLabel for="idcu_pr_24_lbl_fecha_nuevo_compromiso"
+                                       value="#{properties.value('cu_pr_24_lbl_fecha_nuevo_compromiso')}:" 
+                                       rendered="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.mostrarBtnEnviarCorreccionesUnidadPolicial}" 
+                                       styleClass="gris negrilla"/>
+                        <p:calendar pattern="#{properties.value('general_formato_fecha')}" 
+                                    locale="es" 
+                                    showOn="button" 
+                                    yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" 
+                                    showButtonPanel="true" 
+                                    navigator="true" 
+                                    rendered="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.mostrarBtnEnviarCorreccionesUnidadPolicial}" 
+                                    value="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.compromisoProyectoDTOSeleccionado.fechaNuevoCompromiso}"  
+                                    required="true"  
+                                    id="idcu_pr_24_lbl_fecha_nuevo_compromiso"/>    
+                    </h:panelGrid>
+                    <br />
+                    <p:separator styleClass="separadorBorder" /> 
+                    <div class="centrado">
+                        <p:commandButton value="#{properties.value('cu_co_4_btn_regresar_evaluar')}"
+                                         action="#{navigationFaces.redirectCuPr24RevisarCompromisoEnviadosPorJefeUnidad}" 
+                                         immediate="true" />
+                        <p:commandButton value="#{properties.value('cu_pr_24_lbl_btn_guardar_retroalimentacion')}" 
+                                         id="idcu_pr_24_lbl_btn_guardar_retroalimentacion"
+                                         action="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.guardarRetroalimentacion}"
+                                         process="@this,idpagrespuestaretroalimenacion" update="idpagrespuestaretroalimenacion" />
+                        <p:commandButton value="#{properties.value('cu_pr_24_lbl_btn_guardar_aceptar_cumplimiento')}" 
+                                         id="idcu_pr_24_lbl_btn_guardar_aceptar_cumplimiento"
+                                         disabled="#{!cuPr24RevisarCompromisoEnviadosPorJefeUnidad.mostrarBtnAceptarCumplimientoCompromiso}"                                         
+                                         oncomplete="PF('varConfirmAceptarCumplimiento').show();" 
+                                         process="@this,idpagrespuestaretroalimenacion"/>
+                        <p:commandButton value="#{properties.value('cu_pr_24_lbl_btn_guardar_enviar_correcciones_uni_pol')}" 
+                                         id="idcu_pr_24_lbl_btn_guardar_enviar_correcciones_uni_pol"
+                                         disabled="#{!cuPr24RevisarCompromisoEnviadosPorJefeUnidad.mostrarBtnEnviarCorreccionesUnidadPolicial}"                                         
+                                         oncomplete="PF('varConfirmEnviarCorreccionesUnidadPolicial').show();"
+                                         process="@this,idpagrespuestaretroalimenacion"/>
+                    </div>
+                    <br />
+                    <br />
+                </h:form>
+                <p:confirmDialog widgetVar="varConfirmAceptarCumplimiento" 
+                                 header="#{properties.value('cu_co_3_lbl_titulo_confirmacion_publicar')}" 
+                                 message="#{properties.value('cu_pr_24_lbl_aceptar_cumplimiento_msg_confirma')}" > 
+                    <h:form id="idForm_varConfirmAceptarCumplimiento">
+                        <p:outputPanel id="pgroupdialogconfirmDialogvarEnviar">
+                            <div class="centrado">
+                                <p:commandButton actionListener="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.aceptarCumplimiento}" 
+                                                 value="#{properties.value('cu_co_3_lbl_btn_si_publicar')}" 
+                                                 immediate="true"
+                                                 oncomplete="varConfirmAceptarCumplimiento.hide();" />  
+                                <p:commandButton value="#{properties.value('cu_co_3_lbl_btn_no_publicar')}" 
+                                                 onclick="varConfirmAceptarCumplimiento.hide();" type="button" />       
+                            </div>
+                        </p:outputPanel>
+                    </h:form>
+                </p:confirmDialog>
+                <p:confirmDialog widgetVar="varConfirmEnviarCorreccionesUnidadPolicial" 
+                                 header="#{properties.value('cu_co_3_lbl_titulo_confirmacion_publicar')}" 
+                                 message="#{properties.value('cu_pr_24_lbl_enviar_unidad_cumplimiento_msg_confirma')}" > 
+                    <h:form id="idForm_varConfirmEnviarCorreccionesUnidadPolicial">
+                        <p:outputPanel id="pgroupdialogconfirmDialogvarEnviar">
+                            <div class="centrado">
+                                <p:commandButton actionListener="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.enviarCorreccionesUnidadPolicial}" 
+                                                 value="#{properties.value('cu_co_3_lbl_btn_si_publicar')}" 
+                                                 immediate="true"
+                                                 oncomplete="varConfirmEnviarCorreccionesUnidadPolicial.hide();" />  
+                                <p:commandButton value="#{properties.value('cu_co_3_lbl_btn_no_publicar')}" 
+                                                 onclick="varConfirmEnviarCorreccionesUnidadPolicial.hide();" 
+                                                 type="button" />       
+                            </div>
+                        </p:outputPanel>
+                    </h:form>
+                </p:confirmDialog>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

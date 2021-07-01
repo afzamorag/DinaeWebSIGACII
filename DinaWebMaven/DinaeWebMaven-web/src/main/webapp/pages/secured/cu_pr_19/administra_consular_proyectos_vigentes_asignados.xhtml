@@ -1,0 +1,257 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <body>
+        <ui:composition 
+            template="../../../templates/plantillaPrincipal.xhtml">
+            <ui:define name="content">
+                <h:form 
+                    id="idForm_administra_consular_proyectos_vigentes_asignados">
+                    <br />
+                    <p:panel> 
+                        <div 
+                            class="fixed-menu">
+                            <div 
+                                class="right-col">
+                                <h2>
+                                    #{properties.value('cu_pr_19_lbl_titulo')}
+                                </h2>
+                            </div>
+                        </div>
+                        <br />
+                        <h:panelGrid 
+                            columns="2" 
+                            style="width: 100%" 
+                            rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                            columnClasses="panelGridColumnaLabel_50_porciento,panelGridColumnaValor_50_porciento" >
+                            <h:outputLabel 
+                                value="Pautas y contenido de apoyo para la investigación" 
+                                styleClass="gris negrilla" />
+                            <p:commandLink 
+                                ajax="false" 
+                                immediate="true">
+                                <h:outputLabel 
+                                    value="Pautas.pdf" />
+                                <p:fileDownload 
+                                    value="#{cuPr19ProyectosVigentesAsignadosFaces.downloadContentProperty}" />
+                            </p:commandLink>
+                        </h:panelGrid>
+                        <br />
+                        <div 
+                            class="centrado">
+                            <div 
+                                class="green negrilla" 
+                                align="left">
+                                <h2>
+                                    #{properties.value('cu_pr_19_lbl_titulo_tabla_institucional')}
+                                </h2>
+                            </div>
+                        </div>
+                        <div 
+                            width="100%">
+                            <p:dataTable 
+                                var="inst" 
+                                paginator="true" 
+                                style="font-size: small ; border: 1px solid black"                                         
+                                value="#{cuPr19ProyectosVigentesAsignadosFaces.proyectosInstitucionales}"
+                                rowIndexVar="idFila" 
+                                paginatorPosition="bottom" 
+                                rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                                emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                                rows="#{properties.value('general_mensaje_filas_datatable_pagina')}">
+                                <p:column 
+                                    resizable="true" 
+                                    headerText="#{properties.value('cu_pr_19_lbl_tabla_num')}" 
+                                    width="10" >  
+                                    <h:outputLabel 
+                                        value="#{idFila + 1}" />  
+                                </p:column>
+                                <p:column resizable="true" headerText="#{properties.value('cu_pr_19_lbl_tabla_codigo')}" width="120" >  
+                                    <h:outputLabel value="#{inst.codigoProyecto}" />  
+                                </p:column> 
+
+                                <p:column resizable="true" headerText="#{properties.value('cu_pr_19_lbl_tabla_titulo_proyecto')}">  
+                                    <h:outputLabel value="#{inst.tituloPropuesto}" />  
+                                </p:column> 
+                                <p:column resizable="true" headerText="#{properties.value('cu_pr_19_lbl_tabla_fecha_actualiza')}" width="120">  
+                                    <h:outputLabel value="#{inst.fechaActualizacion}"> 
+                                        <f:convertDateTime pattern="#{properties.value('general_formato_fecha_hora')}" locale="es_CO" />
+                                    </h:outputLabel>   
+                                </p:column> 
+
+                                <p:column resizable="true" headerText="#{properties.value('cu_pr_19_lbl_tabla_compromisos')}">  
+                                    <h:panelGroup>
+                                        <p:dataTable var="comp" style="width: 100%"
+                                                     value="#{inst.compromisos}"                                         
+                                                     rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                                                     emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                                                     rows="#{properties.value('general_mensaje_filas_datatable_pagina')}">  
+                                            <p:column resizable="true" headerText="#{properties.value('cu_pr_19_lbl_tabla_compromisos_compromiso')}">  
+
+                                                <!-- Informe final -->
+                                                <p:commandLink immediate="true" style="#{cuPr19ProyectosVigentesAsignadosFaces.validarLinkHabilitado( comp ) ? 'color: #FF0000;' : ''}" 
+                                                               disabled="#{cuPr19ProyectosVigentesAsignadosFaces.validarLinkHabilitado( comp )}"
+                                                               value="#{comp.compromiso}"
+                                                               rendered="#{comp.tipoInforme == 'F' and comp.muestraLink}"
+                                                               action="#{cuPr19ProyectosVigentesAsignadosFaces.administrarCompromiso('P_INSTITUCIONAL', comp, inst )}"/>                                          
+
+                                                <!-- Informe de avance -->
+                                                <p:commandLink immediate="true" style="#{cuPr19ProyectosVigentesAsignadosFaces.validarLinkHabilitado( comp ) ? 'color: #FF0000;' : ''}" 
+                                                               disabled="#{cuPr19ProyectosVigentesAsignadosFaces.validarLinkHabilitado( comp )}"
+                                                               value="#{comp.compromiso}" 
+                                                               rendered="#{comp.tipoInforme == 'A' and comp.muestraLink}"
+                                                               action="#{cuPr19ProyectosVigentesAsignadosFaces.administrarCompromiso('P_INSTITUCIONAL', comp, inst )}" />  
+
+                                                <!-- Formulacion -->
+                                                <p:commandLink immediate="true" style="#{cuPr19ProyectosVigentesAsignadosFaces.validarLinkHabilitado( comp ) ? 'color: #FF0000;' : ''}" 
+                                                               disabled="#{cuPr19ProyectosVigentesAsignadosFaces.validarLinkHabilitado( comp )}"
+                                                               value="#{comp.compromiso}" 
+                                                               rendered="#{comp.tipoInforme == 'N/A' and comp.muestraLink}"
+                                                               action="#{cuPr19ProyectosVigentesAsignadosFaces.administrarCompromiso('P_INSTITUCIONAL', comp, inst )}"  />  
+
+                                                <h:outputLabel value="#{comp.compromiso}" rendered="#{!comp.muestraLink}" style="color:#8b8b89" />
+                                            </p:column> 
+
+                                            <p:column resizable="true" headerText="#{properties.value('cu_pr_19_lbl_tabla_compromisos_estado')}">  
+                                                <h:outputLabel value="#{comp.estado}" style="#{cuPr19ProyectosVigentesAsignadosFaces.validarLinkHabilitado( comp ) ? 'color: #FF0000; opacity: 0.35;' : 'color: #8b8b89;'}" />  
+                                            </p:column> 
+
+                                            <p:column resizable="true" headerText="#{properties.value('cu_pr_19_lbl_tabla_compromisos_fecha_limite')}">  
+                                                <h:outputLabel value="#{comp.fecha}" style="#{cuPr19ProyectosVigentesAsignadosFaces.validarLinkHabilitado( comp ) ? 'color: #FF0000; opacity: 0.35;' : 'color: #8b8b89;'}">
+                                                    <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+                                                </h:outputLabel>  
+                                            </p:column> 
+
+                                            <p:column resizable="true" headerText="#{properties.value('cu_pr_19_lbl_tabla_compromisos_comentarios')}">  
+                                                <p:commandLink value="#{properties.value('cu_pr_19_lbl_link_ver_comentarios')}" 
+                                                               action="#{cuPr19ProyectosVigentesAsignadosFaces.verComentariosCompromisoProyecto( comp )}"   />  
+                                            </p:column> 
+
+                                            <f:facet name="footer">  
+                                                <p:commandLink immediate="true" action="#{cuPr1ProyectoFaces.initReturnCU_Desde_CU_PR_19_Financiacion( inst.id )}" 
+                                                               value="#{properties.value('cu_pr_19_lbl_link_actualizar_proyecto')}"
+                                                               rendered="#{inst.mostrarLinkActualizarProyecto}" />                                          
+                                                <h:outputLabel value="  |  " />
+                                                <p:commandLink immediate="true" action="#{cuPr6ConsultarDetalleProyectoInvestigacion.initReturnCU_Desde_CU_PR_19( inst.id )}" value="#{properties.value('cu_pr_19_lbl_link_ver_proyecto')}" />                                                 
+                                            </f:facet>                                        
+
+                                        </p:dataTable>                                    
+
+                                    </h:panelGroup>
+
+                                </p:column> 
+
+                            </p:dataTable>
+                        </div>
+                    </p:panel>
+
+                    <br />
+
+                    <!--/div -->
+                    <p:panel>
+                        <div class="centrado">
+                            <div class="green negrilla" align="left">
+                                <h2>
+                                    #{properties.value('cu_pr_19_lbl_titulo_tabla_finaciacion')}
+                                </h2>
+                            </div>
+                            <p:dataTable var="fin" paginator="true" 
+                                         value="#{cuPr19ProyectosVigentesAsignadosFaces.proyectosFinanciados}"
+                                         rowIndexVar="idFila" 
+                                         paginatorPosition="bottom" 
+                                         rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                                         emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                                         rows="#{properties.value('general_mensaje_filas_datatable_pagina')}"
+                                         style="font-size: small; border: 1px solid black">  
+
+                                <p:column headerText="#{properties.value('cu_pr_19_lbl_tabla_num')}" width="10">  
+                                    <h:outputLabel value="#{idFila + 1}" />  
+                                </p:column> 
+
+                                <p:column headerText="#{properties.value('cu_pr_19_lbl_tabla_codigo')}" width="120">  
+                                    <h:outputLabel value="#{fin.codigoProyecto}" />  
+                                </p:column> 
+
+                                <p:column headerText="#{properties.value('cu_pr_19_lbl_tabla_titulo_proyecto')}">  
+                                    <h:outputLabel value="#{fin.tituloPropuesto}" />  
+                                </p:column> 
+
+                                <p:column headerText="#{properties.value('cu_pr_19_lbl_tabla_fecha_actualiza')}" width="120">  
+                                    <h:outputLabel value="#{fin.fechaActualizacion}">
+                                        <f:convertDateTime pattern="#{properties.value('general_formato_fecha_hora')}" locale="es_CO" />
+                                    </h:outputLabel>  
+                                </p:column> 
+
+                                <p:column headerText="#{properties.value('cu_pr_19_lbl_tabla_compromisos')}">  
+                                    <h:panelGroup>
+                                        <p:dataTable var="comp" 
+                                                     value="#{fin.compromisos}"                                         
+                                                     rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                                                     emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                                                     rows="#{properties.value('general_mensaje_filas_datatable_pagina')}">  
+                                            <p:column headerText="#{properties.value('cu_pr_19_lbl_tabla_compromisos_compromiso')}">  
+
+                                                <!-- Informe final -->
+                                                <p:commandLink immediate="true" style="#{cuPr19ProyectosVigentesAsignadosFaces.validarLinkHabilitado( comp ) ? 'color: #FF0000;' : ''}" 
+                                                               disabled="#{cuPr19ProyectosVigentesAsignadosFaces.validarLinkHabilitado( comp )}"
+                                                               value="#{comp.compromiso}" 
+                                                               rendered="#{comp.tipoInforme == 'F' and comp.muestraLink}"                                                       
+                                                               action="#{cuPr19ProyectosVigentesAsignadosFaces.administrarCompromiso( 'P_CONVOCATORIA', comp, fin )}"/>  
+
+                                                <!-- Informe avance -->
+                                                <p:commandLink immediate="true" style="#{cuPr19ProyectosVigentesAsignadosFaces.validarLinkHabilitado( comp ) ? 'color: #FF0000;' : ''}" 
+                                                               disabled="#{cuPr19ProyectosVigentesAsignadosFaces.validarLinkHabilitado( comp )}"
+                                                               value="#{comp.compromiso}" 
+                                                               rendered="#{comp.tipoInforme == 'A' and comp.muestraLink}"
+                                                               action="#{cuPr19ProyectosVigentesAsignadosFaces.administrarCompromiso( 'P_CONVOCATORIA', comp, fin )}" />  
+
+                                                <!-- Formulacion -->
+                                                <p:commandLink immediate="true" style="#{cuPr19ProyectosVigentesAsignadosFaces.validarLinkHabilitado( comp ) ? 'color: #FF0000;' : ''}" 
+                                                               disabled="#{cuPr19ProyectosVigentesAsignadosFaces.validarLinkHabilitado( comp )}"
+                                                               value="#{comp.compromiso}" 
+                                                               rendered="#{comp.tipoInforme == 'N/A' and comp.muestraLink}"
+                                                               action="#{cuPr19ProyectosVigentesAsignadosFaces.administrarCompromiso( 'P_CONVOCATORIA', comp, fin )}"/>  
+
+                                                <h:outputLabel value="#{comp.compromiso}" rendered="#{!comp.muestraLink}" style="color:#8b8b89" />
+                                            </p:column> 
+
+                                            <p:column headerText="#{properties.value('cu_pr_19_lbl_tabla_compromisos_estado')}">  
+                                                <h:outputLabel value="#{comp.estado}" style="#{cuPr19ProyectosVigentesAsignadosFaces.validarLinkHabilitado( comp ) ? 'color: #FF0000; opacity: 0.35;' : 'color: #8b8b89;'}"/>  
+                                            </p:column> 
+
+                                            <p:column headerText="#{properties.value('cu_pr_19_lbl_tabla_compromisos_fecha_limite')}">  
+                                                <h:outputLabel value="#{comp.fecha}" style="#{cuPr19ProyectosVigentesAsignadosFaces.validarLinkHabilitado( comp ) ? 'color: #FF0000; opacity: 0.35;' : 'color: #8b8b89;'}">
+                                                    <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+                                                </h:outputLabel>  
+                                            </p:column> 
+
+                                            <p:column headerText="#{properties.value('cu_pr_19_lbl_tabla_compromisos_comentarios')}">  
+                                                <p:commandLink value="#{properties.value('cu_pr_19_lbl_link_ver_comentarios')}" 
+                                                               action="#{cuPr19ProyectosVigentesAsignadosFaces.verComentariosCompromisoProyecto( comp )}"   />  
+                                            </p:column> 
+
+                                            <f:facet name="footer">  
+                                                <p:commandLink immediate="true" action="#{cuPr1ProyectoFaces.initReturnCU_Desde_CU_PR_19_Financiacion( fin.id )}" 
+                                                               value="#{properties.value('cu_pr_19_lbl_link_actualizar_proyecto')}"
+                                                               rendered="#{fin.mostrarLinkActualizarProyecto}" />  
+                                                <h:outputLabel value="  |  " />
+                                                <p:commandLink immediate="true" action="#{cuPr6ConsultarDetalleProyectoInvestigacion.initReturnCU_Desde_CU_PR_19( fin.id )}" value="#{properties.value('cu_pr_19_lbl_link_ver_proyecto')}" />                                                  
+                                            </f:facet> 
+
+                                        </p:dataTable>
+
+                                    </h:panelGroup>
+                                </p:column> 
+                            </p:dataTable>
+                        </div>
+                    </p:panel>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <br />
+    <h:outputLabel value="#{properties.value('cu_ne_6_lbl_unidad_policial')}" styleClass="gris negrilla" />
+    <h:selectOneMenu styleClass="include_listado_propuesta" id="idListaSelectItemUnidadPoli" class="gris" 
+                     value="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.idUnidadPolicialSeleccionado}" >  
+        <f:selectItem itemLabel="--Todos--" itemValue="" />  
+        <f:selectItems value="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.listaUnidadPolicialSelectItem}" var="_item" />  
+        <p:ajax update="idlistaCompromisoProyectoDTO" listener="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.handleUnidadPolicialSeleccionadaChange}" />  
+    </h:selectOneMenu>
+    <br />
+    <p:dataTable 
+        emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+        var="_comprimiso" 
+        value="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.listaCompromisoProyectoDTO}"
+        paginator="true" 
+        rowIndexVar="idFila" 
+        paginatorPosition="bottom" 
+        id="idlistaCompromisoProyectoDTO"
+        rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}" 
+        selectionMode="single"
+        selection="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.compromisoProyectoDTOSeleccionadoVista}" 
+        rows="10"
+        paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+        rowsPerPageTemplate="25,50,100"
+        style="font-size: smaller">
+
+        <p:ajax event="rowSelect" listener="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.seleccionComprimiso}" />  
+        <p:ajax event="rowUnselect" listener="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.noSeleccionCompromiso}" />  
+
+        <p:column width="3%" headerText="#{properties.value('cu_pr_25_lbl_datatable_num')}">  
+            #{idFila + 1}               
+        </p:column>
+
+        <p:column width="17%" headerText="#{properties.value('cu_pr_24_lbl_datatable_unidad_poli')}">  
+            #{_comprimiso.nombreUnidadPolicial}                  
+        </p:column>
+
+        <p:column width="12%" headerText="#{properties.value('cu_pr_25_lbl_datatable_codigo_proyec')}">  
+            #{_comprimiso.codigoProyecto}                  
+        </p:column>
+
+        <p:column width="30%" headerText="#{properties.value('cu_pr_25_lbl_datatable_titulo_proyec')}" >  
+            #{_comprimiso.tituloProyecto}
+        </p:column>
+
+        <p:column width="7%" headerText="#{properties.value('cu_pr_25_lbl_datatable_compromiso')}"> 
+            #{_comprimiso.compromiso}
+        </p:column>
+
+        <p:column width="8%" headerText="#{properties.value('cu_pr_25_lbl_datatable_fecha_limite')}">
+            <h:outputText value="#{_comprimiso.fechaLimite}">
+                <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+            </h:outputText>    
+        </p:column>
+
+        <p:column width="8%" headerText="#{properties.value('cu_pr_24_lbl_datatable_fecha_presentacion')}">
+            <h:outputText value="#{_comprimiso.fechaPresentacion}">
+                <f:convertDateTime pattern="#{properties.value('general_formato_fecha_hora')}" locale="es_CO" />
+            </h:outputText>    
+        </p:column>
+
+        <p:column width="8%"  headerText="#{properties.value('cu_pr_24_lbl_datatable_estado')}">  
+            #{_comprimiso.nombreEstado}
+        </p:column>
+
+        <p:column width="7%"  headerText="#{properties.value('cu_pr_24_lbl_datatable_revision')}">  
+            <p:commandLink value="#{properties.value('cu_pr_24_lbl_datatable_agre_retor')}" process="@this,idlistaCompromisoProyectoDTO"
+                           action="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.seleccionComprimisoProyecto( _comprimiso )}" />
+        </p:column>
+        <f:facet name="footer">  
+            #{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.numeroRegistroCompromisos} #{properties.value('general_mensaje_footer_datatable_count')}
+        </f:facet>
+    </p:dataTable>
+
+</html>

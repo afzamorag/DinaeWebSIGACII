@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <h:body>
+        <div class="body">
+            <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+                <ui:define name="content">
+                    <h:form id="idFormularioGlobal">
+                        <div class="fixed-menu">
+                            <div class="right-col">
+                                <h2 style="font: verdana;">
+                                    #{properties.value('cu_pr_10_lbl_titulo')}
+                                </h2>
+                            </div>
+                        </div>
+                        <h:panelGrid columns="2" style="width:100%;" columnClasses="panelGridColumnaValor_47_porciento, panelGridColumnaLabel_53_porciento">
+
+                            <h:panelGrid columns="2">
+                                <h:outputText value="#{properties.value('cu_pr_10_lbl_titulo_proyecto')}: " styleClass="gris negrilla" style="text-align: right;" />
+                                <h:outputText value="#{cuPr10RegistroInformeFinal.proyecto.tituloPropuesto}" styleClass="gris" style="text-align: left"/>
+                            </h:panelGrid>
+
+
+                            <h:panelGrid columns="2">
+                                <h:panelGrid columns="2">
+                                    <h:outputLabel value="*" style="color: red; font-weight: bold" />
+                                    <h:outputText value="#{properties.value('cu_pr_10_lbl_periodo_informe')}: " styleClass="gris negrilla" style="text-align: right;" />
+                                </h:panelGrid>
+                                <h:panelGrid columns="3">
+                                    <h:outputText value="#{cuPr10RegistroInformeFinal.informeAvance.fechaInicio}" styleClass="gris" style="text-align: right">                                                             
+                                        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+                                    </h:outputText> 
+                                    <h:outputText style="text-align: center" value="-" />
+                                    <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es" style="text-align: left"
+                                                valueChangeListener="#{cuPr10RegistroInformeFinal.cambioFechaFinChangeEvent}"
+                                                yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                                                navigator="true" required="true" value="#{cuPr10RegistroInformeFinal.fechaFinalizacion}" 
+                                                id="informeAvanceFinalFechaFinal" showOn="button"> 
+                                        <p:ajax event="dateSelect"  listener="#{cuPr10RegistroInformeFinal.fechaFinalizacion}" />
+                                    </p:calendar>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </h:form>
+                    <br/>
+                    <br/>
+                    <p:tabView id="tabWrapper" activeIndex="#{cuPr10RegistroInformeFinal.activeTabIndex}">
+
+                        <p:ajax event="tabChange" listener="#{cuPr10RegistroInformeFinal.onTabChange}" update=":tabWrapper"/> 
+
+                        <p:tab id="tabInfoBasicas" title="#{properties.value('cu_pr_10_lbl_tab_info_basica')}">
+                            <h:panelGrid columns="1" width="100%">                    
+                                <ui:include src="include_informacion_basica.xhtml" />
+                                <div class="centrado">
+                                    <p:commandLink value="#{properties.value('cu_pr_10_lbl_tab1_link_ingresar_modificar_informe')}" 
+                                                   immediate="true"
+                                                   action="#{cuPr10RegistroInformeFinal.invocarCuPr7}">  
+                                    </p:commandLink>
+                                </div>
+                            </h:panelGrid>
+                            <br />
+                            <p:separator styleClass="separadorBorder" /> 
+
+                            <h:form id="formidBtnGuardarInformacionBasica">
+                                <div class="centrado">                                    
+
+                                    <p:commandButton value="#{properties.value('cu_pr_3_lbl_btn_regresar')}" id="idBtnRegresarProyecto"
+                                                     action="#{cuPr10RegistroInformeFinal.regresarCuPr19()}" immediate="true"/>
+
+
+                                    <p:commandButton value="#{properties.value('cu_pr_10_lbl_btn_guardar')}"
+                                                     action="#{cuPr10RegistroInformeFinal.guardar(0)}" />
+
+                                    <p:commandButton actionListener="#{cuPr10RegistroInformeFinal.enviarCompromiso}"
+                                                     id="btnGuardarInfoBasica"
+                                                     value="#{properties.value('cu_pr_10_lbl_btn_enviar')}"
+                                                     immediate="true">
+                                        <p:confirm 
+                                            header="#{bundle['commons.cfmdlg.header']}" 
+                                            message="#{bundle['commons.cfmdlg.header']}" 
+                                            icon="ui-icon-alert" />
+                                    </p:commandButton>
+
+                                </div>
+                            </h:form>
+                        </p:tab>
+                        <p:tab id="tabRegistrarArchivo" title="#{properties.value('cu_pr_10_lbl_tab_registar_archivo')}">
+                            <ui:include src="include_registrar_archivo.xhtml" >
+                            </ui:include>
+                        </p:tab>
+                        <p:tab id="tabResultadoInvestiga" title="#{properties.value('cu_pr_10_lbl_tab_resultado_investiga')}">
+                            <ui:include src="include_resultado_investigacion.xhtml" >
+                            </ui:include>    
+                        </p:tab>
+                        <p:tab id="tabResenaInvestiga" title="#{properties.value('cu_pr_10_lbl_tab_resena_investiga')}">
+                            <ui:include src="include_resena_investigacion.xhtml" >
+                            </ui:include>
+                        </p:tab>                                   
+                    </p:tabView>
+
+                    <p:confirmDialog widgetVar="varConfirmEnviarCompromisoFinal" header="#{properties.value('cu_co_3_lbl_titulo_confirmacion_publicar')}" 
+                                     message="#{properties.value('cu_pr_10_lbl_confirmacion_mensaje_enviar_compromiso_informe')}" > 
+
+                        <h:form id="idForm_varConfirmPublicar">
+
+                            <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmEnviarCompromisoFinal">
+                                <div class="centrado">
+
+                                    <p:commandButton actionListener="#{cuPr10RegistroInformeFinal.enviarCompromiso}" 
+                                                     value="#{properties.value('cu_co_3_lbl_btn_si_publicar')}" immediate="true"
+                                                     oncomplete="varConfirmEnviarCompromisoFinal.hide();" />  
+
+                                    <p:commandButton value="#{properties.value('cu_co_3_lbl_btn_no_publicar')}" 
+                                                     onclick="varConfirmEnviarCompromisoFinal.hide();" type="button" />       
+                                </div>
+                            </p:outputPanel>
+
+                        </h:form>
+                    </p:confirmDialog>
+                </ui:define>
+            </ui:composition>
+        </div>
+    </h:body>
+</html>

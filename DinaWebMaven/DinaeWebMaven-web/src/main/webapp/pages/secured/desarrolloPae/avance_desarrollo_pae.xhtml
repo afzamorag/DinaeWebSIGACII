@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    template="/templates/plantillaPrincipal.xhtml">
+    <ui:define
+        name="content">
+        <p:panel 
+            id="main"
+            styleClass="ui-fluid">
+            <h:form
+                id="frmList"
+                prependId="false"
+                rendered="#{!seguimientoDesarrolloPAEController.renderObject}"> 
+                <h:outputText
+                    id="opttitlefind"
+                    value="#{bundle['siedueventoescuela.title']}"/>
+                <p:separator />
+                <p:panel
+                    id="pnlgeneral">
+                    <p:panelGrid
+                        id="pnlfiltro"
+                        layout="grid" 
+                        columns="2"
+                        columnClasses="ui-grid-col-2,ui-grid-col-10" 
+                        styleClass="ui-panelgrid-blank">
+                        <!-- vigencia -->
+                        <p:outputLabel
+                            for="fltvigencia"
+                            value="#{bundle['vigencia']}"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu                             
+                                value="#{seguimientoDesarrolloPAEController.filtro.vigencia}"               
+                                required="true"
+                                id="fltvigencia">
+                                <f:selectItem 
+                                    noSelectionOption="true"/>
+                                <f:selectItems 
+                                    value="#{seguimientoDesarrolloPAEController.vigencias}" 
+                                    var="vigencia" 
+                                    itemLabel="#{vigencia.vigencia}" 
+                                    itemValue="#{vigencia.vigencia}"/>
+                            </p:selectOneMenu>
+                            <p:message
+                                for="fltvigencia"/>
+                        </h:panelGroup>
+                        <p:outputLabel   
+                            for="fltescuela"
+                            value="#{bundle['escuela']}"
+                            rendered="#{seguimientoDesarrolloPAEController.validaRol}"/>                        
+                        <p:selectOneMenu                            
+                            value="#{seguimientoDesarrolloPAEController.filtro.escuela}"               
+                            required="false" 
+                            id="fltescuela"
+                            filter="true"
+                            filterMatchMode="contains"
+                            rendered="#{seguimientoDesarrolloPAEController.validaRol}">
+                            <f:selectItem 
+                                noSelectionOption="true"/>
+                            <f:selectItems 
+                                value="#{seguimientoDesarrolloPAEController.escuelas}" 
+                                var="escuela" 
+                                itemLabel="#{escuela.descripcionDependencia}" 
+                                itemValue="#{escuela.consecutivo}"/>
+                        </p:selectOneMenu>                             
+                    </p:panelGrid>
+                    <f:facet
+                        name="footer">
+                        <p:panelGrid
+                            columns="2"
+                            layout="grid" 
+                            columnClasses="ui-grid-col-2, ui-grid-col-10" 
+                            styleClass="ui-panelgrid-blank">                            
+                            <p:commandButton 
+                                id="btnCreate"
+                                value="#{bundle['commons.btn.find']}"
+                                title="#{bundle['commons.btn.find']}"
+                                icon="ui-icon-search"      
+                                process="@this pnlfiltro"
+                                actionListener="#{seguimientoDesarrolloPAEController.findCapacitaciones}"
+                                update=":main"
+                                style="border: none"/>             
+                        </p:panelGrid>
+                    </f:facet>
+                </p:panel>               
+            </h:form>
+            <h:form
+                id="frmDetail"
+                prependId="false"
+                rendered="#{seguimientoDesarrolloPAEController.renderObject}">
+                <h:outputText
+                    value="#{bundle['pae.title.seguimiento']} #{seguimientoDesarrolloPAEController.unidad}"
+                    style="text-align: center; width: 100%"
+                    styleClass="negrilla"/>
+                <p:tabView 
+                    dynamic="true" 
+                    effect="fold"
+                    cache="false">
+                    <p:tab 
+                        title="#{bundle['capacitacion.seguimiento.general']}"
+                        rendered="#{seguimientoDesarrolloPAEController.validaRol}">
+                        <p:panelGrid
+                            id="pnlgraphgeneralYear"
+                            layout="grid" 
+                            columns="1"                                        
+                            style="width:100%; margin-bottom:10px; margin-top:10px;">
+                            <f:facet
+                                name="header">
+                                DESARROLLO PLAN ANUAL DE CAPACITACIÓN PAE - ESTRATEGIAS
+                            </f:facet>
+                            <p:chart 
+                                id="graphGenEstrategia"
+                                type="bar" 
+                                model="#{seguimientoDesarrolloPAEController.barModelGeneral}" 
+                                rendered="#{seguimientoDesarrolloPAEController.renderObject}"
+                                style="font-size: smaller; height: 400px; margin-top: 10px"
+                                responsive="true"/>                            
+                        </p:panelGrid>
+                        <p:dataTable 
+                            id="dtlistGeneralYearDinae"
+                            value="#{seguimientoDesarrolloPAEController.listAvanceMetaGeneral}"
+                            var="record"
+                            paginator="true" 
+                            rows="1000"     
+                            reflow="true"
+                            style="font-size: x-small; margin-bottom:10px; margin-top:10px;"
+                            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                            paginatorPosition="bottom"
+                            rowsPerPageTemplate="10, 100, 500"
+                            styleClass="TABLE_DASHBOARD"
+                            rendered="#{seguimientoDesarrolloPAEController.renderObject}">
+                            <f:facet
+                                name="header">
+                                DESARROLLO PLAN ANUAL DE EDUCACIÓN - ESTRATEGIAS
+                            </f:facet>
+                            <p:columnGroup 
+                                type="header">
+                                <p:row>                                    
+                                    <p:column 
+                                        rowspan="3" 
+                                        headerText="#{bundle['capacitacion.estrategia']}"
+                                        style="width: 50%"
+                                        sortBy="#{record.estrategia}"                        
+                                        filterBy="#{record.estrategia}"
+                                        filterMatchMode="contains"/>                            
+                                </p:row>
+                                <p:row>                                    
+                                    <p:column 
+                                        colspan="4" 
+                                        headerText="#{bundle['capacitacion.programacion.anual']}"/> 
+                                </p:row>
+                                <p:row>
+                                    <p:column headerText="#{bundle['capacitacion.programado']}"/>
+                                    <p:column headerText="#{bundle['capacitacion.ejecucion']}"/>
+                                    <p:column headerText="#{bundle['capacitacion.faltante']}"/>
+                                    <p:column headerText="#{bundle['capacitacion.avance']}"/>                                
+                                </p:row>                                        
+                            </p:columnGroup>                                 
+                            <p:column>
+                                <h:outputText 
+                                    value="#{record.estrategia}"/>
+                            </p:column>
+                            <p:column 
+                                style="text-align:center">
+                                <h:outputText 
+                                    value="#{record.meta}"/>
+                            </p:column>
+                            <p:column 
+                                style="text-align:center">
+                                <h:outputText 
+                                    value="#{record.total}"/>
+                            </p:column>
+                            <p:column 
+                                style="text-align:center">
+                                <h:outputText 
+                                    value="#{record.meta - record.total}"/>
+                            </p:column>
+                            <p:column                                 
+                                style="text-align:center" 
+                                styleClass="#{seguimientoDesarrolloPAEController.generalAvance(record)}">
+                                <h:outputText
+                                    value="#{seguimientoDesarrolloPAEController.onCalculateAVG(record)}%"/>
+                            </p:column>
+                            <p:columnGroup type="footer">
+                                <p:row>
+                                    <p:column 
+                                        colspan="1" 
+                                        style="text-align:center"
+                                        footerText="Total:"> 
+                                    </p:column>
+                                    <p:column
+                                        colspan="1" 
+                                        style="text-align:center"                                    
+                                        footerText="#{seguimientoDesarrolloPAEController.metaGeneralDinae}">                                        
+                                    </p:column>
+                                    <p:column   
+                                        colspan="1" 
+                                        style="text-align:center"    
+                                        footerText="#{seguimientoDesarrolloPAEController.totalGeneralDinae}">                                        
+                                    </p:column>
+                                    <p:column   
+                                        colspan="1" 
+                                        style="text-align:center"    
+                                        footerText="#{seguimientoDesarrolloPAEController.metaGeneralDinae - seguimientoDesarrolloPAEController.totalGeneralDinae}">                                        
+                                    </p:column>
+                                    <p:column
+                                        colspan="1" 
+                                        style="text-align:center" 
+                                        footerText="#{seguimientoDesarrolloPAEController.avanceGeneralValueDinae}%"
+                                        styleClass="#{seguimientoDesarrolloPAEController.balance(seguimientoDesarrolloPAEController.avanceGeneralValueDinae)}">                                                                 
+                                    </p:column>
+                                </p:row> 
+                            </p:columnGroup>
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab 
+                        title="#{bundle['pae.title.seguimiento.anual']}">
+                        <p:panelGrid
+                            id="pnlgraphgeneral"
+                            layout="grid" 
+                            columns="1"                                        
+                            style="width:100%; margin-bottom:10px; margin-top:10px;">
+                            <f:facet
+                                name="header">
+                                DESARROLLO PLAN ANUAL DE CAPACITACIÓN PAE - ESTRATEGIAS
+                            </f:facet>
+                            <p:chart 
+                                id="graph"
+                                type="bar" 
+                                model="#{seguimientoDesarrolloPAEController.barModel}" 
+                                rendered="#{seguimientoDesarrolloPAEController.renderObject}"
+                                style="font-size: smaller; height: 400px; margin-top: 10px"
+                                responsive="true"/>                            
+                        </p:panelGrid>
+                        <p:dataTable 
+                            id="dtlistGeneralYear"
+                            value="#{seguimientoDesarrolloPAEController.listAvanceGeneralAnio}"
+                            var="record"
+                            paginator="true" 
+                            rows="1000"     
+                            reflow="true"
+                            style="font-size: x-small; margin-bottom:10px; margin-top:10px;"
+                            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                            paginatorPosition="bottom"
+                            rowsPerPageTemplate="10, 100, 500"
+                            styleClass="TABLE_DASHBOARD"
+                            rendered="#{seguimientoDesarrolloPAEController.renderObject}">
+                            <f:facet
+                                name="header">
+                                DESARROLLO PLAN ANUAL DE EDUCACIÓN - ESTRATEGIAS
+                            </f:facet>
+                            <p:columnGroup 
+                                type="header">
+                                <p:row>
+                                    <p:column 
+                                        rowspan="3" 
+                                        headerText="#{bundle['capacitacion.escuela']}" 
+                                        style="width: 10%"
+                                        sortBy="#{record.escuela}"
+                                        filterBy="#{record.escuela}"
+                                        filterMatchMode="contains"/>
+                                    <p:column 
+                                        rowspan="3" 
+                                        headerText="#{bundle['capacitacion.estrategia']}"
+                                        style="width: 30%"
+                                        sortBy="#{record.estrategia}"                        
+                                        filterBy="#{record.estrategia}"
+                                        filterMatchMode="contains"/>                            
+                                </p:row>
+                                <p:row>                                    
+                                    <p:column 
+                                        colspan="3" 
+                                        headerText="#{bundle['capacitacion.programacion.anual']}"/> 
+                                </p:row>
+                                <p:row>
+                                    <p:column headerText="#{bundle['capacitacion.programado']}"/>
+                                    <p:column headerText="#{bundle['capacitacion.ejecucion']}"/>                                   
+                                    <p:column headerText="#{bundle['capacitacion.avance']}"/>                                
+                                </p:row>                                        
+                            </p:columnGroup>     
+                            <p:column>
+                                <h:outputText 
+                                    value="#{record.escuela}"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText 
+                                    value="#{record.estrategia}"/>
+                            </p:column>
+                            <p:column 
+                                style="text-align:center" 
+                                headerText="#{bundle['capacitacion.meta.sigla']}">
+                                <h:outputText 
+                                    value="#{record.meta}"/>
+                            </p:column>
+                            <p:column 
+                                style="text-align:center" 
+                                headerText="#{bundle['capacitacion.total']}">
+                                <h:outputText 
+                                    value="#{record.total}"/>
+                            </p:column>
+                            <p:column                                 
+                                style="text-align:center"                                                                        
+                                headerText="#{bundle['capacitacion.avance']}"
+                                styleClass="#{seguimientoDesarrolloPAEController.generalAvance(record)}">
+                                <h:outputText
+                                    value="#{seguimientoDesarrolloPAEController.onCalculateAVG(record)}%"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab 
+                        title="#{bundle['pae.title.seguimiento.trimestre']}">                                     
+                        <p:panelGrid
+                            id="pnlgraph"
+                            layout="grid" 
+                            columns="2"
+                            columnClasses="left,right" 
+                            style="width:100%;">
+                            <f:facet
+                                name="header">
+                                SEGUMIENTO TRIMESTRAL
+                            </f:facet>
+                            <p:chart
+                                id="graphTrimI"
+                                type="bar" 
+                                model="#{seguimientoDesarrolloPAEController.barModelTrimI}" 
+                                style="width:100%;" />
+                            <p:chart
+                                id="graphTrimII"
+                                type="bar" 
+                                model="#{seguimientoDesarrolloPAEController.barModelTrimII}" 
+                                style="width:100%;" />
+                            <p:chart
+                                id="graphTrimIII"
+                                type="bar" 
+                                model="#{seguimientoDesarrolloPAEController.barModelTrimIII}" 
+                                style="width:100%;" />
+                            <p:chart
+                                id="graphTrimIV"
+                                type="bar" 
+                                model="#{seguimientoDesarrolloPAEController.barModelTrimIV}" 
+                                style="width:100%;" />
+                        </p:panelGrid>
+                        <p:dataTable 
+                            id="dtlistGeneral"
+                            value="#{seguimientoDesarrolloPAEController.listAvanceGeneral}"
+                            var="record"
+                            paginator="true" 
+                            rows="1000"     
+                            reflow="true"
+                            style="font-size: x-small; margin-bottom:10px; margin-top:10px;"
+                            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                            paginatorPosition="bottom"
+                            rowsPerPageTemplate="10, 100, 500"
+                            styleClass="TABLE_DASHBOARD"
+                            rendered="#{seguimientoDesarrolloPAEController.renderObject}"> 
+                            <f:facet
+                                name="header">
+                                Desarrollo Plan Anual de Capacitación PAE - Estrategias
+                            </f:facet>
+                            <p:columnGroup 
+                                type="header">
+                                <p:row>
+                                    <p:column 
+                                        rowspan="3" 
+                                        headerText="#{bundle['capacitacion.escuela']}" 
+                                        style="width: 10%"
+                                        sortBy="#{record.escuela}"
+                                        filterBy="#{record.escuela}"
+                                        filterMatchMode="contains"/>
+                                    <p:column 
+                                        rowspan="3" 
+                                        headerText="#{bundle['capacitacion.estrategia']}"
+                                        style="width: 30%"
+                                        sortBy="#{record.estrategia}"                        
+                                        filterBy="#{record.estrategia}"
+                                        filterMatchMode="contains"/>                            
+                                </p:row>
+                                <p:row>
+                                    <p:column 
+                                        colspan="2" 
+                                        headerText="#{bundle['capacitacion.trimestreT1']}" />
+                                    <p:column 
+                                        colspan="2" 
+                                        headerText="#{bundle['capacitacion.trimestreT2']}" />
+                                    <p:column 
+                                        colspan="2" 
+                                        headerText="#{bundle['capacitacion.trimestreT3']}" />
+                                    <p:column 
+                                        colspan="2" 
+                                        headerText="#{bundle['capacitacion.trimestreT4']}" />
+                                    <p:column 
+                                        colspan="3" 
+                                        headerText="#{bundle['capacitacion.ejecucion']}"/> 
+                                </p:row>
+                                <p:row>
+                                    <p:column headerText="#{bundle['capacitacion.programado.sigla']}"/>
+                                    <p:column headerText="#{bundle['capacitacion.ejecutado.sigla']}"/>
+                                    <p:column headerText="#{bundle['capacitacion.programado.sigla']}"/>
+                                    <p:column headerText="#{bundle['capacitacion.ejecutado.sigla']}"/>
+                                    <p:column headerText="#{bundle['capacitacion.programado.sigla']}"/>
+                                    <p:column headerText="#{bundle['capacitacion.ejecutado.sigla']}"/>
+                                    <p:column headerText="#{bundle['capacitacion.programado.sigla']}"/>
+                                    <p:column headerText="#{bundle['capacitacion.ejecutado.sigla']}"/>
+                                    <p:column headerText="#{bundle['capacitacion.meta.sigla']}"/>
+                                    <p:column headerText="#{bundle['capacitacion.total']}"/>
+                                    <p:column headerText="#{bundle['capacitacion.avance']}"/>
+                                </p:row>
+                            </p:columnGroup>
+                            <p:column>
+                                <h:outputText 
+                                    value="#{record.escuela}"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText 
+                                    value="#{record.estrategia}"/>
+                            </p:column>                    
+                            <p:column                         
+                                style="text-align: center"
+                                styleClass="#{seguimientoDesarrolloPAEController.avanceTrimestreI(record)}">
+                                <h:outputText 
+                                    value="#{record.mT1}"/>
+                            </p:column>
+                            <p:column                         
+                                style="text-align: center"
+                                styleClass="#{seguimientoDesarrolloPAEController.avanceTrimestreI(record)}">
+                                <h:outputText 
+                                    value="#{record.cT1}"/>
+                            </p:column>
+                            <p:column                         
+                                style="text-align: center"
+                                styleClass="#{seguimientoDesarrolloPAEController.avanceTrimestreII(record)}">
+                                <h:outputText 
+                                    value="#{record.mT2}"/>
+                            </p:column>
+                            <p:column                         
+                                style="text-align: center"
+                                styleClass="#{seguimientoDesarrolloPAEController.avanceTrimestreII(record)}">
+                                <h:outputText 
+                                    value="#{record.cT2}"/>
+                            </p:column>
+                            <p:column                         
+                                style="text-align: center"
+                                styleClass="#{seguimientoDesarrolloPAEController.avanceTrimestreIII(record)}">
+                                <h:outputText 
+                                    value="#{record.mT3}"/>
+                            </p:column>
+                            <p:column                         
+                                style="text-align: center"
+                                styleClass="#{seguimientoDesarrolloPAEController.avanceTrimestreIII(record)}">
+                                <h:outputText 
+                                    value="#{record.cT3}"/>
+                            </p:column>
+                            <p:column                         
+                                style="text-align: center"
+                                styleClass="#{seguimientoDesarrolloPAEController.avanceTrimestreIV(record)}">
+                                <h:outputText 
+                                    value="#{record.mT4}"/>
+                            </p:column>
+                            <p:column                        
+                                style="text-align: center"
+                                styleClass="#{seguimientoDesarrolloPAEController.avanceTrimestreIV(record)}">
+                                <h:outputText 
+                                    value="#{record.cT4}"/>
+                            </p:column>
+                            <p:column 
+                                styleClass="#{seguimientoDesarrolloPAEController.avanceGeneral(record)}"                        
+                                style="text-align: center">
+                                <h:outputText 
+                                    value="#{record.meta}"/>
+                            </p:column>
+                            <p:column 
+                                styleClass="#{seguimientoDesarrolloPAEController.avanceGeneral(record)}"                        
+                                style="text-align: center">
+                                <h:outputText 
+                                    value="#{record.total}"/>
+                            </p:column>
+                            <p:column 
+                                styleClass="#{seguimientoDesarrolloPAEController.avanceGeneral(record)}"                      
+                                style="text-align: center">
+                                <h:outputText 
+                                    value="#{seguimientoDesarrolloPAEController.avanceEstrategia(record)}"/>
+                            </p:column>
+                            <p:columnGroup type="footer">
+                                <p:row>
+                                    <p:column 
+                                        colspan="2" 
+                                        style="text-align:center" 
+                                        footerText="Balance general"/>
+                                    <p:column 
+                                        colspan="1" 
+                                        style="text-align:center" 
+                                        styleClass="#{seguimientoDesarrolloPAEController.balanceGeneralSemI()}"
+                                        footerText="#{seguimientoDesarrolloPAEController.getiSem()}" />
+                                    <p:column 
+                                        colspan="1" 
+                                        style="text-align:center" 
+                                        styleClass="#{seguimientoDesarrolloPAEController.balanceGeneralSemI()}"
+                                        footerText="#{seguimientoDesarrolloPAEController.getiSemC()}"/>
+                                    <p:column 
+                                        colspan="1" 
+                                        style="text-align:center" 
+                                        styleClass="#{seguimientoDesarrolloPAEController.balanceGeneralSemII()}"
+                                        footerText="#{seguimientoDesarrolloPAEController.iiSem}"/>
+                                    <p:column 
+                                        colspan="1" 
+                                        style="text-align:center" 
+                                        footerText="#{seguimientoDesarrolloPAEController.iiSemC}"
+                                        styleClass="#{seguimientoDesarrolloPAEController.balanceGeneralSemII()}"/>
+                                    <p:column 
+                                        colspan="1" 
+                                        style="text-align:center" 
+                                        footerText="#{seguimientoDesarrolloPAEController.iiiSem}"
+                                        styleClass="#{seguimientoDesarrolloPAEController.balanceGeneralSemIII()}"/>
+                                    <p:column 
+                                        colspan="1" 
+                                        style="text-align:center" 
+                                        footerText="#{seguimientoDesarrolloPAEController.iiiSemC}"
+                                        styleClass="#{seguimientoDesarrolloPAEController.balanceGeneralSemIII()}"/>
+                                    <p:column 
+                                        colspan="1" 
+                                        style="text-align:center" 
+                                        footerText="#{seguimientoDesarrolloPAEController.ivSem}"
+                                        styleClass="#{seguimientoDesarrolloPAEController.balanceGeneralSemIV()}"/>
+                                    <p:column 
+                                        colspan="1" 
+                                        style="text-align:center" 
+                                        footerText="#{seguimientoDesarrolloPAEController.ivSemC}"
+                                        styleClass="#{seguimientoDesarrolloPAEController.balanceGeneralSemIV()}"/>
+                                    <p:column 
+                                        colspan="1" 
+                                        style="text-align:center" 
+                                        footerText="#{seguimientoDesarrolloPAEController.metaGeneral}"
+                                        styleClass="#{seguimientoDesarrolloPAEController.generalAvance()}"/>
+                                    <p:column 
+                                        colspan="1" 
+                                        style="text-align:center" 
+                                        footerText="#{seguimientoDesarrolloPAEController.totalGeneral}"
+                                        styleClass="#{seguimientoDesarrolloPAEController.generalAvance()}"/>
+                                    <p:column 
+                                        colspan="1" 
+                                        style="text-align:center" 
+                                        footerText="#{seguimientoDesarrolloPAEController.avanceGeneralValue}"
+                                        styleClass="#{seguimientoDesarrolloPAEController.generalAvance()}"/>
+                                </p:row>
+                            </p:columnGroup>
+                        </p:dataTable> 
+                    </p:tab>                    
+                    <p:tab 
+                        title="#{bundle['pae.title.seguimiento.general']}">
+                        <p:dataTable 
+                            id="dtlist"
+                            value="#{seguimientoDesarrolloPAEController.list}"
+                            var="record"
+                            paginator="true" 
+                            rows="1000"     
+                            reflow="true"                    
+                            style="font-size: x-small; margin-bottom:10px; margin-top:10px;"
+                            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                            rowsPerPageTemplate="1000, 5000, 10000"
+                            styleClass="TABLE_DASHBOARD"
+                            rendered="#{seguimientoDesarrolloPAEController.renderObject}"
+                            paginatorPosition="bottom"> 
+                            <f:facet
+                                name="header">
+                                Desarrollo Plan Anual de Capacitación PAE
+                            </f:facet>
+                            <p:columnGroup 
+                                type="header">
+                                <p:row>
+                                    <p:column 
+                                        rowspan="3" 
+                                        headerText="#{bundle['capacitacion.escuela']}" 
+                                        style="width: 5%"
+                                        sortBy="#{record.escuela}"
+                                        filterBy="#{record.escuela}"
+                                        filterMatchMode="contains"/>
+                                    <p:column 
+                                        rowspan="3" 
+                                        headerText="#{bundle['capacitacion.estrategia']}"
+                                        style="width: 18%"
+                                        sortBy="#{record.estrategia}"                        
+                                        filterBy="#{record.estrategia}"
+                                        filterMatchMode="contains"/>
+                                    <p:column 
+                                        rowspan="3" 
+                                        headerText="#{bundle['capacitacion.carrera']}"                                
+                                        sortBy="#{record.carrera}"
+                                        style="width: 32%"
+                                        filterBy="#{record.carrera}"
+                                        filterMatchMode="contains"/>
+                                </p:row>
+                                <p:row>
+                                    <p:column 
+                                        colspan="2" 
+                                        headerText="#{bundle['capacitacion.trimestreT1']}" />
+                                    <p:column 
+                                        colspan="2" 
+                                        headerText="#{bundle['capacitacion.trimestreT2']}" />
+                                    <p:column 
+                                        colspan="2" 
+                                        headerText="#{bundle['capacitacion.trimestreT3']}" />
+                                    <p:column 
+                                        colspan="2" 
+                                        headerText="#{bundle['capacitacion.trimestreT4']}" />
+                                    <p:column 
+                                        colspan="3" 
+                                        headerText="#{bundle['capacitacion.ejecucion']}"/> 
+                                </p:row>
+                                <p:row>
+                                    <p:column headerText="#{bundle['capacitacion.programado.sigla']}"/>
+                                    <p:column headerText="#{bundle['capacitacion.ejecutado.sigla']}"/>
+                                    <p:column headerText="#{bundle['capacitacion.programado.sigla']}"/>
+                                    <p:column headerText="#{bundle['capacitacion.ejecutado.sigla']}"/>
+                                    <p:column headerText="#{bundle['capacitacion.programado.sigla']}"/>
+                                    <p:column headerText="#{bundle['capacitacion.ejecutado.sigla']}"/>
+                                    <p:column headerText="#{bundle['capacitacion.programado.sigla']}"/>
+                                    <p:column headerText="#{bundle['capacitacion.ejecutado.sigla']}"/>
+                                    <p:column headerText="#{bundle['capacitacion.meta.sigla']}"/>
+                                    <p:column headerText="#{bundle['capacitacion.total']}"/>
+                                    <p:column headerText="#{bundle['capacitacion.avance']}"/>
+                                </p:row>
+                            </p:columnGroup>
+                            <p:column>
+                                <h:outputText 
+                                    value="#{record.escuela}"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText 
+                                    value="#{record.estrategia}"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText 
+                                    value="#{record.carrera}"/>
+                            </p:column>
+                            <p:column                         
+                                style="text-align: center"
+                                styleClass="#{seguimientoDesarrolloPAEController.avanceTrimestreI(record)}">
+                                <h:outputText 
+                                    value="#{record.mT1}"/>
+                            </p:column>
+                            <p:column                         
+                                style="text-align: center"
+                                styleClass="#{seguimientoDesarrolloPAEController.avanceTrimestreI(record)}">
+                                <h:outputText 
+                                    value="#{record.cT1}"/>
+                            </p:column>
+                            <p:column                         
+                                style="text-align: center"
+                                styleClass="#{seguimientoDesarrolloPAEController.avanceTrimestreII(record)}">
+                                <h:outputText 
+                                    value="#{record.mT2}"/>
+                            </p:column>
+                            <p:column                         
+                                style="text-align: center"
+                                styleClass="#{seguimientoDesarrolloPAEController.avanceTrimestreII(record)}">
+                                <h:outputText 
+                                    value="#{record.cT2}"/>
+                            </p:column>
+                            <p:column                         
+                                style="text-align: center"
+                                styleClass="#{seguimientoDesarrolloPAEController.avanceTrimestreIII(record)}">
+                                <h:outputText 
+                                    value="#{record.mT3}"/>
+                            </p:column>
+                            <p:column                         
+                                style="text-align: center"
+                                styleClass="#{seguimientoDesarrolloPAEController.avanceTrimestreIII(record)}">
+                                <h:outputText 
+                                    value="#{record.cT3}"/>
+                            </p:column>
+                            <p:column                         
+                                style="text-align: center"
+                                styleClass="#{seguimientoDesarrolloPAEController.avanceTrimestreIV(record)}">
+                                <h:outputText 
+                                    value="#{record.mT4}"/>
+                            </p:column>
+                            <p:column                        
+                                style="text-align: center"
+                                styleClass="#{seguimientoDesarrolloPAEController.avanceTrimestreIV(record)}">
+                                <h:outputText 
+                                    value="#{record.cT4}"/>
+                            </p:column>
+                            <p:column 
+                                styleClass="#{seguimientoDesarrolloPAEController.avanceGeneral(record)}"                        
+                                style="text-align: center">
+                                <h:outputText 
+                                    value="#{record.meta}"/>
+                            </p:column>
+                            <p:column 
+                                styleClass="#{seguimientoDesarrolloPAEController.avanceGeneral(record)}"                        
+                                style="text-align: center">
+                                <h:outputText 
+                                    value="#{record.total}"/>
+                            </p:column>
+                            <p:column 
+                                styleClass="#{seguimientoDesarrolloPAEController.avanceGeneral(record)}"                      
+                                style="text-align: center">
+                                <h:outputText 
+                                    value="#{record.avance}"/>
+                            </p:column>
+                            <p:columnGroup type="footer">
+                                <p:row>
+                                    <p:column 
+                                        colspan="3" 
+                                        style="text-align:center" 
+                                        footerText="Balance general"/>
+                                    <p:column 
+                                        colspan="1" 
+                                        style="text-align:center" 
+                                        styleClass="#{seguimientoDesarrolloPAEController.balanceGeneralSemI()}"
+                                        footerText="#{seguimientoDesarrolloPAEController.getiSem()}" />
+                                    <p:column 
+                                        colspan="1" 
+                                        style="text-align:center" 
+                                        styleClass="#{seguimientoDesarrolloPAEController.balanceGeneralSemI()}"
+                                        footerText="#{seguimientoDesarrolloPAEController.getiSemC()}"/>
+                                    <p:column 
+                                        colspan="1" 
+                                        style="text-align:center" 
+                                        styleClass="#{seguimientoDesarrolloPAEController.balanceGeneralSemII()}"
+                                        footerText="#{seguimientoDesarrolloPAEController.iiSem}"/>
+                                    <p:column 
+                                        colspan="1" 
+                                        style="text-align:center" 
+                                        footerText="#{seguimientoDesarrolloPAEController.iiSemC}"
+                                        styleClass="#{seguimientoDesarrolloPAEController.balanceGeneralSemII()}"/>
+                                    <p:column 
+                                        colspan="1" 
+                                        style="text-align:center" 
+                                        footerText="#{seguimientoDesarrolloPAEController.iiiSem}"
+                                        styleClass="#{seguimientoDesarrolloPAEController.balanceGeneralSemIII()}"/>
+                                    <p:column 
+                                        colspan="1" 
+                                        style="text-align:center" 
+                                        footerText="#{seguimientoDesarrolloPAEController.iiiSemC}"
+                                        styleClass="#{seguimientoDesarrolloPAEController.balanceGeneralSemIII()}"/>
+                                    <p:column 
+                                        colspan="1" 
+                                        style="text-align:center" 
+                                        footerText="#{seguimientoDesarrolloPAEController.ivSem}"
+                                        styleClass="#{seguimientoDesarrolloPAEController.balanceGeneralSemIV()}"/>
+                                    <p:column 
+                                        colspan="1" 
+                                        style="text-align:center" 
+                                        footerText="#{seguimientoDesarrolloPAEController.ivSemC}"
+                                        styleClass="#{seguimientoDesarrolloPAEController.balanceGeneralSemIV()}"/>
+                                    <p:column 
+                                        colspan="1" 
+                                        style="text-align:center" 
+                                        footerText="#{seguimientoDesarrolloPAEController.metaGeneral}"
+                                        styleClass="#{seguimientoDesarrolloPAEController.generalAvance()}"/>
+                                    <p:column 
+                                        colspan="1" 
+                                        style="text-align:center" 
+                                        footerText="#{seguimientoDesarrolloPAEController.totalGeneral}"
+                                        styleClass="#{seguimientoDesarrolloPAEController.generalAvance()}"/>
+                                    <p:column 
+                                        colspan="1" 
+                                        style="text-align:center" 
+                                        footerText="#{seguimientoDesarrolloPAEController.avanceGeneralValue}"
+                                        styleClass="#{seguimientoDesarrolloPAEController.generalAvance()}"/>
+                                </p:row>
+                            </p:columnGroup>
+                        </p:dataTable> 
+                    </p:tab>
+                </p:tabView>
+                <p:panelGrid
+                    id="pngButtons"
+                    columns="12"
+                    layout="grid" 
+                    columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+                    styleClass="ui-panelgrid-blank"
+                    rendered="#{seguimientoDesarrolloPAEController.renderObject}">
+                    <p:commandButton 
+                        value="#{bundle['commons.btn.back']}"
+                        title="#{bundle['commons.btn.back']}"
+                        icon="ui-icon-arrowreturn-1-w"
+                        actionListener="#{seguimientoDesarrolloPAEController.onBack()}"                                
+                        update=":main"
+                        style="border: none"/>
+                </p:panelGrid>
+            </h:form>   
+        </p:panel>
+    </ui:define>
+</ui:composition>

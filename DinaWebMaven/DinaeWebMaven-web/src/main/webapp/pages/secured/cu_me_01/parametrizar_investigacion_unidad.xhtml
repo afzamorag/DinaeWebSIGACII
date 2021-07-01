@@ -1,0 +1,417 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <body>
+        <div 
+            class="body">
+            <ui:composition 
+                template="../../../templates/plantillaPrincipal.xhtml">
+                <ui:define 
+                    name="content">                
+                    <p:panel 
+                        id="main"
+                        styleClass="ui-fluid"
+                        header="#{properties.value('cu_me_01_lbl_titulo')}">
+                        <p:messages autoUpdate="false" id="msg" showDetail="true" />
+                        <h:form 
+                            id="idform_parametrizar_investigacion_unidad"
+                            prependId="false">
+                            <!--h:outputText 
+                                value="#{properties.value('cu_me_01_lbl_titulo')}"/>
+                            <p:separator /-->
+                            <p:panel 
+                                id="pnlbtns">
+                                <p:panelGrid 
+                                    id="pgBusqueda" 
+                                    columns="2"
+                                    layout="grid" 
+                                    columnClasses="ui-grid-col-2,ui-grid-col-6" 
+                                    styleClass="ui-panelgrid-blank">
+                                    <p:outputLabel 
+                                        for="cu_me_01_lbl_unidad" 
+                                        value="#{properties.value('cu_me_01_lbl_unidad')}:" 
+                                        styleClass="gris negrilla"/>
+                                    <p:selectOneMenu                                        
+                                        rendered="true" 
+                                        id="cu_me_01_lbl_unidad"  
+                                        value="#{cuMe1InvestigacionUnidad.filtro.unidad.idUnidadPolicial}" 
+                                        required="false" 
+                                        filter="true"
+                                        filterMatchMode="contains">  
+                                        <f:selectItem 
+                                            itemLabel=" SELECCIONE " 
+                                            itemValue="" />  
+                                        <f:selectItems 
+                                            value="#{appController.unidadesPoliciales()}" 
+                                            var="unidad" 
+                                            itemLabel="#{unidad.siglaFisica} - #{unidad.descripcionDependencia}" 
+                                            itemValue="#{unidad.consecutivo}"/> 
+                                    </p:selectOneMenu>
+                                    <p:outputLabel 
+                                        for="cu_me_01_lbl_vigencia" 
+                                        value="#{properties.value('cu_me_01_lbl_vigencia')}:" 
+                                        styleClass="gris negrilla"/>
+                                    <p:selectOneMenu 
+                                        rendered="true" 
+                                        id="cu_me_01_lbl_vigencia"
+                                        value="#{cuMe1InvestigacionUnidad.filtro.sieduProgramaInvestigacionPK.vigencia}" 
+                                        required="false" 
+                                        filter="true"
+                                        filterMatchMode="contains">  
+                                        <f:selectItem 
+                                            itemLabel=" SELECCIONE" 
+                                            itemValue="" />  
+                                        <f:selectItems 
+                                            value="#{cuMe1InvestigacionUnidad.vigencias}"  />
+                                    </p:selectOneMenu>
+                                    <p:outputLabel 
+                                        for="cu_me_01_lbl_modalidad" 
+                                        value="#{properties.value('cu_me_01_lbl_modalidad')}:" 
+                                        styleClass="gris negrilla"/>
+                                    <p:selectOneMenu 
+                                        rendered="true" 
+                                        converter="dominioConverter"
+                                        id="cu_me_01_lbl_modalidad" 
+                                        value="#{cuMe1InvestigacionUnidad.filtro.modalidad}" 
+                                        required="false" 
+                                        filter="true"
+                                        filterMatchMode="contains">  
+                                        <f:selectItem 
+                                            itemLabel=" SELECCIONE" 
+                                            itemValue="" />  
+                                        <f:selectItems 
+                                            value="#{cuMe1InvestigacionUnidad.modalidades}" 
+                                            var="item" itemValue="#{item}" 
+                                            itemLabel="#{item.nombre}" />
+                                    </p:selectOneMenu>
+                                </p:panelGrid>
+                                <f:facet 
+                                    name="footer">
+                                    <p:panelGrid
+                                        columns="6"
+                                        id="pnlbtnsfind"
+                                        layout="grid" 
+                                        columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+                                        styleClass="ui-panelgrid-blank">
+                                        <p:commandButton 
+                                            value="#{properties.value('cu_me_01_lbl_btn_buscar')}" 
+                                            style="border:none"
+                                            actionListener="#{cuMe1InvestigacionUnidad.buscarNecesidades()}" 
+                                            update="idDataTableNecesidades,messages,pnlbtnsfind" />  
+                                        <p:commandButton 
+                                            value="#{properties.value('cu_me_01_lbl_btn_nuevo')}" 
+                                            id="btnNuevo"  
+                                            rendered="#{cuMe1InvestigacionUnidad.busco}" 
+                                            oncomplete="PF('dlgeditar').show()" 
+                                            style="border:none"
+                                            update="editarForm" actionListener="#{cuMe1InvestigacionUnidad.nuevo()}" />  
+                                    </p:panelGrid>
+                                </f:facet>
+                            </p:panel>
+                            <p:dataTable 
+                                emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                                id="idDataTableNecesidades" 
+                                var="investigacionUnidad" 
+                                value="#{cuMe1InvestigacionUnidad.investigacionesUnidad}" 
+                                rowIndexVar="idFila" 
+                                rows="15" 
+                                paginator="true" 
+                                rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaImparDataTable'}"
+                                resizableColumns="true"                                          
+                                paginatorPosition="bottom" 
+                                selection="#{cuMe1InvestigacionUnidad.investigacionUnidadSeleccionada}" 
+                                styleClass="tabla"
+                                style="margin-top:10px"> 
+                                <f:facet 
+                                    name="header">
+                                    Investigaciones programas por Unidad de Policía
+                                </f:facet>
+                                <p:column 
+                                    headerText="#{properties.value('cu_me_01_lbl_vigencia')}">
+                                    <h:outputText
+                                        value="#{investigacionUnidad.sieduProgramaInvestigacionPK.vigencia}" />
+                                </p:column>
+                                <p:column 
+                                    headerText="#{properties.value('cu_me_01_lbl_unidad')}">
+                                    <h:outputText 
+                                        value="#{investigacionUnidad.unidad.siglaFisicaYnombreUnidad}" />
+                                </p:column>
+                                <p:column 
+                                    headerText="#{properties.value('cu_me_01_lbl_modalidad')}">
+                                    <h:outputText 
+                                        value="#{investigacionUnidad.modalidad.nombre}" />
+                                </p:column>
+                                <p:column 
+                                    headerText="#{properties.value('cu_me_01_lbl_cantidad')}">
+                                    <h:outputText 
+                                        value="#{investigacionUnidad.numeroInvestigaciones}" />
+                                </p:column>
+                                <p:column 
+                                    headerText="#{properties.value('cu_me_01_lbl_cantidad_banco')}">
+                                    <h:outputText 
+                                        value="#{investigacionUnidad.numeroInvestigacionesBanco}" />
+                                </p:column>
+                                <p:column 
+                                    headerText="#{properties.value('cu_me_01_lbl_opciones')}"
+                                    style="text-align: center">
+                                    <h:panelGroup>
+                                        <p:commandLink 
+                                            value="Eliminar" 
+                                            immediate="true" 
+                                            action="#{cuMe1InvestigacionUnidad.eliminar()}"
+                                            update="messages, idform_parametrizar_investigacion_unidad">
+                                            <f:setPropertyActionListener 
+                                                value="#{investigacionUnidad}" 
+                                                target="#{cuMe1InvestigacionUnidad.investigacionUnidadSeleccionada}"/>
+                                            <p:confirm 
+                                                header="#{bundle['commons.cfmdlg.header']}" 
+                                                message="#{bundle['commons.cfmdlg.remove.message']}" 
+                                                icon="ui-icon-alert" />
+                                        </p:commandLink> 
+                                        <p:spacer width="5"/>
+                                        <p:commandLink 
+                                            value="#{properties.value('cu_me_01_lbl_editar')}" 
+                                            oncomplete="PF('dlgeditar').show()" 
+                                            update="editarForm"
+                                            immediate="true" 
+                                            action="#{cuMe1InvestigacionUnidad.editar( investigacionUnidad )}" 
+                                            style="border: none" 
+                                            rendered="#{investigacionUnidad.sieduProgramaInvestigacionPK.vigencia>=cuMe1InvestigacionUnidad.vigenciaActual}">
+                                        </p:commandLink>
+                                    </h:panelGroup>
+                                </p:column>                              
+                            </p:dataTable>
+                        </h:form>
+                    </p:panel>
+                    <p:dialog 
+                        id="editarForm" 
+                        header="Parametrización" 
+                        widgetVar="dlgeditar" 
+                        fitViewport="false" 
+                        responsive="true" 
+                        width="1000" 
+                        showHeader="true" 
+                        modal="true" closable="false"
+                        positionType="absolute">
+                        <p:panel
+                            id="pnlNvo"
+                            styleClass="ui-fluid" >
+                            <h:form
+                                id="frmCreate"
+                                prependId="false">
+                                <p:panel>
+                                    <p:panelGrid 
+                                        id="pgEdicion"
+                                        columns="2"                                             
+                                        layout="grid" 
+                                        columnClasses="ui-grid-col-4,ui-grid-col-8" 
+                                        styleClass="ui-panelgrid-blank">
+                                        <p:outputLabel 
+                                            for="cu_me_01_lbl_unidad_create" 
+                                            value="#{properties.value('cu_me_01_lbl_unidad')}:" 
+                                            styleClass="gris negrilla"/>
+                                        <h:panelGroup>
+                                            <p:selectOneMenu 
+                                                rendered="true" 
+                                                id="cu_me_01_lbl_unidad_create"                                          
+                                                disabled="#{cuMe1InvestigacionUnidad.editando}"
+                                                value="#{cuMe1InvestigacionUnidad.investigacionUnidadSeleccionada.sieduProgramaInvestigacionPK.unidad}" 
+                                                required="true"
+                                                filter="true"
+                                                filterMatchMode="contains">
+                                                <f:selectItem 
+                                                    itemLabel=" SELECCIONE" itemValue=""/>
+                                                <f:selectItems 
+                                                    value="#{appController.unidadesPoliciales()}" 
+                                                    var="unidadConvoca" 
+                                                    itemLabel="#{unidadConvoca.siglaFisica} - #{unidadConvoca.descripcionDependencia}"  
+                                                    itemValue="#{unidadConvoca.consecutivo}"/>    
+                                            </p:selectOneMenu>
+                                            <p:message 
+                                                for="cu_me_01_lbl_unidad_create"/>
+                                        </h:panelGroup>
+                                        <p:outputLabel 
+                                            for="cu_me_01_lbl_vigencia_create" 
+                                            value="#{properties.value('cu_me_01_lbl_vigencia')}:" 
+                                            styleClass="gris negrilla"/>
+                                        <h:panelGroup>
+                                            <p:selectOneMenu 
+                                                rendered="true" 
+                                                disabled="#{cuMe1InvestigacionUnidad.editando}"
+                                                id="cu_me_01_lbl_vigencia_create" 
+                                                value="#{cuMe1InvestigacionUnidad.investigacionUnidadSeleccionada.sieduProgramaInvestigacionPK.vigencia}" 
+                                                required="true">
+                                                <f:selectItem 
+                                                    itemLabel=" SELECCIONE" itemValue=""/>
+                                                <f:selectItems 
+                                                    value="#{cuMe1InvestigacionUnidad.vigencias}"  />
+                                            </p:selectOneMenu>
+                                            <p:message
+                                                for="cu_me_01_lbl_vigencia_create"/>
+                                        </h:panelGroup>
+                                        <p:outputLabel 
+                                            for="cu_me_01_lbl_modalidad_create" 
+                                            value="#{properties.value('cu_me_01_lbl_modalidad')}:" 
+                                            styleClass="gris negrilla"/>
+                                        <h:panelGroup>
+                                            <p:selectOneMenu 
+                                                rendered="true"                                                          
+                                                id="cu_me_01_lbl_modalidad_create" 
+                                                value="#{cuMe1InvestigacionUnidad.investigacionUnidadSeleccionada.sieduProgramaInvestigacionPK.idModalidad}" 
+                                                required="true">
+                                                <f:selectItem 
+                                                    itemLabel=" SELECCIONE" 
+                                                    itemValue=""/>
+                                                <f:selectItems 
+                                                    value="#{cuMe1InvestigacionUnidad.modalidades}" 
+                                                    var="item" 
+                                                    itemValue="#{item.id}" 
+                                                    itemLabel="#{item.nombre}" />
+                                            </p:selectOneMenu>
+                                            <p:message
+                                                for="cu_me_01_lbl_modalidad_create"/>
+                                        </h:panelGroup>
+                                        <p:outputLabel 
+                                            for="cu_me_01_lbl_cantidad" 
+                                            value="#{properties.value('cu_me_01_lbl_cantidad')}:" 
+                                            styleClass="gris negrilla"/>
+                                        <h:panelGroup>
+                                            <p:inputText 
+                                                id="cu_me_01_lbl_cantidad" 
+                                                value="#{cuMe1InvestigacionUnidad.investigacionUnidadSeleccionada.numeroInvestigaciones}"  
+                                                required="true" 
+                                                alt="#{properties.value('cu_me_01_lbl_cantidad')}" 
+                                                title="#{properties.value('cu_me_01_lbl_cantidad')}" >
+                                                <f:validateLongRange 
+                                                    minimum="0" />
+                                            </p:inputText>
+                                            <p:message
+                                                for="cu_me_01_lbl_cantidad"/>
+                                        </h:panelGroup>
+                                        <p:outputLabel 
+                                            for="cu_me_01_lbl_cantidad_banco" 
+                                            value="#{properties.value('cu_me_01_lbl_cantidad_banco')}:" 
+                                            styleClass="gris negrilla"/>
+                                        <h:panelGroup>
+                                            <p:inputText 
+                                                id="cu_me_01_lbl_cantidad_banco" 
+                                                value="#{cuMe1InvestigacionUnidad.investigacionUnidadSeleccionada.numeroInvestigacionesBanco}" 
+                                                required="true" 
+                                                alt="#{properties.value('cu_me_01_lbl_cantidad_banco')}" 
+                                                title="#{properties.value('cu_me_01_lbl_cantidad_banco')}">
+                                                <f:validateLongRange 
+                                                    minimum="0" />
+                                            </p:inputText>
+                                            <p:message
+                                                for="cu_me_01_lbl_cantidad_banco"/>
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                    <p:panelGrid
+                                        columns="2"
+                                        layout="grid" 
+                                        columnClasses="ui-grid-col-4,ui-grid-col-3" 
+                                        styleClass="ui-panelgrid-blank">
+                                        <p:outputLabel
+                                            for="cu_me_01_lbl_fecha_inicio"
+                                            value="#{bundle['programarcapacitaciones.fecha_inicio.lbl']}"
+                                            styleClass="gris negrilla"/>
+                                        <h:panelGroup>
+                                            <p:calendar 
+                                                id="cu_me_01_lbl_fecha_inicio" 
+                                                value="#{cuMe1InvestigacionUnidad.investigacionUnidadSeleccionada.prinFechaInicio}"
+                                                pattern="#{properties.value('general_formato_fecha')}"                             
+                                                readonlyInput="true"
+                                                locale="es" 
+                                                showButtonPanel="true" 
+                                                navigator="true"
+                                                required="true"
+                                                style="text-align: center">
+                                            </p:calendar>
+                                            <p:message
+                                                for="cu_me_01_lbl_fecha_inicio"/>
+                                        </h:panelGroup>
+                                        <p:outputLabel
+                                            for="cu_me_01_lbl_fecha_final"
+                                            value="#{bundle['programarcapacitaciones.fecha_final.lbl']}"
+                                            styleClass="gris negrilla"/>
+                                        <h:panelGroup>
+                                            <p:calendar 
+                                                id="cu_me_01_lbl_fecha_final" 
+                                                value="#{cuMe1InvestigacionUnidad.investigacionUnidadSeleccionada.prinFechaFinal}"
+                                                pattern="#{properties.value('general_formato_fecha')}"                             
+                                                readonlyInput="true"
+                                                locale="es" 
+                                                showButtonPanel="true" 
+                                                navigator="true"
+                                                required="true"
+                                                style="text-align: center">
+                                            </p:calendar>
+                                            <p:message
+                                                for="cu_me_01_lbl_fecha_final"/>
+                                        </h:panelGroup>
+                                    </p:panelGrid>                                    
+                                    <p:panelGrid
+                                        columns="6"
+                                        layout="grid" 
+                                        columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+                                        styleClass="ui-panelgrid-blank">
+                                        <p:commandButton 
+                                            value="#{properties.value('cu_me_01_lbl_btn_guardar')}" 
+                                            update="idform_parametrizar_investigacion_unidad, frmCreate"                                                          
+                                            style="border:none"
+                                            actionListener="#{cuMe1InvestigacionUnidad.guardar()}" 
+                                            oncomplete="validacionCamposDialog(xhr, status, args, PF('dlgeditar'))">
+                                            <p:confirm 
+                                                header="#{bundle['commons.cfmdlg.header']}" 
+                                                message="#{bundle['commons.cfmdlg.save.message']}" 
+                                                icon="ui-icon-alert" />
+                                        </p:commandButton>  
+                                        <p:commandButton 
+                                            value="#{properties.value('cu_me_02_lbl_volver')}" 
+                                            oncomplete="PF('dlgeditar').hide();"
+                                            style="border:none" 
+                                            immediate="true"/>
+                                    </p:panelGrid>
+                                </p:panel>
+                            </h:form>
+                        </p:panel>
+                    </p:dialog>
+                    <!--p:confirmDialog 
+                        widgetVar="confirmEliminar" 
+                        header="#{properties.value('cu_me_01_titulo_alerta')}" 
+                        appendTo="main"
+                        message="#{properties.value('cu_me_01_lbl_confirmacion_eliminar')}" > 
+                        <h:form 
+                            id="idFormEliminar">
+                            <p:outputPanel 
+                                id="pgroupdialogconfirmDialogvarConfirmEliminarFuenteFinanciera">
+                                <p:panelGrid
+                                    columns="2"
+                                    layout="grid" 
+                                    columnClasses="ui-grid-col-4,ui-grid-col-4" 
+                                    styleClass="ui-panelgrid-blank">
+                                    <p:commandButton 
+                                        actionListener="#{cuMe1InvestigacionUnidad.eliminar}" 
+                                        style="border:none"
+                                        value="#{properties.value('cu_pr_7_lbl_btn_confirma_si')}" 
+                                        immediate="true"
+                                        oncomplete="PF('confirmEliminar').hide();"
+                                        update="messages, idform_parametrizar_investigacion_unidad" />  
+                                    <p:commandButton 
+                                        value="#{properties.value('cu_pr_7_lbl_btn_confirma_no')}" 
+                                        style="border:none"
+                                        onclick="PF('confirmEliminar').hide();" 
+                                        type="button" />       
+                                </p:panelGrid>
+                            </p:outputPanel>
+                        </h:form>
+                    </p:confirmDialog-->
+                </ui:define>
+            </ui:composition>
+        </div>
+    </body>
+</html>

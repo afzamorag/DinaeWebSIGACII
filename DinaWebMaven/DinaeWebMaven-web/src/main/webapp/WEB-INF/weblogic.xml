@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<weblogic-web-app xmlns="http://xmlns.oracle.com/weblogic/weblogic-web-app" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd http://xmlns.oracle.com/weblogic/weblogic-web-app http://xmlns.oracle.com/weblogic/weblogic-web-app/1.0/weblogic-web-app.xsd">
+  <security-role-assignment>
+    <role-name>valid-users</role-name>
+    <principal-name>users</principal-name>
+  </security-role-assignment>
+  <container-descriptor>
+    <prefer-web-inf-classes>false</prefer-web-inf-classes>
+    <!--<prefer-application-packages>
+        <package-name>javax.faces.*</package-name>
+        <package-name>com.sun.faces.*</package-name>
+        <package-name>com.bea.faces.*</package-name>
+    </prefer-application-packages>-->
+    <!--<prefer-application-resources>
+        <resource-name>javax.faces.*</resource-name>
+        <resource-name>com.sun.faces.*</resource-name>
+        <resource-name>com.bea.faces.*</resource-name>
+        <resource-name>META-INF/services/javax.servlet.ServletContainerInitializer</resource-name>
+    </prefer-application-resources>-->
+  </container-descriptor>
+  <context-root>/DinaeWebMaven-web</context-root>
+</weblogic-web-app>

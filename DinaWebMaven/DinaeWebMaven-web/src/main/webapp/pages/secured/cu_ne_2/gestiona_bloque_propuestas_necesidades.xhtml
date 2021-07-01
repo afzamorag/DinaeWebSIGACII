@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+    <div class="body">
+
+      <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+        <ui:define name="content">
+
+          <h:form id="idForm_cu_ne_2_gestiona_bloque_propuestas_necesidades">
+
+            <div class="fixed-menu">
+              <!--VENTANA DE LISTA DE PERIODOS-->
+              <div class="right-col">
+                <h2>
+                  #{properties.value('cu_ne_2_titulo_propuesta_necesidad')}
+                </h2>
+                <ui:include src="include_lista_periodos.xhtml" /> 
+              </div>
+            </div>
+          </h:form>
+
+
+        </ui:define>
+      </ui:composition>
+    </div>
+  </body>
+</html>

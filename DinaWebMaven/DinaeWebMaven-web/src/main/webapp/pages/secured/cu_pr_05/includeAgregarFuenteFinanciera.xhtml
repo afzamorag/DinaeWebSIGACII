@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+  <h:form id="formAgregarFuenteFinanciera" >
+    <br />
+    <h:panelGrid id="panelgridComponentes" columns="2" style="width: 100%" 
+                 rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+      <h:outputLabel value="#{properties.value('cu_pr_5_lbl_nombre_fuente')}" styleClass="gris negrilla" for="textAreaNombreFuente" />
+      <p:inputText value="#{registrarPresupuesto.nombreFuenteFinanciera}" required="true" 
+                   id="textAreaNombreFuente" maxlength="100" size="50" />
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_tipo_fuente')}" 
+                       styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:selectOneMenu id="selectTipoFuente" value="#{registrarPresupuesto.tipoFuente}" styleClass="gris">
+        <f:selectItem itemLabel="-- Seleccione un tipo de fuente --" itemValue="-1" />
+        <f:selectItems value="#{registrarPresupuesto.listaTipoFuente}"/>
+      </h:selectOneMenu>
+    </h:panelGrid>
+    <br/>
+    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+    <div class="centrado">
+      <p:commandButton value="#{properties.value('cu_pr_5_lbl_btn_add_fuente_financiera')}" 
+                       rendered="#{!registrarPresupuesto.esModificacion}"
+                       actionListener="#{registrarPresupuesto.guardar(0)}" 
+                       process="@form"
+                       update="@form"/>
+
+
+      <p:commandButton value="#{properties.value('cu_pr_5_lbl_btn_upd_fuente_financiera')}" 
+                       rendered="#{registrarPresupuesto.esModificacion}"
+                       actionListener="#{registrarPresupuesto.guardar(0)}" 
+                       process="@form"
+                       update="@form"/>
+
+      <p:commandButton value="#{properties.value('cu_pr_5_lbl_btn_cancel_fuente_financiera')}" 
+                       rendered="#{registrarPresupuesto.esModificacion}"
+                       actionListener="#{registrarPresupuesto.cancelarModificacionFuente}" 
+                       process="@this"
+                       update="@form">                
+      </p:commandButton>
+
+    </div>
+    <br/>
+    <div class="centrado">
+
+      <ui:include src="include_lista_lista_fuentes_financieras.xhtml"/>
+
+    </div>
+
+    <p:confirmDialog widgetVar="varConfirmEliminarFuenteFinanciera" header="#{properties.value('cu_pr_2_lbl_titulo_confirmacion_titulo')}" 
+                     message="#{properties.value('cu_pr_5_lbl_titulo_confirmacion_mensaje_eliminar_fuente')}" > 
+
+      <h:form id="idFormEliminarFuenteFinanciera">
+
+        <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmEliminarFuenteFinanciera">
+          <div class="centrado">
+            <p:commandButton actionListener="#{registrarPresupuesto.eliminarFuenteFinanciera}" 
+                             value="#{properties.value('cu_pr_7_lbl_btn_confirma_si')}" immediate="true"
+                             oncomplete="varConfirmEliminarFuenteFinanciera.hide();"
+                             update=":tabView:formAgregarFuenteFinanciera:tablaFuentesFinancieras" />  
+            <p:commandButton value="#{properties.value('cu_pr_7_lbl_btn_confirma_no')}" 
+                             onclick="varConfirmEliminarFuenteFinanciera.hide();" type="button" />       
+          </div>
+        </p:outputPanel>
+
+      </h:form>
+    </p:confirmDialog>
+  </h:form>
+</html>

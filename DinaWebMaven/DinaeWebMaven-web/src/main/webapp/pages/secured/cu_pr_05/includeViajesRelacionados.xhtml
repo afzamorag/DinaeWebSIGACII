@@ -1,0 +1,185 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <h:form id="formViajesRelacionados">
+    <br />
+    <h:panelGrid id="panelgridViajesRelacionados" columns="2" style="width: 100%" 
+                 rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_nombre_investigador_viajes')}" 
+                       styleClass="gris negrilla" />
+      </h:panelGrid>
+      <h:selectOneMenu value="#{registrarPresupuesto.idInvetigadorViaje}"
+                       id="selectInvestigadorViaje"
+                       styleClass="gris">  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{registrarPresupuesto.listaInvestigadorViaje}" var="_inv" itemValue="#{_inv.idInvestigadorProyecto}" itemLabel="#{_inv.nombreCompleto}" />                
+      </h:selectOneMenu>
+
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_evento_viaje')}" 
+                       styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:panelGroup>
+        <p:inputTextarea value="#{registrarPresupuesto.eventoViaje}"
+                         id="textAreaEventoViaje" styleClass="textareaMaximo"
+                         maxlength="250" counter="contadorEventoViaje"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         cols="100" rows="3" autoResize="false">
+          <f:validateLength minimum="0"  maximum="250" />                    
+        </p:inputTextarea>
+        <h:outputText id="contadorEventoViaje" styleClass="gris" />
+      </h:panelGroup>
+
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_departamento_origen')}" 
+                       styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:selectOneMenu value="#{registrarPresupuesto.idDepartamentoOrigenViaje}" id="selectDepartamentoOrigen" styleClass="gris">  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{registrarPresupuesto.listaDepartamentoOrigenViaje}" var="_dptoOrig" itemValue="#{_dptoOrig.idDepartamento}" itemLabel="#{_dptoOrig.descDepartamento}"/>
+        <p:ajax event="change" update="@this selectCiudadOrigen" 
+                listener="#{registrarPresupuesto.cargarListaCiudadOrigenViaje}"/>
+      </h:selectOneMenu>
+
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_ciudad_origen')}" 
+                       styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:selectOneMenu value="#{registrarPresupuesto.idCiudadOrigenViaje}"
+                       id="selectCiudadOrigen"
+                       styleClass="gris">
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{registrarPresupuesto.listaCiudadOrigenViaje}" var="_ciudadOrigen" itemValue="#{_ciudadOrigen.codMunicipio}" itemLabel="#{_ciudadOrigen.descMunicipio}"/>                
+      </h:selectOneMenu>
+
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_departamento_destino')}" 
+                       styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:selectOneMenu value="#{registrarPresupuesto.idDepartamentoDestinoViaje}" id="selectDepartamentoDestino" styleClass="gris">  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{registrarPresupuesto.listaDepartamentoDestinoViaje}" var="_dptoDest" itemValue="#{_dptoDest.idDepartamento}" itemLabel="#{_dptoDest.descDepartamento}" />
+        <p:ajax event="change" update="@this selectCiudadDestino" 
+                listener="#{registrarPresupuesto.cargarListaCiudadDestinoViaje}"/>
+      </h:selectOneMenu>
+
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_ciudad_destino')}" 
+                       styleClass="gris negrilla" />
+      </h:panelGrid>
+      <h:selectOneMenu value="#{registrarPresupuesto.idCiudadDestinoViaje}"
+                       id="selectCiudadDestino" 
+                       styleClass="gris">  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{registrarPresupuesto.listaCiudadDestinoViaje}" var="_ciudadDest" itemValue="#{_ciudadDest.codMunicipio}" itemLabel="#{_ciudadDest.descMunicipio}"/>                
+      </h:selectOneMenu>
+
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_costo_pasajes')}" 
+                       styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:inputText value="#{registrarPresupuesto.costoPasajesViaje}"
+                   maxlength="18" id="inputCostoPasajes" onkeypress="return soloNumerosInpuText(event);"> 
+        <p:ajax event="blur" update="inputCostoPasajes" />
+        <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" maxFractionDigits="2" />
+      </h:inputText>
+
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_costo_viaticos')}" 
+                       styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:inputText value="#{registrarPresupuesto.costoViaticosViaje}"
+                   maxlength="18" id="inputCostoViaticos" onkeypress="return soloNumerosInpuText(event);">  
+        <p:ajax event="blur" update="inputCostoViaticos" />
+        <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" maxFractionDigits="2" />
+      </h:inputText>
+
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_fuente_viaje')}" 
+                       styleClass="gris negrilla" for="selectFuenteViaje"/>
+      </h:panelGrid>
+      <h:selectOneMenu value="#{registrarPresupuesto.idFuenteProyectoViaje}" 
+                       id="selectFuenteViaje"
+                       styleClass="gris">  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{registrarPresupuesto.listaFuentesProyectoItems}"/>
+      </h:selectOneMenu>
+    </h:panelGrid>
+    <br/>
+    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+    <div class="centrado">
+      <p:commandButton value="#{properties.value('cu_pr_5_lbl_btn_add_evento_relacionado')}" 
+                       rendered="#{!registrarPresupuesto.esModificaViaje}"
+                       actionListener="#{registrarPresupuesto.guardarTabViajes}" 
+                       process="@form"
+                       update="@form"/>
+
+      <p:commandButton value="#{properties.value('cu_pr_5_lbl_btn_upd_equipo_investigacion')}" 
+                       rendered="#{registrarPresupuesto.esModificaViaje}"
+                       actionListener="#{registrarPresupuesto.guardarTabViajes}" 
+                       process="@form"
+                       update="@form"/>
+      
+      <p:commandButton value="#{properties.value('cu_pr_5_lbl_btn_cancel_fuente_financiera')}" 
+                       rendered="#{registrarPresupuesto.esModificaViaje}"
+                       actionListener="#{registrarPresupuesto.cancelarModificarViaje}" 
+                       process="@this"
+                       update="@form">
+      </p:commandButton>
+    </div>
+    <br/>
+
+    <div class="centrado">
+
+      <ui:include src="include_lista_viajes_relacionados.xhtml" />
+
+    </div>
+
+    <p:confirmDialog widgetVar="varConfirmEliminarViaje" header="#{properties.value('cu_pr_2_lbl_titulo_confirmacion_titulo')}" 
+                     message="#{properties.value('cu_pr_5_lbl_titulo_confirmacion_mensaje_eliminar_viaje')}" > 
+
+      <h:form id="idFormEliminarViaje">
+
+        <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmEliminarViaje">
+          <div class="centrado">
+            <p:commandButton actionListener="#{registrarPresupuesto.eliminarViajeRelacionado}" 
+                             value="#{properties.value('cu_pr_7_lbl_btn_confirma_si')}" immediate="true"
+                             oncomplete="varConfirmEliminarViaje.hide();"
+                             update=":tabView:formViajesRelacionados:tablaViajesProyectos" />  
+            <p:commandButton value="#{properties.value('cu_pr_7_lbl_btn_confirma_no')}" 
+                             onclick="varConfirmEliminarViaje.hide();" type="button" />       
+          </div>
+        </p:outputPanel>
+
+      </h:form>
+    </p:confirmDialog>
+  </h:form>
+</html>
+

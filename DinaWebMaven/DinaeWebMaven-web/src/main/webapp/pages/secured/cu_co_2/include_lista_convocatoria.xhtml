@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+
+  <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+               id="idDataTableConvocatorias" var="_convocatoria" 
+               value="#{cuCo2ParticipaConvocatoriasFaces.listaConvotariaModel}" 
+               rowIndexVar="idFila" rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+               paginator="true" 
+               resizableColumns="true"
+               rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+               paginatorPosition="bottom" selection="#{cuCo2ParticipaConvocatoriasFaces.convotariaSeleccionado}" 
+               selectionMode="single" >
+
+    <p:ajax event="rowSelect" listener="#{cuCo2ParticipaConvocatoriasFaces.enviarPropuestaSeleccionConvocatoria}"/>  
+    <p:ajax event="rowUnselect" listener="#{cuCo2ParticipaConvocatoriasFaces.noSeleccionConvocatoria}" 
+            update=":idForm_cu_co_2_gestiona_bloque_participa_convocatoria_financia"/>  
+
+    <p:column width="20" headerText="#{properties.value('cu_co_2_lbl_datatable_numero')}">  
+      #{_convocatoria.concecutivo}  
+    </p:column>
+
+    <p:column width="250" headerText="#{properties.value('cu_co_2_lbl_datatable_convocatoria')}">
+      #{_convocatoria.nombreConvocatorio}
+    </p:column> 
+
+    <p:column headerText="#{properties.value('cu_co_2_lbl_datatable_descripcion')}">  
+      #{_convocatoria.descripcion}
+    </p:column>  
+
+    <p:column width="80" headerText="#{properties.value('cu_co_2_lbl_datatable_estado')}">  
+      #{_convocatoria.estadoConvocatorio.valor}
+    </p:column>  
+
+    <p:column width="70" headerText="#{properties.value('cu_co_2_lbl_datatable_fecha_limite')}">
+      <h:outputLabel value="#{_convocatoria.fechaFin}">
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+      </h:outputLabel>    
+    </p:column>
+
+    <f:facet name="footer">
+      #{cuCo2ParticipaConvocatoriasFaces.numeroRegistro} #{properties.value('general_mensaje_footer_datatable_count')}
+    </f:facet>
+
+  </p:dataTable> 
+
+</html>

@@ -1,0 +1,159 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+  <h:body>
+    <div class="body">
+      <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+        <ui:define name="content">
+          <div class="fixed-menu">
+            <!--VENTANA DE LISTA DE PERIODOS-->
+            <div class="right-col">
+              <h2 style="font: verdana;">
+                #{properties.value('cu_iv_02_lbl_titulo_consultar_investigadores')}
+              </h2>
+              <br/>
+              <h:form id="formConsultarInvestigadores" >
+
+                <h:outputLabel value="#{properties.value('cu_pr_09_lbl_subtitulo_consultar_proyectos_de_investigacion')}" styleClass="green negrilla"/>
+                <br />
+                <br />
+                <h:panelGrid id="panelgridConsultarInvestigadores" columns="2" style="width: 100%" 
+                             rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                             columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+                  <h:outputLabel value="#{properties.value('cu_ne_4_lbl_unidad_policial')}" styleClass="gris negrilla" />
+                  <h:selectOneMenu styleClass="gris" value="#{cuIv02ConsultarInvestigadores.unidadPolicial}">  
+                    <f:selectItem itemLabel="--Select--" itemValue="" />  
+                    <f:selectItems value="#{cuIv02ConsultarInvestigadores.listaItemsUnidadesPoliciales}" />  
+                  </h:selectOneMenu>
+
+                  <h:outputLabel value="#{properties.value('cu_pr_21_lbl_numero_identificacion')}" 
+                                 styleClass="gris negrilla" for="inputNumIdentificacion"/>
+                  <p:inputText id="inputNumIdentificacion"
+                               value="#{cuIv02ConsultarInvestigadores.numIdentificacion}"
+                               maxlength="20" size="20" />
+
+                  <h:outputLabel value="#{properties.value('cu_iv_01_lbl_nombre_investigador')}" 
+                                 styleClass="gris negrilla" for="inputNombres"/>
+                  <p:inputText id="inputNombres"
+                               value="#{cuIv02ConsultarInvestigadores.nombresInvestigador}"
+                               maxlength="100" size="100" />
+
+                  <h:outputLabel value="#{properties.value('cu_iv_01_lbl_apellidos_investigador')}" 
+                                 styleClass="gris negrilla" for="inputApellidos"/>
+                  <p:inputText id="inputApellidos"
+                               value="#{cuIv02ConsultarInvestigadores.apellidosInvestigador}"
+                               maxlength="100" size="100" />
+
+                  <h:outputLabel value="#{properties.value('cu_pr_08_lbl_estado_proyecto')}" 
+                                 styleClass="gris negrilla" for="selectEstado"/>
+                  <h:selectOneMenu value="#{cuIv02ConsultarInvestigadores.estado}" id="selectEstado" styleClass="gris">  
+                    <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+                    <f:selectItems value="#{cuIv02ConsultarInvestigadores.listaItemsEstados}" />
+                  </h:selectOneMenu>
+
+                  <h:outputLabel value="#{properties.value('cu_iv_01_lbl_profesor_policial')}" 
+                                 styleClass="gris negrilla" />
+                  <p:selectOneRadio id="radioProfesorPolicial"  styleClass="gris"
+                                    value="#{cuIv02ConsultarInvestigadores.profesorPolicial}">
+                    <f:selectItem itemLabel="Sí" itemValue="Y" />
+                    <f:selectItem itemLabel="No" itemValue="N" />
+                  </p:selectOneRadio>
+                  <h:outputLabel value="#{properties.value('cu_pr_3_lbl_sub_titulo_nivel_formacion')}" 
+                                 styleClass="gris negrilla" for="checkboxNivelesFormacion"/>
+                  <p:selectManyCheckbox id="checkboxNivelesFormacion"  styleClass="gris"
+                                        value="#{cuIv02ConsultarInvestigadores.nivelesFormacionSeleccionados}">
+                    <f:selectItems value="#{cuIv02ConsultarInvestigadores.listaItemsNivelesFormacion}" />
+                  </p:selectManyCheckbox>
+
+                  <h:outputLabel value="#{properties.value('cu_iv_02_lbl_caracteristicas')}" 
+                                 styleClass="gris negrilla" for="checkboxCaracteristicas"/>
+                  <p:selectManyCheckbox id="checkboxCaracteristicas"  styleClass="gris"
+                                        value="#{cuIv02ConsultarInvestigadores.caracteristicasSeleccionadas}">
+                    <f:selectItems value="#{cuIv02ConsultarInvestigadores.listaItemsCaracteristicas}" />
+                  </p:selectManyCheckbox>                                
+
+                  <h:outputLabel value="Categoría" styleClass="gris negrilla" />
+                  <h:selectOneMenu id="selectGradoInvestigador" styleClass="gris"
+                                   value="#{cuIv02ConsultarInvestigadores.idCategoriaPolicial}">
+                    <f:selectItem itemValue="-1" itemLabel="-- Seleccione --" />
+                    <f:selectItems value="#{cuIv02ConsultarInvestigadores.listaCategoriaPolicial}" />
+                    <p:ajax update="listaGradoInvestigador" listener="#{cuIv02ConsultarInvestigadores.handleCategoriaSeleccionadaSeleccionadaChange}" />  
+                  </h:selectOneMenu>
+
+                  <h:outputLabel value="#{properties.value('cu_pr_21_lbl_grado')}" styleClass="gris negrilla" />
+                  <h:selectOneMenu id="listaGradoInvestigador" styleClass="gris" value="#{cuIv02ConsultarInvestigadores.gradoInvestigador}">
+                    <f:selectItem itemValue="" itemLabel="-- Seleccione --" />
+                    <f:selectItems value="#{cuIv02ConsultarInvestigadores.listaItemsGrados}" />
+                  </h:selectOneMenu>
+
+                  <h:outputLabel value="#{properties.value('cu_iv_02_lbl_vinculacion_investigador')}" 
+                                 styleClass="gris negrilla" rendered="false" />
+                  <h:selectOneMenu id="selectVinculacion" rendered="false" styleClass="gris"
+                                   value="#{cuIv02ConsultarInvestigadores.vinculacion}">
+                    <f:selectItem itemValue="-1" itemLabel="-- Seleccione --" />
+                    <f:selectItems value="#{cuIv02ConsultarInvestigadores.listaItemsVinculacion}" />
+                  </h:selectOneMenu>
+
+                </h:panelGrid>
+
+                <br/>
+                <p:separator />
+                <div class="centrado">
+                  <p:commandButton value="Buscar" update="@form" action="#{cuIv02ConsultarInvestigadores.buscarInvestigador}"/>
+                  <p:commandButton value="Limpiar" update="@form" action="#{cuIv02ConsultarInvestigadores.borrarFormulario}" />  
+                </div>
+                <br/>
+                <p:dataTable var="investigador" value="#{cuIv02ConsultarInvestigadores.listaInvestigadores}"
+                             rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                             id="tablaInvestigadores" emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                             paginator="true" paginatorPosition="bottom" 
+                             resizableColumns="true" rowIndexVar="idFila"
+                             rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                             selection="#{cuIv02ConsultarInvestigadores.investigadorSeleccionadoDTO}" 
+                             selectionMode="single" rowKey="#{investigador.id}">
+
+                  <p:ajax event="rowSelect" listener="#{cuIv02ConsultarInvestigadores.irDetallesInvestigador}" update="@form" />
+
+                  <p:column headerText="#{properties.value('cu_pr_13_lbl_column_numero')}" width="20">
+                    <h:outputText value="#{idFila + 1}" />
+                  </p:column>
+
+                  <p:column headerText="#{properties.value('cu_iv_02_lbl_column_tipo_vinculacion')}" width="100" >
+                    <h:outputText value="#{investigador.nombreTipoVinculacion}" />
+                  </p:column>
+
+                  <p:column headerText="#{properties.value('cu_iv_3_lbl_datatable_jefe_grado')}" width="50" >
+                    <h:outputText value="#{investigador.grado}" />
+                  </p:column>
+
+                  <p:column headerText="#{properties.value('cu_iv_3_lbl_datatable_jefe_nombres_app')}" >
+                    <h:outputText value="#{investigador.nombresApellidos}" />
+                  </p:column>
+
+                  <p:column headerText="Identificación" width="110" >
+                    <h:outputText value="#{investigador.identifica}" />
+                  </p:column>
+
+                  <p:column headerText="Origen" width="100" >
+                    <h:outputText value="#{investigador.origen}" />
+                  </p:column>
+
+                  <f:facet name="footer">
+                    #{fn:length( cuIv02ConsultarInvestigadores.listaInvestigadores)} #{properties.value('general_mensaje_footer_datatable_count')}
+                  </f:facet>
+                </p:dataTable>
+              </h:form>
+            </div>
+          </div>
+        </ui:define>
+      </ui:composition>
+    </div>
+  </h:body>
+</html>

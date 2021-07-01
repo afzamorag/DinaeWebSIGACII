@@ -1,0 +1,122 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <body>
+
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+      <ui:define name="content">
+
+        <h:form id="idForm_cu_ne_2_gestiona_bloque_propuestas_necesidades">
+
+          <div class="fixed-menu">
+            <!--VENTANA DE LISTA DE PERIODOS-->
+            <div class="right-col">
+              <h2>
+                #{properties.value('cu_ne_2_titulo_propuesta_necesidad')}
+              </h2>
+            </div>
+          </div>
+
+          <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                       columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+            <h:outputLabel value="#{properties.value('cu_ne_2_lbl_nombre_unidad_policial')}" styleClass="gris negrilla" />
+            <h:outputLabel value="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.nombreUnidadPolicial}" styleClass="gris" />
+
+            <h:outputLabel value="#{properties.value('cu_ne_2_lbl_periodo')}" styleClass="gris negrilla" />
+            <h:outputLabel value="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.periodoSeleccionado.anio}" styleClass="gris" />
+
+            <h:outputLabel value="#{properties.value('cu_ne_2_lbl_cantidad_propuesta_requerida')}" styleClass="gris negrilla" />
+            <h:outputLabel value="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.periodoSeleccionado.cantidad}" styleClass="gris" />
+
+          </h:panelGrid>   
+
+          <br />
+
+          <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}"  
+                       id="idDataTablePropuestas" var="_propuesta" styleClass="tabla" paginatorPosition="bottom" 
+                       rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true" 
+                       value="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.listaPropuestaNecesidad}"
+                       rowIndexVar="idFila"
+                       resizableColumns="true"
+                       rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+            <p:column width="30" headerText="#{properties.value('cu_ne_2_lbl_numero')}">  
+              <h:outputLabel value="#{idFila + 1}" />  
+            </p:column>  
+
+            <p:column headerText="#{properties.value('cu_ne_2_lbl_tema_propuesta')}">  
+              <h:outputLabel value="#{_propuesta.tema}"  />  
+            </p:column> 
+
+            <p:column width="150" headerText="#{properties.value('cu_ne_2_lbl_area')} - #{properties.value('cu_ne_2_lbl_linea')} ">  
+              <h:outputLabel value="#{_propuesta.linea.areaCienciaTecnologia.nombre} - #{_propuesta.linea.nombre}"  />
+            </p:column>  
+
+            <p:column width="100" headerText="#{properties.value('cu_ne_2_lbl_estado')}">
+              <h:outputLabel value="#{_propuesta.estadoDescripcion}" />                              
+            </p:column>                        
+
+            <p:column width="120" headerText="Acciones">
+              <p:commandButton value="#{properties.value('cu_ne_2_lbl_modificar')}" 
+                               rendered="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.mostrarBtnModificarPropuesta( _propuesta )}"
+                               update=":idForm_cu_ne_2_gestiona_bloque_propuestas_necesidades" 
+                               action="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.modificarPropuestaSeleccionada(_propuesta)}" >
+              </p:commandButton>
+              <p:commandButton value="#{properties.value('cu_ne_2_lbl_consultar')}" 
+                               rendered="#{!cuNe2GestionaBloquePropuestasNecesidadesFaces.mostrarBtnModificarPropuesta( _propuesta )}"
+                               action="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.consultarPropuestaSeleccionada(_propuesta)}" >
+              </p:commandButton>
+              <br /><br />
+              <p:commandLink value="#{properties.value('cu_ne_2_lbl_comentarios_ver')}" 
+                             update=":idForm_cu_ne_2_gestiona_bloque_propuestas_necesidades" 
+                             action="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.verComentariosJefePropuestaSeleccionada(_propuesta)}">
+              </p:commandLink>
+            </p:column>
+
+            <f:facet name="footer">  
+              #{fn:length( cuNe2GestionaBloquePropuestasNecesidadesFaces.listaPropuestaNecesidad )} #{properties.value('general_mensaje_footer_datatable_count')}
+            </f:facet>
+          </p:dataTable>
+
+          <br />
+          <center>
+            <h:panelGrid columns="3">
+              <p:commandLink value="#{properties.value('cu_ne_2_lbl_agregar_nueva_propuesta')}" 
+                             action="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.agregarNuevaPropuesta}" 
+                             update=":idForm_cu_ne_2_gestiona_bloque_propuestas_necesidades" 
+                             rendered="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.mostrarLinkAgregarNuevaPropuesta}" />
+              <p:spacer width="200" height="20" />
+              <p:commandLink value="#{properties.value('cu_ne_2_lbl_consultar_propuestas')}" 
+                             action="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.consultarPropuestasHistoricas}" 
+                             rendered="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.mostrarLinkAgregarNuevaPropuesta}" />
+            </h:panelGrid>
+          </center>
+          <br />
+          <p:separator styleClass="separadorBorder" /> 
+          <div class="centrado">
+            <p:commandButton value="#{properties.value('cu_ne_2_lbl_regresar')}"
+                             action="#{navigationFaces.redirectCuNe02Redirect}" 
+                             immediate="true" />
+
+            <p:commandButton value="#{properties.value('cu_ne_2_lbl_enviar')}" 
+                             action="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.enviarPropuestaNecesidad}"
+                             rendered="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.mostrarBtnEnviarPropuesta}"
+                             update=":idForm_cu_ne_2_gestiona_bloque_propuestas_necesidades" />
+
+          </div>
+          <br />
+          <br />
+
+        </h:form>
+
+      </ui:define>
+    </ui:composition>
+  </body>
+</html>

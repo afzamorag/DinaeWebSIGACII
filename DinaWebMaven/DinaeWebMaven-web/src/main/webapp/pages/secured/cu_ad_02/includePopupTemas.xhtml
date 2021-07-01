@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <h:form id="formTemas">
+    <h:panelGrid id="panelgridAdminParamSistemaTemas" columns="2" style="width: 100%" 
+                 rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_40_porciento,panelGridColumnaValor_60_porciento">
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="Descripción del tema" for="inputDescTemaParam" styleClass="gris negrilla" />
+      </h:panelGrid>             
+      <h:inputText value="#{cuAd02AdministrarParametrosSistemaFaces.descripcionTema}" id="inputDescTemaParam" styleClass="gris"
+                   size="50"/>    
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="Estado" for="selectEstadoTemaParam" styleClass="gris negrilla" />
+      </h:panelGrid>             
+      <h:selectOneMenu value="#{cuAd02AdministrarParametrosSistemaFaces.estadoTema}" id="selectEstadoTemaParam" styleClass="gris" >
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="" />
+        <f:selectItem itemLabel="ACTIVO" itemValue="ACTIVO" />
+        <f:selectItem itemLabel="INACTIVO" itemValue="INACTIVO" />
+      </h:selectOneMenu>
+
+
+      <f:facet name="footer">
+        <div class="centrado">
+          <br />
+          <p:commandButton value="#{properties.value('general_lbl_btn_guardar')}" 
+                           rendered="#{!cuAd02AdministrarParametrosSistemaFaces.modificarTema}" id="btnGuardarTemasParam"
+                           actionListener="#{cuAd02AdministrarParametrosSistemaFaces.guardarModificarTema}" 
+                           process="@form"
+                           update=":formAdminParamSistema:tablaParametrosSistemaTipo"
+                           oncomplete="postAction(xhr, status, args)"/>
+
+          <p:commandButton value="#{properties.value('general_lbl_btn_modificar')}" 
+                           rendered="#{cuAd02AdministrarParametrosSistemaFaces.modificarTema}"
+                           actionListener="#{cuAd02AdministrarParametrosSistemaFaces.guardarModificarTema}" 
+                           process="@form"
+                           update=":formAdminParamSistema:tablaParametrosSistemaTipo"
+                           oncomplete="postAction(xhr, status, args)" />
+
+          <p:commandButton value="#{properties.value('general_lbl_btn_cancelar')}" 
+                           rendered="#{cuAd02AdministrarParametrosSistemaFaces.modificarTema}"
+                           action="#{cuAd02AdministrarParametrosSistemaFaces.inicializarDatosTemas}" 
+                           update=":formAdminParamSistema:formPopup"
+                           oncomplete="PF('formCreateUpdateParams').hide();"/>
+
+        </div>                
+      </f:facet>
+
+    </h:panelGrid>
+
+  </h:form>
+</html>

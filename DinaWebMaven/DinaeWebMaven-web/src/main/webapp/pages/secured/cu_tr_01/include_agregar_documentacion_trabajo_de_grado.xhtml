@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+  <h:form id="form_documentacion_trabajo_de_grado" >
+    <br />
+    <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaValor_30_porciento,panelGridColumnaValor_70_porciento" id="pg_documentacion_trabajo_de_grado">
+
+      <h:outputLabel value="#{properties.value('cu_tr_01_lbl_documentacion_trabajo_de_grado_tipo_archivo')}" styleClass="gris negrilla" 
+                     for="idcu_tr_01_lbl_documentacion_trabajo_de_grado_tipoarchivo" />
+      <h:selectOneMenu required="true" id="idcu_tr_01_lbl_documentacion_trabajo_de_grado_tipoarchivo" styleClass="gris"
+                       value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.documentacionProyectoSeleccionado.tipoDocumento.idConstantes}"
+                       disabled="#{cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura}">  
+        <f:selectItem itemLabel="--Select--" itemValue="" />  
+        <f:selectItems value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.listaSelectItemTipoArchivo}" var="_itemTipoArchivo" />  
+      </h:selectOneMenu>
+
+      <h:outputLabel value="#{properties.value('cu_tr_01_lbl_trabajo_de_grado_archivo')}" 
+                     styleClass="gris negrilla" for="idcu_tr_01_lbl_trabajo_de_grado_archivo" />
+
+      <h:panelGrid columns="1">
+        <h:outputLabel id="idNombreArchivoCargado" styleClass="green"
+                       value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.nombreArchivoSubido}" />
+        <p:fileUpload id="idcu_tr_01_lbl_trabajo_de_grado_archivo" dragDropSupport="true" 
+                      fileUploadListener="#{cuTr01IngresarModificarTrabajoDeGradoFaces.handleFileUpload}" 
+                      fileLimit="1" 
+                      label="#{properties.value('cu_tr_01_lbl_examinar')}" update="idNombreArchivoCargado" multiple="false"
+                      fileLimitMessage="#{properties.value('cu_tr_01_lbl_mensaje_maximo_numero_archivo')}"
+                      uploadLabel="#{properties.value('cu_tr_01_lbl_subiendo')}" 
+                      invalidFileMessage="#{properties.value('cu_tr_01_lbl_archivo_invalido')}"
+                      invalidSizeMessage="#{properties.value('cu_tr_01_lbl_tamanio_invalido_archivo')}" 
+                      allowTypes="#{properties.value('cu_tr_01_lbl_formatos_archivos_soportados')}"
+                      mode="advanced" auto="false" cancelLabel="#{properties.value('cu_tr_01_lbl_cancelar')}"  
+                      disabled="#{cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura}"
+                      required="true"/>
+      </h:panelGrid>
+
+      <h:outputLabel value="#{properties.value('cu_tr_01_lbl_documentacion_trabajo_de_grado_descripcion_archivo')}" styleClass="gris negrilla" 
+                     for="idcu_tr_01_lbl_documentacion_trabajo_de_grado_descripcion_archivo" />
+      <h:panelGrid columns="1" style="width: 100%">
+        <p:inputTextarea value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.documentacionProyectoSeleccionado.descripcion}"  
+                         id="idcu_tr_01_lbl_documentacion_trabajo_de_grado_descripcion_archivo"
+                         maxlength="512" counter="contadorInputeTextAreaDescripcion" 
+                         required="true" cols="100" rows="3" autoResize="false"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         styleClass="textareaMaximo"
+                         disabled="#{cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura}">
+          <f:validateLength minimum="1"  maximum="512" />
+        </p:inputTextarea>
+        <h:outputText id="contadorInputeTextAreaDescripcion" styleClass="gris" />
+      </h:panelGrid>
+
+    </h:panelGrid>
+
+    <p:dataTable id="idDataTableDocumentos" var="_documento"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.listaDocumentacionTrabajoDeGradoDTO}" 
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rowIndexVar="idFila" paginatorPosition="bottom" 
+                 resizableColumns="true"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true">
+
+      <p:column width="20" headerText="#{properties.value('cu_tr_01_lbl_tabla_documentos_numerador')}">  
+                #{ idFila + 1}
+      </p:column>  
+
+      <p:column headerText="#{properties.value('cu_tr_01_lbl_documentacion_trabajo_de_grado_tipo_archivo')}" style="width: 10%">  
+        #{_documento.nombreTipoDocumento}
+      </p:column>
+
+      <p:column headerText="#{properties.value('cu_tr_01_lbl_documentacion_trabajo_de_grado_fecha_de_presentacion')}" style="width: 15%">  
+        <h:outputText value="#{_documento.fechaPresentacion}">                
+          <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" type="date"/>
+        </h:outputText>
+      </p:column>
+
+      <p:column headerText="#{properties.value('cu_tr_01_lbl_documentacion_trabajo_de_grado_descripcion_archivo')}" style="width: 50%">  
+        #{_documento.descripcion}                
+      </p:column>
+
+      <p:column headerText="#{properties.value('cu_tr_01_lbl_trabajo_de_grado_columna_descarga_archivo')}" style="width: 20%">  
+        <p:commandLink ajax="false" immediate="true" id="idCommanLinkDescargaArchivo" >
+          <h:outputLabel value="#{_documento.nombreArchivo}" />
+          <f:setPropertyActionListener value="#{_documento}" target="#{cuTr01IngresarModificarTrabajoDeGradoFaces.documentacionTrabajoDeGradoDTODescargarSeleccionado}" />  
+          <p:fileDownload value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.downloadContentProperty}" />
+        </p:commandLink>
+      </p:column>
+
+      <p:column headerText="#{properties.value('cu_tr_01_lbl_tabla_documentacion_trabajo_de_grado_comentario_archivo')}" style="width: 19%">  
+        <h:panelGrid columns="1">
+          <p:row rendered="#{_documento.tieneComentarios}">
+            <p:commandLink id="idcu_tr_01_command_link_ver_comentarios"
+                           value="#{properties.value('cu_tr_01_lbl_link_documentacion_trabajo_de_grado_ver_comentario')}"
+                           immediate="true"                                   
+                           action="#{cuTr01IngresarModificarTrabajoDeGradoFaces.verComentariosProyectoDocumentacionTrabajoDeGrado(_documento)}"
+                           update=":#{p:component('idcu_tr_01_pg_comentarios_documentacion_proyecto')}"
+                           disabled="#{not _documento.tieneComentarios}">                                                           
+              <f:setPropertyActionListener value="#{_documento}" target="#{cuTr01IngresarModificarTrabajoDeGradoFaces.documentacionTrabajoDeGradoDTOComentariarSeleccionado}"/>                        
+            </p:commandLink>
+          </p:row>
+          <p:row rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.esResponsableTrabajosDeGrado}">
+            <p:commandLink id="idcu_tr_01_command_link_agregar_comentarios"
+                           value="#{properties.value('cu_tr_01_lbl_link_documentacion_trabajo_de_grado_agregar_comentario')}"
+                           immediate="true"
+                           actionListener="#{cuTr01IngresarModificarTrabajoDeGradoFaces.agregarComentariosProyectoDocumentacionTrabajoDeGrado(_documento)}"
+                           update=":#{p:component('idcu_tr_01_pg_comentarios_documentacion_proyecto')}"
+                           disabled="#{cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura}">                        
+              <f:setPropertyActionListener value="#{_documento}" target="#{cuTr01IngresarModificarTrabajoDeGradoFaces.documentacionTrabajoDeGradoDTOComentariarSeleccionado}" /> 
+
+            </p:commandLink>
+          </p:row>
+        </h:panelGrid>
+      </p:column>
+
+      <p:column headerText="" style="width: 10%">  
+        <p:commandLink value="#{properties.value('cu_tr_01_lbl_documentacion_trabajo_de_grado_datatable_eliminar')}" 
+                       immediate="true"
+                       oncomplete="PF('varConfirmEliminarDocumento').show()"
+                       disabled="#{cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura or not cuTr01IngresarModificarTrabajoDeGradoFaces.modoInvestigadorPrincipal}">  
+          <f:setPropertyActionListener value="#{_documento}" target="#{cuTr01IngresarModificarTrabajoDeGradoFaces.documentacionTrabajoDeGradoDTOEliminarSeleccionado}" />  
+        </p:commandLink>  
+      </p:column>
+
+      <f:facet name="footer">  
+        #{fn:length( cuTr01IngresarModificarTrabajoDeGradoFaces.listaDocumentacionTrabajoDeGradoDTO )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable>
+
+    <br/><br/>
+
+    <h:panelGroup id="idcu_tr_01_pg_comentarios_documentacion_proyecto">
+
+      <c:if test="#{empty cuTr01IngresarModificarTrabajoDeGradoFaces.listaComentarioProyectoDTODocumentoSeleccionado}">
+        <h:outputLabel value="#{properties.value('cu_tr_01_lbl_documentacion_tabla_comentarios_vacia')} #{cuTr01IngresarModificarTrabajoDeGradoFaces.nombreTipoDocumentoComentariarSeleccionado}" 
+                       styleClass="gris"
+                       rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.verComentarioDocumento}"/>
+      </c:if>
+      <c:if test="#{not empty cuTr01IngresarModificarTrabajoDeGradoFaces.listaComentarioProyectoDTODocumentoSeleccionado}">
+        <h:outputLabel value="#{properties.value('cu_tr_01_lbl_tabla_comentarios_para_documento_titulo')} #{cuTr01IngresarModificarTrabajoDeGradoFaces.nombreTipoDocumentoComentariarSeleccionado}" 
+                       styleClass="gris negrilla centrado"
+                       rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.verComentarioDocumento}"/>            
+      </c:if>
+      <p:dataTable id="idcu_tr_01_datatable_comentarios_documentacion_proyecto" 
+                   var="_comentario"
+                   emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                   value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.listaComentarioProyectoDTODocumentoSeleccionado}" 
+                   rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.verComentarioDocumento}"
+                   rowStyleClass="#{idFilaComentario % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                   rowIndexVar="idFilaComentario" paginatorPosition="bottom" 
+                   resizableColumns="true"
+                   rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true">
+
+        <p:column styleClass="centrado" width="1" headerText="#{properties.value('cu_tr_01_lbl_tabla_documentos_numerador')}">  
+                #{ idFilaComentario + 1}
+        </p:column>
+
+        <p:column width="200" headerText="#{properties.value('cu_tr_01_lbl_tabla_documentacion_trabajo_de_grado_comentario_archivo')}">  
+          #{_comentario.comentario}
+        </p:column>
+
+        <p:column width="150" headerText="#{properties.value('cu_tr_01_lbl_documentacion_trabajo_de_grado_fecha_de_presentacion_comentario')}">  
+          <h:outputText value="#{_comentario.fechaRegistro}">                
+            <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" type="date"/>
+          </h:outputText>
+
+        </p:column>
+
+        <f:facet name="footer">  
+          #{fn:length( cuTr01IngresarModificarTrabajoDeGradoFaces.listaComentarioProyectoDTODocumentoSeleccionado )} #{properties.value('general_mensaje_footer_datatable_count')}
+        </f:facet>
+
+      </p:dataTable>
+
+
+      <h:panelGrid id="id_cu_tr_01_pg_agregar_comentario_documento"
+                   columns="2"
+                   style="width: 100%"
+                   rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.agregarComentarioDocumento}">
+        <h:panelGrid columns="1">
+          <h:outputLabel value="#{properties.value('cu_tr_01_lbl_documentacion_trabajo_de_grado_comentario_archivo')}" styleClass="gris negrilla" 
+                         for="idcu_tr_01_lbl_documentacion_trabajo_de_grado_comentario_archivo" />
+          <h:outputLabel value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.nombreTipoDocumentoComentariarSeleccionado}" 
+                         styleClass="gris negrilla"/>
+        </h:panelGrid>
+        <h:panelGrid columns="1" style="width: 100%">
+          <p:inputTextarea value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.comentarioProyectoDocumentoSeleccionado.comentario}"  
+                           id="idcu_tr_01_lbl_documentacion_trabajo_de_grado_comentario_archivo"
+                           maxlength="512" counter="contadorInputeTextAreaComentario" 
+                           cols="100" rows="3" autoResize="false"
+                           counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                           styleClass="textareaMaximo"
+                           required="true">
+            <f:validateLength minimum="1"  maximum="1000" />
+          </p:inputTextarea>
+          <h:outputText id="contadorInputeTextAreaComentario" styleClass="gris" />                    
+        </h:panelGrid>                
+      </h:panelGrid>            
+      <h:panelGroup id="idcu_tr_01_pg_boton_guardar_comentario"
+                    rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.agregarComentarioDocumento}">      
+        <br/>
+        <p:separator styleClass="separadorBorder" /> 
+        <br/>        
+        <div class="centrado">
+          <p:commandButton value="#{properties.value('cu_tr_01_lbl_documentacion_trabajo_de_grado_btn_guardar')}" 
+                           id="idcu_tr_01_btn_guardar_comentario_documento"
+                           process="@this,id_cu_tr_01_pg_agregar_comentario_documento"
+                           update=":#{p:component('idcu_tr_01_pg_comentarios_documentacion_proyecto')},idDataTableDocumentos"
+                           action="#{cuTr01IngresarModificarTrabajoDeGradoFaces.guardarComentarioDocumento}"/>
+        </div>
+      </h:panelGroup>
+
+    </h:panelGroup>
+
+    <h:panelGroup id="idcu_tr_01_pgroup_include_accion_botones_abajo_documentacion">
+      <ui:include src="include_accion_botones_abajo_trabajo_de_grado.xhtml" />
+    </h:panelGroup>
+
+  </h:form>     
+
+  <p:confirmDialog widgetVar="varConfirmEliminarDocumento" header="#{properties.value('cu_tr_01_lbl_titulo_confirmacion_titulo')}" 
+                   message="#{properties.value('cu_tr_01_lbl_titulo_confirmacion_mensaje_eliminar_documento')}" > 
+
+    <h:form id="idForm_varDocumento">
+
+      <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmEliminarDocumento">
+        <div class="centrado">
+          <p:commandButton actionListener="#{cuTr01IngresarModificarTrabajoDeGradoFaces.eliminarDocumento}" 
+                           value="#{properties.value('cu_tr_01_lbl_btn_confirma_si')}" immediate="true"
+                           oncomplete="varConfirmEliminarDocumento.hide();"
+                           update=":tabViewTrabajosDeGrado:form_documentacion_trabajo_de_grado:idDataTableDocumentos,:tabViewTrabajosDeGrado:form_documentacion_trabajo_de_grado:idcu_tr_01_pg_comentarios_documentacion_proyecto" />  
+          <p:commandButton value="#{properties.value('cu_tr_01_lbl_btn_confirma_no')}" 
+                           onclick="varConfirmEliminarDocumento.hide();" />       
+        </div>
+      </p:outputPanel>
+
+
+
+    </h:form>
+
+
+
+  </p:confirmDialog>
+</html>

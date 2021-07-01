@@ -1,0 +1,134 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+  <h:body>
+    <div class="body">
+      <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+        <ui:define name="content">
+          <div class="fixed-menu">
+            <!--VENTANA DE LISTA DE PERIODOS-->
+            <div class="right-col">
+              <h2 style="font: verdana;">Administrar criterios de evaluación</h2>
+              <br/>
+              <h:form id="formAdminCriteriosEvaluacion" >
+                <h:panelGrid id="panelgridAdminCriteriosEvaluacion" columns="2" style="width: 100%" 
+                             rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                             columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+                  <h:outputLabel value="Criterio de evaluación: " 
+                                 styleClass="gris negrilla" for="selectCriterioEvaluacion"/>
+                  <h:selectOneMenu value="#{cuAd03AdminCriteriosEvaluacion.criterioEvaluacion}" styleClass="gris"
+                                   id="selectCriterioEvaluacion" required="true">  
+                    <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+                    <f:selectItems 
+                      value="#{cuAd03AdminCriteriosEvaluacion.listaItemsCriteriosEvaluacion}" />
+                    <p:ajax update="@form"  
+                            listener="#{cuAd03AdminCriteriosEvaluacion.validarCriterioEvaluacion}" />  
+                  </h:selectOneMenu>
+                </h:panelGrid>
+                <br/>
+                <div class="centrado">
+                  <p:commandButton value="Agregar nuevo criterio de evaluación" update="@form"
+                                   actionListener="#{cuAd03AdminCriteriosEvaluacion.agregarCriterioEvaluacion}"
+                                   rendered="#{!cuAd03AdminCriteriosEvaluacion.mostrarDatosCriterio}"
+                                   disabled="#{!cuAd03AdminCriteriosEvaluacion.habilitarBotonAgregar}"/> 
+                </div>
+                <br/>
+                <h:panelGrid id="panelDatosDelCriterio" columns="2" style="width: 100%;"
+                             rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                             columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento"
+                             rendered="#{cuAd03AdminCriteriosEvaluacion.mostrarDatosCriterio}">
+                  <h:outputLabel value="Nombre del criterio: " 
+                                 styleClass="gris negrilla" for="inputNombreCriterio"/>
+                  <p:inputText id="inputNombreCriterio" maxlength="100" size="100" required="true"
+                               value="#{cuAd03AdminCriteriosEvaluacion.nombreCriterioEvaluacion}"/>
+
+                  <h:outputLabel value="Descripción del criterio: " 
+                                 styleClass="gris negrilla" for="textAreaDescCriterio"/>
+                  <h:panelGroup>
+                    <p:inputTextarea value="#{cuAd03AdminCriteriosEvaluacion.descCriterioEvaluacion}"
+                                     id="textAreaDescCriterio" styleClass="textareaMaximo"
+                                     maxlength="256" counter="contadorDescCriterio"
+                                     counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                                     required="true" autoResize="false">
+                      <f:validateLength minimum="1"  maximum="256" />
+                    </p:inputTextarea>
+                    <h:outputText id="contadorDescCriterio" styleClass="gris" />
+                  </h:panelGroup>
+
+                  <h:outputLabel value="Valor: " 
+                                 rendered="#{cuAd03AdminCriteriosEvaluacion.mostrarValor}"
+                                 styleClass="gris negrilla" for="inputValorCriterio"/>
+                  <p:inputText id="inputValorCriterio" maxlength="3" size="3"
+                               rendered="#{cuAd03AdminCriteriosEvaluacion.mostrarValor}"
+                               value="#{cuAd03AdminCriteriosEvaluacion.valorCriterioEvaluacion}">
+                    <f:validateLongRange minimum="1" maximum="100" />
+                  </p:inputText>
+
+                  <h:outputLabel value="Estado: " 
+                                 styleClass="gris negrilla" for="selectEstadoCriterio"/>
+                  <h:selectOneMenu id="selectEstadoCriterio" required="true" styleClass="gris"
+                                   value="#{cuAd03AdminCriteriosEvaluacion.estadoCriterioEvaluacion}">
+                    <f:selectItem itemValue="-1" itemLabel="-- Seleccione --" />
+                    <f:selectItems value="#{cuAd03AdminCriteriosEvaluacion.listaItemsEstados}" />
+                  </h:selectOneMenu>
+
+                </h:panelGrid>
+                <br/>
+                <div class="centrado">
+                  <p:commandButton value="Guardar" update="@form"
+                                   action="#{cuAd03AdminCriteriosEvaluacion.guardarCriterioEvaluacion}"
+                                   rendered="#{cuAd03AdminCriteriosEvaluacion.mostrarBotonGuardar}"/> 
+                  <p:commandButton value="Actualizar" update="@form"
+                                   actionListener="#{cuAd03AdminCriteriosEvaluacion.guardarCriterioEvaluacion}"
+                                   rendered="#{cuAd03AdminCriteriosEvaluacion.mostrarBotonActualizar}"/> 
+                  <p:commandButton value="Cancelar" update="@form" immediate="true"
+                                   actionListener="#{cuAd03AdminCriteriosEvaluacion.borrarFormulario}"
+                                   rendered="#{cuAd03AdminCriteriosEvaluacion.mostrarBotonActualizar || cuAd03AdminCriteriosEvaluacion.mostrarBotonGuardar}"/> 
+                </div>
+                <br/>
+                <p:dataTable var="criterio" value="#{cuAd03AdminCriteriosEvaluacion.listaCriteriosEvaluacion}"
+                             rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                             id="tablaCriterios" emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                             paginator="true" paginatorPosition="bottom" 
+                             resizableColumns="true" rowIndexVar="idFila"
+                             rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                             selection="#{cuAd03AdminCriteriosEvaluacion.criterioSeleccionado}" 
+                             selectionMode="single" rowKey="#{criterio.idCriterioEvaluacion}">
+
+                  <p:ajax event="rowSelect" listener="#{cuAd03AdminCriteriosEvaluacion.seleccionarCriterio}" 
+                          update="@form" />
+
+                  <p:column headerText="No." width="25">
+                    <h:outputText value="#{idFila + 1}" />
+                  </p:column>
+                  <p:column headerText="Nombre" width="100" >
+                    <h:outputText value="#{criterio.nombreCriterio}" />
+                  </p:column>
+                  <p:column headerText="Descripción" width="150" >
+                    <h:outputText value="#{criterio.descripcionCriterio}" />
+                  </p:column>
+                  <p:column headerText="Valor" width="100" >
+                    <h:outputText value="#{criterio.valor}" />
+                  </p:column>
+                  <p:column headerText="Estado" width="100" >
+                    <h:outputText value="#{criterio.estado}" />
+                  </p:column>
+                  <f:facet name="footer">
+                    #{fn:length( cuAd03AdminCriteriosEvaluacion.listaCriteriosEvaluacion)} #{properties.value('general_mensaje_footer_datatable_count')}
+                  </f:facet>
+                </p:dataTable>
+              </h:form>
+            </div>
+          </div>
+        </ui:define>
+      </ui:composition>
+    </div>
+  </h:body>
+</html>
+

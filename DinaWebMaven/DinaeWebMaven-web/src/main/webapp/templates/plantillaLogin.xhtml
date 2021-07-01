@@ -1,0 +1,285 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link href="#{request.contextPath}/images/css/default.css" rel="stylesheet" type="text/css" />
+        <link href="#{request.contextPath}/images/css/cssLayout.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="#{request.contextPath}/ui/js/calendar_es.js"></script>
+        <script type="text/javascript" src="#{request.contextPath}/ui/js/utilidades_dinae.js"></script>
+        <title>DINAE-SIEDU</title>
+
+    </h:head>
+
+    <h:body class="body">
+
+        <!-- ajax status dialog -->    
+        <script 
+            type="text/javascript">
+                function start() {
+                    PF('statusDialog').show();
+                }
+
+                function stop() {
+                    PF('statusDialog').hide();
+                }
+        </script>
+        <p:ajaxStatus 
+            id="idAjaxStatusTemplate" 
+            onstart="PF('statusDialog').show();" 
+            onsuccess="PF('statusDialog').hide();" 
+            oncomplete="PF('statusDialog').hide();" 
+            onerror="PF('statusDialog').hide();" />
+        <p:dialog 
+            modal="true" 
+            widgetVar="statusDialog" 
+            showHeader="false" 
+            draggable="false" 
+            closable="false" 
+            resizable="false" 
+            visible="false" 
+            position="center" 
+            maximizable="false" 
+            minimizable="false" 
+            height="40" 
+            width="170">
+            <p:graphicImage 
+                value="/images/ajax-loader.gif" />
+        </p:dialog>
+
+        <!-- Inicia encabezado -->
+        <div id="header" class="header">
+            <a class="logo" href="/"><img src="#{request.contextPath}/images/logo.png" alt="Logo Policía Nacional" /></a>
+            <div class="social-networks">
+                SÍGANOS EN:
+                <a href="#;" target="_blank" class="fb"></a>
+                <a href="#;" target="_blank" class="tw"></a>
+                <a href="#;" target="_blank" class="yt"></a>
+                <a href="#;" target="_blank" class="fr"></a>
+                <a href="#;" target="_blank" class="pi"></a>
+            </div>
+            <div class="nombreusuariologueado">
+                <h:outputLabel value="#{loginFaces.informacionPantallaLogin}" /> 
+            </div>
+            <div class="title">
+                <b>POLICÍA NACIONAL DE COLOMBIA</b><br />
+                <span>DIRECCIÓN NACIONAL DE ESCUELAS</span><br />
+                <span>SISTEMA DE INFORMACIÓN PARA LA GESTIÓN ACADÉMICA</span>                
+            </div>
+        </div>
+
+        <!-- Fin encabezado -->
+        <!-- 
+                Inicia menú superior (principal).
+                Para dejar seleccionado un ítem del menú, se le da la clase 'sel' al elemento 'a' correspondiente
+        -->
+        <div  class="main-menu">
+            <!--ul class="menu">
+              <li><a class="{loginFaces.mostrarMenu ? 'sel' : ''}" href="{request.contextPath}/faces/pages/login/inicio.xhtml?faces-redirect=true">Investigación</a></li>
+              <li><a href="#;">Proyección social</a></li>
+              <li><a href="#;">Académica</a></li>
+              <li><a href="#;">Educación contínua</a></li>
+              <li><a href="#;">Otros</a></li>
+            </ul-->
+            <h:panelGrid rendered="#{loginFaces.loggedIn}" columns="3">
+
+                <h:panelGroup rendered="#{loginFaces.loggedIn}">
+                    <div class="ayuda">
+                        <h:form>
+                            <p:commandLink ajax="false" immediate="true" value="Ayuda">
+                                <p:fileDownload value="#{loginFaces.downloadContentPropertyDocumentoAyuda}" />
+                            </p:commandLink>
+                        </h:form>
+                    </div>    
+                </h:panelGroup>
+
+                 <!--<h:panelGroup rendered="#{!loginFaces.loggedIn}">
+                    <div class="login">
+                        <h:form>
+                            <ui:insert name="top">    
+                                <p:commandLink value="Log In" action="/pages/login/login.xhtml?faces-redirect=true" immediate="true" />
+                            </ui:insert>
+                        </h:form>
+                    </div>
+                </h:panelGroup> -->
+
+                <h:panelGroup rendered="#{loginFaces.loggedIn}">
+                    <div class="logout" >
+                        <h:form>
+                            <ui:insert name="top"> 
+                                <p:commandLink value="Log OUT" action="#{loginFaces.logout}" immediate="true"  />
+                            </ui:insert>
+                        </h:form>
+                    </div>
+                </h:panelGroup>    
+
+            </h:panelGrid>     
+        </div>
+
+        <!-- Contenedor de 'fader' o 'slider' principal -->
+        <h:panelGroup rendered="#{loginFaces.mostrarImagenMenuArriba}">
+            <div 
+                align="center" 
+                style="position: relative; 
+                box-shadow: 5px 5px 5px 5px #999; 
+                margin: 8px 8px 8px 8px; 
+                height: 600px; 
+                width: 1150px; 
+                background-image: url('#{request.contextPath}/media/banner-1.jpg')">
+                <!-- PRUEBA PARA NUEVA ENTRADA -->
+                <div class="header-img">
+                    <a class="logo" href="/">
+                        <img src="#{request.contextPath}/images/logo.png" alt="Logo Policía Nacional" />
+                    </a>
+                    <div class="social-networks">
+                        SÍGANOS EN:
+                        <a href="#;" target="_blank" class="fb"></a>
+                        <a href="#;" target="_blank" class="tw"></a>
+                        <a href="#;" target="_blank" class="yt"></a>
+                        <a href="#;" target="_blank" class="fr"></a>
+                        <a href="#;" target="_blank" class="pi"></a>
+                    </div>
+                    <div class="nombreusuariologueado">
+                        <h:outputLabel value="#{loginFaces.informacionPantallaLogin}" /> 
+                    </div>
+                    <div class="title">
+                        <b>POLICÍA NACIONAL DE COLOMBIA</b><br/>
+                        <span>DIRECCIÓN NACIONAL DE ESCUELAS</span><br/>
+                        <span>SISTEMA DE INFORMACIÓN PARA LA GESTIÓN ACADÉMICA</span>                
+                    </div>
+                </div>
+                <!-- FIN PRUEBA NUEVA ENTRADA -->
+
+
+
+                <form 
+                    id="login-form" 
+                    method="POST" 
+                    action="j_security_check" >
+                    <h:panelGroup 
+                        rendered="#{param['Error']=='true'}">
+                        <div 
+                            class="div-error-login">
+                            <div 
+                                align="left" 
+                                style="width: content-box; height: auto">                            
+                                &nbsp;&nbsp;<img src="#{request.contextPath}/images/error.png" style="display: inline-block; line-height: 30px; vertical-align: middle;"/>
+                                &nbsp;<h:outputText value="Usuario y/o clave inválidos!" styleClass="font-error-login"   />                                 
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                    <h:panelGroup 
+                        rendered="#{param['Invalido']=='1'}">
+                        <div 
+                            class="div-error-login">
+                            <div 
+                                align="left" 
+                                style="width: content-box; height: auto">                            
+                                &nbsp;&nbsp;<img src="#{request.contextPath}/images/error.png" style="display: inline-block; line-height: 30px; vertical-align: middle;"/>
+                                &nbsp;<h:outputText value="No se encontró Unidad Policial asociada el usuario!" styleClass="font-error-login"   />                                 
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                    <br />
+                    <h:panelGrid 
+                        columns="2"  
+                        style="margin-left:auto;margin-right:auto;" 
+                        rendered="#{!loginFaces.loggedIn}">
+                        <h:outputLabel 
+                            styleClass="negrilla" 
+                            value="Usuario:"/>
+                        <h:inputText 
+                            styleClass="textMediano 
+                            #{param['Error']=='true' ? 'inputInvalid' : ''}" 
+                            id="j_username" 
+                            required="true" 
+                            size="50"/>
+
+                        <h:outputLabel 
+                            styleClass="negrilla" 
+                            value="Clave:"/>
+                        <h:inputSecret 
+                            styleClass="textMediano #{param['Error']=='true' ? 'inputInvalid' : ''}" 
+                            id="j_password" 
+                            autocomplete="off"  
+                            size="50" />
+
+                        <h:outputLabel />
+                        <input 
+                            type="submit" 
+                            value="Ingresar al sistema" 
+                            class="button" />
+
+
+                    </h:panelGrid>
+                    <br /><br /><br />
+                </form>
+
+
+
+<!--<li><img src="#{request.contextPath}/media/banner-2.jpg" alt="Banner 2" /></li>-->
+
+
+
+            </div>
+        </h:panelGroup>
+        <!-- Fin contenedor de 'fader' -->
+
+        <!-- Fin menú superior -->
+        <!-- 
+            Inicia menú superior (principal).
+            Para dejar seleccionado un ítem del menú, se le da la clase 'sel' al elemento 'a' correspondiente
+        -->
+        <div>
+
+            <h:form>
+
+                <h:panelGroup rendered="#{loginFaces.mostrarMenu}">
+                    <div id="left" style="width:250px">
+                        <p:panelMenu styleClass="menu" model="#{menuFaces.menuModel}" ></p:panelMenu>
+                    </div>
+                </h:panelGroup>
+
+            </h:form>
+            <div id="content" class="left_content">
+
+                <p:messages id="messages" autoUpdate="true" showDetail="true" showSummary="false" closable="true" globalOnly="true" /> 
+                <p:growl id="growl" showDetail="true" sticky="true" autoUpdate="true" showSummary="false" globalOnly="true" />
+                <ui:insert name="content"></ui:insert>
+
+            </div>
+            <div id="contentCompleto" >               
+                <ui:insert name="contentCompleto"></ui:insert>
+
+            </div>
+
+            <!-- Inicia pie de página -->
+            <div class="footer">
+                <ul class="menu logos">
+                    <li><a href="#;" class="presidencia"></a></li>
+                    <li><a href="#;" class="mindefensa"></a></li>
+                    <li><a href="#;" class="bicentenario"></a></li>
+                    <li><a href="#;" class="sigob"></a></li>
+                    <li><a href="#;" class="gob-linea"></a></li>
+                    <li><a href="#;" class="contratacion"></a></li>
+                </ul>
+                <ul class="menu footer-menu">
+                    <li><a href="#;">Inicio</a> I </li>
+                    <li><a href="#;">Política de privacidad</a> I </li>
+                    <li><a href="#;">Contáctenos</a> I </li>
+                    <li><a href="#;">Mapa del sitio</a> I </li>
+                </ul>
+                <div class="footer-line"></div>
+            </div>
+            <!-- Fin de pie de página  -->
+        </div>
+
+    </h:body>
+
+</html>

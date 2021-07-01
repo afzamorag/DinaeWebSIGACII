@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"> 
+
+  <h:form id="version_form_include_lista_asesorias_proyecto" >
+
+    <br />
+    <p:dataTable var="_asesoria_proyecto" value="#{administracionProyectoVersionFaces.listaAsesoriaProyectoDTO}"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                 id="tablaProyectos"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                 paginator="true" 
+                 resizableColumns="true" rowIndexVar="idFila"
+                 paginatorPosition="bottom" 
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+      <p:column headerText="#{properties.value('cu_pr_17_lbl_column_fecha_registro_asesoria')}" width="140">
+        <h:outputText value="#{_asesoria_proyecto.fechaRegistro}" >
+          <f:convertDateTime pattern="#{properties.value('general_formato_fecha_hora')}" locale="es_CO" />
+        </h:outputText>
+      </p:column>
+
+      <p:column headerText="#{properties.value('cu_pr_17_lbl_column_resultado_asesoria')}" >
+        <h:outputText value="#{_asesoria_proyecto.resultadoAsesoria}" escape="false" />
+      </p:column>
+
+      <p:column headerText="#{properties.value('cu_pr_17_lbl_column_modalidad')}" width="120" >
+        #{_asesoria_proyecto.modalidad}
+      </p:column>
+
+      <p:column headerText="#{properties.value('cu_pr_17_lbl_column_evaluador')}" width="100" >
+        #{_asesoria_proyecto.evaluador}
+      </p:column>
+      <f:facet name="footer">  
+        #{fn:length(administracionProyectoVersionFaces.listaAsesoriaProyectoDTO)} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+    </p:dataTable>
+
+  </h:form>
+
+</html>

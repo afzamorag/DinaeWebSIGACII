@@ -1,0 +1,615 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+        <ui:define name="content">
+            <p:dialog  header="#{properties.value('cu_me_06_lbl_titulo_cu')}" 
+                       widgetVar="verForm" 
+                       fitViewport="false" 
+                       responsive="true" 
+                       width="1200" 
+                       showHeader="true" 
+                       modal="true" 
+                       positionType="absolute">
+                <h:form
+                    prependId="false">
+                </h:form>
+
+            </p:dialog>
+            <p:confirmDialog widgetVar="confirmAprobar" 
+                             header="#{properties.value('cu_me_01_titulo_alerta')}" 
+                             global="true"
+                             message="#{properties.value('cu_me_06_lbl_confirmacion_aprobar')}" > 
+                <h:form id="idFormAprobar">
+                    <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmAprobar">
+                        <p:panel>
+                            <p:panelGrid
+                                columns="2"
+                                layout="grid" 
+                                columnClasses="ui-grid-col-2,ui-grid-col-2" 
+                                styleClass="ui-panelgrid-blank">
+                                <p:commandButton actionListener="#{cuMe6AprobarDelBancoVicin.aprobar()}" 
+                                                 style="border:none"
+                                                 value="#{properties.value('cu_pr_7_lbl_btn_confirma_si')}" 
+                                                 immediate="true"
+                                                 oncomplete="PF('confirmAprobar').hide();PF('verForm').hide();"
+                                                 update="verForm, messages, idform_aprobar_del_banco:idDatatablePropuestas" />  
+                                <p:commandButton value="#{properties.value('cu_pr_7_lbl_btn_confirma_no')}" 
+                                                 style="border:none"
+                                                 onclick="PF('confirmAprobar').hide();" 
+                                                 type="button" />       
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:outputPanel>
+                </h:form>
+            </p:confirmDialog>            
+            <p:confirmDialog widgetVar="confirmRechazar" 
+                             header="#{properties.value('cu_me_01_titulo_alerta')}" 
+                             global="true"
+                             message="#{properties.value('cu_me_06_lbl_confirmacion_no_aprobar')}" > 
+                <h:form id="idFormRechazar">
+                    <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmRechazar">
+                        <p:panel>
+                            <p:panelGrid
+                                columns="2"
+                                layout="grid" 
+                                columnClasses="ui-grid-col-2,ui-grid-col-2" 
+                                styleClass="ui-panelgrid-blank">
+                                <p:commandButton actionListener="#{cuMe6AprobarDelBancoVicin.rechazar()}" 
+                                                 style="border:none"
+                                                 value="#{properties.value('cu_pr_7_lbl_btn_confirma_si')}" 
+                                                 immediate="true"
+                                                 oncomplete="PF('confirmRechazar').hide();PF('verForm').hide();"
+                                                 update="verForm, messages, idform_aprobar_del_banco:idDatatablePropuestas" />  
+                                <p:commandButton value="#{properties.value('cu_pr_7_lbl_btn_confirma_no')}" 
+                                                 style="border:none"
+                                                 onclick="PF('confirmRechazar').hide();" 
+                                                 type="button"/>       
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:outputPanel>
+                </h:form>
+            </p:confirmDialog>
+            <p:confirmDialog widgetVar="confirmEliminar" 
+                             header="#{properties.value('cu_me_01_titulo_alerta')}" 
+                             global="true"
+                             message="#{properties.value('cu_me_06_lbl_confirmacion_eliminar')}" > 
+                <h:form id="idFormEliminar">
+                    <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmEliminar">
+                        <p:panel>
+                            <p:panelGrid
+                                columns="2"
+                                layout="grid" 
+                                columnClasses="ui-grid-col-2,ui-grid-col-2" 
+                                styleClass="ui-panelgrid-blank">
+                                <p:commandButton actionListener="#{cuMe6AprobarDelBancoVicin.eliminar}" 
+                                                 style="border:none"
+                                                 value="#{properties.value('cu_pr_7_lbl_btn_confirma_si')}" 
+                                                 immediate="true"
+                                                 oncomplete="PF('confirmEliminar').hide();"
+                                                 update="verForm, messages" />  
+                                <p:commandButton value="#{properties.value('cu_pr_7_lbl_btn_confirma_no')}" 
+                                                 style="border:none"
+                                                 onclick="PF('confirmEliminar').hide();" 
+                                                 type="button" />       
+                            </p:panelGrid>
+                        </p:panel>
+                    </p:outputPanel>
+                </h:form>
+            </p:confirmDialog>
+            <p:panel 
+                id="main"
+                styleClass="ui-fluid">
+                <h:form 
+                    id="idform_aprobar_del_banco"
+                    rendered="#{cuMe6AprobarDelBancoVicin.renderForm}">
+                    <h:outputText 
+                        value="#{properties.value('cu_me_06_lbl_titulo_cu')}"/>
+                    <p:separator />
+                    <p:panel>
+                        <p:messages autoUpdate="true" id="msg" showDetail="false"/>
+                        <p:panelGrid id="pgBusqueda" 
+                                     columns="2" 
+                                     layout="grid" 
+                                     columnClasses="ui-grid-col-2,ui-grid-col-10" 
+                                     styleClass="ui-panelgrid-blank">
+                            <p:outputLabel for="cu_me_06_lbl_unidad" 
+                                           value="#{properties.value('cu_me_06_lbl_unidad')}:" 
+                                           styleClass="negrilla"/>
+                            <p:selectOneMenu rendered="true" 
+                                             id="cu_me_06_lbl_unidad"  
+                                             value="#{cuMe6AprobarDelBancoVicin.idUnidadPolicial}" 
+                                             required="false"
+                                             filter="true"
+                                             filterMatchMode="contains">
+                                <f:selectItem itemLabel=" SELECCIONE " itemValue=""/>
+                                <f:selectItems value="#{appController.unidadesPoliciales()}" 
+                                               var="unidadConvoca" 
+                                               itemLabel="#{unidadConvoca.siglaFisica} - #{unidadConvoca.descripcionDependencia}" 
+                                               itemValue="#{unidadConvoca.pk.consecutivo}"/> 
+                            </p:selectOneMenu>
+                            <p:outputLabel for="cu_me_06_lbl_vigencia" 
+                                           value="#{properties.value('cu_me_06_lbl_vigencia')}:"                                            
+                                           styleClass="negrilla"/>
+                            <p:selectOneMenu rendered="true" 
+                                             id="cu_me_06_lbl_vigencia" 
+                                             value="#{cuMe6AprobarDelBancoVicin.vigencia}" 
+                                             required="false">
+                                <f:selectItem itemLabel=" SELECCIONE " itemValue=""/>
+                                <f:selectItems value="#{cuMe6AprobarDelBancoVicin.vigencias}"  />
+                            </p:selectOneMenu>
+                            <p:outputLabel for="cu_me_06_lbl_modalidad" 
+                                           value="#{properties.value('cu_me_06_lbl_modalidad')}:" 
+                                           styleClass="negrilla"/>
+                            <p:selectOneMenu rendered="true" 
+                                             converter="dominioConverter" 
+                                             id="cu_me_06_lbl_modalidad" 
+                                             value="#{cuMe6AprobarDelBancoVicin.modalidad}" 
+                                             required="false">
+                                <f:selectItem itemLabel=" SELECCIONE " itemValue=""/>                              
+                                <f:selectItems value="#{cuMe6AprobarDelBancoVicin.modalidades}" 
+                                               var="modalidad" 
+                                               itemValue="#{modalidad}" 
+                                               itemLabel="#{modalidad.nombre}"/>
+                            </p:selectOneMenu>
+                        </p:panelGrid>
+                        <p:panel>
+                            <p:panelGrid
+                                columns="6"
+                                layout="grid" 
+                                columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+                                styleClass="ui-panelgrid-blank">
+                                <p:commandButton value="#{properties.value('cu_me_06_lbl_buscar')}" 
+                                                 style="border:none" 
+                                                 process="@form"
+                                                 actionListener="#{cuMe6AprobarDelBancoVicin.buscarProgramaInvestigacion()}" 
+                                                 update="msg, idDatatablePropuestas, messages"/>  
+                            </p:panelGrid>
+                        </p:panel>
+                        <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                                     id="idDatatablePropuestas" 
+                                     reflow="true"
+                                     var="propuesta" 
+                                     value="#{cuMe6AprobarDelBancoVicin.propuestasAsignadas}" 
+                                     rowIndexVar="idFila" 
+                                     rows="15" 
+                                     paginator="true"                            
+                                     rowKey="#{propuesta.sieduPropuestaAsignadaPK}"
+                                     paginatorPosition="bottom" 
+                                     rendered="true">
+                            <p:column headerText="#{properties.value('cu_me_06_lbl_vigencia')}">
+                                <h:outputText value="#{propuesta.sieduPropuestaAsignadaPK.vigencia}" />
+                            </p:column>
+                            <p:column headerText="#{properties.value('cu_me_06_lbl_modalidad')}">
+                                <h:outputText value="#{propuesta.modalidad.descripcion}" />
+                            </p:column>
+                            <p:column headerText="#{properties.value('cu_me_06_lbl_titulo')}">
+                                <h:outputText value="#{propuesta.propuestaNecesidad.titulo}" />
+                            </p:column>
+                            <p:column headerText="#{properties.value('cu_me_06_lbl_area')}">
+                                <h:outputText value="#{propuesta.propuestaNecesidad.linea.areaCienciaTecnologia.nombre}" />
+                            </p:column>
+                            <p:column headerText="#{properties.value('cu_me_06_lbl_linea')}">
+                                <h:outputText value="#{propuesta.propuestaNecesidad.linea.nombre}" />
+                            </p:column>
+                            <p:column headerText="#{properties.value('cu_me_06_lbl_banco')}">
+                                <h:outputText value="#{propuesta.propuestaNecesidad.idBancoNecesidad==null?'NO':'SI'}" />
+                            </p:column>
+                            <p:column headerText="#{properties.value('cu_me_06_lbl_opciones')}">
+                                <p:commandButton 
+                                    value="Ver"  
+                                    update="main"         
+                                    disabled="#{(propuesta.propuestaNecesidad.constantes.idConstantes !=12)}"
+                                    immediate="true" 
+                                    action="#{cuMe6AprobarDelBancoVicin.ver( propuesta )}" 
+                                    style="border: none" />                 
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+                <h:form 
+                    id="verForm"
+                    rendered="#{!cuMe6AprobarDelBancoVicin.renderForm}">
+                    <p:panel header="Detalles propuesta investigacion"
+                             rendered="#{cuMe6AprobarDelBancoVicin.renderPanel}">
+                        <p:panelGrid columns="2" 
+                                     layout="grid" 
+                                     columnClasses="ui-grid-col-3,ui-grid-col-9">
+                            <f:facet
+                                name="header">
+                                Información general
+                            </f:facet>
+                            <p:outputLabel 
+                                value="#{properties.value('cu_me_06_lbl_unidad')}:" 
+                                styleClass="negrilla"/>
+                            <h:outputText value="#{cuMe6AprobarDelBancoVicin.propuestaSeleccionada.unidadPolicial.siglaFisicaYnombreUnidad}"/>
+                            <p:outputLabel  
+                                value="#{bundle['aprobarpropuestanecesidad.fechaenvio.lbl']}:" 
+                                styleClass="negrilla" />
+                            <h:outputText 
+                                value="#{cuMe6AprobarDelBancoVicin.propuestaSeleccionada.fechaEnvio}">
+                                <f:convertDateTime type="date" 
+                                                   pattern="#{bundle['pattern.default.date']}"/>
+                            </h:outputText>
+                            <p:outputLabel 
+                                value="#{properties.value('cu_me_06_lbl_area')}:" 
+                                styleClass="negrilla"/>
+                            <h:outputText value="#{cuMe6AprobarDelBancoVicin.propuestaSeleccionada.linea.areaCienciaTecnologia.nombre}"/>
+                            <p:outputLabel 
+                                value="#{properties.value('cu_me_06_lbl_linea')}:" 
+                                styleClass="negrilla"/>
+                            <h:outputText 
+                                value="#{cuMe6AprobarDelBancoVicin.propuestaSeleccionada.linea.nombre}"/>                    
+                            <p:outputLabel 
+                                value="#{properties.value('cu_me_02_lbl_tema_propuesto')}:" 
+                                styleClass="negrilla"/>
+                            <h:outputText 
+                                value="#{cuMe6AprobarDelBancoVicin.propuestaSeleccionada.tema}"/>
+                            <p:outputLabel 
+                                value="#{properties.value('cu_me_06_lbl_titulo')}:" 
+                                styleClass="negrilla"/>
+                            <h:outputText 
+                                value="#{cuMe6AprobarDelBancoVicin.propuestaSeleccionada.titulo}"/>
+                            <p:outputLabel 
+                                value="#{properties.value('cu_me_02_lbl_resultados_esperados')}:" 
+                                styleClass="negrilla"/>
+                            <h:outputText 
+                                value="#{cuMe6AprobarDelBancoVicin.propuestaSeleccionada.resultadoEsperado}"/> 
+                            <p:outputLabel 
+                                value="#{properties.value('cu_me_02_lbl_fuentes_informacion')}:" 
+                                styleClass="negrilla"/>
+                            <h:outputText 
+                                value="#{cuMe6AprobarDelBancoVicin.propuestaSeleccionada.fuenteInformacion}"/> 
+                            <h:outputLabel  
+                                value="#{properties.value('cu_me_02_lbl_actividades_propuestas')}:" 
+                                styleClass="negrilla"/>
+                            <h:outputText
+                                value="#{cuMe6AprobarDelBancoVicin.propuestaSeleccionada.posibleActividad}"/>
+                            <h:outputLabel  
+                                value="#{bundle['aprobarpropuestanecesidad.archivoanexo.lbl']}:" 
+                                styleClass="negrilla"/>
+                            <p:commandLink 
+                                ajax="false"                               
+                                onclick="PrimeFaces.monitorDownload(start, stop);" 
+                                title="#{bundle['commons.btn.download']}">
+                                <h:outputText                                            
+                                    value="#{cuMe6AprobarDelBancoVicin.propuestaSeleccionada.nombreArchivo}"/>
+                                <p:fileDownload 
+                                    value="#{cuMe6AprobarDelBancoVicin.archivo}"/>
+                            </p:commandLink>
+                        </p:panelGrid>
+                        <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                                     id="idDataTableFuncionarios" var="funcionario" 
+                                     value="#{cuMe6AprobarDelBancoVicin.funcionarios}" 
+                                     rowIndexVar="idFila" rows="15" paginator="true"                                     
+                                     resizableColumns="true" rowKey="#{funcionario.persona.persPers}"
+                                     paginatorPosition="bottom" rendered="true"
+                                     styleClass="tabla"
+                                     style="margin-top:10px; font-size: smaller">
+                            <f:facet
+                                name="header">
+                                Funcionarios que proponen la investigación
+                            </f:facet>
+                            <p:column headerText="#{properties.value('cu_me_02_lbl_grado')}">
+                                <h:outputText value="#{funcionario.grado}" />
+                            </p:column>
+                            <p:column headerText="#{properties.value('cu_me_02_lbl_nombre')}">
+                                <h:outputText value="#{funcionario.nombreCompleto}" />                            
+                            </p:column>
+                            <p:column headerText="#{properties.value('cu_me_02_lbl_correo')}">
+                                <h:outputText value="#{funcionario.correo}" />
+                            </p:column>
+                            <p:column headerText="#{properties.value('cu_me_02_lbl_telefono')}">
+                                <h:outputText value="#{funcionario.telefono}" />
+                            </p:column>
+                            <p:column headerText="#{properties.value('cu_me_02_lbl_cargo')}">
+                                <h:outputText value="#{funcionario.cargo}" />
+                            </p:column>
+                            <p:column headerText="#{properties.value('cu_me_02_lbl_unidad')}">
+                                <h:outputText value="#{funcionario.grado}" />
+                            </p:column>
+                        </p:dataTable>
+                        <p:panelGrid columns="3" 
+                                     layout="grid" 
+                                     columnClasses="ui-grid-col-2,ui-grid-col-8,ui-grid-col-2"
+                                     style="margin-top:10px">                            
+                            <f:facet
+                                name="header">
+                                Agregar observaciones Vicerrectoría de Investigación
+                            </f:facet>
+                            <p:outputLabel for="cu_me_06_lbl_observacion" 
+                                           value="#{properties.value('cu_me_06_lbl_observacion')}:" 
+                                           styleClass="negrilla"/>
+                            <p:inputTextarea value="#{cuMe6AprobarDelBancoVicin.observacion}" 
+                                             id="cu_me_06_lbl_observacion"
+                                             maxlength="1000"
+                                             autoResize="true"
+                                             rows="1"/>
+                            <p:commandButton value="#{properties.value('cu_me_06_lbl_agregar')}"  
+                                             immediate="false" update="idDataTableComentarios" 
+                                             process="@this,cu_me_06_lbl_observacion" 
+                                             style="border:none"
+                                             actionListener="#{cuMe6AprobarDelBancoVicin.agregarObservacion}"/>  
+                        </p:panelGrid>                                                       
+                        <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                                     id="idDataTableComentarios" 
+                                     var="comentario" 
+                                     value="#{cuMe6AprobarDelBancoVicin.comentarios}" 
+                                     rowIndexVar="idFila" 
+                                     rows="15" paginator="true"                                      
+                                     resizableColumns="true" 
+                                     rowKey="#{comentario.idComentarioNecesidad}"
+                                     paginatorPosition="bottom" 
+                                     rendered="true"
+                                     style="margin-top:10px">
+                            <f:facet
+                                name="header">
+                                Observaciones realizadas por la Vicerrectoría de Investigación
+                            </f:facet>
+                            <p:column headerText="#{bundle['aprobarpropuestanecesidad.fechacomentario.lbl']}">
+                                <h:outputText value="#{comentario.fecha}">
+                                    <f:convertDateTime type="date" 
+                                                       pattern="#{bundle['pattern.default.date']}"/>
+                                </h:outputText>
+                            </p:column>                                
+                            <p:column headerText="#{bundle['aprobarpropuestanecesidad.observacion.lbl']}">
+                                <h:outputText value="#{comentario.comentario}" />
+                            </p:column>
+                            <p:column headerText="#{bundle['aprobarpropuestanecesidad.autor.lbl']}">
+                                <h:outputText value="#{comentario.autor}" />
+                            </p:column>                                
+                            <p:column headerText="#{bundle['aprobarpropuestanecesidad.opciones.lbl']}">
+                                <p:commandButton value="Eliminar" 
+                                                 immediate="true" 
+                                                 style="border:none" 
+                                                 oncomplete="PF('confirmEliminar').show()" >
+                                    <f:setPropertyActionListener value="#{comentario}" 
+                                                                 target="#{cuMe6AprobarDelBancoVicin.comentarioSeleccionado}"/> 
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                        <f:facet
+                            name="footer">
+                            <p:panelGrid
+                                columns="6"
+                                layout="grid" 
+                                columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+                                styleClass="ui-panelgrid-blank"
+                                style="margin-top:10px">
+                                <p:commandButton 
+                                    value="#{bundle['aprobarpropuestanecesidad.preaprobar.btn']}" 
+                                    immediate="true" 
+                                    style="border:none" 
+                                    action="#{cuMe6AprobarDelBancoVicin.preaprobar()}"
+                                    update="main"
+                                    rendered="#{!cuMe6AprobarDelBancoVicin.renderButton}"/>
+                                <p:commandButton 
+                                    value="#{bundle['aprobarpropuestanecesidad.noaprobar.btn']}" 
+                                    immediate="true" 
+                                    style="border:none" 
+                                    oncomplete="PF('confirmRechazar').show()"/>
+                                <p:commandButton 
+                                    value="#{bundle['commons.btn.back']}" 
+                                    style="border:none"                       
+                                    action="#{cuMe6AprobarDelBancoVicin.onBack()}"
+                                    update="main"/> 
+                            </p:panelGrid>
+                        </f:facet>                        
+                    </p:panel>  
+                    <p:panel                         
+                        style="margin-top:10px; text-align: center"
+                        id="pnlEjecutor"
+                        rendered="#{!cuMe6AprobarDelBancoVicin.renderPanel}">
+                        <p:panel
+                            header="#{bundle['aprobarpropuestanecesidad.title.unidadejecutora']}"
+                            style="margin-top:10px; text-align: center"
+                            id="pnlUnidadesEjecutoras">
+                            <p:panelGrid 
+                                columns="5" 
+                                layout="grid" 
+                                columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+                                style="margin-top:20px">
+                                <f:facet
+                                    name="header">
+                                    #{properties.value('cu_ne_7_vincular_otras_unida_policiale')}
+                                </f:facet>
+                                <p:outputLabel 
+                                    value="#{properties.value('cu_ne_7_nombre_de_la_unidad')}" 
+                                    for="idListaSelectItemUnidad" 
+                                    styleClass="negrilla" />                            
+                                <p:selectOneMenu 
+                                    required="false" 
+                                    id="idListaSelectItemUnidad"                                  
+                                    value="#{cuMe6AprobarDelBancoVicin.idUnidadPolicialVinculaSeleccionado}"                                 
+                                    filter="true"
+                                    filterMatchMode="contains">  
+                                    <f:selectItem 
+                                        itemLabel=" SELECCIONE "
+                                        itemValue="" />  
+                                    <f:selectItems 
+                                        value="#{cuMe6AprobarDelBancoVicin.listaItemUnidadPolicialVincula}" 
+                                        var="unidad" 
+                                        itemValue="#{unidad.idUnidadPolicial}" 
+                                        itemLabel="#{unidad.siglaFisicaYnombreUnidad}"/>  
+                                </p:selectOneMenu>
+                                <p:outputLabel 
+                                    value="#{properties.value('cu_ne_7_rol_en_proyecto')}" 
+                                    for="idListaSelectItemLinea" 
+                                    styleClass="negrilla" />
+                                <p:selectOneMenu 
+                                    required="false" 
+                                    id="idListaSelectItemLinea"                                 
+                                    value="#{cuMe6AprobarDelBancoVicin.idRolVinculaEjecutorSelecionado}">  
+                                    <f:selectItem 
+                                        itemLabel=" SELECCIONE " 
+                                        itemValue="" />  
+                                    <f:selectItems 
+                                        value="#{cuMe6AprobarDelBancoVicin.listaItemRolVincula}" 
+                                        var="rol" 
+                                        itemValue="#{rol.idConstantes}" 
+                                        itemLabel="#{rol.valor}"/>  
+                                </p:selectOneMenu> 
+                                <p:commandButton 
+                                    value="#{properties.value('cu_ne_7_vincular')}" 
+                                    action="#{cuMe6AprobarDelBancoVicin.vincularUnidadFuncional()}" 
+                                    update="pnlEjecutor"
+                                    process="@form" 
+                                    style="border:none"/>
+                            </p:panelGrid>
+                            <p:dataTable 
+                                emptyMessage="#{properties.value('general_mensaje_no_records_found')}"  
+                                var="_ejecutor" 
+                                id="tablaEjecutoresNecesidad" 
+                                value="#{cuMe6AprobarDelBancoVicin.listadoEjecutorNecesidad}"
+                                paginatorPosition="bottom" 
+                                rowIndexVar="idFila"
+                                resizableColumns="true"
+                                style="margin-top:15px"
+                                rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                                paginator="true" >
+                                <f:facet
+                                    name="header">
+                                    #{properties.value('cu_ne_7_unida_policial_ejecutora')}
+                                </f:facet>
+
+                                <p:column 
+                                    headerText="#{properties.value('cu_ne_7_lista_unidad_policial')}">  
+                                    <h:outputText 
+                                        value="#{_ejecutor.nombreUnidadPolicial}" />                    
+                                </p:column>
+                                <p:column 
+                                    headerText="#{properties.value('cu_ne_7_rol')}">  
+                                    <h:outputText 
+                                        value="#{_ejecutor.nombreRol}" />                    
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel>
+
+                        <p:panel
+                            header="#{bundle['aprobarpropuestanecesidad.title.compromisos']}"
+                            style="margin-top:50px; text-align: center"                            
+                            id="pnlCompromisos">
+                            <p:panelGrid 
+                                columns="5" 
+                                layout="grid" 
+                                columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+                                style="margin-top:20px">
+                                <f:facet
+                                    name="header">
+                                    Agregar nuevos compromisos a la propuesta
+                                </f:facet>
+                                <p:outputLabel 
+                                    value="#{properties.value('cu_pr_23_lbl_tipo_compromiso')}" 
+                                    styleClass="negrilla"/>
+                                <p:selectOneMenu 
+                                    required="false" 
+                                    id="lstCompromisos"                                  
+                                    value="#{cuMe6AprobarDelBancoVicin.compromisoSeleccionado.tipoCompromiso}"
+                                    converter="constanteConverter">  
+                                    <f:selectItem 
+                                        itemLabel=" SELECCIONE "
+                                        itemValue="" />  
+                                    <f:selectItems 
+                                        value="#{cuMe6AprobarDelBancoVicin.tipoCompromisoList}" 
+                                        var="tipoCompromiso" 
+                                        itemValue="#{tipoCompromiso}" 
+                                        itemLabel="#{tipoCompromiso.valor}"/>  
+                                </p:selectOneMenu>
+                                <p:outputLabel 
+                                    value="#{properties.value('cu_pr_23_lbl_fecha_limite')}" 
+                                    for="idfecha" 
+                                    styleClass="negrilla"/>  
+                                <p:calendar 
+                                    pattern="#{properties.value('general_formato_fecha')}" 
+                                    locale="es"
+                                    yearRange="#{properties.value('general_calendar_rango_anio_fecha')}"  
+                                    readonlyInput="true"
+                                    navigator="true"                                    
+                                    id="idfecha" 
+                                    value="#{cuMe6AprobarDelBancoVicin.compromisoSeleccionado.fecha}"/>
+                                <p:commandButton                                 
+                                    value="#{properties.value('cu_pr_23_lbl_guardar_compromiso')}" 
+                                    update="pnlEjecutor"   
+                                    action="#{cuMe6AprobarDelBancoVicin.guardarCompromiso()}"
+                                    style="border:none"
+                                    process="@form"/>                             
+                            </p:panelGrid> 
+                            <p:dataTable 
+                                emptyMessage="#{properties.value('general_mensaje_no_records_found')}"  
+                                id="idDataTableCompromisos" 
+                                var="_compromiso" 
+                                value="#{cuMe6AprobarDelBancoVicin.listaCompromiso}" 
+                                rowIndexVar="idFila" 
+                                rows="15" 
+                                paginator="true"                                  
+                                resizableColumns="true"
+                                paginatorPosition="bottom"                             
+                                style="margin-top:20px">
+                                <f:facet
+                                    name="header">
+                                    #{bundle['aprobarpropuestanecesidad.tablecompromisos.title']}
+                                </f:facet>
+                                <p:column 
+                                    headerText="#{properties.value('cu_pr_23_lbl_numero')}">  
+                                    #{idFila + 1}
+                                </p:column>
+                                <p:column 
+                                    headerText="#{properties.value('cu_pr_23_lbl_nombre_compromiso')}">  
+                                    #{_compromiso.nombreCompromisoNumeroIncrementa}
+                                </p:column> 
+                                <p:column 
+                                    headerText="#{properties.value('cu_pr_23_lbl_fecha_limite')}">
+                                    <h:outputText 
+                                        value="#{_compromiso.fecha}">
+                                        <f:convertDateTime 
+                                            pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+                                    </h:outputText>    
+                                </p:column>
+                                <p:column 
+                                    headerText="#{properties.value('cu_pr_19_lbl_tabla_acciones')}">                                
+                                    <p:commandLink 
+                                        value="#{properties.value('cu_pr_10_lbl_tab3_btn_eliminar')}" 
+                                        immediate="true"
+                                        action="#{cuMe6AprobarDelBancoVicin.eliminarCompromisoPeriodo()}"
+                                        update="idDataTableCompromisos">  
+                                        <f:setPropertyActionListener 
+                                            value="#{_compromiso}" 
+                                            target="#{cuMe6AprobarDelBancoVicin.compromisoSeleccionado}"/>  
+                                    </p:commandLink>              
+                                </p:column> 
+                            </p:dataTable>  
+                        </p:panel>
+                        <f:facet
+                            name="footer">
+                            <p:panelGrid
+                                columns="6"
+                                layout="grid" 
+                                columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+                                styleClass="ui-panelgrid-blank"
+                                style="margin-top:10px">
+                                <p:commandButton                                 
+                                    value="#{properties.value('cu_pr_23_lbl_guardar_compromiso')}" 
+                                    update="pnlEjecutor"   
+                                    action="#{cuMe6AprobarDelBancoVicin.publicarPropuestas()}"
+                                    style="border:none"
+                                    process="@form"/> 
+                                <p:commandButton 
+                                    value="#{bundle['commons.btn.back']}" 
+                                    style="border:none"                       
+                                    action="#{cuMe6AprobarDelBancoVicin.onBack()}"
+                                    update="main"                                    
+                                    process="@form"/>
+                            </p:panelGrid>
+                        </f:facet>          
+
+                    </p:panel>
+                </h:form>
+            </p:panel>            
+        </ui:define>
+    </ui:composition>
+</html>

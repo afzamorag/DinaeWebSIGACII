@@ -1,0 +1,188 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <body>
+    <div class="body">
+
+      <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+        <ui:define name="content">
+
+          <h:form id="idForm_gestiona_correo">
+
+            <div class="fixed-menu">
+
+              <div class="right-col">
+                <h2>
+                  Administración de Plantilla Correo
+                </h2>                                
+              </div>
+            </div>
+
+            <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                         columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento" >
+
+              <h:outputLabel for="id_codigocorreo" value="Correo" styleClass="gris negrilla" /> 
+              <h:selectOneMenu id="id_codigocorreo" value="#{cuAdCorreoFaces.codigoCorreoSeleccionado}"  styleClass="gris">
+                <f:selectItem itemValue="" itemLabel="--Seleccione--"/>
+                <f:selectItems value="#{cuAdCorreoFaces.listaCodigoCorreoItem}"  />  
+                <p:ajax update="@form" listener="#{cuAdCorreoFaces.handleSeleccionarCorreo()}"/>
+              </h:selectOneMenu> 
+
+            </h:panelGrid>
+
+            <br /><br />
+            <h:panelGroup id="pggeneradetallecorreo">
+
+              <h:panelGroup rendered="#{cuAdCorreoFaces.mostrarDetalleMailSeleccionado}">
+
+                <p:tabView id="tabViewProyectos" orientation="top" activeIndex="#{cuAdCorreoFaces.idTabSeleccionado}" >  
+
+                  <p:ajax event="tabChange" listener="#{cuAdCorreoFaces.onTabChange}" />  
+
+                  <p:tab id="idTabDetalleCorreo" title="Parametrizar correo">
+                    <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento" >
+
+                      <h:outputLabel for="id_codigo" value="Codigo" styleClass="gris negrilla" /> 
+                      <h:outputLabel id="id_codigo" value="#{cuAdCorreoFaces.correoParametrizaSeleccionado.codigo}" styleClass="gris" /> 
+
+                      <h:outputLabel for="id_asunto" value="Asunto" styleClass="gris negrilla" /> 
+                      <p:inputText size="100" maxlength="512" required="true" id="id_asunto" value="#{cuAdCorreoFaces.correoParametrizaSeleccionado.asunto}" styleClass="gris" /> 
+
+                      <h:outputLabel for="id_formato" value="Formato" styleClass="gris negrilla" /> 
+                      <p:inputText size="100" maxlength="50" required="true" id="id_formato" value="#{cuAdCorreoFaces.correoParametrizaSeleccionado.formato}" styleClass="gris" /> 
+
+                      <h:outputLabel for="id_texto" value="Mensaje" styleClass="gris negrilla" /> 
+                      <p:editor id="id_texto" value="#{cuAdCorreoFaces.textoCadenaCorreo}" maxlength="4000"/> 
+
+                    </h:panelGrid>
+
+                    <br />
+                    <p:separator styleClass="separadorBorder" /> 
+                    <div class="centrado">
+
+                      <p:commandButton value="#{properties.value('cu_co_4_btn_agregar_guardar_propuestas')}"
+                                       action="#{cuAdCorreoFaces.guardarCorreo}" 
+                                       process="@this,id_asunto,id_formato,id_texto"
+                                       update="@form" />
+
+                      <p:commandButton value="Limpiar"
+                                       immediate="true"
+                                       action="#{cuAdCorreoFaces.limpiar}" 
+                                       update="@form" />
+
+                    </div>
+                    <br />
+                  </p:tab>
+
+                  <p:tab id="idTabTestCorreo" title="Test correo">
+
+                    <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento" >
+
+                      <h:outputLabel value="Codigo" styleClass="gris negrilla" /> 
+                      <h:outputLabel  value="#{cuAdCorreoFaces.correoParametrizaSeleccionadoTest.codigo}" styleClass="gris" /> 
+
+                      <h:outputLabel value="Asunto" styleClass="gris negrilla" /> 
+                      <h:outputLabel value="#{cuAdCorreoFaces.correoParametrizaSeleccionadoTest.asunto}" styleClass="gris" /> 
+
+                      <h:outputLabel value="Formato" styleClass="gris negrilla" /> 
+                      <h:outputLabel value="#{cuAdCorreoFaces.correoParametrizaSeleccionadoTest.formato}" styleClass="gris" /> 
+
+                      <h:outputLabel value="Mensaje" styleClass="gris negrilla" /> 
+                      <p:editor disabled="true" value="#{cuAdCorreoFaces.textoCadenaCorreo}" maxlength="4000"/> 
+
+                    </h:panelGrid>
+
+                    <br />
+                    <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento" >
+
+                      <h:outputLabel for="idmail" value="Mail" styleClass="gris negrilla" /> 
+                      <p:inputText size="50" required="true" id="idmail" value="#{cuAdCorreoFaces.correoTest}" styleClass="gris" /> 
+
+                    </h:panelGrid>
+                    <br />      
+
+                    <h:outputLabel value="Ingrese los datos para realizar la prueba:" styleClass="green negrilla" />         
+                    <h:panelGrid columns="2">
+
+                      <h:panelGrid columns="1">
+                        <h:outputLabel value="Parametros-Valores ASUNTO" styleClass="gris negrilla" />                                     
+                        <div class="centrado">
+                          <h:panelGrid columns="2">
+
+                            <p:inputText value="#{cuAdCorreoFaces.keyAsunto1}" styleClass="gris" />   
+                            <p:inputText value="#{cuAdCorreoFaces.valueAsunto1}" styleClass="gris" />   
+
+                            <p:inputText value="#{cuAdCorreoFaces.keyAsunto2}" styleClass="gris" />   
+                            <p:inputText value="#{cuAdCorreoFaces.valueAsunto2}" styleClass="gris" />   
+
+                            <p:inputText value="#{cuAdCorreoFaces.keyAsunto3}" styleClass="gris" />   
+                            <p:inputText value="#{cuAdCorreoFaces.valueAsunto3}" styleClass="gris" />   
+
+                            <p:inputText value="#{cuAdCorreoFaces.keyAsunto4}" styleClass="gris" />   
+                            <p:inputText value="#{cuAdCorreoFaces.valueAsunto4}" styleClass="gris" />   
+
+                            <p:inputText value="#{cuAdCorreoFaces.keyAsunto5}" styleClass="gris" />   
+                            <p:inputText value="#{cuAdCorreoFaces.valueAsunto5}" styleClass="gris" />   
+
+                          </h:panelGrid>
+                        </div>      
+                      </h:panelGrid>
+
+                      <h:panelGrid columns="1">
+                        <h:outputLabel value="Parametros-Valores CONTENIDO" styleClass="gris negrilla" /> 
+                        <div class="centrado">
+                          <h:panelGrid columns="2">
+
+                            <p:inputText value="#{cuAdCorreoFaces.keyContenido1}" styleClass="gris" />   
+                            <p:inputText value="#{cuAdCorreoFaces.valueContenido1}" styleClass="gris" />   
+
+                            <p:inputText value="#{cuAdCorreoFaces.keyContenido2}" styleClass="gris" />   
+                            <p:inputText value="#{cuAdCorreoFaces.valueContenido2}" styleClass="gris" />   
+
+                            <p:inputText value="#{cuAdCorreoFaces.keyContenido3}" styleClass="gris" />   
+                            <p:inputText value="#{cuAdCorreoFaces.valueContenido3}" styleClass="gris" />   
+
+                            <p:inputText value="#{cuAdCorreoFaces.keyContenido4}" styleClass="gris" />   
+                            <p:inputText value="#{cuAdCorreoFaces.valueContenido4}" styleClass="gris" />   
+
+                            <p:inputText value="#{cuAdCorreoFaces.keyContenido5}" styleClass="gris" />   
+                            <p:inputText value="#{cuAdCorreoFaces.valueContenido5}" styleClass="gris" />   
+
+                          </h:panelGrid>
+                        </div>    
+                      </h:panelGrid>
+                    </h:panelGrid>
+                    <div class="centrado">
+                      <p:commandButton value="Test"
+                                       action="#{cuAdCorreoFaces.probarCorreo}" 
+                                       update=":idForm_gestiona_correo" />
+                    </div>
+
+                  </p:tab>
+
+                </p:tabView>
+
+
+
+
+
+              </h:panelGroup>
+
+            </h:panelGroup>
+
+          </h:form>
+
+
+        </ui:define>
+      </ui:composition>
+    </div>
+  </body>
+</html>

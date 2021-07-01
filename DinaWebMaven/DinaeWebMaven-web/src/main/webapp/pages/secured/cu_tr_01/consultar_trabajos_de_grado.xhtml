@@ -1,0 +1,349 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <head>
+        <title>Listado De Trabajos De Grado</title>
+        <meta 
+            name="viewport" 
+            content="width=device-width"/>
+    </head>
+    <body>
+        <ui:composition 
+            template="../../../templates/plantillaPrincipal.xhtml">
+            <ui:define 
+                name="content">
+                <h:form 
+                    id="idcu_tr_01_form_consultar_trabajos_de_grado" >
+                    <div 
+                        class="fixed-menu">
+                        <div 
+                            class="right-col">
+                            <h2>
+                                #{properties.value('cu_tr_01_lbl_titulo')}
+                            </h2>
+                        </div>
+                    </div>
+                    <div 
+                        width="100%">
+                        <h:panelGroup 
+                            id="idcu_pg_responsable_trabajos_de_grado"
+                            rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.esResponsableTrabajosDeGrado}">
+                            <div 
+                                class="centrado">
+                                <div 
+                                    class="green negrilla" align="left">
+                                    <h2>
+                                        #{properties.value('cu_tr_01_lbl_titulo_tabla_trabajos_de_grado')}
+                                    </h2>
+                                </div>
+                            </div>
+                            <!-- Inicio Buscador -->
+                            <h:panelGroup 
+                                id="idcu_pg_buscador_trabajos_de_grado">
+                                <h:panelGrid 
+                                    id="idcu_panel_buscador"
+                                    style="width: 100%"
+                                    columns="2"
+                                    columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaLabel_70_porciento"
+                                    rowClasses="filaParPanelGridPar,filaParPanelGridImPar">
+
+                                    <h:outputLabel 
+                                        value="#{properties.value('cu_tr_01_lbl_nombre_del_programa')}" 
+                                        styleClass="gris negrilla" 
+                                        for="idcu_tr_01_lista_programas_trabajo_de_grado"/>
+                                    <h:selectOneMenu 
+                                        styleClass="gris" 
+                                        id="idcu_tr_01_lista_programas_trabajo_de_grado" 
+                                        value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.idProgramaSeleccionadoConsulta}" >  
+                                        <f:selectItem 
+                                            itemLabel="--Seleccione--" 
+                                            itemValue="" />  
+                                        <f:selectItems 
+                                            value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.listaNombreProgramaConsultarItem}" 
+                                            var="_itemProgramasConsulta" />                    
+                                    </h:selectOneMenu>
+                                </h:panelGrid>
+                                <div 
+                                    class="centrado">        
+                                    <p:commandButton 
+                                        value="#{properties.value('cu_tr_01_lbl_btn_consultar_trabajos_de_grado')}" 
+                                        id="idcu_tr_01_btn_consultar_trabajos_de_grado"
+                                        action="#{cuTr01IngresarModificarTrabajoDeGradoFaces.consultarTrabajosDeGrado}"
+                                        ajax="false"
+                                        update="idcu_pg_data_table_trabajos_de_grado"/>
+                                </div>
+                            </h:panelGroup>
+                            <!-- Fin Buscador -->
+                            <br/>
+                            <p:separator 
+                                styleClass="separadorBorder" />
+                            <br/>
+                            <!-- Inicio Tabla de trabajos de grado -->
+                            <h:panelGroup 
+                                id="idcu_pg_data_table_trabajos_de_grado">                        
+                                <p:dataTable 
+                                    id="idcu_data_table_trabajos_de_grado"                                     
+                                    var="trabgrado" 
+                                    paginator="true" 
+                                    style="width: 100%; font-size: small"
+                                    value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.trabajosDeGrado}"
+                                    rowIndexVar="idFila" 
+                                    paginatorPosition="bottom" 
+                                    rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                                    emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                                    rows="#{properties.value('general_mensaje_filas_datatable_pagina')}"> 
+                                    <p:column 
+                                        resizable="true" 
+                                        headerText="#{properties.value('cu_tr_01_lbl_tabla_num')}" 
+                                        style="width: 4%">  
+                                        <h:outputLabel 
+                                            value="#{idFila + 1}" />  
+                                    </p:column> 
+                                    <p:column 
+                                        resizable="true" 
+                                        headerText="#{properties.value('cu_tr_01_lbl_tabla_titulo_trabajo')}" 
+                                        style="width: 27%" filterBy="#{trabgrado.tituloPropuesto}" filterMatchMode="contains">  
+                                        <h:outputLabel 
+                                            value="#{trabgrado.tituloPropuesto}"/>  
+                                    </p:column> 
+                                    <p:column 
+                                        resizable="true" 
+                                        headerText="#{properties.value('cu_tr_01_lbl_tabla_fecha_de_presentacion')}"
+                                        style="width: 7%; text-align: center">  
+                                        <h:outputLabel 
+                                            value="#{trabgrado.fechaRegistro}" 
+                                            style="text-align: center">
+                                            <f:convertDateTime 
+                                                pattern="#{properties.value('general_formato_fecha')}" 
+                                                locale="es_CO" />
+                                        </h:outputLabel>   
+                                    </p:column>
+                                    <p:column 
+                                        resizable="true" 
+                                        headerText="#{properties.value('cu_tr_01_lbl_unidad_policial')}" 
+                                        style="width: 20%">  
+                                        <h:outputLabel 
+                                            value="#{trabgrado.unidadPolicial.nombre}" />  
+                                    </p:column>
+                                    <p:column 
+                                        resizable="true" 
+                                        headerText="Programa" 
+                                        style="width: 16%">
+                                            <h:outputLabel 
+                                                value="#{trabgrado.programas.nombre}" /> 
+                                    </p:column>  
+                                    <p:column 
+                                        resizable="true" 
+                                        headerText="#{properties.value('cu_tr_01_lbl_investigador_principal')}" 
+                                        style="width: 18%">  
+                                        <h:outputLabel 
+                                            value="#{trabgrado.nombreInvestigadorPrincipal}" />
+                                    </p:column>
+                                    <p:column 
+                                        resizable="true" 
+                                        headerText="#{properties.value('cu_tr_01_lbl_actualizar_informacion')}" 
+                                        style="color:white">  
+                                        <p:commandLink 
+                                            immediate="true" 
+                                            action="#{cuTr01IngresarModificarTrabajoDeGradoFaces.initReturnCU_Desde_Consulta_Trabajos_de_grado( trabgrado.idProyecto )}" 
+                                            value="#{properties.value('cu_tr_01_lbl_link_actualizar_trabajo_de_grado')}" /> 
+                                    </p:column>
+                                    <f:facet 
+                                        name="footer">  
+                                        #{fn:length(cuTr01IngresarModificarTrabajoDeGradoFaces.trabajosDeGrado)} #{properties.value('general_mensaje_footer_datatable_count')}
+                                    </f:facet>
+                                </p:dataTable>
+                            </h:panelGroup>
+                            <br />
+                            <p:commandLink 
+                                immediate="true" 
+                                action="#{cuTr01IngresarModificarTrabajoDeGradoFaces.initReturnCU_Agregar_Trabajo_de_Grado}" 
+                                value="#{properties.value('cu_tr_01_lbl_link_agregar_nuevo_trabajo_de_grado')}" /> 
+                        </h:panelGroup>
+                    </div>
+                    <!-- Fin tabla de Trabajos de grado -->
+
+
+                    <!-- Trabajos de grado asignados a investigador Principal -->
+
+                    <div width="100%">
+                        <h:panelGroup id="idcu_pg_data_table_trabajos_de_grado_asignadosInvestigador_principal"
+                                      rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.esInvestigadorPrincipal}">                        
+                            <br/>
+                            <p:separator styleClass="separadorBorder" />
+                            <br/>
+                            <div class="green negrilla" align="left">
+                                <h2>
+                                    #{properties.value('cu_tr_01_lbl_titulo_tabla_trabajos_de_grado_asignados_investigador_principal')}
+                                </h2>
+                            </div>
+
+                            <p:dataTable id="idcu_data_table_trabajos_de_grado_asignados_investigador_principal"                                     
+                                         var="trabgradoinvestigador" paginator="true" style="width: 100%"
+                                         value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.trabajosDeGradoAsigndosInvestigadorPrincipal}"
+                                         rowIndexVar="idFilaInv" paginatorPosition="bottom" 
+                                         rowStyleClass="#{idFilaInv % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                                         emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                                         rows="#{properties.value('general_mensaje_filas_datatable_pagina')}">  
+
+                                <p:column resizable="true" headerText="#{properties.value('cu_tr_01_lbl_tabla_num')}" style="width: 5%">  
+                                    <h:outputLabel value="#{idFilaInv + 1}" />  
+                                </p:column> 
+
+                                <p:column resizable="true" headerText="#{properties.value('cu_tr_01_lbl_tabla_titulo_trabajo')}" style="width: 30%">  
+                                    <h:outputLabel value="#{trabgradoinvestigador.tituloPropuesto}" />  
+                                </p:column> 
+
+                                <p:column resizable="true" headerText="#{properties.value('cu_tr_01_lbl_tabla_fecha_de_presentacion')}" style="width: 10%">  
+                                    <h:outputLabel value="#{trabgradoinvestigador.fechaRegistro}">
+                                        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+                                    </h:outputLabel>   
+                                </p:column> 
+
+                                <p:column resizable="true" headerText="#{properties.value('cu_tr_01_lbl_unidad_policial')}" style="width: 30%">  
+                                    <h:outputLabel value="#{trabgradoinvestigador.unidadPolicial.nombre}" />  
+                                </p:column>
+
+                                <p:column resizable="true" headerText="#{properties.value('cu_tr_01_lbl_actualizar_informacion')}" style="color:white; width: 15%">  
+                                    <p:commandLink immediate="true" 
+                                                   action="#{cuTr01IngresarModificarTrabajoDeGradoFaces.initReturnCU_Desde_Consulta_Trabajos_de_grado_Investigador_principal( trabgradoinvestigador.idProyecto )}" 
+                                                   value="#{properties.value('cu_tr_01_lbl_link_actualizar_trabajo_de_grado')}" /> 
+                                </p:column>
+
+                                <f:facet name="footer">  
+                                    #{fn:length(cuTr01IngresarModificarTrabajoDeGradoFaces.trabajosDeGradoAsigndosInvestigadorPrincipal)} #{properties.value('general_mensaje_footer_datatable_count')}
+                                </f:facet>
+
+                            </p:dataTable>
+
+                        </h:panelGroup>
+
+                    </div>
+                    <!-- Fin Trabajos de grado asignados a investigador Principal -->
+
+                    <div width="100%">
+                        <!-- Inicio Generador de consultas -->
+                        <h:panelGroup id="idcu_pg_usuario_generador_de_consulta"
+                                      rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.esUsuarioGeneradorDeConsulta}">
+
+
+                            <div class="centrado">
+                                <div class="green negrilla" align="left">
+                                    <h2>
+                                        #{properties.value('cu_tr_01_lbl_titulo_tabla_trabajos_de_grado_usuario_generador_de_consulta')}
+                                    </h2>
+                                </div>
+                            </div>      
+
+                            <!--Buscador Generador de consultas-->
+                            <h:panelGrid id="idcu_tr_01_panel_buscador_usuario_generador_consulta"
+                                         style="width: 100%"
+                                         columns="2"
+                                         columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaLabel_70_porciento"
+                                         rowClasses="filaParPanelGridPar,filaParPanelGridImPar">
+
+                                <h:outputLabel value="#{properties.value('cu_tr_01_lbl_nombre_del_programa')}" 
+                                               styleClass="gris negrilla" 
+                                               for="idcu_tr_01_lista_programas_trabajo_de_grado_generador_consulta"/>
+                                <h:selectOneMenu styleClass="gris" id="idcu_tr_01_lista_programas_trabajo_de_grado_generador_consulta" value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.idProgramaSeleccionadoGeneradorConsulta}" >  
+                                    <f:selectItem itemLabel="--Select--" itemValue="" />  
+                                    <f:selectItems value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.listaNombreProgramaConsultarGeneradorConsultaItem}" var="_itemProgramasConsultaGeneradorConsulta" />                    
+                                </h:selectOneMenu>
+
+                            </h:panelGrid>
+
+                            <div class="centrado">        
+                                <p:commandButton value="#{properties.value('cu_tr_01_lbl_btn_consultar_trabajos_de_grado')}" id="idcu_tr_01_btn_consultar_trabajos_de_grado_generador_consulta"
+                                                 action="#{cuTr01IngresarModificarTrabajoDeGradoFaces.consultarTrabajosDeGradoGeneradorDeConsulta}"
+                                                 ajax="false"
+                                                 update="idcu_tr_01_pg_data_table_trabajos_de_grado_generador_de_consulta"/>
+                            </div>
+                            <!-- Fin Buscador Generador de consultas-->
+
+                            <br/>
+                            <p:separator styleClass="separadorBorder" />
+                            <br/>
+                            <!-- Inicio Tabla de trabajos de grado Generador de Consultas -->
+                            <h:panelGroup id="idcu_tr_01_pg_data_table_trabajos_de_grado_generador_de_consulta">                        
+                                <p:dataTable id="idcu_tr_01_data_table_trabajos_de_grado_generador_de_consulta"                                     
+                                             var="trabgradogenconsulta" paginator="true" style="width: 100%"
+                                             value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.trabajosDeGradoGeneradorDeConsulta}"
+                                             rowIndexVar="idFilaConsulta" paginatorPosition="bottom" 
+                                             rowStyleClass="#{idFilaConsulta % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                                             emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                                             rows="#{properties.value('general_mensaje_filas_datatable_pagina')}">  
+                                    <p:column 
+                                        resizable="true" 
+                                        headerText="#{properties.value('cu_tr_01_lbl_tabla_num')}" 
+                                        style="width: 5%">  
+                                        <h:outputLabel 
+                                            value="#{idFilaConsulta + 1}" />  
+                                    </p:column> 
+                                    <p:column 
+                                        resizable="true" 
+                                        headerText="#{properties.value('cu_tr_01_lbl_tabla_titulo_trabajo')}" 
+                                        style="width: 25%"
+                                        filterBy="#{trabgradogenconsulta.tituloPropuesto}"
+                                        filterMatchMode="contains">  
+                                        <h:outputLabel 
+                                            value="#{trabgradogenconsulta.tituloPropuesto}" />  
+                                    </p:column> 
+                                    <p:column 
+                                        resizable="true" 
+                                        headerText="#{properties.value('cu_tr_01_lbl_tabla_fecha_de_presentacion')}"
+                                        style="width: 10%">  
+                                        <h:outputLabel 
+                                            value="#{trabgradogenconsulta.fechaRegistro}">
+                                            <f:convertDateTime 
+                                                pattern="#{properties.value('general_formato_fecha')}" 
+                                                locale="es_CO" />
+                                        </h:outputLabel>   
+                                    </p:column> 
+                                    <p:column 
+                                        resizable="true" 
+                                        headerText="#{properties.value('cu_tr_01_lbl_unidad_policial')}" 
+                                        style="width: 20%">  
+                                        <h:outputLabel 
+                                            value="#{trabgradogenconsulta.unidadPolicial.nombre}" />  
+                                    </p:column>  
+                                    <p:column 
+                                        resizable="true" 
+                                        headerText="#{properties.value('cu_tr_01_lbl_investigador_principal')}" 
+                                        style="width: 15%">  
+                                        <h:outputLabel 
+                                            value="#{trabgradogenconsulta.nombreInvestigadorPrincipal}" />
+                                    </p:column>
+                                    <p:column 
+                                        resizable="true" 
+                                        headerText="#{properties.value('cu_tr_01_lbl_tabla_programa')}" 
+                                        style="width: 15%">  
+                                        <h:outputLabel 
+                                            value="#{trabgradogenconsulta.programas.nombre}" />
+                                    </p:column>
+                                    <p:column 
+                                        resizable="true" 
+                                        headerText="#{properties.value('cu_tr_01_lbl_tabla_consultar')}" 
+                                        style="color:white; width: 10%">  
+                                        <p:commandLink 
+                                            immediate="true" 
+                                            action="#{cuTr01IngresarModificarTrabajoDeGradoFaces.initReturnCU_Desde_Consulta_Trabajos_de_grado_Generador_de_consulta( trabgradogenconsulta.idProyecto )}" 
+                                            value="#{properties.value('cu_tr_01_lbl_link_generar_consulta_trabajo_de_grado')}" /> 
+                                    </p:column>
+                                    <f:facet name="footer">  
+                                        #{fn:length(cuTr01IngresarModificarTrabajoDeGradoFaces.trabajosDeGradoGeneradorDeConsulta)} #{properties.value('general_mensaje_footer_datatable_count')}
+                                    </f:facet>
+                                </p:dataTable>
+                            </h:panelGroup>                    
+                        </h:panelGroup>                
+                        <!-- Fin Generador de consultas -->
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

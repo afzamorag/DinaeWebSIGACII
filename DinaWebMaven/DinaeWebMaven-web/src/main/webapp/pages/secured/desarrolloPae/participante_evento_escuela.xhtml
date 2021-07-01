@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    <h:form
+        id="frmParticipante"
+        prependId="false"> 
+        <h:outputText 
+            value="#{bundle['siedueventoescuela.participante.title']}: #{sieduEventoEscuelaController.selected.eveeCapa.carrera.descripcion}"
+                styleClass="negrilla"/> 
+        <p:separator />
+        <p:panel
+            rendered="#{sieduEventoEscuelaController.renderButtom}">
+            <p:panelGrid
+                id="pnlListparticipante"
+                layout="grid" 
+                columns="3"
+                columnClasses="ui-grid-col-3,ui-grid-col-2,ui-grid-col-2" 
+                styleClass="ui-panelgrid-blank"> 
+                <p:outputLabel                        
+                    value="#{bundle['numero.identificacion']}"
+                    for="nroIdentificacionParticipante"/>      
+                <h:panelGroup>
+                    <p:inputText 
+                        id="nroIdentificacionParticipante"
+                        value="#{sieduParticipanteEventoController.identificacion}"
+                        required="true"/>
+                    <p:message
+                        for="nroIdentificacionParticipante"/>
+                </h:panelGroup>
+                <p:commandButton 
+                    id="btnCreateParticipa"
+                    value="#{bundle['commons.btn.add']}"
+                    title="#{bundle['commons.btn.add']}"
+                    icon="ui-icon-plus"
+                    actionListener="#{sieduParticipanteEventoController.onSave()}"
+                    process="@form"
+                    update=":tvDatos:frmParticipante :tvDatos:frmListParticipante"/>      
+            </p:panelGrid>
+        </p:panel>
+    </h:form>
+    <p:separator/>
+    <h:form
+        id="frmListParticipante"
+        prependId="false">
+        <p:panel>
+            <p:dataTable 
+                id="dtListParticipante"
+                value="#{sieduParticipanteEventoController.list}"
+                var="record"
+                paginator="true" 
+                paginatorPosition="bottom"
+                rows="50"
+                selectionMode="single" 
+                selection="#{sieduParticipanteEventoController.selected}" 
+                rowKey="#{record.parePare}"
+                reflow="true"
+                rowIndexVar="index"
+                editable="true"
+                style="font-size: x-small; margin-top:10px"
+                paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                rowsPerPageTemplate="10,25,50,100,500,1000">  
+                <p:column 
+                    headerText="#{bundle['commons.lbl.numero']}"
+                    style="text-align: center; width: 4%">
+                    <h:outputText 
+                        value="#{index + 1}"/>
+                </p:column>
+                <p:column 
+                    headerText="#{bundle['siedueventoescuela.participante.identificacion']}"
+                    style="text-align: center; width: 10%">
+                    <h:outputText 
+                        value="#{record.parePers.persNroid}"/>
+                </p:column>
+                <p:column
+                    headerText="#{bundle['siedueventoescuela.participante.grado']}"
+                    style="text-align: center; width: 5%">
+                    <h:outputText 
+                        value="#{record.parePers.persGrado}"/>
+                </p:column> 
+                <p:column  
+                    headerText="#{bundle['siedueventoescuela.participante.nombres']}" 
+                    sortBy="#{record.parePers.persNombres} #{record.parePers.persApellidos}"
+                    style="width: 25%">
+                    <h:outputText 
+                        value="#{record.parePers.persNombres} #{record.parePers.persApellidos}"/>
+                </p:column>
+                <p:column
+                    headerText="#{bundle['siedueventoescuela.participante.cargo']}"
+                    style="text-align: justify;">
+                    <h:outputText 
+                        value="#{record.pareCargo.descripcion}"/>
+                </p:column>                    
+                <p:column 
+                    headerText="#{bundle['siedueventoescuela.participante.perfil']}"
+                    style="text-align: center; width: 5%">
+                    <h:outputText 
+                        value="#{record.pareCumplePerfil eq 'N'?'NO':'SI'}"/>
+                </p:column>         
+                <p:column 
+                    headerText="#{bundle['unidad']}"
+                    sortBy="#{record.pareUdeUdepe.siglaFisica}"
+                    style="text-align: center; width: 6%">
+                    <h:outputText 
+                        value="#{record.pareUdeUdepe.siglaFisica}"/>
+                </p:column>
+                <p:column 
+                    headerText="#{bundle['siedueventoescuela.participante.estado']}"
+                    sortBy="#{record.pareEstado}"
+                    style="text-align: center; width: 8%">
+                    <h:outputText 
+                        value="#{record.pareEstado}"/>
+                </p:column>                    
+                <p:column 
+                    headerText="#{bundle['commons.lbl.delete']}"
+                    rendered="#{sieduEventoEscuelaController.renderButtom}"
+                    style="text-align: center; width: 7%">
+                    <h:panelGroup>
+                        <p:commandLink value="#{bundle['commons.btn.remove']}" 
+                                       title="#{bundle['commons.btn.remove']}" 
+                                       actionListener="#{sieduParticipanteEventoController.onDelete(record)}"
+                                       immediate="true"
+                                       update=":tvDatos:frmListParticipante :tvDatos:frmListInasistente">
+                            <f:setPropertyActionListener value="#{record}" target="#{sieduParticipanteEventoController.selected}"/>
+                            <p:confirm 
+                                header="#{bundle['commons.cfmdlg.header']}" 
+                                message="#{bundle['commons.cfmdlg.remove.message']}" 
+                                icon="ui-icon-alert" />
+                        </p:commandLink>
+                    </h:panelGroup>
+                </p:column>
+            </p:dataTable> 
+        </p:panel>
+    </h:form>
+</ui:composition>

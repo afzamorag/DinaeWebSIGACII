@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+  <h:form id="formEventosRelacionadosInforme">
+    <br />
+    <h:outputLabel value="#{properties.value('cu_pr_14_tab_2_lbl_info')}" styleClass="green negrilla"/>
+    <br/><br/>
+    <div class="centrado">
+      <p:dataTable var="evento" value="#{cuPr14AvancePresupuestoProyecto.listaEventosRelacionadosModel}"
+                   rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                   id="tablaEventoProyectosInforme"
+                   emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                   selection="#{cuPr14AvancePresupuestoProyecto.eventosSeleccionados}"
+                   style="width: 100%;" paginator="true"
+                   resizableColumns="true" rowIndexVar="idFila"
+                   paginatorPosition="bottom"
+                   disabledSelection="#{cuPr14AvancePresupuestoProyecto.soloLectura}"
+                   rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"> 
+
+        <p:column selectionMode="multiple" style="width:15px" disabledSelection="#{!evento.seleccionable or cuPr14AvancePresupuestoProyecto.soloLectura}" />  
+
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_column_numero')}" width="25" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{idFila + 1}" styleClass="gris" style="font-size: 13px"/>
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_column_titulo_evento')}" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{evento.tituloEvento}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_column_objetivo_evento')}" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{evento.objetivoEvento}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_column_ciudad_evento')}" width="150" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{evento.nombreCiudad}" styleClass="gris" style="font-size: 13px"/>
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_column_costo_evento')}" width="75" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{evento.costo}" styleClass="alineadoDerecha gris" style="font-size: 13px">                  
+            <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" />
+          </h:outputLabel>           
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_column_fuente_financiera')}" width="75" style="color: white; font-size: 13px">
+          <h:outputLabel value="#{evento.fuenteProyecto.nombreFuente}" styleClass="gris" style="font-size: 13px"/>
+        </p:column>
+        <f:facet name="footer">  
+          #{fn:length( cuPr14AvancePresupuestoProyecto.listaEventosRelacionados  )} #{properties.value('general_mensaje_footer_datatable_count')}
+        </f:facet>
+      </p:dataTable>
+    </div>
+    <br />
+    <div class="centrado">
+
+      <p:commandButton value="#{properties.value('cu_pr_14_lbl_btn_regresar')}" id="idBtnRegresarProyecto"
+                       action="#{cuPr14AvancePresupuestoProyecto.regresar}" immediate="true"
+                       />
+
+      <p:commandButton value="#{properties.value('general_lbl_btn_guardar')}" 
+                       id="btn1EquiposInvestiga"
+                       rendered="#{!cuPr14AvancePresupuestoProyecto.soloLectura}"
+                       action="#{cuPr14AvancePresupuestoProyecto.guardarEventosInforme}" update="@form"/>
+    </div>
+  </h:form>
+</html>
+

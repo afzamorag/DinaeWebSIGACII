@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+
+      <ui:define name="content">
+        <div class="fixed-menu">
+          <div class="right-col">
+            <h2>
+              Seleccionar ensayos para enviar
+            </h2>
+          </div>
+        </div>
+
+        <div width="100%">
+          <h:form id="idFormularioEnsayosGanador">
+            <h:panelGrid width="100%" columnClasses="panelGridTextoError" rendered="#{cuCo8EvaluacionEnsayoCriticoFaces.deshabilitarEdicion}">
+              <h:outputLabel value="Debe evaluar todos los ensayos antes de seleccionar los ganadores"/>
+            </h:panelGrid>
+            <p:dataTable var="_ensayo" value="#{cuCo8EvaluacionEnsayoCriticoFaces.listaEnsayoCriticoUnidadView}"
+                         rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                         id="tablaAutor"
+                         emptyMessage="#{properties.value('general_mensaje_no_records_found')}"                                     
+                         style="width: 100%;" paginator="true"
+                         resizableColumns="true" rowIndexVar="idFila"
+                         paginatorPosition="bottom"
+                         rowStyleClass="filaParDataTable">
+
+              <p:column headerText="N°" width="25" style="text-align: center">
+                #{idFila + 1}
+              </p:column>
+              <p:column headerText="Unidad Policial">
+                #{_ensayo.nombreUnidad}
+              </p:column>
+              <p:column headerText="Titulo Ensayo" style="text-align: center" >
+                #{_ensayo.tituloEnsayo}
+              </p:column>
+              <p:column width="80" headerText="Calificación" style="text-align: center">
+                #{_ensayo.evaluacionEnsayo}
+              </p:column>
+              <p:column width="200" headerText="Estado" style="text-align: center">
+                <h:selectOneMenu styleClass="gris" value="#{_ensayo.estadoCalifacion}" id="selectOrigenEquipo" disabled="#{cuCo8EvaluacionEnsayoCriticoFaces.deshabilitarEdicion or cuCo8EvaluacionEnsayoCriticoFaces.deshabilitarEdicionEnviar}">  
+                  <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+                  <f:selectItems value="#{cuCo8EvaluacionEnsayoCriticoFaces.itemsListaEstados}" var="_estado" itemValue="#{_estado.idConstantes}" itemLabel="#{_estado.valor}"/>
+                </h:selectOneMenu>
+              </p:column>
+              <f:facet name="footer">  
+                #{fn:length( cuCo8EvaluacionEnsayoCriticoFaces.listaEnsayoCriticoUnidadView )} #{properties.value('general_mensaje_footer_datatable_count')}
+              </f:facet>
+            </p:dataTable>
+
+            <br />
+            <br />
+
+            <p:separator styleClass="separadorBorder" /> 
+            <div class="centrado">
+              <p:commandButton value="#{properties.value('cu_co_7_lbl_btn_regresar')}"
+                               id="btnRegresarListadoEnsayos" immediate="true" action="#{cuCo8EvaluacionEnsayoCriticoFaces.regresarSeleccionGanadores}"/>
+
+              <p:commandButton value="#{properties.value('cu_co_7_lbl_btn_guardar')}"
+                               id="btnGuardarEvaluacionEnsayo" rendered="#{!cuCo8EvaluacionEnsayoCriticoFaces.deshabilitarEdicion and !cuCo8EvaluacionEnsayoCriticoFaces.deshabilitarEdicionEnviar}"
+                               action="#{cuCo8EvaluacionEnsayoCriticoFaces.guardarCalificacionEnsayos}"
+                               update="@form" process="@form"/>  
+
+              <p:commandButton value="Enviar" oncomplete="PF('varConfirmarEnviarCalificaEnsayo').show()"
+                               id="btnEnviarEvaluacionEnsayo" rendered="#{!cuCo8EvaluacionEnsayoCriticoFaces.deshabilitarEdicion and !cuCo8EvaluacionEnsayoCriticoFaces.deshabilitarEdicionEnviar and !cuCo8EvaluacionEnsayoCriticoFaces.esEncargadoVicin}"
+                               update="@form" process="@form"/> 
+
+              <p:commandButton value="Publicar" oncomplete="PF('varConfirmarEnviarCalificaEnsayo').show()"
+                               id="btnPublicarEvaluacionEnsayo" rendered="#{!cuCo8EvaluacionEnsayoCriticoFaces.deshabilitarEdicion and cuCo8EvaluacionEnsayoCriticoFaces.esEncargadoVicin and !cuCo8EvaluacionEnsayoCriticoFaces.deshabilitarEdicionEnviar}"
+                               update="@form" process="@form"/> 
+
+            </div>
+
+
+            <p:confirmDialog widgetVar="varConfirmarEnviarCalificaEnsayo" header="#{properties.value('cu_pr_2_lbl_titulo_confirmacion_titulo')}" 
+                             message="#{properties.value('cu_co_8_mensaje_enviar_ganadores_vicin')}" > 
+
+              <h:form id="idForm_varEnviarCalificaEnsayo">
+
+                <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmEnviarCalificaEnsayo">
+                  <div class="centrado">
+                    <p:commandButton actionListener="#{cuCo8EvaluacionEnsayoCriticoFaces.enviarEnsayosGanadoresVicin}" 
+                                     value="#{properties.value('cu_pr_7_lbl_btn_confirma_si')}" immediate="true"
+                                     oncomplete="varConfirmarEnviarCalificaEnsayo.hide();"
+                                     update=":idFormularioEnsayosGanador" />  
+                    <p:commandButton value="#{properties.value('cu_pr_7_lbl_btn_confirma_no')}" 
+                                     onclick="varConfirmarEnviarCalificaEnsayo.hide();" type="button" />       
+                  </div>
+                </p:outputPanel>
+
+              </h:form>
+            </p:confirmDialog>
+
+          </h:form>
+        </div>
+      </ui:define>
+    </ui:composition>
+  </body>
+</html>

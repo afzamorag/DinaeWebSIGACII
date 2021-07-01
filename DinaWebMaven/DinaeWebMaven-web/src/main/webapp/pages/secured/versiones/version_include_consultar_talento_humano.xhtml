@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"      
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"> 
+
+  <h:form id="version_formAgregarTalentoHumanoDelProyecto" >
+
+    <h:outputLabel  value="#{properties.value('cu_pr_3_lbl_sub_titulo_investiga')}" styleClass="green negrilla" />
+    <br /> <br />
+    <p:dataTable id="idDataTableFuncionariosAgregados" var="_investigador"
+                 value="#{administracionProyectoVersionFaces.listaInvestigadoresProyecto}" 
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}"
+                 paginator="true" rowIndexVar="idFila" 
+                 paginatorPosition="bottom"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}">
+
+      <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_tipo_inves')}" width="80">  
+        #{_investigador.tipoVinculacion.valor}
+      </p:column>              
+      <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_nom_y_apell')}">  
+        #{_investigador.identificacion} - #{_investigador.grado} - #{_investigador.nombreCompleto}
+      </p:column>
+      <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_unidadpoli')}" width="70">
+        #{_investigador.codigoUnidadPolicial}
+      </p:column>
+      <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_correo')}" >
+        #{_investigador.correo}
+      </p:column>
+      <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_num_tel')}" width="70" >
+        #{_investigador.telefono}
+      </p:column>
+      <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_estado')}" width="60" >
+        #{_investigador.descripcionActivo}
+      </p:column>
+      <p:column headerText="Horas" width="50" >  
+        <h:outputLabel value="#{_investigador.calculoTotalHora}" >
+          <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_decimal')}" maxFractionDigits="0" />
+        </h:outputLabel>                
+      </p:column> 
+
+    </p:dataTable>
+
+  </h:form>
+
+</html>

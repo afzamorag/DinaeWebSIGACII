@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+               columnClasses="panelGridColumnaValor_70_porciento, panelGridColumnaLabel_30_porciento">
+
+    <h:outputLabel value="Fecha final de la convocatorioa de ensayo" styleClass="gris negrilla" />                        
+    <h:outputLabel value="#{cuCo8EvaluacionEnsayoCriticoFaces.periodo.fechaFin}" styleClass="gris negrilla">
+      <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+    </h:outputLabel>
+
+  </h:panelGrid>
+  <br />
+  <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+               id="idDataTableEnsayosCuco8" var="_ensayo" 
+               value="#{cuCo8EvaluacionEnsayoCriticoFaces.listadoEnsayoCriticoUnidadModel}" 
+               rowIndexVar="idFila" rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+               paginator="true" 
+               resizableColumns="true"
+               rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+               paginatorPosition="bottom" selection="#{cuCo8EvaluacionEnsayoCriticoFaces.ensayoItemSeleccionado}" 
+               selectionMode="single" >
+
+    <p:ajax event="rowSelect" listener="#{cuCo8EvaluacionEnsayoCriticoFaces.enviarEnsayoCriticoEvaluacion}"/>  
+    <p:ajax event="rowUnselect" listener="#{cuCo8EvaluacionEnsayoCriticoFaces.noSeleccionEnsayoEvaluacion}" 
+            update="idDataTableEnsayosCuco8"/>  
+
+    <p:column width="20" headerText="N°" style="text-align: center">  
+      <h:outputText value="#{idFila + 1}" />
+    </p:column>
+
+    <p:column headerText="Unidad Policial">
+      <h:outputText value="#{_ensayo.nombreUnidad}" />
+    </p:column> 
+
+    <p:column width="90" headerText="Consecutivo" style="text-align: center">  
+      <h:outputText value="#{_ensayo.consecutivoEnsayo}" />
+    </p:column>  
+
+    <p:column headerText="Titulo">  
+      <h:outputText value="#{_ensayo.tituloEnsayo}" />
+    </p:column> 
+
+    <p:column width="90" headerText="Fecha Presentación" style="text-align: center">
+      <h:outputLabel value="#{_ensayo.fechaPresentacion}">
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+      </h:outputLabel>    
+    </p:column>
+
+    <p:column width="70" headerText="Estado" style="text-align: center">  
+      <h:outputText value="#{_ensayo.estadoEnsayo}" />
+    </p:column> 
+
+    <p:column width="70" headerText="Evaluación" style="text-align: center">  
+      <h:outputText value="#{_ensayo.evaluacionEnsayo}" />
+    </p:column> 
+
+    <f:facet name="footer">
+      #{fn:length(cuCo8EvaluacionEnsayoCriticoFaces.listaEnsayoCriticoUnidadView)} #{properties.value('general_mensaje_footer_datatable_count')}
+    </f:facet>
+
+  </p:dataTable> 
+
+  <br />
+
+  <div class="centrado">
+    <p:commandLink value="Seleccionar ganadores" 
+                   immediate="true" disabled="#{!cuCo8EvaluacionEnsayoCriticoFaces.mostrarLinkGanadores}"
+                   action="#{cuCo8EvaluacionEnsayoCriticoFaces.irSeleccionarGanadores}">  
+    </p:commandLink>
+  </div>
+
+  <br />
+  <h:outputLabel value="La opción de Seleccionar ganadores se habilita cuando todos los ensayos se encuentren evaluados y la fecha final de la convocatoria se encuentre vencida." styleClass="red tamanioText11px" />
+  <p:separator styleClass="separadorBorder" /> 
+  <div class="centrado">
+    <p:commandButton value="#{properties.value('cu_co_7_lbl_btn_regresar')}"
+                     id="btnRegresarListadoConvocatoriasEnsayo" immediate="true" 
+                     action="#{cuCo8EvaluacionEnsayoCriticoFaces.regresarOrigen}"/>
+  </div>
+
+</html>

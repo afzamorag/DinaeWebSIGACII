@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+
+      <ui:define name="content">
+        <div class="fixed-menu">
+          <div class="right-col">
+            <h2>
+              #{cuPr1ProyectoFaces.lblTitulo}
+            </h2>
+          </div>
+        </div>
+        <div class="centrado">
+
+          <h:outputLabel styleClass="green negrilla" value="#{properties.value('cu_pre_1_lbl_unidades_ejecutoras')}"/>
+          <p:dataTable var="_unidadejecutora" paginator="false" 
+                       value="#{cuPr1ProyectoFaces.listaUnidadPolicialEjecutoras}"
+                       rowIndexVar="idFila" paginatorPosition="bottom" 
+                       rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                       emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                       rows="#{properties.value('general_mensaje_filas_datatable_pagina')}">  
+
+            <p:column headerText="#{properties.value('cu_pr_1_lbl_datatable_unidadpolicial')}">  
+              <h:outputLabel value="#{_unidadejecutora.unidadPolicial.nombre}" />  
+            </p:column> 
+
+            <p:column headerText="#{properties.value('cu_pr_1_lbl_datatable_rol')}">  
+              <h:outputLabel value="#{_unidadejecutora.rol.valor}" />  
+            </p:column> 
+
+          </p:dataTable>
+
+        </div>
+
+        <br /><br />
+
+        <p:tabView id="tabViewProyectos" orientation="top" activeIndex="#{cuPr1ProyectoFaces.idTabSeleccionado}" >  
+
+          <p:ajax event="tabChange" listener="#{cuPr1ProyectoFaces.onTabChange}" />  
+
+          <p:tab id="idTabViewInformacionBasicoProyecto" title="#{properties.value('cu_pre_1_lbl_informacion_basica_proyecto')}">
+            <ui:include src="include_agregarProyectoInformacionBasica.xhtml"></ui:include>
+          </p:tab>
+
+          <p:tab id="idTabViewTalentoHumano" title="#{properties.value('cu_pre_1_lbl_talento_humano')}" >  
+            <h:outputLabel styleClass="green negrilla" value="#{properties.value('cu_pr_1_lbl_necesario_adicionar_info_basica_proyecto')}" 
+                           rendered="#{cuPr1ProyectoFaces.esNuevoProyecto}" />  
+            <h:panelGroup rendered="#{!cuPr1ProyectoFaces.esNuevoProyecto}">
+              <ui:include src="/pages/secured/cu_pr_3/include_agregarTalentoHumano.xhtml" />
+            </h:panelGroup>
+          </p:tab>
+
+          <p:tab id="idTabViewPlanteamientoProyecto" title="#{properties.value('cu_pre_1_lbl_planteamiento_proyecto')}" >  
+            <h:outputLabel styleClass="green negrilla" value="#{properties.value('cu_pr_1_lbl_necesario_adicionar_info_basica_proyecto')}" 
+                           rendered="#{cuPr1ProyectoFaces.esNuevoProyecto}" />  
+            <h:panelGroup rendered="#{!cuPr1ProyectoFaces.esNuevoProyecto}">
+              <ui:include src="/pages/secured/cu_pr_4/include_agregar_planteamiento_proyecto.xhtml" />
+            </h:panelGroup>
+          </p:tab>
+
+          <p:tab id="idTabViewOtrosParticipantes" title="#{properties.value('cu_pre_1_lbl_otros_participantes')}" >
+            <h:outputLabel styleClass="green negrilla" value="#{properties.value('cu_pr_1_lbl_necesario_adicionar_info_basica_proyecto')}" 
+                           rendered="#{cuPr1ProyectoFaces.esNuevoProyecto}" />  
+            <h:panelGroup rendered="#{!cuPr1ProyectoFaces.esNuevoProyecto}">
+              <ui:include src="/pages/secured/cu_pr_2/include_agregar_otro_participantes_proyecto.xhtml" />
+            </h:panelGroup>
+          </p:tab>
+
+          <p:tab id="idTabViewIndicadores" title="#{properties.value('cu_pre_1_lbl_indicadores')}" >
+            <h:outputLabel styleClass="green negrilla" value="#{properties.value('cu_pr_1_lbl_necesario_adicionar_info_basica_proyecto')}" 
+                           rendered="#{cuPr1ProyectoFaces.esNuevoProyecto}" />  
+            <h:panelGroup rendered="#{!cuPr1ProyectoFaces.esNuevoProyecto}">
+              <ui:include src="/pages/secured/cu_pr_1/include_agregar_indicadores.xhtml" />
+            </h:panelGroup>
+          </p:tab>
+        </p:tabView>
+
+        <p:confirmDialog widgetVar="varConfirmEnviarPropuestConvocatoria" header="#{properties.value('cu_co_3_lbl_titulo_confirmacion_publicar')}" 
+                         message="#{properties.value('cu_pr_1_lbl_confirmacion_mensaje_enviar')}" > 
+
+          <h:form id="idForm_varConfirmPublicar">
+
+            <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmPublicar">
+              <div class="centrado">
+                <p:commandButton actionListener="#{cuPr1ProyectoFaces.enviarCompromisoProyecto}" 
+                                 value="#{properties.value('cu_co_3_lbl_btn_si_publicar')}" immediate="true"
+                                 oncomplete="varConfirmEnviarPropuestConvocatoria.hide()" />  
+                <p:commandButton value="#{properties.value('cu_co_3_lbl_btn_no_publicar')}" 
+                                 onclick="PF('varConfirmEnviarPropuestConvocatoria').hide();"                                  
+                                 type="button" />       
+              </div>
+            </p:outputPanel>
+
+          </h:form>
+        </p:confirmDialog>
+
+      </ui:define>
+    </ui:composition>
+  </body>
+</html>

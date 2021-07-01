@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+      <ui:define name="content">
+
+        <h:form id="idForm_include_consulta_evento_investigacion">
+
+          <div class="fixed-menu">
+            <div class="right-col">
+              <h2>
+                Gestión de Eventos
+              </h2>
+            </div>
+          </div>
+
+          <h:panelGroup id="pgDetalleGlobalEvento">
+
+            <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                         columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento" >
+
+              <h:outputLabel styleClass="gris negrilla" value="Tipo de evento" />
+              <h:selectOneMenu required="true" id="id_tipo_evento" disabled="true" value="#{cuPr18IngresaModificarEventoInvestigacionFaces.eventoInvestigacion.tipoEvento.idConstantes}"  
+                               styleClass="gris">
+                <f:selectItem itemValue="" itemLabel="--Select--"/>
+                <f:selectItems value="#{cuPr18IngresaModificarEventoInvestigacionFaces.listaTipoEventoItem}"  />                                  
+              </h:selectOneMenu>
+
+              <h:outputLabel styleClass="gris negrilla" value="Nombre del evento" />
+              <h:outputLabel styleClass="gris" value="#{cuPr18IngresaModificarEventoInvestigacionFaces.eventoInvestigacion.nombre}" />                            
+
+              <h:outputLabel styleClass="gris negrilla" value="Descripción del evento" />
+              <h:outputLabel styleClass="gris" value="#{cuPr18IngresaModificarEventoInvestigacionFaces.eventoInvestigacion.descripcion}" />                            
+
+              <h:outputLabel styleClass="gris negrilla" value="Modalidad" />
+              <p:selectManyCheckbox disabled="true" required="true" styleClass="gris" id="id_tipos_modalidades" value="#{cuPr18IngresaModificarEventoInvestigacionFaces.eventoInvestigacion.opcionesSeleccionadaModalidad}">  
+                <f:selectItem itemValue="V" itemLabel="Virtual" />  
+                <f:selectItem itemValue="P" itemLabel="Presencial" />                                  
+              </p:selectManyCheckbox>  
+
+              <h:outputLabel styleClass="gris negrilla" value="#{properties.value('cu_co_1_lbl_fecha_inicio')}" />
+              <h:outputLabel styleClass="gris" value="#{cuPr18IngresaModificarEventoInvestigacionFaces.eventoInvestigacion.fechaInicio}">
+                <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+              </h:outputLabel>                              
+
+              <h:outputLabel styleClass="gris negrilla" value="#{properties.value('cu_co_1_lbl_fecha_fin')}" />
+              <h:outputLabel styleClass="gris" value="#{cuPr18IngresaModificarEventoInvestigacionFaces.eventoInvestigacion.fechaFin}">
+                <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+              </h:outputLabel>  
+
+              <h:outputLabel styleClass="gris negrilla" value="Ciudad de realización" />
+              <h:outputLabel styleClass="gris" value="#{cuPr18IngresaModificarEventoInvestigacionFaces.eventoInvestigacion.ciudad}" />
+
+              <h:outputLabel styleClass="gris negrilla" value="Lugar" />
+              <h:outputLabel styleClass="gris" value="#{cuPr18IngresaModificarEventoInvestigacionFaces.eventoInvestigacion.lugar}" />                            
+
+            </h:panelGrid>                                               
+
+            <p:dataTable id="idDataTableFuncionariosAgregados" var="_investigador"
+                         value="#{cuPr18IngresaModificarEventoInvestigacionFaces.listaInvestigadoresProyecto}" 
+                         rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                         rows="#{properties.value('general_mensaje_filas_datatable_pagina')}"
+                         paginator="true" rowIndexVar="idFila" 
+                         paginatorPosition="bottom"
+                         resizableColumns="true"                                                          
+                         emptyMessage="#{properties.value('general_mensaje_no_records_found')}">
+
+              <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_nom_y_apell')}">  
+                #{_investigador.identificacion} - #{_investigador.grado} - #{_investigador.nombreCompleto}
+              </p:column>
+              <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_unidadpoli')}" width="70">
+                #{_investigador.codigoUnidadPolicial}
+              </p:column>
+              <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_correo')}" >
+                #{_investigador.correo}
+              </p:column>
+              <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_num_tel')}" width="70" >
+                #{_investigador.telefono}
+              </p:column>
+
+            </p:dataTable>
+
+            <br />
+            <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                         columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento" >
+
+              <h:outputLabel styleClass="gris negrilla" value="Archivo de evidencia" />
+              <h:panelGrid columns="1">
+
+                <h:outputLabel id="idNombreArchivoCargado" styleClass="green" rendered="#{!cuPr18IngresaModificarEventoInvestigacionFaces.mostrarLinkDescargaArchivo}" 
+                               value="#{cuPr18IngresaModificarEventoInvestigacionFaces.nombreArchivoSubido}" />
+                <p:commandLink ajax="false" immediate="true" id="idCommanLinkDescargaArchivo" 
+                               rendered="#{cuPr18IngresaModificarEventoInvestigacionFaces.mostrarLinkDescargaArchivo}">
+                  <h:outputLabel value="#{cuPr18IngresaModificarEventoInvestigacionFaces.eventoInvestigacion.nombreArchivo}" />
+                  <p:fileDownload value="#{cuPr18IngresaModificarEventoInvestigacionFaces.downloadContentProperty}" />
+                </p:commandLink>
+
+              </h:panelGrid>
+
+            </h:panelGrid>
+
+          </h:panelGroup>
+
+          <br />
+          <p:separator styleClass="separadorBorder" /> 
+          <div class="centrado">
+
+            <p:commandButton value="#{properties.value('cu_co_1_lbl_btn_regresar')}" 
+                             action="#{navigationFaces.redirectCuPr18IngresaModificarEventoInvestigacionRedirect}" 
+                             immediate="true" />
+
+          </div>
+
+
+        </h:form>
+
+      </ui:define>
+
+    </ui:composition>
+
+  </body>
+</html>

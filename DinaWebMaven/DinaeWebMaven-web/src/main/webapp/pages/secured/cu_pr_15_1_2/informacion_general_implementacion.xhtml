@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <h:panelGrid columns="6" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+               columnClasses="panelGridColumnaLabel_25_porciento,panelGridColumnaLabel_25_porciento">
+
+    <h:outputLabel value="Titulo de la investigación" styleClass="gris negrilla" />
+    <h:outputLabel value="#{cuPr15_1_2_AvanceImplemenacionFaces.proyectoSeleccionado.tituloPropuesto}" styleClass="gris" />
+
+    <h:outputLabel value="Fecha de incio de la investigación" styleClass="gris negrilla" />
+    <h:outputLabel value="#{cuPr15_1_2_AvanceImplemenacionFaces.proyectoSeleccionado.fechaEstimadaInicio}" styleClass="gris"> 
+      <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+    </h:outputLabel>    
+
+    <h:outputLabel value="Fecha de fin de la investigación" styleClass="gris negrilla" />
+    <h:outputLabel value="#{cuPr15_1_2_AvanceImplemenacionFaces.proyectoSeleccionado.fechaEstimadaFinalizacion}" styleClass="gris"> 
+      <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+    </h:outputLabel>    
+
+  </h:panelGrid>
+
+  <br />
+  <h:panelGrid columns="6" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+               columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaLabel_70_porciento">
+
+    <h:outputLabel value="Unidades ejecutoras de la investigación" styleClass="gris negrilla" />
+    <p:dataTable var="_unidadejecutora" paginator="false" 
+                 value="#{cuPr15_1_2_AvanceImplemenacionFaces.listaUnidadPolicialEjecutoras}"
+                 rowIndexVar="idFila" 
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}">  
+
+      <p:column headerText="#{properties.value('cu_pr_1_lbl_datatable_unidadpolicial')}">  
+        <h:outputLabel value="#{_unidadejecutora.unidadPolicial.nombre}" />  
+      </p:column> 
+
+      <p:column headerText="#{properties.value('cu_pr_1_lbl_datatable_rol')}">  
+        <h:outputLabel value="#{_unidadejecutora.rol.valor}" />  
+      </p:column> 
+
+    </p:dataTable>
+  </h:panelGrid>
+
+  <br />
+  <h:outputLabel value="Jefe de la Unidad que aprueba" styleClass="gris negrilla" />
+  <p:dataTable var="_persona"
+               value="#{cuPr15_1_2_AvanceImplemenacionFaces.listaJefeFuncionariosSeleccionadoAprueba}" 
+               rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+               rows="#{properties.value('general_mensaje_filas_datatable_pagina')}"
+               paginator="false" rowIndexVar="idFila" 
+               paginatorPosition="bottom"
+               emptyMessage="#{properties.value('general_mensaje_no_records_found')}">
+
+    <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_grado')}">  
+      #{_persona.grado}
+    </p:column> 
+    <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_nom_y_apell')}">  
+      #{_persona.nombreCompleto}
+    </p:column>    
+    <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_unidadpoli')}" >
+      #{_persona.unidadPolicial.siglaFisica}
+    </p:column>
+    <p:column headerText="#{properties.value('cu_ne_7_lista_funcionario_cargo')}">  
+      #{_persona.cargo}
+    </p:column> 
+    <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_correo')}" >
+      #{_persona.correo}
+    </p:column>
+    <p:column headerText="Ciudad" >
+      #{_persona.ciudadReside}
+    </p:column>
+    <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_num_tel')}" >
+      #{_persona.telefono}
+    </p:column>
+  </p:dataTable>
+
+  <br />
+
+  <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+               columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+    <h:outputLabel value="Fecha de aprobación en comité" styleClass="gris negrilla" for="id_fechaAprobacionComite" />            
+    <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es"                     
+                yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                navigator="true" required="true" value="#{cuPr15_1_2_AvanceImplemenacionFaces.informeAvanceImplementacion.fechaAprobacionComite}" 
+                id="id_fechaAprobacionComite" showOn="button" /> 
+
+
+    <h:outputLabel value="N° de acta de aprobación en comité" styleClass="gris negrilla" for="id_numeroAprobacionComite" />
+    <p:inputText size="50" maxlength="50" required="true" readonly="#{cuPr15_1_2_AvanceImplemenacionFaces.accesoSoloConsulta}"
+                 value="#{cuPr15_1_2_AvanceImplemenacionFaces.informeAvanceImplementacion.numeroAprobacionComite}" 
+                 id="id_numeroAprobacionComite" />
+
+  </h:panelGrid>
+
+  <br />
+  <h:outputLabel value="Responsables de la investigación" styleClass="gris negrilla" />
+  <p:dataTable id="idDataTableFuncionariosAgregados" var="_investigador" 
+               value="#{cuPr15_1_2_AvanceImplemenacionFaces.listaInvestigadoresProyecto}" 
+               rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"                 
+               paginator="false" rowIndexVar="idFila"                  
+               emptyMessage="#{properties.value('general_mensaje_no_records_found')}">
+
+    <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_tipo_inves')}">  
+      #{_investigador.tipoVinculacion.valor}
+    </p:column>  
+    <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_grado')}">  
+      #{_investigador.grado}
+    </p:column> 
+    <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_nom_y_apell')}">  
+      #{_investigador.nombreCompleto}
+    </p:column>
+    <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_unidadpoli')}" >
+      #{_investigador.codigoUnidadPolicial}
+    </p:column>
+    <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_correo')}" >
+      #{_investigador.correo}
+    </p:column>
+    <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_num_tel')}" >
+      #{_investigador.telefono}
+    </p:column>
+    <p:column headerText="#{properties.value('cu_pr_3_lbl_datatable_estado')}" >
+      #{_investigador.descripcionActivo}
+    </p:column>
+  </p:dataTable>
+  <br/>
+
+  <h:outputLabel value="Responsables implementación" styleClass="gris negrilla" />
+  <p:dataTable var="personal" value="#{cuPr15_1_2_AvanceImplemenacionFaces.listaPersonalImplementacion}"                 
+               emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+               paginator="false" 
+               resizableColumns="true" rowIndexVar="idFila"
+               rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+    <p:column headerText="#{properties.value('cu_pr_21_lbl_column_grado')}" width="120" >
+      <h:outputText value="#{personal.grado}" />
+    </p:column>
+    <p:column headerText="#{properties.value('cu_pr_21_lbl_column_nombres_apellidos')}">
+      <h:outputText value="#{personal.nombreCompleto}" />
+    </p:column>
+    <p:column headerText="#{properties.value('cu_iv_02_lbl_column_correo')}">
+      <h:outputText value="#{personal.correo}" />
+    </p:column>
+
+  </p:dataTable>
+
+  <br/>    
+  <p:commandLink ajax="false" immediate="true" value="Generar Formato" >
+    <p:fileDownload value="#{cuPr15_1_2_AvanceImplemenacionFaces.generarFormato}" />
+  </p:commandLink>
+  <br/>
+</html>

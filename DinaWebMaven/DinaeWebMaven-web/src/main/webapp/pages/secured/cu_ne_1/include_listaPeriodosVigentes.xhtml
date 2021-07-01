@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">   
+
+  <h:form id="formListaPeriodo" styleClass="site">
+
+    <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}"  
+                 var="periodo" id="tablaPeriodo" value="#{cuNe1PeriodoNecesidadesFaces.periodos}" 
+                 rowIndexVar="idFila" paginator="true" 
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 paginatorPosition="bottom" styleClass="tabla"
+                 resizableColumns="true"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}">  
+
+      <p:column width="30" headerText="#{properties.value('cu_ne_1_lbl_lista_periodo_n')}"> 
+        <f:facet name="header">  
+          <h:outputText value="#{properties.value('cu_ne_1_lbl_lista_periodo_n')}" />  
+        </f:facet>
+        <h:outputText value="#{idFila+1}" />
+      </p:column> 
+      <p:column width="30" headerText="#{properties.value('cu_ne_1_lbl_lista_periodo_anio')}">  
+        <h:outputText value="#{periodo.anio}" />
+      </p:column> 
+      <p:column headerText="#{properties.value('cu_ne_1_lbl_lista_periodo_descripcion')}">  
+        <h:outputText value="#{periodo.descripcion}" styleClass="gris"  />
+      </p:column>
+      <p:column width="70" sortBy="#{periodo.estado eq 'T' ?'Temporal': 'Publicado'}" headerText="#{properties.value('cu_ne_1_lbl_lista_periodo_estado')}">  
+        <h:outputText value="#{periodo.estado eq 'T' ?'Temporal': 'Publicado'}" />
+      </p:column>  
+      <p:column width="80" headerText="#{properties.value('cu_ne_1_lbl_lista_periodo_modificar')}">  
+        <p:commandButton value="#{properties.value('cu_ne_1_lbl_btn_modificar_periodo')}"  
+                         update="@(form:formAgregarPeriodo),@(form:listaHitos)" 
+                         action="#{cuNe1PeriodoNecesidadesFaces.seleccionarPeriodoAModificar}" 
+                         rendered="#{cuNe1PeriodoNecesidadesFaces.mostrarBtnModificarPeriodo(periodo)}"
+                         styleClass="button">
+          <f:setPropertyActionListener value="#{periodo}" target="#{cuNe1PeriodoNecesidadesFaces.periodoSelect}" />  
+        </p:commandButton>
+      </p:column> 
+      <p:column width="80" headerText="#{properties.value('cu_ne_1_lbl_lista_periodo_consultar_propuesta')}"> 
+        <div class='inner'>
+          <p:commandButton value="#{properties.value('cu_ne_1_lbl_btn_onsultar_propuesta')}"  
+                           update="@(form:formAgregarPeriodo),@(form:listaHitos)" 
+                           action="#{cuNe1PeriodoNecesidadesFaces.revisarPropuestasNecesidad()}" 
+                           rendered="#{cuNe1PeriodoNecesidadesFaces.mostrarBtnRevisarPeriodo(periodo) and periodo.estado eq 'P'}" styleClass="button">
+            <f:setPropertyActionListener value="#{periodo}" target="#{cuNe1PeriodoNecesidadesFaces.periodoSelect}" />  
+          </p:commandButton>
+        </div>
+      </p:column> 
+      <f:facet name="footer">
+        #{fn:length(
+          cuNe1PeriodoNecesidadesFaces.periodos
+          )}
+        #{properties.value('general_mensaje_footer_datatable_count')}
+        <br/>
+        <p:commandLink action="#{cuNe1PeriodoNecesidadesFaces.linkAgregarPeriodo}" update="@(form:formAgregarPeriodo),@(form:listaHitos),tabView)" ajax="false">
+          <h:outputText  value="#{properties.value('cu_ne_1_lbl_link_agregar_periodo')}"/>                    
+        </p:commandLink>
+
+      </f:facet>
+    </p:dataTable>
+  </h:form>
+
+</html>

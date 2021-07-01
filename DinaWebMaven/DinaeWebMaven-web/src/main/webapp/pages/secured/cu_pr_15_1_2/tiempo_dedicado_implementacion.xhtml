@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"      
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+
+  <h:outputLabel value="Por favor ingrese los datos solicitados a continuación" styleClass="green negrilla" />
+
+  <br/>
+  <p:dataTable var="personal" value="#{cuPr15_1_2_AvanceImplemenacionFaces.listaInvestigadorProyecto}"
+               rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+               id="tablaPersonalImplementacion"
+               emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+               paginator="true" paginatorPosition="bottom" 
+               resizableColumns="true" rowIndexVar="idFila"
+               rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+    <p:column headerText="#{properties.value('cu_pr_21_lbl_column_numero')}" width="25">
+      <h:outputText value="#{idFila + 1}" />
+    </p:column>
+    <p:column headerText="#{properties.value('cu_pr_21_lbl_column_grado')}" width="120" >
+      <h:outputText value="#{personal.grado}" />
+    </p:column>
+    <p:column headerText="#{properties.value('cu_pr_21_lbl_column_nombres_apellidos')}">
+      <h:outputText value="#{personal.nombreCompleto}" />
+    </p:column>
+    <p:column headerText="#{properties.value('cu_pr_21_lbl_column_unidad')}">
+      <h:outputText value="#{personal.unidadPolicial.nombre}" />
+    </p:column>
+
+    <p:column width="100" headerText="Horas totales de implementación">
+      <h:outputText value="#{personal.horasTotalesImplementacion}" />
+    </p:column>
+
+    <p:column rendered="#{cuPr15_1_2_AvanceImplemenacionFaces.compromisoInformeAvance}" width="100" headerText="Horas dedicadas en el periodo">
+      <p:inputText id="idhorasdedicaimpl"  maxlength="5" onkeypress="return soloNumerosInpuText(event);"                          
+                   value="#{personal.horasDedicadasImplementacion}"
+                   readonly="#{cuPr15_1_2_AvanceImplemenacionFaces.accesoSoloConsulta}"
+                   styleClass="textMaximo" required="true" size="10"  >
+        <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" maxFractionDigits="0" />                
+      </p:inputText>
+    </p:column>
+
+    <p:column rendered="#{cuPr15_1_2_AvanceImplemenacionFaces.compromisoInformeFinal}" width="100" headerText="Horas dedicadas en el periodo">
+      <p:inputText id="idhorasdedicaimplafinal"  maxlength="5" onkeypress="return soloNumerosInpuText(event);"                          
+                   value="#{personal.horasDedicadasAvanceFinalImplementacion}"
+                   styleClass="textMaximo" required="true" size="10"  >
+        <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" maxFractionDigits="0" />                
+      </p:inputText>
+    </p:column>
+
+    <f:facet name="footer">  
+      #{fn:length( cuPr15_1_2_AvanceImplemenacionFaces.listaInvestigadorProyecto)} #{properties.value('general_mensaje_footer_datatable_count')}
+    </f:facet>
+  </p:dataTable>
+
+
+</html>

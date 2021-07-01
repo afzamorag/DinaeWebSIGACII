@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+  <h:form id="formOtrasInstitucionesTrabajoDeGrado" >
+    <br />
+    <!--Otras unidades policiales-->
+    <p:separator styleClass="separadorBorder" /> 
+    <h:panelGroup id="idcu_tr_01_panel_otras_unidades_policiales_trabajo_de_grado">                                      
+      <br/>   
+      <h:outputLabel value="#{properties.value('cu_tr_01_lbl_titulo_otras_unidades_policiales_trabajo_de_grado')}" 
+                     styleClass="gris negrilla" />
+      <br/>
+      <br/>
+      <h:panelGrid columns="2" 
+                   style="width: 100%"                         
+                   id="idcu_tr_01_pg_otras_unidades_policiales"
+                   columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaLabel_70_porciento"
+                   rowClasses="filaParPanelGridPar,filaParPanelGridImPar">
+
+        <h:outputLabel value="#{properties.value('cu_tr_01_lbl_titulo_otras_unidades_nombre_unidad_trabajo_de_grado')}" 
+                       styleClass="gris" 
+                       for="idcu_tr_01_lista_otras_unidades_policiales"/>
+        <h:selectOneMenu styleClass="gris" 
+                         id="idcu_tr_01_lista_otras_unidades_policiales" 
+                         value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.idOtraUnidadPolicialSeleccionada}" 
+                         required="true"
+                         disabled="#{cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura or cuTr01IngresarModificarTrabajoDeGradoFaces.modoInvestigadorPrincipal}">  
+          <f:selectItem itemLabel="--Select--" itemValue="" />  
+          <f:selectItems value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.listaOtrasUnidadesPolicialesItem}" var="_itemOtrasUnidades" />                    
+        </h:selectOneMenu>
+
+        <h:outputLabel value="#{properties.value('cu_tr_01_lbl_aporte_investigacion_otras_unidades_trabajo_de_grado')}" 
+                       styleClass="gris" 
+                       for="idcu_tr_01_aporte_investigacion_otras_unidades_policiales"/>
+        <h:panelGrid columns="2" style="width: 100%">
+          <h:panelGrid columns="1" style="width: 100%">
+            <p:inputTextarea id="idcu_tr_01_aporte_investigacion_otras_unidades_policiales"                                 
+                             cols="100"
+                             rows="6"                                 
+                             required="true"
+                             maxlength="512"
+                             counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                             counter="contadorTextAreaUnidaPolicial"
+                             value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.aporteInvestigacionUnidadPolicial}"
+                             disabled="#{cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura or cuTr01IngresarModificarTrabajoDeGradoFaces.modoInvestigadorPrincipal}">
+              <f:validateLength minimum="1"  maximum="512" />
+            </p:inputTextarea>
+            <h:outputText id="contadorTextAreaUnidaPolicial" styleClass="gris" />
+          </h:panelGrid>
+
+          <p:commandButton id="idcu_tr_01_boton_guardar_otras_unidades_policiales" 
+                           value="#{properties.value('cu_tr_01_lbl_boton_guardar_otras_unidades_policiales')}"
+                           actionListener="#{cuTr01IngresarModificarTrabajoDeGradoFaces.vincularOtraUnidadPolicialTrabajoDeGrado}"
+                           process="@this,idcu_tr_01_pg_otras_unidades_policiales"
+                           disabled="#{cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura or cuTr01IngresarModificarTrabajoDeGradoFaces.modoInvestigadorPrincipal}"
+                           update="idcu_tr_01_pg_otras_unidades_policiales,idcu_tr_01_data_table_otras_unidades_policiales">
+          </p:commandButton> 
+        </h:panelGrid>
+      </h:panelGrid>
+      <br/>
+      <br/>         
+    </h:panelGroup>        
+
+    <p:dataTable id="idcu_tr_01_data_table_otras_unidades_policiales" var="_unidades"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.listaOtrasUnidadesPolicialesSemilleroProyectoDTO}" 
+                 rowStyleClass="#{idFilaUnid % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rowIndexVar="idFilaUnid" paginatorPosition="bottom" 
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true">
+
+      <p:column headerText="#{properties.value('cu_tr_01_lbl_sub_titulo_tabla_unidad_policial')}">  
+        <h:outputLabel value="#{_unidades.nombreUnidadPolicial}" />  
+      </p:column>  
+      <p:column headerText="#{properties.value('cu_tr_01_lbl_sub_titulo_tabla_aporte_investigacion_trabajo_de_grado')}">  
+        <h:outputLabel value="#{_unidades.aporteInvestigacion}" 
+                       escape="false"/>  
+      </p:column> 
+
+      <f:facet name="footer">  
+        #{fn:length( cuTr01IngresarModificarTrabajoDeGradoFaces.listaOtrasUnidadesPolicialesSemilleroProyectoDTO )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+    </p:dataTable>
+    <p:separator styleClass="separadorBorder" />
+
+    <!--Otras instituciones-->
+    <br />
+    <p:separator styleClass="separadorBorder" /> 
+    <h:panelGroup id="idcu_tr_01_panel_otras_instituciones_trabajo_de_grado">                                      
+      <br/>   
+      <h:outputLabel value="#{properties.value('cu_tr_01_lbl_titulo_otras_instituciones_trabajo_de_grado')}" 
+                     styleClass="gris negrilla" />
+      <br/>
+      <br/>
+      <h:panelGrid columns="2" 
+                   style="width: 100%" 
+                   id="idcu_tr_01_pg_otras_instituciones"
+                   columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaLabel_70_porciento"
+                   rowClasses="filaParPanelGridPar,filaParPanelGridImPar">
+
+        <h:outputLabel value="#{properties.value('cu_tr_01_lbl_titulo_otras_instituciones_nombre_trabajo_de_grado')}" 
+                       styleClass="gris" 
+                       for="idcu_tr_01_lista_otras_instituciones"/>
+        <h:panelGrid columns="1" style="width: 100%">
+          <h:selectOneMenu styleClass="gris" 
+                           id="idcu_tr_01_lista_otras_instituciones" 
+                           value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.idOtraInstitucionSeleccionada}" 
+                           required="true"
+                           disabled="#{cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura or cuTr01IngresarModificarTrabajoDeGradoFaces.modoInvestigadorPrincipal}">  
+            <f:selectItem itemLabel="--Select--" itemValue="" />  
+            <f:selectItems value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.listaOtrasInstitucionesItem}" var="_itemOtrasInstituciones" />                    
+            <p:ajax update="idcu_tr_01_pg_otras_instituciones, idcu_tr_01_pg_otra_nueva_institucion" 
+                    listener="#{cuTr01IngresarModificarTrabajoDeGradoFaces.handleOtrasInstitucionesChange}" />
+          </h:selectOneMenu>
+          <h:panelGroup id="idcu_tr_01_pg_otra_nueva_institucion">
+            <h:panelGrid columns="2" rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.mostrarDetalleOtraNuevaInstitucion}">
+
+              <h:outputLabel for="idcu_tr_01_otras_instituciones_nueva_institucion_text_area" value="#{properties.value('cu_tr_01_lbl_titulo_otras_instituciones_nueva_institucion')}" styleClass="gris negrilla" />
+              <p:inputText id="idcu_tr_01_otras_instituciones_nueva_institucion_text_area"
+                           required="true"                                 
+                           value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.otraNuevaInstitucion}" styleClass="gris" />
+            </h:panelGrid>
+          </h:panelGroup>
+        </h:panelGrid>
+
+        <h:outputLabel value="#{properties.value('cu_tr_01_lbl_aporte_investigacion_otras_instituciones_trabajo_de_grado')}" 
+                       styleClass="gris negrilla" 
+                       for="idcu_tr_01_aporte_investigacion_otras_instituciones"/>
+
+        <h:panelGrid columns="2" style="width: 100%">
+          <h:panelGrid columns="1" style="width: 100%">
+            <p:inputTextarea id="idcu_tr_01_aporte_investigacion_otras_instituciones"                                 
+                             cols="100"
+                             rows="6"                                 
+                             required="true"
+                             maxlength="512"
+                             counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                             counter="contadorTextAreaInstitucion"
+                             disabled="#{cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura or cuTr01IngresarModificarTrabajoDeGradoFaces.modoInvestigadorPrincipal}"
+                             value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.aporteInvestigacionOtrasInstituciones}">
+              <f:validateLength minimum="1"  maximum="512" />
+            </p:inputTextarea>
+            <h:outputText id="contadorTextAreaInstitucion" styleClass="gris" />
+          </h:panelGrid>
+
+          <p:commandButton id="idcu_tr_01_boton_guardar_otras_instituciones" 
+                           value="#{properties.value('cu_tr_01_lbl_boton_guardar_otras_instituciones')}"
+                           actionListener="#{cuTr01IngresarModificarTrabajoDeGradoFaces.vincularOtraInstitucionTrabajoDeGrado}"
+                           process="@this,idcu_tr_01_pg_otras_instituciones"
+                           disabled="#{cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura or cuTr01IngresarModificarTrabajoDeGradoFaces.modoInvestigadorPrincipal}"
+                           update="idcu_tr_01_pg_otras_instituciones,idcu_tr_01_data_table_otras_instituciones">
+          </p:commandButton> 
+        </h:panelGrid>
+      </h:panelGrid>
+      <br/>
+      <br/>         
+    </h:panelGroup>        
+
+    <p:dataTable id="idcu_tr_01_data_table_otras_instituciones" var="_instituciones"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.listaOtrasInstitucionesProyectoDTO}" 
+                 rowStyleClass="#{idFilaInsti % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rowIndexVar="idFilaInsti" paginatorPosition="bottom" 
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true">
+
+      <p:column headerText="#{properties.value('cu_tr_01_lbl_sub_titulo_tabla_instituciones')}">  
+        <h:outputLabel value="#{_instituciones.nombreInstitucion}" />  
+      </p:column>  
+      <p:column headerText="#{properties.value('cu_tr_01_lbl_sub_titulo_tabla_aporte_investigacion_trabajo_de_grado')}">  
+        <h:outputLabel value="#{_instituciones.aporteInvestigicacion}" 
+                       escape="false"/>  
+      </p:column> 
+
+      <f:facet name="footer">  
+        #{fn:length( cuTr01IngresarModificarTrabajoDeGradoFaces.listaOtrasInstitucionesProyectoDTO )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+    </p:dataTable>
+
+
+    <p:separator styleClass="separadorBorder" />    
+    <br />
+    <br />         
+    <h:panelGroup id="idcu_tr_01_pgroup_include_accion_botones_abajo_otras_instituciones">
+      <ui:include src="include_accion_botones_abajo_trabajo_de_grado.xhtml" />
+    </h:panelGroup>
+
+  </h:form>
+</html>

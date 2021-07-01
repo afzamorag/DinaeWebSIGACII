@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"> 
+
+
+  <br />
+  <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+               columnClasses="panelGridColumnaValor_30_porciento,panelGridColumnaValor_70_porciento">
+
+    <h:outputLabel  value="#{properties.value('cu_pr_7_lbl_subtitulo_duracion_proyecto')}" styleClass="gris negrilla"/>
+    <h:outputLabel value="#{includeInformacionInformeProyectoGenericoFaces.duracionProyecto}" styleClass="gris"/>
+
+    <h:outputLabel  value="#{properties.value('cu_pr_7_lbl_subtitulo_valortotal_proyecto')}" styleClass="gris negrilla"/>
+    <h:outputLabel value="#{includeInformacionInformeProyectoGenericoFaces.valorTotalProyecto}" styleClass="gris">
+      <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" />
+    </h:outputLabel>
+
+    <h:outputLabel  value="#{properties.value('cu_pr_7_lbl_subtitulo_recursospoli_proyecto')}" styleClass="gris negrilla"/>
+    <h:outputLabel value="#{includeInformacionInformeProyectoGenericoFaces.recursosPolicia}" styleClass="gris">
+      <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" />
+    </h:outputLabel>
+
+    <h:outputLabel  value="#{properties.value('cu_pr_7_lbl_subtitulo_recursosfuente_proyecto')}" styleClass="gris negrilla"/>
+    <h:outputLabel value="#{includeInformacionInformeProyectoGenericoFaces.recursoFuenteExterna}" styleClass="gris">
+      <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" />
+    </h:outputLabel>
+
+  </h:panelGrid>
+
+</html>

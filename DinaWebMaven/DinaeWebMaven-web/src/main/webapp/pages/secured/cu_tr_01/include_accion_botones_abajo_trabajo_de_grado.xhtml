@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+  <br />
+  <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+  <p:separator styleClass="separadorBorder" /> 
+  <div class="centrado">
+
+    <p:commandButton value="#{properties.value('cu_tr_01_lbl_btn_regresar')}" id="idBtnRegresarTrabajoDeGrado"
+                     action="#{cuTr01IngresarModificarTrabajoDeGradoFaces.regresarConsultarTrabajosDeGrado}"
+                     immediate="true"/>
+
+    <p:commandButton  id="idcu_tr_01_btn_guardar_informacion_basica_trabajo_de_grado"
+                      value="#{properties.value('cu_tr_01_lbl_btn_guardar_trabajo_de_grado')}"
+                      action="#{cuTr01IngresarModificarTrabajoDeGradoFaces.guardarProyecto}"
+                      ajax="false"
+                      update="@form"                          
+                      rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.idTabSeleccionado == 0}"/>
+
+    <p:commandButton id="idcu_tr_01_btn_guardar_documentacion_trabajo_de_grado"
+                     value="#{properties.value('cu_tr_01_lbl_documentacion_trabajo_de_grado_btn_guardar')}"                              
+                     update="@form"
+                     action="#{cuTr01IngresarModificarTrabajoDeGradoFaces.guardarDocumentacion}" 
+                     disabled="#{cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura}"
+                     rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.idTabSeleccionado == 2}"/>
+
+    <p:commandButton id="idcu_tr_01_btn_guardar_evaluacion_trabajo_de_grado" 
+                     value="#{properties.value('cu_tr_01_lbl_boton_guardar_evaluador')}"
+                     actionListener="#{cuTr01IngresarModificarTrabajoDeGradoFaces.guardarEvaluacionYEvaluadoresTrabajoDeGrado}"
+                     disabled="#{cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura or cuTr01IngresarModificarTrabajoDeGradoFaces.modoInvestigadorPrincipal}"
+                     update="@form"
+                     rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.idTabSeleccionado == 3}">
+    </p:commandButton>
+
+  </div>
+
+</html>

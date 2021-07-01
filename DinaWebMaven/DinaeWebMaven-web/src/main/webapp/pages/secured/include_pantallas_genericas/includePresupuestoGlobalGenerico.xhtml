@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+  <h:form id="formPresupuestoGlobal">
+
+
+    <h:outputLabel value="#{presupuestoUtilFaces.tituloPresupuesto}" styleClass="green negrilla" />
+    <div class="centrado">            
+      <p:dataTable id="tablaPresupuestoGeneral" binding="#{presupuestoUtilFaces.dataTablePresupuesto}" />
+    </div>
+    <br /><br />
+
+    <h:panelGroup rendered="#{presupuestoUtilFaces.mostrarPresupuestoAcumulado}" id="panelGroupPresupuestoGenerico">
+      <h:outputLabel value="Presupuesto acumulado" styleClass="green negrilla" />
+      <div class="centrado">
+        <p:dataTable id="tablaPresupuestoGeneralAcumulado" binding="#{presupuestoUtilFaces.dataTablePresupuestoAcumulado}"  />
+      </div>
+    </h:panelGroup>
+
+    <br />
+    <p:commandLink ajax="false" immediate="true" value="Generar Formato" rendered="#{cuPr1ProyectoFaces.esRegistroProyecto and cuPr1ProyectoFaces.proyectoNoMigrado}" >
+      <p:fileDownload value="#{cuPr6ConsultarDetalleProyectoInvestigacion.generarFormatoPresupuesto}" />
+    </p:commandLink>
+
+  </h:form>
+</html>

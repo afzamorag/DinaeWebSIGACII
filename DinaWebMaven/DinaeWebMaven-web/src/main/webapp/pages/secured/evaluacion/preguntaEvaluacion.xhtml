@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    template="/templates/plantillaPrincipal.xhtml">
+
+    <ui:define name="content">
+        <p:panel 
+            id="main"
+            styleClass="ui-fluid">
+            <h:form id="frmList" prependId="false">
+                <h:outputText value="#{bundle['evaluacion.btn.add.preg']}"/>
+                <p:separator />
+                <p:panel>
+                    <p:panelGrid
+                        id="pgFiltro"
+                        layout="grid" 
+                        columns="2"
+                        columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-4"
+                        styleClass="ui-panelgrid-blank">
+                        <!-- Factor -->
+                        <p:outputLabel
+                            for="somAspecto"
+                            value="#{bundle['evaluacion.pregunta.aspecto']}"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu 
+                                id="somAspecto" 
+                                value="#{evaluacionController.preguntaEvaluacion.aspecto.id}" required="true">
+                                <f:selectItem 
+                                    value="#{appController.noSelection}"/>
+                                <f:selectItems 
+                                    value="#{evaluacionController.aspectos}" 
+                                    var="aspecto"
+                                    itemLabel="#{aspecto.descripcion}" 
+                                    itemValue="#{aspecto.id}"/>
+                            </p:selectOneMenu>
+                            <p:message
+                                for="somAspecto" />
+                        </h:panelGroup>
+                        <!-- pregunta -->
+                        <p:outputLabel
+                            for="somPregunta"
+                            value="#{bundle['evaluacion.pregunta.pregunta']}"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu 
+                                id="somPregunta" 
+                                value="#{evaluacionController.preguntaEvaluacion.pregunta.id}"
+                                required="true">
+                                <f:selectItem value="#{appController.noSelection}"/>
+                                <f:selectItems 
+                                    value="#{evaluacionController.preguntas}" 
+                                    var="pregunta"
+                                    itemLabel="#{pregunta.descripcion}" 
+                                    itemValue="#{pregunta.id}"/>
+                            </p:selectOneMenu>
+                            <p:message
+                                for="somPregunta"/>
+                        </h:panelGroup>
+                        <!-- Competencia -->
+                        <p:outputLabel
+                            for="somCompetencia"
+                            value="#{bundle['evaluacion.pregunta.competencia']}"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu 
+                                id="somCompetencia" 
+                                value="#{evaluacionController.preguntaEvaluacion.competencia.compComp}" 
+                                required="true"
+                                filter="true"
+                                filterMatchMode="contains">
+                                <f:selectItem 
+                                    value="#{appController.noSelection}"/>
+                                <f:selectItems 
+                                    value="#{evaluacionController.competencias}" 
+                                    var="competencia"
+                                    itemLabel="#{competencia.compDescri}" 
+                                    itemValue="#{competencia.compComp}"/>
+                            </p:selectOneMenu>
+                            <p:message
+                                for="somCompetencia"/>
+                        </h:panelGroup>
+                        <!-- Valor -->
+                        <p:outputLabel
+                            for="somValor"
+                            value="#{bundle['evaluacion.pregunta.valor']}"/>
+                        <h:panelGroup>
+                            <p:inputText id="somValor" value="#{evaluacionController.preguntaEvaluacion.valorPorcentaje}" required="false">
+                                <f:validateDoubleRange maximum="100" />
+                            </p:inputText>
+                            <p:message for="somValor"/>
+                        </h:panelGroup>
+                    </p:panelGrid>
+                    <f:facet name="footer">
+                        <p:panelGrid
+                            columns="4"
+                            layout="grid" 
+                            columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+                            styleClass="ui-panelgrid-blank">
+                            <p:commandButton value="#{bundle['commons.btn.cancel']}"
+                                             title="#{bundle['commons.btn.cancel']}" icon="icon-reply-all"
+                                             action="#{evaluacionController.getOutcomeCancelarPregunta()}" process="@this" />
+                            <p:commandButton value="#{bundle['commons.btn.save']}"
+                                             title="#{bundle['commons.btn.save']}" icon="icon-doc-add" action="#{evaluacionController.guardarPreguntaEvaluacion()}" update="pgFiltro" />
+                        </p:panelGrid>
+                    </f:facet>
+                </p:panel>
+            </h:form>
+        </p:panel>
+    </ui:define>
+</ui:composition>

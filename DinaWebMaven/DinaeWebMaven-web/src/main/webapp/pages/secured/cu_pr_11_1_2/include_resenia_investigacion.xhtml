@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+               columnClasses="panelGridColumnaValor_30_porciento,panelGridColumnaValor_70_porciento" id="pginclude_informacion_informe_proyecto">
+
+    <h:outputLabel  value="#{properties.value('cu_pr_7_lbl_subtitulo_titulo_pro')}" styleClass="gris negrilla"/>
+    <h:outputLabel value="#{includeInformacionInformeProyectoGenericoFaces.proyectoSeleccionado.tituloPropuesto}" styleClass="gris"/>        
+
+    <h:outputLabel value="Resumen de la investigación:" styleClass="gris negrilla"/>
+    <p:inputTextarea value="#{cuPr11ConsultarDetalleCompromisoFaces.reseniaInvestigacionSeleccionada.resumenPalabras}"  
+                     rows="3" autoResize="false" cols="100" readonly="true"            
+                     styleClass="textareaMaximo">
+    </p:inputTextarea>
+
+    <h:outputLabel value="Palabras clave:" styleClass="gris negrilla"/>
+    <p:inputTextarea value="#{cuPr11ConsultarDetalleCompromisoFaces.reseniaInvestigacionSeleccionada.palabrasClave}"  
+                     rows="3" autoResize="false" cols="100" readonly="true"
+                     styleClass="textareaMaximo">
+    </p:inputTextarea>
+
+    <h:outputLabel value="Abstract:" styleClass="gris negrilla"/>
+    <p:inputTextarea value="#{cuPr11ConsultarDetalleCompromisoFaces.reseniaInvestigacionSeleccionada.abstract1}"  
+                     rows="3" autoResize="false" cols="100" readonly="true"
+                     styleClass="textareaMaximo">
+    </p:inputTextarea>
+
+    <h:outputLabel value="Keywords:" styleClass="gris negrilla"/>
+    <p:inputTextarea value="#{cuPr11ConsultarDetalleCompromisoFaces.reseniaInvestigacionSeleccionada.keywords}"  
+                     rows="3" autoResize="false" cols="100"  readonly="true"
+                     styleClass="textareaMaximo">
+    </p:inputTextarea>
+
+    <h:outputLabel value="Conclusión:" styleClass="gris negrilla"/>
+    <p:inputTextarea value="#{cuPr11ConsultarDetalleCompromisoFaces.reseniaInvestigacionSeleccionada.conclusion}"  
+                     rows="3" autoResize="false" cols="100"  readonly="true"
+                     styleClass="textareaMaximo">
+    </p:inputTextarea>
+
+    <h:outputLabel value="Recomendaciones:" styleClass="gris negrilla"/>
+    <p:inputTextarea value="#{cuPr11ConsultarDetalleCompromisoFaces.reseniaInvestigacionSeleccionada.recomendaciones}"  
+                     rows="3" autoResize="false" cols="100"  readonly="true"
+                     styleClass="textareaMaximo">
+    </p:inputTextarea>
+
+    <h:outputLabel value="Fecha de Inicio" styleClass="gris negrilla"/>
+    <h:outputLabel value="#{cuPr11ConsultarDetalleCompromisoFaces.proyectoSeleccionado.fechaEstimadaInicio}">
+      <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+    </h:outputLabel>
+
+    <h:outputLabel value="Fecha de Fin" styleClass="gris negrilla"/>
+    <h:outputLabel value="#{cuPr11ConsultarDetalleCompromisoFaces.proyectoSeleccionado.fechaEstimadaFinalizacion}">
+      <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+    </h:outputLabel>
+
+  </h:panelGrid>
+</html>

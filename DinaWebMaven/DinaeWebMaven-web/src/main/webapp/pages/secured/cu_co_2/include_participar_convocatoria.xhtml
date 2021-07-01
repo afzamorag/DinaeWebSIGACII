@@ -1,0 +1,146 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <body>
+
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+      <ui:define name="content">
+
+        <h:form id="idForm_cu_co_2_include_participar_convocatoria">
+
+          <div class="fixed-menu">
+            <div class="right-col">
+              <h2>
+                #{properties.value('cu_co_2_lbl_titulo_propues_convoca_finan')}
+              </h2>
+            </div>
+          </div>
+
+          <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                       columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+            <h:outputLabel value="#{properties.value('cu_co_2_lbl_sub_titulo_nombre_uni_pol')}" styleClass="gris negrilla" />
+            <h:outputLabel value="#{cuCo2ParticipaConvocatoriasFaces.nombreUnidadPolicial}" styleClass="gris" />
+
+            <h:outputLabel value="#{properties.value('cu_co_2_lbl_sub_titulo_nombre_convoca')}" styleClass="gris negrilla" />
+            <h:outputLabel value="#{cuCo2ParticipaConvocatoriasFaces.convotariaSeleccionado.nombreConvocatorio}" styleClass="gris" />
+
+            <h:outputLabel value="#{properties.value('cu_co_2_lbl_sub_titulo_descri_convoca')}" styleClass="gris negrilla" />
+            <h:outputLabel value="#{cuCo2ParticipaConvocatoriasFaces.convotariaSeleccionado.descripcion}" styleClass="gris" />
+
+            <h:outputLabel value="#{properties.value('cu_co_2_lbl_sub_titulo_concecutivo_num')}" styleClass="gris negrilla" />
+            <h:outputLabel value="#{cuCo2ParticipaConvocatoriasFaces.convotariaSeleccionado.concecutivo}" styleClass="gris" />
+
+            <h:outputLabel value="#{properties.value('cu_co_2_lbl_sub_titulo_archivo')}" styleClass="gris negrilla" />
+            <p:commandLink ajax="false" immediate="true" id="idCommanLinkDescargaArchivo" 
+                           rendered="#{cuCo2ParticipaConvocatoriasFaces.mostrarLinkDescargaArchivo}">
+              <h:outputLabel value="#{cuCo2ParticipaConvocatoriasFaces.convotariaSeleccionado.nombreArchivo}" />
+              <p:fileDownload value="#{cuCo2ParticipaConvocatoriasFaces.downloadContentProperty}" />
+            </p:commandLink>                                                
+
+          </h:panelGrid>   
+
+          <br />
+          <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                       id="idDataTablePropuestas" var="_proyecto" styleClass="tabla" paginatorPosition="bottom" 
+                       rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true" 
+                       value="#{cuCo2ParticipaConvocatoriasFaces.listaProyectoPorPeriodo}"
+                       rowIndexVar="idFila"
+                       resizableColumns="true"
+                       rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+            <p:column width="20" headerText="#{properties.value('cu_co_2_lbl_datatable_num')}">  
+              #{idFila + 1}
+            </p:column>  
+
+            <p:column headerText="#{properties.value('cu_co_2_lbl_datatable_titu_propuesto')}">  
+              #{_proyecto.tituloPropuesto}
+            </p:column> 
+
+            <p:column width="115" headerText="#{properties.value('cu_co_2_lbl_datatable_area')}">  
+              #{_proyecto.nombreArea}
+            </p:column>  
+
+            <p:column headerText="#{properties.value('cu_co_2_lbl_datatable_linea')}">  
+              #{_proyecto.nombreLinea}
+            </p:column>  
+
+            <p:column width="100" headerText="#{properties.value('cu_co_2_lbl_datatable_estado')}">
+              #{_proyecto.estado}
+            </p:column>
+
+            <p:column width="100" headerText="#{properties.value('cu_co_2_lbl_datatable_comentario_jefe')}">
+              <p:commandLink value="#{properties.value('cu_co_2_lbl_datatable_link_ver_comentario_jefe')}" immediate="true"
+                             rendered="#{cuCo2ParticipaConvocatoriasFaces.isPuedeConsultarComentarioConvocatoria( _proyecto )}"       
+                             action="#{cuCo2ParticipaConvocatoriasFaces.verComentariosJefeProyectoSeleccionado(_proyecto)}">
+              </p:commandLink>
+            </p:column>
+
+            <p:column width="80" headerText="#{properties.value('cu_ne_2_lbl_modificar')}">
+              <p:commandButton value="#{properties.value('cu_ne_2_lbl_modificar')}" 
+                               rendered="#{cuCo2ParticipaConvocatoriasFaces.isPuedeModificarConvocatoria( _proyecto )}"                                             
+                               action="#{cuCo2ParticipaConvocatoriasFaces.modificarProyectoSeleccionado(_proyecto)}" >
+              </p:commandButton>
+              <p:commandButton value="#{properties.value('cu_ne_2_lbl_consultar')}" 
+                               rendered="#{!cuCo2ParticipaConvocatoriasFaces.isPuedeModificarConvocatoria( _proyecto )}"
+                               action="#{cuCo2ParticipaConvocatoriasFaces.consultarProyectoSeleccionado(_proyecto)}" >
+              </p:commandButton>
+            </p:column>
+
+            <f:facet name="footer">  
+              #{fn:length( cuCo2ParticipaConvocatoriasFaces.listaProyectoPorPeriodo )} #{properties.value('general_mensaje_footer_datatable_count')}
+              <br />
+              <p:commandLink value="#{properties.value('cu_co_2_lbl_agregar_propuesta_proyecto')}" 
+                             action="#{cuCo2ParticipaConvocatoriasFaces.agregarNuevoProyecto}" />
+            </f:facet>
+
+          </p:dataTable>
+          <br /><br />
+          <p:separator styleClass="separadorBorder" /> 
+          <div class="centrado">
+
+            <p:commandButton value="#{properties.value('cu_pr_2_lbl_btn_regresar')}" id="idBtnRegresarProyecto"
+                             action="#{navigationFaces.redirectCuCo2ParticipaConvocatoriasRedirect}"
+                             immediate="true" />
+
+            <p:commandButton value="#{properties.value('cu_pr_1_lbl_para_mas_informacion_click_btn_envia')}" id="idBtnEnviarProyecto"
+                             onclick="varConfirmEnviarConvocatoria.show();" immediate="true" 
+                             rendered="#{cuCo2ParticipaConvocatoriasFaces.mostrarBtnEnviar}" />
+
+          </div>
+
+        </h:form>
+
+        <p:confirmDialog widgetVar="varConfirmEnviarConvocatoria" header="#{properties.value('cu_co_3_lbl_titulo_confirmacion_publicar')}" 
+                         message="#{properties.value('cu_co_2_lbl_titulo_confirmacion_mensaje_confirma_envia')}" > 
+
+          <h:form id="idForm_varConfirmPublicar">
+
+            <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmPublicar">
+              <div class="centrado">
+
+                <p:commandButton value="#{properties.value('cu_co_2_lbl_btn_no_publicar_confirma')}" 
+                                 onclick="varConfirmEnviarConvocatoria.hide();" />    
+
+                <p:commandButton actionListener="#{cuCo2ParticipaConvocatoriasFaces.enviarPropuestasJefeUnidad}" 
+                                 value="#{properties.value('cu_co_2_lbl_btn_si_publicar_confirma')}" 
+                                 immediate="true"
+                                 update=":idForm_cu_co_2_include_participar_convocatoria"
+                                 rendered="#{cuCo2ParticipaConvocatoriasFaces.mostrarBtnEnviar}"
+                                 oncomplete="varConfirmEnviarConvocatoria.hide();" />  
+              </div>
+            </p:outputPanel>
+
+          </h:form>
+        </p:confirmDialog>
+
+      </ui:define>
+    </ui:composition>
+  </body>
+</html>

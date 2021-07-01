@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <body>
+        <ui:composition 
+            template="../../../templates/plantillaPrincipal.xhtml">
+            <ui:define 
+                name="content">
+                <h:form 
+                    id="form_revisar_compromiso_jefe_unidad" styleClass="site">
+                    <div 
+                        class="fixed-menu">
+                        <div 
+                            class="right-col">
+                            <h2>
+                                #{properties.value('cu_pr_25_lbl_titulo_compromiso_proy')}
+                            </h2>
+                        </div>
+                    </div>
+                    <p:dataTable 
+                        emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                        var="_comprimiso" 
+                        id="tablaCompromisos" 
+                        value="#{cuPr25RevisarCompromisoJefeUnidad.listaCompromisoProyectoDTO}"
+                        paginator="true" 
+                        rowIndexVar="idFila" 
+                        selectionMode="single" 
+                        paginatorPosition="bottom" 
+                        rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                        selection="#{cuPr25RevisarCompromisoJefeUnidad.compromisoProyectoDTOSeleccionado}" 
+                        rows="#{properties.value('general_mensaje_filas_datatable_pagina')}">
+                        <p:ajax 
+                            event="rowSelect" 
+                            listener="#{cuPr25RevisarCompromisoJefeUnidad.seleccionComprimiso}" />  
+                        <p:ajax 
+                            event="rowUnselect" 
+                            listener="#{cuPr25RevisarCompromisoJefeUnidad.noSeleccionCompromiso}" 
+                            update=":form_revisar_compromiso_jefe_unidad"/> 
+                        <p:column 
+                            width="30" 
+                            headerText="#{properties.value('cu_pr_25_lbl_datatable_num')}">  
+                            #{idFila + 1}               
+                        </p:column>
+                        <p:column 
+                            width="150" 
+                            headerText="#{properties.value('cu_pr_25_lbl_datatable_codigo_proyec')}">  
+                            #{_comprimiso.codigoProyecto}                  
+                        </p:column>
+                        <p:column 
+                            headerText="#{properties.value('cu_pr_25_lbl_datatable_titulo_proyec')}" >  
+                            #{_comprimiso.tituloProyecto}
+                        </p:column>
+                        <p:column 
+                            headerText="#{properties.value('cu_pr_25_lbl_datatable_compromiso')}"> 
+                            #{_comprimiso.compromiso}
+                        </p:column>
+
+                        <p:column 
+                            width="50" 
+                            headerText="#{properties.value('cu_pr_25_lbl_datatable_fecha_limite')}">
+                            <h:outputText 
+                                value="#{_comprimiso.fechaLimite}">
+                                <f:convertDateTime 
+                                    pattern="#{properties.value('general_formato_fecha')}" 
+                                    locale="es_CO" />
+                            </h:outputText>    
+                        </p:column>
+                        <p:column 
+                            width="80"  
+                            headerText="#{properties.value('cu_pr_25_lbl_datatable_resultados')}">  
+                            <h:selectOneMenu 
+                                id="listaEstados" 
+                                value="#{_comprimiso.resultadoTemporal}" 
+                                styleClass="gris">
+                                <f:selectItem 
+                                    itemValue="" 
+                                    itemLabel="--Select--"/>
+                                <f:selectItems 
+                                    value="#{cuPr25RevisarCompromisoJefeUnidad.listaItemResultadoCompromiso}"  /> 
+                                <p:ajax 
+                                    update=":form_revisar_compromiso_jefe_unidad:tablaCompromisos" />
+                            </h:selectOneMenu>                
+                        </p:column>
+                        <p:column 
+                            headerText="#{properties.value('cu_pr_25_lbl_datatable_comentarios')}">
+                            <p:inputTextarea  
+                                id="comentario"  
+                                value="#{_comprimiso.comentario}" 
+                                rendered="#{cuPr25RevisarCompromisoJefeUnidad.compromisoNoAceptada( _comprimiso.resultadoTemporal )}"
+                                maxlength="512" 
+                                counter="contadorDescripcion"  
+                                counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}">                                
+                                <f:validateLength 
+                                    minimum="1" 
+                                    maximum="512" />
+                                <p:ajax 
+                                    listener="#{cuPr25RevisarCompromisoJefeUnidad.handledFijarComentario(_comprimiso, _comprimiso.comentario)}" />
+                            </p:inputTextarea>
+                            <br/>
+                            <h:outputText 
+                                id="contadorDescripcion" />
+                            <p:tooltip 
+                                id="tooltip" 
+                                for="comentario" 
+                                showEffect="fade" 
+                                hideEffect="fade">
+                                <p:message for="comentario" />
+                            </p:tooltip>
+                        </p:column>
+                        <f:facet 
+                            name="footer">  
+                            #{cuPr25RevisarCompromisoJefeUnidad.numeroRegistroCompromisos} #{properties.value('general_mensaje_footer_datatable_count')}
+                        </f:facet>
+                    </p:dataTable>
+                    <br />
+                    <br />
+                    <p:separator 
+                        styleClass="separadorBorder" /> 
+                    <div class="centrado">
+                        <p:commandButton 
+                            id="enviarVicin" 
+                            update="form_revisar_compromiso_jefe_unidad"
+                            value="#{properties.value('cu_pr_25_lbl_btn_enviar_vicin')}"
+                            rendered="#{cuPr25RevisarCompromisoJefeUnidad.mostrarBtns}"
+                            oncomplete="PF('varConfirmEnviarVicin').show()"                            
+                            immediate="true"  />
+                        <p:commandButton 
+                            id="enviarGrupoInvestigacion" update="form_revisar_compromiso_jefe_unidad"
+                            value="#{properties.value('cu_pr_25_lbl_btn_enviar_grp_envestiga')}" 
+                            rendered="#{cuPr25RevisarCompromisoJefeUnidad.mostrarBtns}"
+                            oncomplete="PF('varConfirmEnviarGrupoInvestiga').show()"                             
+                            immediate="true" />
+                        <p:commandButton 
+                            update="form_revisar_compromiso_jefe_unidad"
+                            value="#{properties.value('cu_pr_25_lbl_btn_guardar_comentarios')}" 
+                            rendered="#{cuPr25RevisarCompromisoJefeUnidad.mostrarBtns}"
+                            action="#{cuPr25RevisarCompromisoJefeUnidad.guardar}" />
+                    </div>
+                </h:form>
+                <p:confirmDialog 
+                    widgetVar="varConfirmEnviarVicin" 
+                    header="#{properties.value('cu_co_3_lbl_titulo_confirmacion_publicar')}" 
+                    message="#{properties.value('cu_pr_25_lbl_confirmacion_mensaje_enviar_vicin')}" > 
+                    <h:form 
+                        id="idForm_varConfirmEnviarVicin">
+                        <p:outputPanel 
+                            id="pgroupdialogconfirmDialogvarEnviar">
+                            <div 
+                                class="centrado">
+                                <p:commandButton 
+                                    actionListener="#{cuPr25RevisarCompromisoJefeUnidad.enviarVicin}" 
+                                    value="#{properties.value('cu_co_3_lbl_btn_si_publicar')}" immediate="true"
+                                    oncomplete="varConfirmEnviarVicin.hide();" />  
+                                <p:commandButton 
+                                    value="#{properties.value('cu_co_3_lbl_btn_no_publicar')}" 
+                                    onclick="varConfirmEnviarVicin.hide();" type="button" />       
+                            </div>
+                        </p:outputPanel>
+                    </h:form>
+                </p:confirmDialog>
+                <p:confirmDialog 
+                    widgetVar="varConfirmEnviarGrupoInvestiga" 
+                    header="#{properties.value('cu_co_3_lbl_titulo_confirmacion_publicar')}" 
+                    message="#{properties.value('cu_pr_25_lbl_confirmacion_mensaje_enviar_grupoinvestiga')}" > 
+                    <h:form 
+                        id="idForm_varConfirmEnviarGrupoInvestiga">
+                        <p:outputPanel 
+                            id="pgroupdialogconfirmDialogvarEnviar">
+                            <div 
+                                class="centrado">
+                                <p:commandButton 
+                                    actionListener="#{cuPr25RevisarCompromisoJefeUnidad.enviarGrupoInvestigacion}" 
+                                    value="#{properties.value('cu_co_3_lbl_btn_si_publicar')}" 
+                                    immediate="true"
+                                    oncomplete="varConfirmEnviarGrupoInvestiga.hide();" />  
+                                <p:commandButton 
+                                    value="#{properties.value('cu_co_3_lbl_btn_no_publicar')}" 
+                                    onclick="varConfirmEnviarGrupoInvestiga.hide();" 
+                                    type="button" />       
+                            </div>
+                        </p:outputPanel>
+                    </h:form>
+                </p:confirmDialog>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

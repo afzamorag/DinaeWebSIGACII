@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <h:form id="forminclude_evento_semillero" >
+
+    <br />
+    <h:outputLabel value="Horario de Reuniones de Coordinación" styleClass="green negrilla" />
+    <p:dataTable id="idDataTableHorarioReuniones" var="_horario"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 value="#{cuIv4ConsultarDetalleSemilleroFaces.listaHorarioReuniones}" 
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rowIndexVar="idFila"
+                 resizableColumns="true"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}">
+
+      <p:column headerText="Dia" style="color: white; font-size: 13px">  
+        <h:outputLabel value="#{_horario.diaSemana}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>  
+      </p:column>
+
+      <p:column headerText="Hora de Inicio" style="color: white; font-size: 13px">  
+        <h:outputText value="#{_horario.horaInicio}" styleClass="gris">  
+          <f:convertDateTime pattern="HH:mm" locale="es_CO" />
+        </h:outputText>
+      </p:column>
+
+      <p:column headerText="Hora de fin" style="color: white; font-size: 13px">      
+        <h:outputText value="#{_horario.horaFin}" styleClass="gris">  
+          <f:convertDateTime pattern="HH:mm" locale="es_CO" />
+        </h:outputText>                
+      </p:column>
+    </p:dataTable>
+    <br />
+    <br /> 
+    <h:outputLabel value="Eventos" styleClass="green negrilla" />
+    <p:dataTable var="_evento" id="dataTableDetallesEventosSemillero"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 value="#{cuIv4ConsultarDetalleSemilleroFaces.listaEventosSemillero}" 
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rowIndexVar="idFila" paginatorPosition="bottom" 
+                 resizableColumns="true"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true">
+
+      <p:column headerText="#{properties.value('general_lbl_numero_tabla')}" width="15" style="color: white; font-size: 13px">                                
+        <h:outputText value="#{idFila + 1}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+      </p:column>
+      <p:column headerText="Nombre del evento" style="color: white; font-size: 13px">                                                                
+        <h:outputText value="#{_evento.nombreEvento}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+      </p:column>
+      <p:column headerText="Clase o tema de la ponencia" style="color: white; font-size: 13px">
+        <h:outputText value="#{_evento.claseTemaPonencia}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+      </p:column>
+      <p:column headerText="Lugar del evento" style="color: white; font-size: 13px">
+        <h:outputText value="#{_evento.lugarEvento}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>      
+      </p:column>
+      <p:column headerText="Ciudad" style="color: white; font-size: 13px" width="130">
+        <h:outputText value="#{cuIv4ConsultarDetalleSemilleroFaces.tomarNombreCiudad(_evento.idCiudad)}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>      
+      </p:column>
+
+      <p:column headerText="Fechas de realización" width="70" style="color: white; font-size: 13px">
+        <h:panelGroup>
+          <h:outputText value="#{_evento.fechaInicioEvento}" styleClass="gris" style="font-size: 13px">
+            <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+          </h:outputText>   
+          <h:outputText value=" - " styleClass="gris" style="font-size: 13px"/>
+          <h:outputText value="#{_evento.fechaFinalizacionEvento}" styleClass="gris" style="font-size: 13px">
+            <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+          </h:outputText>
+        </h:panelGroup>
+      </p:column>
+
+      <p:column headerText="Modalidad" style="color: white; font-size: 13px" width="60">
+        <h:outputText value="#{_evento.modalidadParticpacionValor}" styleClass="gris" style="font-size: 13px"/>
+      </p:column>   
+
+      <p:column headerText="Participantes" style="color: white; font-size: 13px" width="80">
+        <h:outputText value="#{cuIv4ConsultarDetalleSemilleroFaces.calcularMostrarAsistentesEventos(_evento)}" styleClass="alineadoDerecha gris" style="font-size: 13px"/>
+      </p:column>   
+
+      <p:column headerText="Archivo de evidencia" width="150" style="color: white; font-size: 13px">
+        <p:commandLink ajax="false" immediate="true" id="downloadArchivoEvidenciaFotoEvento" 
+                       disabled="#{_evento.archivoEvidenciaDocumental == null}">
+          <h:outputLabel styleClass="#{_evento.archivoEvidenciaDocumental == null ? 'gris' : ''}" value="#{_evento.archivoEvidenciaDocumental == null? 'No disponible' : _evento.archivoEvidenciaDocumental}" />
+          <p:fileDownload value="#{cuIv4ConsultarDetalleSemilleroFaces.descargarArchivoEvidenciaFotoEventoTabla(_evento.archivoEvidenciaDocumental, _evento.archivoEvidenciaDocumentalOriginal)}" />
+        </p:commandLink>
+      </p:column>   
+
+      <f:facet name="footer">  
+        #{fn:length( cuIv4ConsultarDetalleSemilleroFaces.listaEventosSemillero )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable>
+  </h:form>
+</html>

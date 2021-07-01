@@ -1,0 +1,269 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+      <ui:define name="content">
+
+        <h:form id="idForm_cu_ne_2_gestiona_bloque_propuestas_necesidades">
+
+          <div class="fixed-menu">
+            <!--VENTANA DE LISTA DE PERIODOS-->
+            <div class="right-col">
+              <h2>
+                #{properties.value('cu_ne_2_titulo_registro_propuesta_necesidad')}
+              </h2>
+            </div>
+          </div>
+
+          <h:panelGroup id="pgDetalleFuncionarioGlobal">
+            <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                         columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+              <h:outputLabel styleClass="gris negrilla" value="#{properties.value('cu_ne_2_lbl_nombre_unidad_policial')}" />
+              <h:outputLabel value="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.nombreUnidadPolicial}" styleClass="gris" />
+
+            </h:panelGrid>   
+            <br />
+            <br />
+
+            <h:outputLabel styleClass="green negrilla" value="#{properties.value('cu_ne_2_lbl_por_favor_ingrese_datos_soli')}" />
+
+            <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                         columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento" >
+
+              <h:outputLabel styleClass="gris negrilla" value="#{properties.value('cu_ne_2_lbl_area')}" for="idListaSelectItemArea" />
+              <h:selectOneMenu required="true" id="idListaSelectItemArea" styleClass="gris"
+                               disabled="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.soloLecturaPropuestaNecesidad}"
+                               value="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.areaCienciaTecnologiaSeleccionada}">  
+                <f:selectItem itemLabel="--Select--" itemValue="" />  
+                <f:selectItems value="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.listaAreaCienciaTecnologiaItem}" var="_item" />  
+                <p:ajax update="idListaSelectItemLinea" listener="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.handleAreaCienciaTecnologiaSeleccionadaChange}" />  
+              </h:selectOneMenu>
+              <h:outputLabel styleClass="gris negrilla" value="#{properties.value('cu_ne_2_lbl_linea')}" for="idListaSelectItemLinea" />
+              <h:selectOneMenu required="true" id="idListaSelectItemLinea"  styleClass="gris" 
+                               disabled="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.soloLecturaPropuestaNecesidad}"
+                               value="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.lineaSeleccionada}">  
+                <f:selectItem itemLabel="--Select--" itemValue="" />  
+                <f:selectItems value="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.listaLineaItem}" />  
+              </h:selectOneMenu>
+
+              <h:outputLabel styleClass="gris negrilla" for="idTemaPropuesto" value="#{properties.value('cu_ne_2_lbl_tema_propuesta')}" />
+              <h:panelGrid columns="1">
+                <p:inputTextarea value="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.propuestaNecesidad.tema}" 
+                                 maxlength="512" required="true" counter="contadorTema" 
+                                 counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}" autoResize="false"
+                                 styleClass="textareaMaximo"  title="#{properties.value('cu_ne_2_lbl_tema_propuesta')}, maximo 512 caracteres"
+                                 readonly="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.soloLecturaPropuestaNecesidad}"
+                                 cols="100" rows="3" id="idTemaPropuesto" >
+                  <f:validateLength minimum="1" maximum="512" />
+                </p:inputTextarea>
+                <h:outputText id="contadorTema" styleClass="gris" />
+              </h:panelGrid>
+
+              <h:outputLabel styleClass="gris negrilla" for="idresultadoEsperado" value="#{properties.value('cu_ne_2_lbl_resultado_esperado')}" />
+              <h:panelGrid columns="1">
+                <p:inputTextarea value="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.propuestaNecesidad.resultadoEsperado}" 
+                                 maxlength="700" required="true" requiredMessage="Requerido" styleClass="textareaMaximo" 
+                                 readonly="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.soloLecturaPropuestaNecesidad}"
+                                 counter="contadorresultadoEsperado" counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}" autoResize="false"
+                                 cols="100" rows="3" id="idresultadoEsperado"
+                                 title="#{properties.value('cu_ne_2_lbl_resultado_esperado')}, maximo 700 caracteres">
+                  <f:validateLength minimum="1" maximum="700" />
+                </p:inputTextarea>
+                <h:outputText id="contadorresultadoEsperado" styleClass="gris" />
+              </h:panelGrid>
+
+              <h:outputLabel styleClass="gris negrilla" for="idfuenteInformacion" value="#{properties.value('cu_ne_2_lbl_fuente_informacion')}" />
+              <h:panelGrid columns="1">
+                <p:inputTextarea value="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.propuestaNecesidad.fuenteInformacion}" 
+                                 readonly="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.soloLecturaPropuestaNecesidad}"
+                                 maxlength="700" required="true" requiredMessage="Requerido" styleClass="textareaMaximo" 
+                                 counter="contadorfuenteInformacion" counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}" autoResize="false"
+                                 cols="100" rows="3" id="idfuenteInformacion" 
+                                 title="#{properties.value('cu_ne_2_lbl_fuente_informacion')}, maximo 700 caracteres">
+
+                  <f:validateLength minimum="1" maximum="700" />
+                </p:inputTextarea>
+                <h:outputText id="contadorfuenteInformacion" styleClass="gris" />
+              </h:panelGrid>
+
+              <h:outputLabel styleClass="gris negrilla" for="idposibleActividad" value="#{properties.value('cu_ne_2_lbl_posible_activ_para_obtencion_info')}" />
+              <h:panelGrid columns="1">
+                <p:inputTextarea value="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.propuestaNecesidad.posibleActividad}" 
+                                 maxlength="700" required="true" requiredMessage="Requerido" styleClass="textareaMaximo" 
+                                 readonly="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.soloLecturaPropuestaNecesidad}"
+                                 counter="contadorposibleActividad" counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}" autoResize="false"
+                                 cols="100" rows="3" id="idposibleActividad" 
+                                 title="#{properties.value('cu_ne_2_lbl_posible_activ_para_obtencion_info')}, maximo 700 caracteres">
+                  <f:validateLength minimum="1" maximum="700" />
+                </p:inputTextarea>
+                <h:outputText id="contadorposibleActividad" styleClass="gris" />
+              </h:panelGrid>
+            </h:panelGrid> 
+
+            <br />
+            <br />
+
+            <h:outputLabel styleClass="green negrilla" value="#{properties.value('cu_ne_2_lbl_funcionarios_proponen_tema')}" />
+
+            <h:panelGrid columns="3" rendered="#{!cuNe2GestionaBloquePropuestasNecesidadesFaces.soloLecturaPropuestaNecesidad}" >
+
+              <h:outputLabel styleClass="gris negrilla" value="#{properties.value('cu_ne_2_lbl_num_identificacion')}" />
+              <p:inputText id="idnumeroDocumento" styleClass="textMediano" value="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.numeroDocumento}" maxlength="100" size="30" />
+              <p:commandButton value="#{properties.value('cu_ne_2_lbl_buscar')}" 
+                               action="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.buscarFuncionario}" 
+                               process="@this,:idForm_cu_ne_2_gestiona_bloque_propuestas_necesidades:idnumeroDocumento"
+                               update="pgDetalleFuncionario pgAdicionarFuncionarioTelefono">
+              </p:commandButton>
+            </h:panelGrid>
+
+            <h:panelGroup id="pgDetalleFuncionario">
+
+              <h:panelGrid columns="6" rendered="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.vistaFuncionario != null and 
+                                                   cuNe2GestionaBloquePropuestasNecesidadesFaces.numeroDocumento != null and 
+                                                   cuNe2GestionaBloquePropuestasNecesidadesFaces.vistaFuncionario.identificacion != null}" >
+                <h:outputLabel value="#{properties.value('cu_ne_2_lbl_grado')}" styleClass="gris negrilla" />
+                <h:outputLabel value="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.vistaFuncionario.grado}" styleClass="gris" />
+
+                <h:outputLabel value="#{properties.value('cu_ne_2_lbl_nombre_apellido')}" styleClass="gris negrilla"  />
+                <h:outputLabel value="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.vistaFuncionario.nombreCompleto}" styleClass="gris" />
+
+                <h:outputLabel value="#{properties.value('cu_ne_2_lbl_correo_electronico')}" styleClass="gris negrilla" />
+                <h:outputLabel value="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.vistaFuncionario.correo}" styleClass="gris" />
+              </h:panelGrid>
+
+            </h:panelGroup>
+
+            <br />
+            <br />
+            <h:panelGroup id="pgAdicionarFuncionarioTelefono">
+
+              <h:panelGrid columns="3" rendered="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.vistaFuncionario != null and 
+                                                   cuNe2GestionaBloquePropuestasNecesidadesFaces.numeroDocumento != null and 
+                                                   cuNe2GestionaBloquePropuestasNecesidadesFaces.numeroDocumento != ' ' and
+                                                   cuNe2GestionaBloquePropuestasNecesidadesFaces.vistaFuncionario.identificacion != null}">
+
+                <h:outputLabel value="#{properties.value('cu_ne_2_lbl_numero_telefonico')}" for="idcu_ne_2_lbl_numero_telefonico" styleClass="gris negrilla" />
+                <p:inputText styleClass="textMediano" value="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.numeroTelefono}" 
+                             maxlength="50" size="30" id="idcu_ne_2_lbl_numero_telefonico" required="true" />
+                <p:commandButton value="#{properties.value('cu_ne_2_lbl_agregar')}" action="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.agregarFuncionario}" 
+                                 process="@this,:idForm_cu_ne_2_gestiona_bloque_propuestas_necesidades:idcu_ne_2_lbl_numero_telefonico"
+                                 update="pgAdicionarFuncionarioTelefono idDataTableFuncionariosAgregados pgDetalleFuncionario">
+                </p:commandButton>
+
+              </h:panelGrid>
+
+            </h:panelGroup>
+
+            <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}"  id="idDataTableFuncionariosAgregados" var="_funcionarios" styleClass="tabla"
+                         value="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.listaFuncionariosNecesidad}" 
+                         rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                         rowIndexVar="idFila" paginatorPosition="bottom"
+                         resizableColumns="true"
+                         rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true">
+
+              <p:column width="100" headerText="#{properties.value('cu_ne_2_lbl_grado')}">  
+                <h:outputLabel value="#{_funcionarios.grado}" />  
+              </p:column>  
+
+              <p:column width="120" headerText="#{properties.value('cu_pr_2_lbl_subtitulo_autor_cc_comentario')}">  
+                <h:outputLabel value="#{_funcionarios.identificacion}" />  
+              </p:column> 
+
+              <p:column headerText="#{properties.value('cu_ne_2_lbl_nombre_apellido')}">  
+                <h:outputLabel value="#{_funcionarios.nombreCompleto}" />  
+              </p:column> 
+
+              <p:column width="200" headerText="#{properties.value('cu_ne_2_lbl_correo_electronico')}">  
+                <h:outputLabel value="#{_funcionarios.correo}"  />  
+              </p:column>  
+
+              <p:column width="100" headerText="#{properties.value('cu_ne_2_lbl_numero_telefonico')}" >
+                <h:outputLabel value="#{_funcionarios.telefono}" />
+              </p:column>
+
+              <p:column width="80" headerText="#{properties.value('cu_pr_19_lbl_tabla_acciones')}">
+                <div class="centrado">
+                  <p:commandLink value="#{properties.value('cu_pr_10_lbl_tab3_btn_eliminar')}" 
+                                 immediate="true"                                                   
+                                 rendered="#{!cuNe2GestionaBloquePropuestasNecesidadesFaces.soloLecturaPropuestaNecesidad and _funcionarios.idFuncionarioNecesidad != null}" 
+                                 oncomplete="PF('varConfirmEliminarFuncionario').show()"
+                                 style="font-size: 13px">  
+                    <f:setPropertyActionListener value="#{_funcionarios}" target="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.funcionarioNecesidadSeleccionadoEliminar}" />  
+                  </p:commandLink>
+                </div>
+              </p:column>
+
+            </p:dataTable>
+
+            <br /><br />
+            <h:panelGrid columns="1" width="100%">
+              <p:commandLink ajax="false" immediate="true" id="idCommanLinkDescargaArchivo" 
+                             rendered="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.mostrarLinkDescargaArchivo}" >
+                <h:outputLabel value="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.propuestaNecesidad.nombreArchivo}" />
+                <p:fileDownload value="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.downloadContentProperty}" />
+              </p:commandLink>
+              <h:outputLabel id="idNombreArchivoCargado" styleClass="green" rendered="#{!cuNe2GestionaBloquePropuestasNecesidadesFaces.mostrarLinkDescargaArchivo}" 
+                             value="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.nombreArchivoSubido}" />
+              <p:fileUpload dragDropSupport="true" fileUploadListener="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.handleFileUpload}" 
+                            rendered="#{!cuNe2GestionaBloquePropuestasNecesidadesFaces.soloLecturaPropuestaNecesidad}" fileLimit="1" 
+                            label="#{properties.value('cu_ne_2_lbl_examinar')}" update="idNombreArchivoCargado idCommanLinkDescargaArchivo" multiple="false"
+                            fileLimitMessage="#{properties.value('cu_ne_2_lbl_mensaje_maximo_numero_archivo')}"
+                            uploadLabel="#{properties.value('cu_ne_2_lbl_subiendo')}" invalidFileMessage="#{properties.value('cu_ne_2_lbl_archivo_invalido')}"
+                            invalidSizeMessage="#{properties.value('cu_ne_2_lbl_tamanio_invalido_archivo')}" allowTypes="#{properties.value('cu_ne_2_lbl_formatos_archivos_soportados')}"
+                            mode="advanced" auto="false" cancelLabel="#{properties.value('cu_ne_2_lbl_cancelar')}"  />
+            </h:panelGrid>
+            <br />
+
+          </h:panelGroup>
+
+          <br />
+          <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+          <p:separator styleClass="separadorBorder" /> 
+          <div class="centrado">
+            <p:commandButton value="#{properties.value('cu_ne_2_lbl_regresar')}" 
+                             action="/pages/secured/cu_ne_2/include_detalle_propuesta.xhtml?faces-redirect=true" 
+                             immediate="true"
+                             update=":idForm_cu_ne_2_gestiona_bloque_propuestas_necesidades" />
+
+            <p:commandButton styleClass="button" rendered="#{!cuNe2GestionaBloquePropuestasNecesidadesFaces.soloLecturaPropuestaNecesidad}" 
+                             value="#{properties.value('cu_ne_2_lbl_guardar')}" action="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.guardarPropuesta}" 
+                             update=":idForm_cu_ne_2_gestiona_bloque_propuestas_necesidades" >
+            </p:commandButton>
+          </div>
+          <br />
+          <br />
+
+        </h:form>
+        <p:confirmDialog widgetVar="varConfirmEliminarFuncionario" header="#{properties.value('cu_pr_2_lbl_titulo_confirmacion_titulo')}" 
+                         message="Sr usuario, desea eliminar el evento seleccionado?" > 
+
+          <h:form id="idFormEliminar">
+
+            <p:outputPanel id="pgroupvarConfirmEliminarFuncionario">
+              <div class="centrado">
+                <p:commandButton actionListener="#{cuNe2GestionaBloquePropuestasNecesidadesFaces.eliminarFuncionario}" 
+                                 value="#{properties.value('cu_pr_7_lbl_btn_confirma_si')}" immediate="true"
+                                 oncomplete="varConfirmEliminarFuncionario.hide();"
+                                 update=":idForm_cu_ne_2_gestiona_bloque_propuestas_necesidades" />  
+                <p:commandButton value="#{properties.value('cu_pr_7_lbl_btn_confirma_no')}" 
+                                 onclick="varConfirmEliminarFuncionario.hide();" type="button" />       
+              </div>
+            </p:outputPanel>
+
+          </h:form>
+        </p:confirmDialog>
+
+      </ui:define>
+    </ui:composition>
+
+  </body>
+</html>

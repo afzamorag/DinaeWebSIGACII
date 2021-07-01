@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <h:form id="forminclude_compromiso_periodo_cambio_unidad_responsable" >
+
+    <br />
+    <h:panelGrid columns="2" style="width: 100%" 
+                 rowClasses="filaParPanelGridPar,filaParPanelGridImPar"  
+                 columnClasses="panelGridColumnaValor_30_porciento,panelGridColumnaValor_70_porciento">
+
+      <h:outputLabel  for="id_unidades_poli_extemporaneo" value="#{properties.value('cu_ne_6_lbl_unidad_policial')}:" styleClass="gris negrilla"/>
+      <h:selectOneMenu id="id_unidades_poli_extemporaneo" class="gris"
+                       value="#{cuPr23GestionarCompromisoProyectos.idUnidadPolicialCambioUnidadResponsable}" 
+                       required="true" >  
+        <f:selectItem itemLabel="--Todos--" itemValue="" />  
+        <f:selectItems value="#{cuPr23GestionarCompromisoProyectos.listaItemsUnidadesPoliciales}" var="_item" />  
+        <p:ajax update=":tabViewProyectos:forminclude_compromiso_periodo_cambio_unidad_responsable:idDataTableProyecto" listener="#{cuPr23GestionarCompromisoProyectos.handleFiltroUnidadPolicialCambioUnidadResponableChange}" />
+      </h:selectOneMenu>
+
+    </h:panelGrid>
+    <br />
+    <h:panelGroup id="pgDatosProyectoASeleccionado" >
+
+      <h:panelGroup id="pgDatosProyectoASeleccionadoRenderer" >
+
+        <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}"  
+                     id="idDataTableProyecto" var="_proyecto" paginatorPosition="bottom" selectionMode="single"
+                     rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true" 
+                     value="#{cuPr23GestionarCompromisoProyectos.listaProyectoCambioUnidad}" 
+                     rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                     selection="#{cuPr23GestionarCompromisoProyectos.proyectoCambioUnidadSeleccionado}" 
+                     resizableColumns="true"
+                     rowIndexVar="idFila" >
+
+          <p:ajax event="rowSelect" listener="#{cuPr23GestionarCompromisoProyectos.verDatalleProyecto}" 
+                  update=":tabViewProyectos:forminclude_compromiso_periodo_cambio_unidad_responsable:pgDatosDetalleProyectoSeleccionado" />  
+          <p:ajax event="rowUnselect" listener="#{cuPr23GestionarCompromisoProyectos.noSeleccionProyecto}" /> 
+
+          <p:column width="90" headerText="#{properties.value('cu_pr_13_lbl_column_fecha_proyecto')}">  
+            <h:outputLabel value="#{_proyecto.fechaEstimadaInicio}">
+              <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+            </h:outputLabel>
+          </p:column> 
+          <p:column width="200" headerText="#{properties.value('cu_pr_11_lbl_codigo_del_proyecto')}">  
+            #{_proyecto.codigoProyecto}
+          </p:column> 
+
+          <p:column width="200" headerText="#{properties.value('cu_pr_7_lbl_subtitulo_titulo_pro')}">  
+            #{_proyecto.tituloPropuesto}
+          </p:column> 
+
+          <p:column width="200" headerText="#{properties.value('cu_ne_4_lbl_area')}">  
+            #{_proyecto.linea.areaCienciaTecnologia.nombre}
+          </p:column> 
+
+          <p:column width="100" headerText="#{properties.value('cu_co_4_subtitulo_estado')}">  
+            #{_proyecto.estado.valor}
+          </p:column> 
+
+          <f:facet name="footer">  
+            #{cuPr23GestionarCompromisoProyectos.numeroRegistroProyectosUnidad} #{properties.value('general_mensaje_footer_datatable_count')}                            
+          </f:facet>
+
+        </p:dataTable>
+
+      </h:panelGroup>
+    </h:panelGroup>
+
+    <br />
+    <h:panelGroup id="pgDatosDetalleProyectoSeleccionado" >
+
+      <h:panelGroup id="pgDatosDetalleProyectoSeleccionadoRenderer" rendered="#{cuPr23GestionarCompromisoProyectos.mostrarPanelDatellProyectoSeleccionadoUnidad}" >
+
+        <h:panelGrid columns="2" style="width: 100%" 
+                     rowClasses="filaParPanelGridPar,filaParPanelGridImPar"  
+                     columnClasses="panelGridColumnaValor_30_porciento,panelGridColumnaValor_70_porciento">      
+          <h:outputLabel value="#{properties.value('cu_pr_11_lbl_codigo_del_proyecto')}" styleClass="gris negrilla"/>
+          <h:outputLabel value="#{cuPr23GestionarCompromisoProyectos.proyectoCambioUnidadSeleccionado.codigoProyecto}" styleClass="gris"/>
+
+          <h:outputLabel value="#{properties.value('cu_pr_7_lbl_subtitulo_titulo_pro')}" styleClass="gris negrilla"/>
+          <h:outputLabel value="#{cuPr23GestionarCompromisoProyectos.proyectoCambioUnidadSeleccionado.tituloPropuesto}" styleClass="gris"/>
+
+        </h:panelGrid>
+        <br />
+        <h:outputLabel value="Unidades ejecutoras:" styleClass="green negrilla"/>
+        <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}"  
+                     var="_ejecutor" id="tablaEjecutoresNecesidad" 
+                     value="#{cuPr23GestionarCompromisoProyectos.listadoEjecutorNecesidad}"
+                     paginatorPosition="bottom" rowIndexVar="idFila"
+                     resizableColumns="true"
+                     rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                     rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true" >
+
+          <p:column headerText="#{properties.value('cu_ne_7_lista_unidad_policial')}">  
+            <h:outputText value="#{_ejecutor.nombreUnidadPolicial}" />                    
+          </p:column>
+          <p:column width="110" headerText="#{properties.value('cu_ne_7_rol')}">  
+            <h:selectOneMenu required="true" styleClass="gris"
+                             value="#{_ejecutor.idRol}">                     
+              <f:selectItems value="#{cuPr23GestionarCompromisoProyectos.listaItemRolVincula}" />  
+            </h:selectOneMenu>
+          </p:column>
+
+          <f:facet name="footer">  
+            #{fn:length( cuPr23GestionarCompromisoProyectos.listadoEjecutorNecesidad )} #{properties.value('general_mensaje_footer_datatable_count')}
+          </f:facet>
+
+        </p:dataTable>
+
+        <br />
+
+        <p:separator styleClass="separadorBorder" /> 
+        <div class="centrado">
+
+          <p:commandButton id="idBtnGuardarCompromiso" value="Cambiar responsable" 
+                           update=":tabViewProyectos:forminclude_compromiso_periodo_cambio_unidad_responsable:pgDatosDetalleProyectoSeleccionado"
+                           action="#{cuPr23GestionarCompromisoProyectos.cambiarResponsableProyecto}" />  
+
+        </div>
+
+      </h:panelGroup>
+
+    </h:panelGroup>
+
+  </h:form>
+</html>

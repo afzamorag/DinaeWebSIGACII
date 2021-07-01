@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    template="/templates/plantillaPrincipal.xhtml">
+    <ui:define
+        name="content">
+        <p:panel 
+            id="main"
+            styleClass="ui-fluid">
+            <h:form
+                id="frmlist"
+                prependId="false"
+                rendered="#{capacitacionController.showList}">
+                <h:outputText 
+                    value="#{bundle['capacitacion.title.list']}"/>
+                <p:separator />
+                <p:panel
+                    id="pnlfiltro">
+                    <p:panelGrid
+                        layout="grid" 
+                        columns="2"
+                        columnClasses="ui-grid-col-2,ui-grid-col-10" 
+                        styleClass="ui-panelgrid-blank">
+                        <!-- vigencia -->
+                        <p:outputLabel
+                            id="fltvigencialbl"
+                            for="fltvigencia"
+                            value="#{bundle['vigencia']}"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu 
+                                id="fltvigencia" 
+                                value="#{capacitacionController.filtro.pae}" 
+                                converter="paeConverter"
+                                filter="true"
+                                filterMatchMode="contains"
+                                required="true">
+                                <p:ajax
+                                    process="@this"
+                                    listener="#{capacitacionController.onLoadList()}"
+                                    update="pnlfiltrobtns fltvigencialbl fltvigencia fltvigenciamsg dtlist"/>
+                                <f:selectItem 
+                                    noSelectionOption="true"/>
+                                <f:selectItems 
+                                    value="#{capacitacionController.vigencias}" 
+                                    var="pae" 
+                                    itemLabel="#{pae.vigencia}" 
+                                    itemValue="#{pae}" />
+                            </p:selectOneMenu>              
+                            <p:message
+                                id="fltvigenciamsg"
+                                for="fltvigencia"/>
+                        </h:panelGroup>
+                        <!-- escuela -->
+                        <p:outputLabel
+                            id="fltescuelalbl"
+                            for="fltescuela"
+                            value="#{bundle['escuela']}"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu 
+                                id="fltescuela" 
+                                value="#{capacitacionController.filtro.escuela}" 
+                                filter="true"
+                                filterMatchMode="contains"
+                                required="false">
+                                <p:ajax
+                                    process="@this"
+                                    listener="#{capacitacionController.onLoadList()}"
+                                    update="pnlfiltrobtns fltescuelalbl fltescuela fltescuelamsg dtlist"/>
+                                <p:ajax
+                                    process="@this"
+                                    listener="#{capacitacionController.onLoadList()}"
+                                    update="pnlfiltrobtns dtlist"/>
+                                <f:selectItem 
+                                    noSelectionOption="true"/>
+                                <f:selectItems 
+                                    value="#{capacitacionController.escuelas}" 
+                                    var="escuela" 
+                                    itemLabel="#{escuela.descripcionDependencia}" 
+                                    itemValue="#{escuela.consecutivo}" />
+                            </p:selectOneMenu>              
+                            <p:message
+                                id="fltescuelamsg"
+                                for="fltescuela"/>
+                        </h:panelGroup>
+                    </p:panelGrid>
+                    <f:facet
+                        name="footer">
+                        <p:panelGrid
+                            id="pnlfiltrobtns"
+                            columns="12"
+                            layout="grid" 
+                            columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+                            styleClass="ui-panelgrid-blank">
+                            <p:commandButton 
+                                value="#{bundle['commons.btn.find']}"
+                                title="#{bundle['commons.btn.find']}"
+                                icon="ui-icon-search"
+                                actionListener="#{capacitacionController.onLoadList()}"
+                                process="@this pnlfiltro"
+                                update="frmlist"
+                                style="border: none"/>
+                            <p:commandButton 
+                                value="#{bundle['capacitacion.btn.consolidate.summary']}"
+                                title="#{bundle['capacitacion.btn.consolidate.detail']}"
+                                icon="ui-icon-action"
+                                actionListener="#{capacitacionController.consolidateTrainingNeeds()}"
+                                rendered="#{capacitacionController.enableConsolidateTrainingNeeds()}"
+                                process="@this pnlfiltro"
+                                update="frmlist"
+                                style="border: none">
+                                <p:confirm 
+                                    header="#{bundle['commons.cfmdlg.header']}" 
+                                    message="#{bundle['capacitacion.msg.confirm.consolidate.needs']}" 
+                                    icon="ui-icon-alert" />
+                            </p:commandButton>
+                            <p:commandButton 
+                                ajax="false" 
+                                value="#{bundle['commons.btn.report']}"
+                                style="border: none">                                 
+                                <p:dataExporter 
+                                    type="csv" 
+                                    target="dtlist" 
+                                    fileName="#{bundle['capacitacion.necesidad']}" 
+                                    pageOnly="false"/>
+                            </p:commandButton> 
+                        </p:panelGrid>
+                    </f:facet>
+                </p:panel>
+                <p:dataTable 
+                    id="dtlist"
+                    value="#{capacitacionController.list}"
+                    var="record"
+                    paginator="true" 
+                    rows="25"
+                    selectionMode="single" 
+                    selection="#{capacitacionController.selected}" 
+                    rowKey="#{record.id}"
+                    reflow="true"
+                    style="font-size: x-small"
+                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                    rowsPerPageTemplate="10,50,100"> 
+                    <p:ajax 
+                        event="rowSelect" 
+                        listener="#{capacitacionController.onRowSelect}" 
+                        update=":main" />
+                    <f:facet
+                        name="header">
+                        Consolidado necesidades de capacitación
+                    </f:facet>
+                    <p:columnGroup 
+                        type="header">
+                        <p:row>
+                            <p:column 
+                                rowspan="3" 
+                                headerText="#{bundle['capacitacion.escuela']}" 
+                                style="width: 6%"
+                                sortBy="#{record.escuela.siglaFisica}"
+                                filterBy="#{record.escuela.siglaFisica}"
+                                filterMatchMode="contains"/>
+                            <p:column 
+                                rowspan="3" 
+                                headerText="#{bundle['capacitacion.estrategia']}"
+                                style="width: 18%"
+                                sortBy="#{record.estrategia.nombre}"                        
+                                filterBy="#{record.estrategia.nombre}"
+                                filterMatchMode="contains"/>
+                            <p:column 
+                                rowspan="3" 
+                                headerText="#{bundle['capacitacion.carrera']}"                                
+                                sortBy="#{record.carrera.titulo}"
+                                filterBy="#{record.carrera.descripcion}"
+                                filterMatchMode="contains"/>
+                            <p:column 
+                                rowspan="3" 
+                                headerText="#{bundle['capacitacion.estado']}"
+                                style="width: 7%"/>
+                            <p:column 
+                                rowspan="3" 
+                                headerText="#{bundle['capacitacion.necesidad']}"
+                                style="width: 6%"/>
+                            <p:column 
+                                rowspan="3" 
+                                headerText="#{bundle['capacitacion.totalAprobado']}"
+                                style="width: 6%"/>
+                            <p:column 
+                                colspan="8" 
+                                headerText="Programación" 
+                                style="width: 25%"/>
+                        </p:row>
+                        <p:row>
+                            <p:column 
+                                colspan="2" 
+                                headerText="#{bundle['capacitacion.trimestreT1']}" />
+                            <p:column 
+                                colspan="2" 
+                                headerText="#{bundle['capacitacion.trimestreT2']}" />
+                            <p:column 
+                                colspan="2" 
+                                headerText="#{bundle['capacitacion.trimestreT3']}" />
+                            <p:column 
+                                colspan="2" 
+                                headerText="#{bundle['capacitacion.trimestreT4']}" />
+                        </p:row>
+                        <p:row>
+                            <p:column headerText="#{bundle['capacitacion.evento.sigla']}"/>
+                            <p:column headerText="#{bundle['capacitacion.persona.sigla']}"/>
+                            <p:column headerText="#{bundle['capacitacion.evento.sigla']}"/>
+                            <p:column headerText="#{bundle['capacitacion.persona.sigla']}"/>
+                            <p:column headerText="#{bundle['capacitacion.evento.sigla']}"/>
+                            <p:column headerText="#{bundle['capacitacion.persona.sigla']}"/>
+                            <p:column headerText="#{bundle['capacitacion.evento.sigla']}"/>
+                            <p:column headerText="#{bundle['capacitacion.persona.sigla']}"/>
+                        </p:row>
+                    </p:columnGroup>
+                    <p:column 
+                        headerText="#{bundle['capacitacion.escuela']}">
+                        <h:outputText 
+                            value="#{record.escuela.siglaFisica}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['capacitacion.estrategia']}">
+                        <h:outputText 
+                            value="#{record.estrategia.nombre}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['capacitacion.carrera']}">
+                        <h:outputText 
+                            value="#{record.carrera.descripcion}"/>
+                    </p:column> 
+                    <p:column 
+                        headerText="#{bundle['capacitacion.estado']}"
+                        sortBy="#{record.estado}"
+                        style="text-align: center">
+                        <h:outputText 
+                            value="#{record.estado}"/>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['capacitacion.necesidad']}"
+                        sortBy="#{record.necesidad}"
+                        style="text-align: center">
+                        <h:outputText 
+                            value="#{record.necesidad}"/>
+                    </p:column>                    
+                    <p:column 
+                        headerText="#{bundle['capacitacion.totalAprobado']}"
+                        sortBy="#{record.totalParticipantes}"
+                        style="text-align: center">
+                        <h:outputText 
+                            value="#{record.totalParticipantes}"/>
+                    </p:column>
+                    <p:column                         
+                        style="text-align: center"
+                        headerText="#{bundle['capacitacion.nroEventosT1']}">
+                        <h:outputText 
+                            value="#{record.nroEventosT1}"/>
+                    </p:column>
+                    <p:column                         
+                        style="text-align: center"
+                        headerText="#{bundle['capacitacion.nroParticipantesT1']}">
+                        <h:outputText 
+                            value="#{record.nroParticipantesT1}"/>
+                    </p:column>
+                    <p:column                         
+                        style="text-align: center"
+                        headerText="#{bundle['capacitacion.nroEventosT2']}">
+                        <h:outputText 
+                            value="#{record.nroEventosT2}"/>
+                    </p:column>
+                    <p:column                         
+                        style="text-align: center"
+                        headerText="#{bundle['capacitacion.nroParticipantesT2']}">
+                        <h:outputText 
+                            value="#{record.nroParticipantesT2}"/>
+                    </p:column>
+                    <p:column                         
+                        style="text-align: center"
+                        headerText="#{bundle['capacitacion.nroEventosT3']}">
+                        <h:outputText 
+                            value="#{record.nroEventosT3}"/>
+                    </p:column>
+                    <p:column                         
+                        style="text-align: center"
+                        headerText="#{bundle['capacitacion.nroParticipantesT3']}">
+                        <h:outputText 
+                            value="#{record.nroParticipantesT3}"/>
+                    </p:column>
+                    <p:column                         
+                        style="text-align: center"
+                        headerText="#{bundle['capacitacion.nroEventosT4']}">
+                        <h:outputText 
+                            value="#{record.nroEventosT4}"/>
+                    </p:column>
+                    <p:column                        
+                        style="text-align: center"
+                        headerText="#{bundle['capacitacion.nroParticipantesT4']}">
+                        <h:outputText 
+                            value="#{record.nroParticipantesT4}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+            <h:form
+                id="frmDetail"
+                prependId="false"
+                rendered="#{capacitacionController.showDetails}">
+                <h:outputText 
+                    value="#{bundle['capacitacion.title.detail']}"/>
+                <p:separator />
+                <p:panel
+                    id="pnlDetails">
+                    <p:panelGrid
+                        columns="4"
+                        layout="grid" 
+                        columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" 
+                        styleClass="ui-panelgrid-blank">
+                        <!-- escuela -->
+                        <p:outputLabel
+                            for="escuela"
+                            value="#{bundle['capacitacion.escuela']}"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                id="escuela"
+                                value="#{capacitacionController.selected.escuela.descripcionDependencia}"/>
+                            <p:message
+                                for="escuela"/>
+                        </h:panelGroup>
+                        <!-- proceso -->
+                        <p:outputLabel
+                            for="proceso"
+                            value="#{bundle['capacitacion.proceso']}"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                id="proceso"
+                                value="#{capacitacionController.selected.proceso.nombre}"/>
+                            <p:message
+                                for="proceso"/>
+                        </h:panelGroup>
+                        <!-- estrategia -->
+                        <p:outputLabel
+                            for="estrategia"
+                            value="#{bundle['capacitacion.estrategia']}"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                id="estrategia"
+                                value="#{capacitacionController.selected.estrategia.nombre}"/>
+                            <p:message
+                                for="estrategia"/>
+                        </h:panelGroup>
+                        <!-- nivelacademico -->
+                        <p:outputLabel
+                            for="nivelacademico"
+                            value="#{bundle['nivelacademico']}"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                id="nivelacademico"
+                                value="#{capacitacionController.selected.carrera.nivelAcademico.descripcion}"/>
+                            <p:message
+                                for="nivelacademico"/>
+                        </h:panelGroup>
+                        <!-- carrera -->
+                        <p:outputLabel
+                            for="carrera"
+                            value="#{bundle['capacitacion.carrera']}"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                id="carrera"
+                                value="#{capacitacionController.selected.carrera.descripcion}"/>
+                            <p:message
+                                for="carrera"/>
+                        </h:panelGroup>
+                        <!-- necesidad -->
+                        <p:outputLabel
+                            for="necesidad"
+                            value="#{bundle['capacitacion.necesidad']}"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                id="necesidad"
+                                value="#{capacitacionController.selected.necesidad}"/>
+                            <p:message
+                                for="necesidad"/>
+                        </h:panelGroup>
+                        <!-- estado -->
+                        <p:outputLabel
+                            for="estado"
+                            value="#{bundle['capacitacion.estado']}"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                id="estado"
+                                value="#{capacitacionController.selected.estado}"/>
+                            <p:message
+                                for="estado"/>
+                        </h:panelGroup>
+                        <!-- modalidad -->
+                        <p:outputLabel
+                            id="modalidadlbl"
+                            for="modalidad"
+                            value="#{bundle['capacitacion.modalidad']}"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                value="#{capacitacionController.selected.modalidad.nombre}"
+                                rendered="#{!capacitacionController.editableField()}"/>
+                            <p:selectOneMenu 
+                                id="modalidad" 
+                                value="#{capacitacionController.selected.modalidad}"
+                                converter="dominioConverter"
+                                required="true"
+                                rendered="#{capacitacionController.editableField()}">
+                                <f:selectItem 
+                                    noSelectionOption="true"/>
+                                <f:selectItems 
+                                    value="#{capacitacionController.modalidades}" 
+                                    var="modalidad" 
+                                    itemLabel="#{modalidad.nombre}" 
+                                    itemValue="#{modalidad}" />
+                            </p:selectOneMenu>              
+                            <p:message  
+                                id="modalidadmsg"
+                                for="modalidad"/>
+                        </h:panelGroup>
+                        <!-- presupuesto -->
+                        <p:outputLabel
+                            for="manejaPresupuesto"
+                            value="#{bundle['capacitacion.presupuesto']}"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                value="#{capacitacionController.selected.manejaPresupuesto}"
+                                rendered="#{!capacitacionController.editable}"/>
+                            <p:selectOneMenu 
+                                id="manejaPresupuesto" 
+                                value="#{capacitacionController.selected.manejaPresupuesto}"
+                                required="true"
+                                rendered="#{capacitacionController.editable}">
+                                <f:selectItems 
+                                    value="#{appController.decisiones}"/>
+                            </p:selectOneMenu>              
+                            <p:message  
+                                for="manejaPresupuesto"/>
+                        </h:panelGroup>
+                        <!-- externo -->
+                        <p:outputLabel
+                            for="externo"
+                            value="#{bundle['capacitacion.externo']}"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                value="#{capacitacionController.selected.externo}"
+                                rendered="#{!capacitacionController.editable}"/>
+                            <p:selectOneMenu 
+                                id="externo" 
+                                value="#{capacitacionController.selected.externo}"
+                                required="true"
+                                rendered="#{capacitacionController.editable}">
+                                <f:selectItems 
+                                    value="#{appController.decisiones}"/>
+                            </p:selectOneMenu>              
+                            <p:message  
+                                for="externo"/>
+                        </h:panelGroup>
+                        <!-- nroEventosT1 -->
+                        <p:outputLabel
+                            id="nroEventosT1lbl"
+                            for="nroEventosT1"
+                            value="#{bundle['capacitacion.nroEventosT1']}"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                value="#{capacitacionController.selected.nroEventosT1}"
+                                rendered="#{!capacitacionController.editable}"/>
+                            <p:inputText 
+                                id="nroEventosT1" 
+                                value="#{capacitacionController.selected.nroEventosT1}"
+                                required="true"
+                                rendered="#{capacitacionController.editable}">
+                                <p:ajax
+                                    event="blur"
+                                    process="@this"
+                                    listener="#{capacitacionController.calcularTotalEventos()}"
+                                    update="nroEventosT1lbl nroEventosT1 nroEventosT1msg totalEventos"/>
+                                <f:validateLongRange
+                                    minimum="0"/>
+                            </p:inputText>              
+                            <p:message  
+                                id="nroEventosT1msg"
+                                for="nroEventosT1"/>
+                        </h:panelGroup>
+                        <!-- nroParticipantesT1 -->
+                        <p:outputLabel
+                            id="nroParticipantesT1lbl"
+                            for="nroParticipantesT1"
+                            value="#{bundle['capacitacion.nroParticipantesT1']}"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                value="#{capacitacionController.selected.nroParticipantesT1}"
+                                rendered="#{!capacitacionController.editable}"/>
+                            <p:inputText 
+                                id="nroParticipantesT1" 
+                                value="#{capacitacionController.selected.nroParticipantesT1}"
+                                required="true"
+                                rendered="#{capacitacionController.editable}">
+                                <p:ajax
+                                    event="blur"
+                                    process="@this"
+                                    listener="#{capacitacionController.calcularTotalParticipantes()}"
+                                    update="nroParticipantesT1lbl nroParticipantesT1 nroParticipantesT1msg totalParticipanteslbl totalParticipantes totalParticipantesmsg"/>
+                                <f:validateLongRange
+                                    minimum="#{capacitacionController.selected.nroEventosT1}"/>
+                            </p:inputText>              
+                            <p:message  
+                                id="nroParticipantesT1msg"
+                                for="nroParticipantesT1"/>
+                        </h:panelGroup>
+                        <!-- nroEventosT2 -->
+                        <p:outputLabel
+                            id="nroEventosT2lbl"
+                            for="nroEventosT2"
+                            value="#{bundle['capacitacion.nroEventosT2']}"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                value="#{capacitacionController.selected.nroEventosT2}"
+                                rendered="#{!capacitacionController.editable}"/>
+                            <p:inputText 
+                                id="nroEventosT2" 
+                                value="#{capacitacionController.selected.nroEventosT2}"
+                                required="true"
+                                rendered="#{capacitacionController.editable}">
+                                <p:ajax
+                                    event="blur"
+                                    process="@this"
+                                    listener="#{capacitacionController.calcularTotalEventos()}"
+                                    update="nroEventosT2lbl nroEventosT2 nroEventosT2msg totalEventos"/>
+                                <f:validateLongRange
+                                    minimum="0"/>
+                            </p:inputText>              
+                            <p:message  
+                                id="nroEventosT2msg"
+                                for="nroEventosT2"/>
+                        </h:panelGroup>
+                        <!-- nroParticipantesT2 -->
+                        <p:outputLabel
+                            id="nroParticipantesT2lbl"
+                            for="nroParticipantesT2"
+                            value="#{bundle['capacitacion.nroParticipantesT2']}"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                value="#{capacitacionController.selected.nroParticipantesT2}"
+                                rendered="#{!capacitacionController.editable}"/>
+                            <p:inputText 
+                                id="nroParticipantesT2" 
+                                value="#{capacitacionController.selected.nroParticipantesT2}"
+                                required="true"
+                                rendered="#{capacitacionController.editable}">
+                                <p:ajax
+                                    event="blur"
+                                    process="@this"
+                                    listener="#{capacitacionController.calcularTotalParticipantes()}"
+                                    update="nroParticipantesT2lbl nroParticipantesT2 nroParticipantesT2msg totalParticipanteslbl totalParticipantes totalParticipantesmsg"/>
+                                <f:validateLongRange
+                                    minimum="#{capacitacionController.selected.nroEventosT2}"/>
+                            </p:inputText>              
+                            <p:message  
+                                id="nroParticipantesT2msg"
+                                for="nroParticipantesT2"/>
+                        </h:panelGroup>
+                        <!-- nroEventosT3 -->
+                        <p:outputLabel
+                            id="nroEventosT3lbl"
+                            for="nroEventosT3"
+                            value="#{bundle['capacitacion.nroEventosT3']}"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                value="#{capacitacionController.selected.nroEventosT3}"
+                                rendered="#{!capacitacionController.editable}"/>
+                            <p:inputText 
+                                id="nroEventosT3" 
+                                value="#{capacitacionController.selected.nroEventosT3}"
+                                required="true"
+                                rendered="#{capacitacionController.editable}">
+                                <p:ajax
+                                    event="blur"
+                                    process="@this"
+                                    listener="#{capacitacionController.calcularTotalEventos()}"
+                                    update="nroEventosT3lbl nroEventosT3 nroEventosT3msg totalEventos"/>
+                                <f:validateLongRange
+                                    minimum="0"/>
+                            </p:inputText>              
+                            <p:message  
+                                id="nroEventosT3msg"
+                                for="nroEventosT3"/>
+                        </h:panelGroup>
+                        <!-- nroParticipantesT3 -->
+                        <p:outputLabel
+                            id="nroParticipantesT3lbl"
+                            for="nroParticipantesT3"
+                            value="#{bundle['capacitacion.nroParticipantesT3']}"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                value="#{capacitacionController.selected.nroParticipantesT3}"
+                                rendered="#{!capacitacionController.editable}"/>
+                            <p:inputText 
+                                id="nroParticipantesT3" 
+                                value="#{capacitacionController.selected.nroParticipantesT3}"
+                                required="true"
+                                rendered="#{capacitacionController.editable}">
+                                <p:ajax
+                                    event="blur"
+                                    process="@this"
+                                    listener="#{capacitacionController.calcularTotalParticipantes()}"
+                                    update="nroParticipantesT3lbl nroParticipantesT3 nroParticipantesT3msg totalParticipanteslbl totalParticipantes totalParticipantesmsg"/>
+                                <f:validateLongRange
+                                    minimum="#{capacitacionController.selected.nroEventosT3}"/>
+                            </p:inputText>              
+                            <p:message  
+                                id="nroParticipantesT3msg"
+                                for="nroParticipantesT3"/>
+                        </h:panelGroup>
+                        <!-- nroEventosT4 -->
+                        <p:outputLabel
+                            id="nroEventosT4lbl"
+                            for="nroEventosT4"
+                            value="#{bundle['capacitacion.nroEventosT4']}"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                value="#{capacitacionController.selected.nroEventosT4}"
+                                rendered="#{!capacitacionController.editable}"/>
+                            <p:inputText 
+                                id="nroEventosT4" 
+                                value="#{capacitacionController.selected.nroEventosT4}"
+                                required="true"
+                                rendered="#{capacitacionController.editable}">
+                                <p:ajax
+                                    event="blur"
+                                    process="@this"
+                                    listener="#{capacitacionController.calcularTotalEventos()}"
+                                    update="nroEventosT4lbl nroEventosT4 nroEventosT4msg totalEventos"/>
+                                <f:validateLongRange
+                                    minimum="0"/>
+                            </p:inputText>              
+                            <p:message  
+                                id="nroEventosT4msg"
+                                for="nroEventosT4"/>
+                        </h:panelGroup>
+                        <!-- nroParticipantesT4 -->
+                        <p:outputLabel
+                            id="nroParticipantesT4lbl"
+                            for="nroParticipantesT4"
+                            value="#{bundle['capacitacion.nroParticipantesT4']}"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                value="#{capacitacionController.selected.nroParticipantesT4}"
+                                rendered="#{!capacitacionController.editable}"/>
+                            <p:inputText 
+                                id="nroParticipantesT4" 
+                                value="#{capacitacionController.selected.nroParticipantesT4}"
+                                required="true"
+                                rendered="#{capacitacionController.editable}">
+                                <p:ajax
+                                    event="blur"
+                                    process="@this"
+                                    listener="#{capacitacionController.calcularTotalParticipantes()}"
+                                    update="nroParticipantesT4lbl nroParticipantesT4 nroParticipantesT4msg totalParticipanteslbl totalParticipantes totalParticipantesmsg"/>
+                                <f:validateLongRange
+                                    minimum="#{capacitacionController.selected.nroEventosT4}"/>
+                            </p:inputText>              
+                            <p:message  
+                                id="nroParticipantesT4msg"
+                                for="nroParticipantesT4"/>
+                        </h:panelGroup>
+                        <!-- totalEventos -->
+                        <p:outputLabel
+                            for="totalEventos"
+                            value="#{bundle['capacitacion.totalEventos']}"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                id="totalEventos" 
+                                value="#{capacitacionController.selected.totalEventos}"/>
+                            <p:message  
+                                for="totalEventos"/>
+                        </h:panelGroup>
+                        <!-- totalParticipantes -->
+                        <p:outputLabel
+                            id="totalParticipanteslbl"
+                            for="totalParticipantes"
+                            value="#{bundle['capacitacion.totalParticipantes']}"/>
+                        <h:panelGroup>
+                            <h:outputText
+                                id="totalParticipantes" 
+                                value="#{capacitacionController.selected.totalParticipantes}"/>
+                            <p:message  
+                                id="totalParticipantesmsg"
+                                for="totalParticipantes"/>
+                        </h:panelGroup>
+                    </p:panelGrid>
+                    <f:facet
+                        name="footer">
+                        <p:panelGrid
+                            columns="12"
+                            layout="grid" 
+                            columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2" 
+                            styleClass="ui-panelgrid-blank">
+                            <p:commandButton 
+                                value="#{bundle['commons.btn.edit']}"
+                                title="#{bundle['commons.btn.edit']}"
+                                icon="ui-icon-pencil"
+                                actionListener="#{capacitacionController.onEdit()}"
+                                rendered="#{capacitacionController.enableEdit()}"
+                                update=":frmDetail"
+                                style="border: none"/>
+                            <p:commandButton 
+                                value="#{bundle['commons.btn.approve']}"
+                                title="#{bundle['commons.btn.approve']}"
+                                icon="ui-icon-pencil"
+                                actionListener="#{capacitacionController.onEdit()}"
+                                rendered="#{capacitacionController.enableApprove()}"
+                                update=":frmDetail"
+                                style="border: none"/>
+                            <p:commandButton 
+                                value="#{bundle['commons.btn.reprobate']}"
+                                title="#{bundle['commons.btn.reprobate']}"
+                                icon="ui-icon-pencil"
+                                actionListener="#{capacitacionController.onReprobate()}"
+                                rendered="#{capacitacionController.enableReprobate()}"
+                                update=":frmDetail"
+                                style="border: none">
+                                <p:confirm 
+                                    header="#{bundle['commons.cfmdlg.header']}" 
+                                    message="#{bundle['commons.msg.reprobate']}" 
+                                    icon="ui-icon-alert" />
+                            </p:commandButton>
+                            <p:commandButton 
+                                value="#{bundle['commons.btn.save']}"
+                                title="#{bundle['commons.btn.save']}"
+                                icon="ui-icon-disk"
+                                actionListener="#{capacitacionController.onApprove()}"
+                                rendered="#{capacitacionController.editable}"
+                                process="@form"
+                                update=":frmDetail"
+                                style="border: none">
+                                <p:confirm 
+                                    header="#{bundle['commons.cfmdlg.header']}" 
+                                    message="#{bundle['commons.msg.approve']}" 
+                                    icon="ui-icon-alert" />
+                            </p:commandButton>
+                            <p:commandButton 
+                                value="#{bundle['commons.btn.cancel']}"
+                                title="#{bundle['commons.btn.cancel']}"
+                                icon="ui-icon-circle-close"
+                                actionListener="#{capacitacionController.onCancel()}"
+                                immediate="true"
+                                rendered="#{capacitacionController.editable}"
+                                update=":main"/>
+                            <p:commandButton 
+                                value="#{bundle['commons.btn.back']}"
+                                title="#{bundle['commons.btn.back']}"
+                                icon="ui-icon-arrowreturn-1-w"
+                                actionListener="#{capacitacionController.onBack()}"
+                                rendered="#{!capacitacionController.editable}"
+                                update=":main"
+                                style="border: none"/>
+                            <p:commandButton
+                                 value="#{bundle['commons.btn.remove']}"
+                                title="#{bundle['commons.btn.remove']}"
+                                icon="ui-icon-trash"
+                                actionListener="#{capacitacionController.onDelete()}"
+                                rendered="#{capacitacionController.enableReprobate()}"
+                                update=":main"
+                                style="border: none"/>
+                        </p:panelGrid>
+                    </f:facet>
+                </p:panel>
+            </h:form>
+        </p:panel>
+    </ui:define>
+</ui:composition>

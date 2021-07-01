@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+  <h:form>
+
+    <f:metadata>
+      <f:event type="preRenderView" listener="#{dashboardFaces.load}"/>            
+    </f:metadata>
+    <h:panelGroup rendered="#{dashboardFaces.mostrarTablaPendientes}">
+      <div class="body">
+        <div class="fixed-menu">
+          <div class="right-col">
+            <h2>Anuncios o compromisos</h2>
+
+            <table class="site">
+              <tr>
+                <th></th>
+                <th>No.</th>
+                <th>Actividad pendiente</th>
+                <th>Acerca de</th>
+                <th>Fecha límite</th>
+                <th>Días restantes</th>
+              </tr>                       
+
+              <ui:repeat var="pendiente" value="#{dashboardFaces.pendientes}"  varStatus="status">
+                <tr>                            
+                  <td style="#{pendiente.styleClass}"></td>
+                  <td style="#{pendiente.styleClass}">#{status.index + 1}</td>
+                  <td style="#{pendiente.styleClass}">#{pendiente.actividadPendiente}</td>
+                  <td style="#{pendiente.styleClass}">#{pendiente.acercaDe}</td>
+                  <td style="#{pendiente.styleClass}">#{pendiente.fechaLimiteFormateada}</td>
+                  <td style="#{pendiente.styleClass}">#{pendiente.diasRestantes}</td>
+                </tr>
+              </ui:repeat>                        
+            </table>
+          </div>
+        </div>
+      </div>
+    </h:panelGroup>
+  </h:form>
+</html>

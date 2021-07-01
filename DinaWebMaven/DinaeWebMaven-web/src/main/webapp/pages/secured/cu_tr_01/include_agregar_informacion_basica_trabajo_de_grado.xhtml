@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+  <h:form id="formInformacionBasicaDelTrabajoDeGrado" >
+
+    <br />
+    <h:outputLabel value="#{properties.value('cu_tr_01_lbl_porfavor_ingrese_datos_info_basica')}" styleClass="green" />
+
+    <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+      <h:outputLabel value="Concecutivo" styleClass="gris negrilla" 
+                     rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.proyectoSeleccionado.concecutivoProyectoGrado != null}" />
+      <h:outputLabel rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.proyectoSeleccionado.concecutivoProyectoGrado != null}" 
+                     value="TG-#{cuTr01IngresarModificarTrabajoDeGradoFaces.proyectoSeleccionado.concecutivoProyectoGrado}" styleClass="gris" />
+
+      <h:outputLabel value="#{properties.value('cu_tr_01_lbl_nombre_del_programa')}" styleClass="gris negrilla"/>
+      <h:panelGrid columns="1" style="width: 100%">
+        <h:selectOneMenu styleClass="gris" 
+                         id="idListaSelectItemNombrePrograma" 
+                         value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.idNombreProgramaSeleccionado}">  
+          <f:selectItem itemLabel="--Select--" itemValue="" />  
+          <f:selectItems value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.listaNombreProgramaItem}" var="_item" />                    
+        </h:selectOneMenu> 
+      </h:panelGrid>
+
+      <h:outputLabel for="idcu_tr_01_lbl_titulo_del_trabajo" value="#{properties.value('cu_tr_01_lbl_titulo_del_trabajo')}" styleClass="gris negrilla" />
+      <h:panelGrid columns="1" style="width: 100%">
+        <p:inputTextarea value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.proyectoSeleccionado.tituloPropuesto}"  
+                         id="idcu_tr_01_lbl_titulo_del_trabajo"
+                         maxlength="512" counter="contadorTituloTrabajoDeGrado" 
+                         required="true" autoResize="false" rows="3"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         styleClass="textareaMaximo">
+          <f:validateLength minimum="1"  maximum="512" />
+        </p:inputTextarea>
+        <h:outputText id="contadorTituloTrabajoDeGrado" styleClass="gris" />
+      </h:panelGrid>            
+
+      <h:outputLabel styleClass="gris negrilla" value="#{properties.value('cu_tr_01_lbl_area_de_ciencia_y_tecnologia')}" for="idListaSelectItemAreaCienciaTecnologia" />
+      <h:selectOneMenu required="true" id="idListaSelectItemAreaCienciaTecnologia" styleClass="gris"
+                       value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.areaCienciaTecnologiaSeleccionada}">  
+        <f:selectItem itemLabel="--Select--" itemValue="" />  
+        <f:selectItems value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.listaAreaCienciaTecnologiaItem}" var="_itemArea" />  
+        <p:ajax update="idListaSelectItemLineaCienciaTecnologia" listener="#{cuTr01IngresarModificarTrabajoDeGradoFaces.handleAreaCienciaTecnologiaSeleccionadaChange}" />  
+      </h:selectOneMenu>
+
+      <h:outputLabel styleClass="gris negrilla" value="#{properties.value('cu_tr_01_lbl_linea_ciencia_y_tecnologia')}" for="idListaSelectItemLineaCienciaTecnologia" />
+      <h:selectOneMenu required="true" id="idListaSelectItemLineaCienciaTecnologia" styleClass="gris"
+                       value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.lineaSeleccionada}">  
+        <f:selectItem itemLabel="--Select--" itemValue="" />  
+        <f:selectItems value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.listaLineaCienciaTecnologiaItem}" />  
+      </h:selectOneMenu>            
+
+      <h:outputLabel for="resumenTrabajoDeGrado" value="#{properties.value('cu_tr_01_lbl_resumen_trabajo_de_grado')}" styleClass="gris negrilla" />
+      <h:panelGrid columns="1" style="width: 100%">
+        <p:inputTextarea id="resumenTrabajoDeGrado" value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.proyectoSeleccionado.resumenProyecto}" 
+                         maxlength="512" counter="contadorResumenProyectoDeGrado" required="true" autoResize="false" rows="5"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         styleClass="textareaMaximo">
+          <f:validateLength  maximum="512" />
+        </p:inputTextarea>
+        <h:outputText id="contadorResumenProyectoDeGrado" styleClass="gris" />
+      </h:panelGrid>
+
+      <h:outputLabel for="fechaInicioTrabajoDeGrado" value="#{properties.value('cu_tr_01_lbl_fecha_inicio_trabajo_de_grado')}" 
+                     rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.mostrarFechaEstimadaInicioTrabajoDeGrado}"
+                     styleClass="gris negrilla" />
+      <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es" 
+                  rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.mostrarFechaEstimadaInicioTrabajoDeGrado}"
+                  yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                  navigator="true" showOn="button" styleClass="gris" value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.fechaEstimadaInicioTrabajoDeGrado}" 
+                  id="fechaInicioTrabajoDeGrado" required="true">
+      </p:calendar>
+
+      <h:outputLabel for="fechaFinTrabajoDeGrado" value="#{properties.value('cu_tr_01_lbl_fecha_fin_trabajo_de_grado')}" 
+                     rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.mostrarFechaEstimadaFinTrabajoDeGrado}"
+                     styleClass="gris negrilla" />            
+      <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es" 
+                  rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.mostrarFechaEstimadaFinTrabajoDeGrado}"
+                  yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                  navigator="true" showOn="button" styleClass="gris" 
+                  value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.fechaEstimadaFinalizacionTrabajoDeGrado}"
+                  id="fechaFinTrabajoDeGrado" required="true">
+        <p:ajax event="dateSelect" listener="#{cuTr01IngresarModificarTrabajoDeGradoFaces.handleCalcularDuracionDelProyecto}" update="duracionMesesEstimadosTrabajoDeGrado" />
+      </p:calendar>
+
+      <h:outputLabel for="duracionMesesEstimadosTrabajoDeGrado" 
+                     value="#{properties.value('cu_tr_01_lbl_duracion_estimada_trabajo_de_grado')}" 
+                     rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.mostrarFechaEstimadaInicioTrabajoDeGrado and cuTr01IngresarModificarTrabajoDeGradoFaces.mostrarFechaEstimadaFinTrabajoDeGrado}"
+                     styleClass="gris negrilla" />
+      <h:panelGrid columns="2"
+                   rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.mostrarFechaEstimadaInicioTrabajoDeGrado and cuTr01IngresarModificarTrabajoDeGradoFaces.mostrarFechaEstimadaFinTrabajoDeGrado}">
+        <h:outputLabel id="duracionMesesEstimadosTrabajoDeGrado" value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.duracionMesesEstimadosTrabajoDeGrado}" styleClass="gris" />
+        <h:outputLabel value=" #{properties.value('cu_tr_01_lbl_subtitulo_meses')}" styleClass="gris" />
+      </h:panelGrid>
+
+      <h:outputLabel for="fechaAprobacionComite" value="#{properties.value('cu_tr_01_lbl_fecha_aprobacion_comite_trabajo_de_grado')}" 
+                     rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.mostrarFechaAprobacionComiteTrabajoDeGrado}"
+                     styleClass="gris negrilla"/>            
+      <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es"
+                  rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.mostrarFechaAprobacionComiteTrabajoDeGrado}"
+                  yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" 
+                  showButtonPanel="true" navigator="true" showOn="button"                        
+                  value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.proyectoSeleccionado.fechaAprobacionComite2}" 
+                  id="fechaAprobacionComite" required="true" />    
+
+      <h:outputLabel for="numeroActaAprobacionComite" value="#{properties.value('cu_tr_01_lbl_numero_acta_aprobacion_comite_trabajo_de_grado')}" 
+                     rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.mostrarNumeroActaComiteTrabajoDeGrado}"
+                     styleClass="gris negrilla"/> 
+      <p:inputText value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.proyectoSeleccionado.nroActaAprobComite}" 
+                   rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.mostrarNumeroActaComiteTrabajoDeGrado}"
+                   id="numeroActaAprobacionComite" 
+                   required="true" maxlength="20"/>
+
+    </h:panelGrid>
+
+    <br/>    
+    <br/>
+
+    <h:panelGroup id="idcu_tr_01_pgroup_include_accion_botones_abajo_info_basica">
+      <ui:include src="include_accion_botones_abajo_trabajo_de_grado.xhtml" />
+    </h:panelGroup>
+
+  </h:form>
+</html>

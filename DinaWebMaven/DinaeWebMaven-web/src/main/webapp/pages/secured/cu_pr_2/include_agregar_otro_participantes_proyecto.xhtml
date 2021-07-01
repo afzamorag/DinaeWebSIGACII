@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"> 
+
+  <h:form id="form_include_agregar_otro_participantes_proyecto" >
+
+    <!-- Grupos de Investigación -->
+    <h:outputLabel  value="#{properties.value('cu_pr_2_lbl_grupos_investigaciones')}" styleClass="green negrilla" />
+
+    <h:panelGrid id="pgOtroParticipante" columns="3" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" >
+
+      <h:panelGrid columns="2" id="pgSelectGrupoInvestigacion">
+
+        <h:outputLabel for="idcu_pr_2_lbl_grupo_investiga" value="#{properties.value('cu_pr_2_lbl_grupo_investiga')}" styleClass="gris" />
+        <h:selectOneMenu  id="idcu_pr_2_lbl_grupo_investiga" styleClass="gris" required="true"
+                          value="#{cuPr1ProyectoFaces.idTipoVinculacionSeleccionado}" >  
+          <f:selectItem itemLabel="--Select--" itemValue="" />  
+          <f:selectItems value="#{cuPr1ProyectoFaces.listaOtrosParticipantesGrupoInvestigacionItem}" var="_item" />
+          <p:ajax update="pgOtroParticipantecionDetalle pgbotonesacciones" 
+                  listener="#{cuPr1ProyectoFaces.handleGrupoInvestigacionOtrosParticipantesChange}" />  
+        </h:selectOneMenu>
+      </h:panelGrid>
+
+    </h:panelGrid>
+
+    <h:panelGrid id="pgOtroParticipanteDetalle" columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_40_porciento, panelGridColumnaLabel_20_porciento">
+
+      <h:panelGroup id="pgOtroParticipantecionDetalle">
+        <h:panelGrid columns="2" rendered="#{cuPr1ProyectoFaces.mostrarDetalleGrupoInvestigacionOtrosParticipantes}">
+
+          <h:outputLabel value="#{properties.value('cu_pr_2_lbl_nombre_grupo')}" styleClass="gris negrilla" />
+          <h:outputLabel value="#{cuPr1ProyectoFaces.grupoInvestigacionSeleccionado.descripcion}" styleClass="gris" />
+
+          <h:outputLabel value="#{properties.value('cu_pr_2_lbl_codigo')}" styleClass="gris negrilla" />
+          <h:outputLabel value="#{cuPr1ProyectoFaces.grupoInvestigacionSeleccionado.codigoGrupo}" styleClass="gris" />
+
+          <h:outputLabel value="#{properties.value('cu_pr_2_lbl_fecha_de_registro_grplac')}" styleClass="gris negrilla" />
+          <h:outputLabel value="#{cuPr1ProyectoFaces.grupoInvestigacionSeleccionado.fechaRegistroGrupo}" styleClass="gris" >
+            <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+          </h:outputLabel>
+
+        </h:panelGrid>
+      </h:panelGroup>
+
+      <h:panelGroup id="pgbotonesacciones" >
+        <div class="centrado">
+          <p:commandButton value="#{properties.value('cu_pr_2_lbl_btn_vincular')}" 
+                           update="pgOtroParticipante,pgOtroParticipanteDetalle,dtlistaGrupoInvestigacionProyecto"
+                           process="@this,pgSelectGrupoInvestigacion"
+                           rendered="#{cuPr1ProyectoFaces.mostrarDetalleGrupoInvestigacionOtrosParticipantes}"
+                           actionListener="#{cuPr1ProyectoFaces.vincularGrupoInvestigacion}" />
+        </div>
+      </h:panelGroup>
+
+    </h:panelGrid>
+
+    <br />
+    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+    <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" id="dtlistaGrupoInvestigacionProyecto"
+                 var="_investigador" paginatorPosition="bottom" 
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true" 
+                 value="#{cuPr1ProyectoFaces.listaGrupoInvestigacionProyecto}"
+                 rowIndexVar="idFila"
+                 resizableColumns="true"
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+      <p:column headerText="#{properties.value('cu_pr_2_lbl_nombre_grupo')}">  
+        #{_investigador.grupoInvestigacion.descripcion}
+      </p:column>  
+
+      <p:column width="100" headerText="#{properties.value('cu_pr_2_lbl_codigo')}">  
+        #{_investigador.grupoInvestigacion.codigoGrupo}
+      </p:column>  
+
+      <p:column width="100" headerText="#{properties.value('cu_pr_2_lbl_fecha_de_registro_grplac')}">
+        <h:outputLabel value="#{_investigador.grupoInvestigacion.fechaRegistroGrupo}" >
+          <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+        </h:outputLabel>  
+      </p:column>
+
+      <p:column width="70" headerText="">  
+        <p:commandLink value="#{properties.value('cu_pr_1_lbl_btn_eliminar_grupo')}" 
+                       update="dtlistaGrupoInvestigacionProyecto" immediate="true"
+                       oncomplete="PF('varConfirmEliminarGrupoInvestiga').show()">  
+          <f:setPropertyActionListener value="#{_investigador}" target="#{cuPr1ProyectoFaces.grupoInvestigacionProyectoEliminar}" />  
+        </p:commandLink>  
+      </p:column>
+
+      <f:facet name="footer">  
+        #{fn:length( cuPr1ProyectoFaces.listaGrupoInvestigacionProyecto )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable>
+
+    <br />
+    <p:separator styleClass="separadorBorder" /> 
+
+    <!-- Semilleros de Investigación: -->
+    <h:outputLabel  value="#{properties.value('cu_pr_2_lbl_semillero_semillero_inves_titulo')}:" styleClass="green negrilla" />
+
+    <h:panelGrid columns="3" id="pgSelectGrupoInvestigacionInvestigadorSemillero" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaLabel_70_porciento">
+
+      <h:outputLabel for="idcu_pr_2_lbl_semillero_semillero_inves_titulo" 
+                     value="#{properties.value('cu_pr_2_lbl_semillero_semillero_inves_titulo')}" styleClass="gris" />
+      <h:panelGrid columns="2">
+        <h:selectOneMenu  id="idcu_pr_2_lbl_semillero_semillero_inves_titulo" required="true"
+                          value="#{cuPr1ProyectoFaces.idTipoSemilleroSeleccionado}" styleClass="gris" >  
+          <f:selectItem itemLabel="--Select--" itemValue="-1" />  
+          <f:selectItems value="#{cuPr1ProyectoFaces.listaOtrosParticipantesSemilleroInvestigaItem}" var="_item" />
+          <p:ajax update=":tabViewProyectos:form_include_agregar_otro_participantes_proyecto:idcu_pr_2_lbl_semillero_ver_detalle_semillero"
+                  listener="#{cuPr1ProyectoFaces.handleSemilleroInvestigacionOtrosParticipantesChange}" />  
+        </h:selectOneMenu>
+        <p:commandLink id="idcu_pr_2_lbl_semillero_ver_detalle_semillero" 
+                       value="#{properties.value('cu_pr_2_lbl_semillero_ver_detalle_semillero')}" 
+                       disabled="#{cuPr1ProyectoFaces.idTipoSemilleroSeleccionado eq null}" 
+                       action="#{cuPr1ProyectoFaces.irConsultaSemillero}"
+                       process="@this"/>
+      </h:panelGrid>
+
+    </h:panelGrid>
+
+    <h:panelGrid columns="2" id="pgDetalleDatosSemillero" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaLabel_70_porciento">
+
+      <h:outputLabel for="idcu_pr_2_lbl_semillero_aporte_investi_semi" 
+                     value="#{properties.value('cu_pr_2_lbl_semillero_aporte_investi_semi')}" styleClass="gris" />
+      <h:panelGrid columns="2" style="width: 100%">
+
+        <h:panelGrid columns="1" style="width: 100%">
+          <p:inputTextarea value="#{cuPr1ProyectoFaces.semilleroProyectoSeleccionado.aporteInvestigacion}"  
+                           id="idcu_pr_2_lbl_semillero_aporte_investi_semi"
+                           maxlength="512" counter="contadorTextArea" 
+                           required="true"
+                           rows="3" autoResize="false" cols="100"
+                           counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                           styleClass="textareaMaximo">
+            <f:validateLength minimum="1"  maximum="512" />
+          </p:inputTextarea>
+          <h:outputText id="contadorTextArea" styleClass="gris" />
+        </h:panelGrid>    
+
+        <p:commandButton value="#{properties.value('cu_pr_2_lbl_btn_vincular')}" 
+                         update="pgSelectGrupoInvestigacionInvestigadorSemillero, dtlistaSemillosInvestigacionProyecto, pgDetalleDatosSemillero"
+                         process="@this,pgSelectGrupoInvestigacionInvestigadorSemillero,pgDetalleDatosSemillero"
+                         actionListener="#{cuPr1ProyectoFaces.vincularSemilleroInvestigacion}" />
+
+      </h:panelGrid>
+
+    </h:panelGrid>
+    <br />
+    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+    <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 id="dtlistaSemillosInvestigacionProyecto"
+                 var="_semillero" paginatorPosition="bottom" 
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true" 
+                 value="#{cuPr1ProyectoFaces.listaSemilleroProyectoDTO}"
+                 rowIndexVar="idFila"
+                 resizableColumns="true"
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+      <p:column width="200" headerText="#{properties.value('cu_pr_2_lbl_semillero_nombre_semillero_detalle')}">  
+        #{_semillero.nombreSemillero}
+      </p:column>  
+
+      <p:column headerText="#{properties.value('cu_pr_2_lbl_semillero_aporte_investi_semi')}">  
+        #{_semillero.aporteInvestigacion}
+      </p:column>  
+
+      <p:column width="70" headerText="">  
+        <p:commandLink value="#{properties.value('cu_pr_1_lbl_btn_eliminar_grupo')}" 
+                       update="dtlistaSemillosInvestigacionProyecto" immediate="true"
+                       oncomplete="PF('varConfirmEliminarSemilleroInvestigacion').show()">  
+          <f:setPropertyActionListener value="#{_semillero}" target="#{cuPr1ProyectoFaces.semilleroProyectoDTOEliminar}" />  
+        </p:commandLink>  
+      </p:column>
+
+      <f:facet name="footer">  
+        #{fn:length( cuPr1ProyectoFaces.listaSemilleroProyectoDTO )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable>
+
+
+    <br />
+    <p:separator styleClass="separadorBorder" /> 
+    <!-- UNIDADES POLICIALES: -->
+    <h:outputLabel  value="#{properties.value('cu_pr_2_lbl_semillero_unidad_policial_titulo')}:" styleClass="green negrilla" />
+
+    <h:panelGrid columns="2" id="pgSelectUnidadPolicialParticipanteSemillero" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaLabel_70_porciento">
+
+      <h:outputLabel for="idcu_pr_2_lbl_unidad_policial_nombre_unidad_policial" 
+                     value="#{properties.value('cu_pr_2_lbl_unidad_policial_nombre_unidad_policial')}" styleClass="gris" />
+
+      <h:selectOneMenu id="idcu_pr_2_lbl_unidad_policial_nombre_unidad_policial" required="true"
+                       value="#{cuPr1ProyectoFaces.idUnidadPolicialSeleccionado}" styleClass="gris" >  
+        <f:selectItem itemLabel="--Select--" itemValue="" />  
+        <f:selectItems value="#{cuPr1ProyectoFaces.listaUnidadPolicialOtrosParticipantesItem}" var="_item" />                    
+      </h:selectOneMenu>    
+
+
+      <h:outputLabel for="idcu_pr_2_lbl_unidadpolicial_aporte_investi_semi" 
+                     value="#{properties.value('cu_pr_2_lbl_semillero_aporte_investi_semi')}" styleClass="gris" />
+      <h:panelGrid columns="2" style="width: 100%">
+
+        <h:panelGrid columns="1" style="width: 100%">
+          <p:inputTextarea value="#{cuPr1ProyectoFaces.aporteInvestigacionUnidadPolicial}"  
+                           id="idcu_pr_2_lbl_unidadpolicial_aporte_investi_semi"
+                           maxlength="512" counter="contadorTextAreaUnidaPolicial" 
+                           required="true" cols="100"
+                           rows="3" autoResize="false"
+                           counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                           styleClass="textareaMaximo">
+            <f:validateLength minimum="1"  maximum="512" />
+          </p:inputTextarea>
+          <h:outputText id="contadorTextAreaUnidaPolicial" styleClass="gris" />
+        </h:panelGrid>    
+
+        <p:commandButton value="#{properties.value('cu_pr_2_lbl_btn_vincular')}" 
+                         update="dtUnidadPolicialParticipanProyecto,pgSelectUnidadPolicialParticipanteSemillero"
+                         process="@this,pgSelectUnidadPolicialParticipanteSemillero"
+                         actionListener="#{cuPr1ProyectoFaces.vincularUnidadPolicialParticipante}" />
+
+
+      </h:panelGrid>
+
+    </h:panelGrid>
+    <br />
+    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+    <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 id="dtUnidadPolicialParticipanProyecto"
+                 var="_unidadpolicialparticipa" paginatorPosition="bottom" 
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true" 
+                 value="#{cuPr1ProyectoFaces.listaUnidadPolicialSemilleroProyectoDTO}"
+                 rowIndexVar="idFila"
+                 resizableColumns="true"
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+      <p:column width="30" headerText="#{properties.value('cu_ne_6_lbl_numero')}">  
+        #{idFila + 1}
+      </p:column>  
+
+      <p:column width="200" headerText="#{properties.value('cu_pr_2_lbl_unidad_policial_datatable_unidad_policial')}">  
+        #{_unidadpolicialparticipa.nombreUnidadPolicial}
+      </p:column>  
+
+      <p:column headerText="#{properties.value('cu_pr_2_lbl_semillero_aporte_investi_semi')}">  
+        #{_unidadpolicialparticipa.aporteInvestigacion}
+      </p:column>  
+
+      <p:column width="70" headerText="">  
+        <p:commandLink value="#{properties.value('cu_pr_1_lbl_btn_eliminar_grupo')}" 
+                       update="dtUnidadPolicialParticipanProyecto" immediate="true"
+                       oncomplete="PF('varConfirmEliminarUnidadPolicialParticipa').show()">  
+          <f:setPropertyActionListener value="#{_unidadpolicialparticipa}" target="#{cuPr1ProyectoFaces.unidadPolicialSemilleroProyectoDTOEliminar}" />  
+        </p:commandLink>  
+      </p:column>
+
+      <f:facet name="footer">  
+        #{fn:length( cuPr1ProyectoFaces.listaUnidadPolicialSemilleroProyectoDTO )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable>
+
+    <br />
+    <p:separator styleClass="separadorBorder" /> 
+    <!-- UNIDADES POLICIALES: -->
+    <h:outputLabel  value="#{properties.value('cu_pr_2_lbl_otras_instituciones_parti_titulo')}:" styleClass="green negrilla" />
+
+    <h:panelGrid columns="2" id="pgSelectOtrasInstitucionesParticipanteSemillero" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaLabel_70_porciento">
+
+      <h:outputLabel for="idcu_pr_2_lbl_otros_instituciones_sub" 
+                     value="#{properties.value('cu_pr_2_lbl_otros_instituciones_sub')}" styleClass="gris" />
+
+      <h:selectOneMenu id="idcu_pr_2_lbl_otros_instituciones_sub" required="true"
+                       value="#{cuPr1ProyectoFaces.idOtraInstitucionParticipante}" styleClass="gris" >  
+        <f:selectItem itemLabel="--Select--" itemValue="" />  
+        <f:selectItems value="#{cuPr1ProyectoFaces.listaOtrasInstitucionesParticipantesItem}" var="_item" /> 
+        <p:ajax update="pgSelectOtrasInstitucionesParticipanteSemillero pgOtroParticipantecionDetalle" 
+                listener="#{cuPr1ProyectoFaces.handleOtrasInstitucionesOtrosParticipantesChange}" />  
+      </h:selectOneMenu>    
+
+      <h:outputLabel id="idlabelotros_nueva_institucion_sub" for="idcu_pr_2_lbl_otros_nueva_institucion_sub" 
+                     rendered="#{cuPr1ProyectoFaces.mostrarAgregarOtroInstitucion}"
+                     value="#{properties.value('cu_pr_2_lbl_otros_nueva_institucion_sub')}" styleClass="gris" />
+      <p:inputText id="idcu_pr_2_lbl_otros_nueva_institucion_sub" required="true" maxlength="100"
+                   value="#{cuPr1ProyectoFaces.otraInstitucionOtrosInstituciones}"  styleClass="textMaximo"
+                   rendered="#{cuPr1ProyectoFaces.mostrarAgregarOtroInstitucion}" />
+
+      <h:outputLabel for="idcu_pr_2_lbl_otros_institucion_aporte_investi_semi" 
+                     value="#{properties.value('cu_pr_2_lbl_semillero_aporte_investi_semi')}" styleClass="gris" />
+      <h:panelGrid columns="2" style="width: 100%">
+
+        <h:panelGrid columns="1" style="width: 100%">
+          <p:inputTextarea value="#{cuPr1ProyectoFaces.aporteInvestigacionOtrosInstituciones}"  
+                           id="idcu_pr_2_lbl_otros_institucion_aporte_investi_semi"
+                           maxlength="512" counter="contadorTextOtrosInstituciones" 
+                           required="true" cols="100"
+                           rows="3" autoResize="false"
+                           counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                           styleClass="textareaMaximo">
+            <f:validateLength minimum="1"  maximum="512" />
+          </p:inputTextarea>
+          <h:outputText id="contadorTextOtrosInstituciones" styleClass="gris" />
+        </h:panelGrid>    
+
+        <p:commandButton value="#{properties.value('cu_pr_2_lbl_btn_vincular')}" 
+                         update="dtOtrasInstitucionesParticipanProyecto,pgSelectOtrasInstitucionesParticipanteSemillero"
+                         process="@this,pgSelectOtrasInstitucionesParticipanteSemillero"
+                         actionListener="#{cuPr1ProyectoFaces.vincularOtrasInstitucionesParticipantes}" />
+
+
+      </h:panelGrid>
+
+    </h:panelGrid>
+    <br />
+    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+    <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 id="dtOtrasInstitucionesParticipanProyecto"
+                 var="_otrainstitucion" paginatorPosition="bottom" 
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true" 
+                 value="#{cuPr1ProyectoFaces.listaOtrosInstitucionesInstitucionesProyectoDTO}"
+                 rowIndexVar="idFila"
+                 resizableColumns="true"
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+      <p:column width="200" headerText="#{properties.value('cu_pr_2_lbl_otra_institucion_datatable_institucion')}">  
+        #{_otrainstitucion.nombreInstitucion}
+      </p:column>  
+
+      <p:column headerText="#{properties.value('cu_pr_2_lbl_semillero_aporte_investi_semi')}">  
+        #{_otrainstitucion.aporteInvestigicacion}
+      </p:column>  
+
+      <p:column width="70" headerText="">  
+        <p:commandLink value="#{properties.value('cu_pr_1_lbl_btn_eliminar_grupo')}" 
+                       update="dtOtrasInstitucionesParticipanProyecto" immediate="true"
+                       oncomplete="PF('varConfirmEliminarOtroInstitucionParticipa').show()">  
+          <f:setPropertyActionListener value="#{_otrainstitucion}" target="#{cuPr1ProyectoFaces.institucionesProyectoDTOSeleccionadoEliminar}" />  
+        </p:commandLink>  
+      </p:column>
+
+      <f:facet name="footer">  
+        #{fn:length( cuPr1ProyectoFaces.listaOtrosInstitucionesInstitucionesProyectoDTO )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable>
+
+    <ui:include src="include_accion_botones_abajo_otro_participantes_proyecto.xhtml" />
+
+  </h:form>
+
+  <p:confirmDialog widgetVar="varConfirmEliminarGrupoInvestiga" header="#{properties.value('cu_pr_1_lbl_titulo_confirmacion_eliminar_grupo_inves')}" 
+                   message="#{properties.value('cu_pr_1_lbl_titulo_confirmacion_mensaje_eliminar_grupo_inves')}" > 
+
+    <h:form id="idForm_varConfirmEliminarGrupoInvestiga">
+
+      <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmEliminarGrupoInvestiga">
+        <div class="centrado">
+          <p:commandButton actionListener="#{cuPr1ProyectoFaces.eliminarGrupoInvestigacion}" 
+                           value="#{properties.value('cu_pr_3_lbl_btn_confirma_si_publicar')}" immediate="true"
+                           oncomplete="varConfirmEliminarGrupoInvestiga.hide();"
+                           update=":tabViewProyectos:form_include_agregar_otro_participantes_proyecto:dtlistaGrupoInvestigacionProyecto" />  
+          <p:commandButton value="#{properties.value('cu_pr_3_lbl_btn_confirma_no_publicar')}" 
+                           onclick="varConfirmEliminarGrupoInvestiga.hide();" type="button" />       
+        </div>
+      </p:outputPanel>
+
+    </h:form>
+  </p:confirmDialog>
+
+  <p:confirmDialog widgetVar="varConfirmEliminarSemilleroInvestigacion" header="#{properties.value('cu_pr_1_lbl_titulo_confirmacion_eliminar_grupo_inves')}" 
+                   message="#{properties.value('cu_pr_1_lbl_titulo_confirmacion_mensaje_eliminar_semillero_inves')}" > 
+
+    <h:form id="idForm_varConfirmEliminarSemilleroInvestigacion">
+
+      <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmEliminarSemilleroInvestigacion">
+        <div class="centrado">
+          <p:commandButton actionListener="#{cuPr1ProyectoFaces.eliminarSemilleroInvestigacion}" 
+                           value="#{properties.value('cu_pr_3_lbl_btn_confirma_si_publicar')}" immediate="true"
+                           oncomplete="varConfirmEliminarSemilleroInvestigacion.hide();"
+                           update=":tabViewProyectos:form_include_agregar_otro_participantes_proyecto:dtlistaSemillosInvestigacionProyecto" />  
+          <p:commandButton value="#{properties.value('cu_pr_3_lbl_btn_confirma_no_publicar')}" 
+                           onclick="varConfirmEliminarSemilleroInvestigacion.hide();" type="button" />       
+        </div>
+      </p:outputPanel>
+
+    </h:form>
+  </p:confirmDialog>
+
+  <p:confirmDialog widgetVar="varConfirmEliminarUnidadPolicialParticipa" header="#{properties.value('cu_pr_2_lbl_titulo_confirmacion_eliminar_titulo_unidad_poli')}" 
+                   message="#{properties.value('cu_pr_2_lbl_titulo_confirmacion_mensaje_eliminar_unidada_policial')}" > 
+
+    <h:form id="idForm_varConfirmEliminarUnidadPolicialParticipa">
+
+      <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmEliminarUnidadPolicialParticipa">
+        <div class="centrado">
+          <p:commandButton actionListener="#{cuPr1ProyectoFaces.eliminarUnidadPolicialParticipante}" 
+                           value="#{properties.value('cu_pr_3_lbl_btn_confirma_si_publicar')}" immediate="true"
+                           oncomplete="varConfirmEliminarUnidadPolicialParticipa.hide();"
+                           update=":tabViewProyectos:form_include_agregar_otro_participantes_proyecto:dtUnidadPolicialParticipanProyecto" />  
+          <p:commandButton value="#{properties.value('cu_pr_3_lbl_btn_confirma_no_publicar')}" 
+                           onclick="varConfirmEliminarUnidadPolicialParticipa.hide();" type="button" />       
+        </div>
+      </p:outputPanel>
+
+    </h:form>
+  </p:confirmDialog>
+
+  <p:confirmDialog widgetVar="varConfirmEliminarOtroInstitucionParticipa" header="#{properties.value('cu_pr_2_lbl_titulo_confirmacion_eliminar_titulo_otra_institucion')}" 
+                   message="#{properties.value('cu_pr_2_lbl_titulo_confirmacion_mensaje_eliminar_otra_institucion')}" > 
+
+    <h:form id="idForm_varConfirmEliminarOtroInstitucionParticipa">
+
+      <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmEliminarOtroInstitucionParticipa">
+        <div class="centrado">
+          <p:commandButton actionListener="#{cuPr1ProyectoFaces.eliminarOtraInstitucionParticipante}" 
+                           value="#{properties.value('cu_pr_3_lbl_btn_confirma_si_publicar')}" immediate="true"
+                           oncomplete="varConfirmEliminarOtroInstitucionParticipa.hide();"
+                           update=":tabViewProyectos:form_include_agregar_otro_participantes_proyecto:dtOtrasInstitucionesParticipanProyecto" />  
+          <p:commandButton value="#{properties.value('cu_pr_3_lbl_btn_confirma_no_publicar')}" 
+                           onclick="varConfirmEliminarOtroInstitucionParticipa.hide();" type="button" />       
+        </div>
+      </p:outputPanel>
+
+    </h:form>
+  </p:confirmDialog>
+
+</html>

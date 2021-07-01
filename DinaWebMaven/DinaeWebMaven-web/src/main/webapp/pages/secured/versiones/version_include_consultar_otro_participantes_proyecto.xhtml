@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"> 
+
+  <h:form >
+
+    <!-- Grupos de Investigación -->
+    <h:outputLabel  value="#{properties.value('cu_pr_2_lbl_grupos_investigaciones')}" styleClass="green negrilla" />
+    <br />
+    <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" id="dtlistaGrupoInvestigacionProyecto"
+                 var="_investigador" paginatorPosition="bottom" 
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true" 
+                 value="#{administracionProyectoVersionFaces.listaGrupoInvestigacionProyecto}"
+                 rowIndexVar="idFila"
+                 resizableColumns="true"
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+      <p:column headerText="#{properties.value('cu_pr_2_lbl_nombre_grupo')}">  
+        #{_investigador.grupoInvestigacion.descripcion}
+      </p:column>  
+
+      <p:column width="100" headerText="#{properties.value('cu_pr_2_lbl_codigo')}">  
+        #{_investigador.grupoInvestigacion.codigoGrupo}
+      </p:column>  
+
+      <p:column width="100" headerText="#{properties.value('cu_pr_2_lbl_fecha_de_registro_grplac')}">
+        <h:outputLabel value="#{_investigador.grupoInvestigacion.fechaRegistroGrupo}" >
+          <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+        </h:outputLabel>  
+      </p:column>
+
+      <f:facet name="footer">  
+        #{fn:length( administracionProyectoVersionFaces.listaGrupoInvestigacionProyecto )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable>
+
+    <br />
+    <p:separator styleClass="separadorBorder" /> 
+
+    <!-- Semilleros de Investigación: -->
+    <h:outputLabel  value="#{properties.value('cu_pr_2_lbl_semillero_semillero_inves_titulo')}:" styleClass="green negrilla" />
+
+    <br />
+    <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 id="dtlistaSemillosInvestigacionProyecto"
+                 var="_semillero" paginatorPosition="bottom" 
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true" 
+                 value="#{administracionProyectoVersionFaces.listaSemilleroProyectoDTO}"
+                 rowIndexVar="idFila"
+                 resizableColumns="true"
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+      <p:column width="200" headerText="#{properties.value('cu_pr_2_lbl_nombre_grupo')}">  
+        #{_semillero.nombreSemillero}
+      </p:column>  
+
+      <p:column headerText="#{properties.value('cu_pr_2_lbl_semillero_aporte_investi_semi')}">  
+        #{_semillero.aporteInvestigacion}
+      </p:column>  
+
+      <f:facet name="footer">  
+        #{fn:length( administracionProyectoVersionFaces.listaSemilleroProyectoDTO )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable>
+
+
+    <br />
+    <p:separator styleClass="separadorBorder" /> 
+    <!-- UNIDADES POLICIALES: -->
+    <h:outputLabel  value="#{properties.value('cu_pr_2_lbl_semillero_unidad_policial_titulo')}:" styleClass="green negrilla" />
+
+    <br />
+    <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 id="dtUnidadPolicialParticipanProyecto"
+                 var="_unidadpolicialparticipa" paginatorPosition="bottom" 
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true" 
+                 value="#{administracionProyectoVersionFaces.listaUnidadPolicialSemilleroProyectoDTO}"
+                 rowIndexVar="idFila"
+                 resizableColumns="true"
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+      <p:column width="200" headerText="#{properties.value('cu_pr_2_lbl_unidad_policial_datatable_unidad_policial')}">  
+        #{_unidadpolicialparticipa.nombreUnidadPolicial}
+      </p:column>  
+
+      <p:column headerText="#{properties.value('cu_pr_2_lbl_semillero_aporte_investi_semi')}">  
+        #{_unidadpolicialparticipa.aporteInvestigacion}
+      </p:column>  
+
+      <f:facet name="footer">  
+        #{fn:length( administracionProyectoVersionFaces.listaUnidadPolicialSemilleroProyectoDTO )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable>
+
+    <br />
+    <p:separator styleClass="separadorBorder" /> 
+    <!-- UNIDADES POLICIALES: -->
+    <h:outputLabel  value="#{properties.value('cu_pr_2_lbl_otras_instituciones_parti_titulo')}:" styleClass="green negrilla" />
+
+    <br />
+    <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 id="dtOtrasInstitucionesParticipanProyecto"
+                 var="_otrainstitucion" paginatorPosition="bottom" 
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true" 
+                 value="#{administracionProyectoVersionFaces.listaOtrosInstitucionesInstitucionesProyectoDTO}"
+                 rowIndexVar="idFila"
+                 resizableColumns="true"
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+      <p:column width="200" headerText="#{properties.value('cu_pr_2_lbl_otra_institucion_datatable_institucion')}">  
+        #{_otrainstitucion.nombreInstitucion}
+      </p:column>  
+
+      <p:column headerText="#{properties.value('cu_pr_2_lbl_semillero_aporte_investi_semi')}">  
+        #{_otrainstitucion.aporteInvestigicacion}
+      </p:column>  
+
+      <f:facet name="footer">  
+        #{fn:length( administracionProyectoVersionFaces.listaOtrosInstitucionesInstitucionesProyectoDTO )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable>
+
+  </h:form>
+
+</html>

@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"      
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui">
+
+  <h:body>
+    <div class="body">
+      <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+        <ui:define name="content">
+
+
+          <h:form id="formSeleccionarProyecto" >
+
+            <div class="fixed-menu">
+
+              <div class="right-col">
+                <h2>
+                  #{properties.value('cu_pr_17_lbl_titulo_asesorias_proyectos')}
+                </h2>                                
+              </div>
+            </div>
+
+            <br />
+            <h:outputLabel value="#{properties.value('cu_pr_17_lbl_subtitulo_seleccionar_proyecto')}" styleClass="green negrilla"/>
+            <br />
+            <br />
+            <h:panelGrid id="panelgridSeleccionarProyecto" columns="2" style="width: 100%" 
+                         rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                         columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+              <h:outputLabel value="#{properties.value('cu_pr_17_lbl_unidad_policial')}" styleClass="gris negrilla"/>
+              <h:selectOneMenu styleClass="gris" value="#{cuPr17AgregarAsesoriaProyectoInvestigacionFaces.idUnidadPolicialSeleccionado}" 
+                               id="selectUnidadPolicial">  
+                <f:selectItem itemLabel="-- Seleccione --" itemValue="" />
+                <f:selectItems value="#{cuPr17AgregarAsesoriaProyectoInvestigacionFaces.listaItemUnidadPolicialSeleccionado}" />
+              </h:selectOneMenu>
+
+              <h:outputLabel value="#{properties.value('cu_pr_17_lbl_codigo_proyecto')}" styleClass="gris negrilla"/>
+              <p:inputText id="inputCodigoProyecto" styleClass="gris"
+                           value="#{cuPr17AgregarAsesoriaProyectoInvestigacionFaces.codigoProyecto}"
+                           maxlength="50" size="30" >
+              </p:inputText>
+
+              <h:outputLabel value="#{properties.value('cu_pr_17_lbl_tipo_proyecto')}" styleClass="gris negrilla" />
+              <h:selectOneMenu value="#{cuPr17AgregarAsesoriaProyectoInvestigacionFaces.tipoProyectoSeleccionado}"  styleClass="gris">
+                <f:selectItem itemValue="" itemLabel="--Seleccione--"/>
+                <f:selectItems value="#{cuPr17AgregarAsesoriaProyectoInvestigacionFaces.listaItemTipoProyectoSeleccionado}"  />                                
+              </h:selectOneMenu> 
+
+            </h:panelGrid>
+            <br/>
+
+            <div class="centrado">
+
+              <p:commandButton value="#{properties.value('cu_ne_4_lbl_btn_limpiar')}" 
+                               action="#{cuPr17AgregarAsesoriaProyectoInvestigacionFaces.limpiar}" 
+                               update="@form"/>
+
+              <p:commandButton value="#{properties.value('cu_pr_17_lbl_btn_buscar_proyecto')}" 
+                               action="#{cuPr17AgregarAsesoriaProyectoInvestigacionFaces.buscarProyectos}" 
+                               update="@form"/>
+
+
+            </div>
+            <br/>
+            <br/>
+            <p:dataTable var="_proyecto" value="#{cuPr17AgregarAsesoriaProyectoInvestigacionFaces.listaProyectoDTOAsesoriasConsulta}"
+                         rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                         id="tablaProyectos"
+                         emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                         style="width: 100%;" paginator="true"
+                         resizableColumns="true" rowIndexVar="idFila"
+                         paginatorPosition="bottom"                                      
+                         rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+
+              <p:column headerText="#{properties.value('cu_pr_17_lbl_column_numero')}" width="25">
+                <h:outputLabel value="#{idFila + 1}" />
+              </p:column>
+              <p:column headerText="#{properties.value('cu_pr_17_lbl_column_codigo_proyecto')}" width="120">
+                <h:outputLabel value="#{_proyecto.codigoProyecto}" />
+              </p:column>
+              <p:column headerText="#{properties.value('cu_pr_17_lbl_column_titulo_proyecto')}" >
+                <h:outputLabel value="#{_proyecto.tituloPropuesto}" />
+              </p:column>
+              <p:column headerText="#{properties.value('cu_pr_17_lbl_column_fecha_presentacion')}" width="120" >
+                <h:outputLabel value="#{_proyecto.fechaPresentacion}" styleClass="gris">
+                  <f:convertDateTime pattern="#{properties.value('general_formato_fecha_hora')}" locale="es_CO" />
+                </h:outputLabel>                 
+              </p:column>
+              <p:column headerText="#{properties.value('cu_pr_17_lbl_column_unidad_policial')}" >
+                <h:outputLabel value="#{_proyecto.nombreUnidadPolicial}" />
+              </p:column>
+              <p:column headerText="#{properties.value('cu_pr_17_lbl_column_tipo_investigacion')}" width="100" >
+                <h:outputLabel value="#{_proyecto.tipoProyecto}" />
+              </p:column>
+              <p:column headerText="#{properties.value('cu_pr_17_lbl_column_asesoria')}" width="100" >
+                <p:commandLink value="Agregar asesoría" action="#{cuPr17AgregarAsesoriaProyectoInvestigacionFaces.agregarAsesoria( _proyecto )}" />
+              </p:column>
+
+              <f:facet name="footer">  
+                #{fn:length( cuPr17AgregarAsesoriaProyectoInvestigacionFaces.listaProyectoDTOAsesoriasConsulta)} #{properties.value('general_mensaje_footer_datatable_count')}
+              </f:facet>
+            </p:dataTable>        
+
+          </h:form>
+
+        </ui:define>
+      </ui:composition>
+    </div>
+  </h:body>
+</html>

@@ -1,0 +1,210 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+
+      <ui:define name="content">
+        <div class="fixed-menu">
+          <div class="right-col">
+            <h2>
+              #{cuPr7RegistrarAvanceInvestigacionFaces.lblTitulo}
+            </h2>
+          </div>
+        </div>
+        <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                     columnClasses="panelGridColumnaValor_50_porciento,panelGridColumnaValor_50_porciento">
+
+          <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                       columnClasses="panelGridColumnaValor_30_porciento,panelGridColumnaValor_70_porciento">
+
+            <h:outputLabel  value="#{properties.value('cu_pr_7_lbl_subtitulo_titulo_pro')}" 
+                            styleClass="gris negrilla"/>
+            <h:outputLabel value="#{cuPr7RegistrarAvanceInvestigacionFaces.proyectoSeleccionado.tituloPropuesto}" 
+                           styleClass="gris"/>
+          </h:panelGrid>
+          <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                       columnClasses="panelGridColumnaValor_30_porciento,panelGridColumnaValor_70_porciento">
+
+            <h:outputLabel value="#{properties.value('cu_pr_7_lbl_subtitulo_periodo_informe')}" 
+                           styleClass="gris negrilla"/>
+            <h:panelGrid columns="3">
+              <h:outputLabel value="#{cuPr7RegistrarAvanceInvestigacionFaces.fechaInicalInforme}" styleClass="gris">
+                <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+              </h:outputLabel> 
+              <h:outputLabel value=" - " />
+              <h:form>
+                <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es" showOn="button" 
+                            yearRange="#{properties.value('general_calendar_rango_anio_fecha')}"
+                            valueChangeListener="#{cuPr7RegistrarAvanceInvestigacionFaces.cambioFechaFinChangeEvent}"
+                            showButtonPanel="true" navigator="true" requiredMessage="Ingrese la fecha inicial"  
+                            value="#{cuPr7RegistrarAvanceInvestigacionFaces.fechaFinalInforme}" id="fFinalInforme" required="true"  >
+                  <p:ajax event="dateSelect"  listener="#{cuPr7RegistrarAvanceInvestigacionFaces.fechaFinalInforme}" />
+                </p:calendar>
+              </h:form>
+            </h:panelGrid>
+
+          </h:panelGrid>
+
+        </h:panelGrid>
+
+        <br /><br />
+
+        <p:tabView id="tabViewAvanceProyectos" orientation="top" activeIndex="#{cuPr7RegistrarAvanceInvestigacionFaces.idTabSeleccionado}" >  
+
+          <p:ajax event="tabChange" update=":formidBtnGuardarInfoBasica tabViewAvanceProyectos" listener="#{cuPr7RegistrarAvanceInvestigacionFaces.onTabChange}"  />  
+
+          <p:tab id="idcu_pr_7_lbl_tab_titulo_infobasica" title="#{properties.value('cu_pr_7_lbl_tab_titulo_infobasica')}">
+            <ui:include src="/pages/secured/include_pantallas_genericas/include_informacion_informe_proyecto.xhtml" />
+
+            <br />
+            <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                         columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+              <h:outputLabel  value="#{properties.value('cu_pr_1_lbl_info_basica_subtitulo_funcion_proy')}" styleClass="gris negrilla"/>
+              <h:outputLabel value="#{includeInformacionInformeProyectoGenericoFaces.proyectoSeleccionado.funcionProyecto}" styleClass="gris"/>
+            </h:panelGrid>
+
+            <ui:include src="/pages/secured/include_pantallas_genericas/include_informacion_totales_proyecto.xhtml" />
+          </p:tab>
+
+          <p:tab id="idcu_pr_7_lbl_tab_titulo_actividades_realiza" title="#{properties.value('cu_pr_7_lbl_tab_titulo_actividades_realiza')}" >
+            <h:panelGroup rendered="#{cuPr7RegistrarAvanceInvestigacionFaces.soloConsulta}">
+              <ui:include src="include_lista_actividades_realizadas_proyecto.xhtml" />
+            </h:panelGroup>
+            <h:panelGroup rendered="#{!cuPr7RegistrarAvanceInvestigacionFaces.soloConsulta}">
+              <ui:include src="include_actividades_realizadas_proyecto.xhtml" />
+            </h:panelGroup>                         
+          </p:tab>
+
+          <p:tab id="idcu_pr_7_lbl_tab_titulo_resultados_alcanz" title="#{properties.value('cu_pr_7_lbl_tab_titulo_resultados_alcanz')}" >
+            <h:panelGroup rendered="#{cuPr7RegistrarAvanceInvestigacionFaces.soloConsulta}">
+              <ui:include src="include_lista_resultados_alcanzados_proyecto.xhtml" />
+            </h:panelGroup>
+            <h:panelGroup rendered="#{!cuPr7RegistrarAvanceInvestigacionFaces.soloConsulta}">
+              <ui:include src="include_resultados_alcanzados_proyecto.xhtml" />
+            </h:panelGroup>
+          </p:tab>
+
+          <p:tab id="idcu_pr_7_lbl_tab_titulo_horas_investi" title="#{properties.value('cu_pr_7_lbl_tab_titulo_horas_investi')}" >
+            <ui:include src="include_horas_investigacion_proyecto.xhtml" />
+          </p:tab>
+
+          <p:tab id="idcu_pr_7_lbl_tab_titulo_presupuesto_ejecu" title="#{properties.value('cu_pr_7_lbl_tab_titulo_presupuesto_ejecu')}" >
+            <h:panelGrid columns="1" width="100%" rendered="#{cuPr7RegistrarAvanceInvestigacionFaces.importPresupuestoPage != null}">                            
+              <ui:include src="#{cuPr7RegistrarAvanceInvestigacionFaces.importPresupuestoPage}" />
+            </h:panelGrid>
+
+            <h:form id="formTest">
+              <div class="centrado">
+                <p:commandLink value="Ingresar avance presupuesto" 
+                               immediate="true"
+                               rendered="#{!cuPr7RegistrarAvanceInvestigacionFaces.soloConsulta}"
+                               action="#{cuPr7RegistrarAvanceInvestigacionFaces.irAvancePresupuesto}" />                                  
+                <h:outputLabel value="  |  " rendered="#{!cuPr7RegistrarAvanceInvestigacionFaces.soloConsulta}" />                            
+                <p:commandLink value="Actualizar presupuesto definido" 
+                               immediate="true"
+                               rendered="#{!cuPr7RegistrarAvanceInvestigacionFaces.soloConsulta}"
+                               action="#{cuPr7RegistrarAvanceInvestigacionFaces.irPresupuestoDefinido}" />                                  
+
+              </div>
+            </h:form>
+          </p:tab>
+
+          <p:tab id="idcu_pr_7_lbl_tab_titulo_indicadores" title="#{properties.value('cu_pr_7_lbl_tab_titulo_indicadores')}" >
+            <ui:include src="include_agregar_indicadores_proyecto.xhtml" />
+          </p:tab>
+
+          <p:tab id="idcu_pr_7_lbl_tab_titulo_sugerencia" title="#{properties.value('cu_pr_7_lbl_tab_titulo_sugerencia')}" >
+            <h:panelGroup rendered="#{cuPr7RegistrarAvanceInvestigacionFaces.soloConsulta}">
+              <ui:include src="include_lista_sugerencias_proyecto.xhtml" />
+            </h:panelGroup>
+            <h:panelGroup rendered="#{!cuPr7RegistrarAvanceInvestigacionFaces.soloConsulta}">
+              <ui:include src="include_sugerencias_proyecto.xhtml" />
+            </h:panelGroup>                        
+          </p:tab>
+
+          <p:tab id="idcu_pr_7_lbl_tab_titulo_evidencia" title="#{properties.value('cu_pr_7_lbl_tab_titulo_evidencia')}" >
+            <h:panelGroup rendered="#{cuPr7RegistrarAvanceInvestigacionFaces.soloConsulta}">
+              <h:form >
+                <ui:include src="include_lista_evidencias_proyecto.xhtml" />
+              </h:form>                            
+            </h:panelGroup>
+            <h:panelGroup rendered="#{!cuPr7RegistrarAvanceInvestigacionFaces.soloConsulta}">
+              <ui:include src="include_evidencias_proyecto.xhtml" />
+            </h:panelGroup>                        
+          </p:tab>
+        </p:tabView>
+
+        <br />
+        <h:panelGroup id="idPanelGrupBotonesAbajo">
+          <h:form id="formidBtnGuardarInfoBasica">
+            <p:separator styleClass="separadorBorder" /> 
+            <div class="centrado">
+
+              <p:commandButton value="#{properties.value('cu_pr_7_lbl_btn_regresar_genenal')}" id="idBtnRegresarProyecto"
+                               action="#{cuPr7RegistrarAvanceInvestigacionFaces.regresar}"
+                               immediate="true" />
+
+              <p:commandButton value="#{properties.value('cu_pr_7_lbl_btn_guarda_info_basica')}" 
+                               id="idBtnGuardarInfoBasica"
+                               update="@form"
+                               ajax="false"
+                               action="#{cuPr7RegistrarAvanceInvestigacionFaces.guardarInformacionBasica}"
+                               rendered="#{cuPr7RegistrarAvanceInvestigacionFaces.mostrarBtnInfoBasicaProyecto}" />
+
+              <p:commandButton value="#{properties.value('cu_pr_7_lbl_evidencia_enviar_revision')}" 
+                               rendered="#{cuPr7RegistrarAvanceInvestigacionFaces.mostrarBtnInfoBasicaProyecto and cuPr7RegistrarAvanceInvestigacionFaces.mostrarBtnEnviar}" 
+                               immediate="true"
+                               oncomplete="PF('varConfirmEnviarJefeParaRevision').show()"/> 
+
+            </div>
+          </h:form>
+        </h:panelGroup>
+
+        <p:confirmDialog widgetVar="varConfirmEnviarRevisionProyecto" header="#{properties.value('cu_co_3_lbl_titulo_confirmacion_publicar')}" 
+                         message="#{properties.value('cu_pr_7_lbl_titulo_confirmacion_mensaje_confirma')}" > 
+
+          <h:form id="idForm_varConfirmPublicarRevisioPro">
+
+            <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmPublicar">
+              <div class="centrado">
+                <p:commandButton actionListener="#{cuPr7RegistrarAvanceInvestigacionFaces.enviarCompromiso}" 
+                                 value="#{properties.value('cu_co_3_lbl_btn_si_publicar')}" immediate="true"
+                                 oncomplete="varConfirmEnviarRevisionProyecto.hide();" />  
+
+                <p:commandButton value="#{properties.value('cu_co_3_lbl_btn_no_publicar')}" 
+                                 onclick="varConfirmEnviarRevisionProyecto.hide();" type="button" />       
+              </div>
+            </p:outputPanel>
+
+          </h:form>
+        </p:confirmDialog>
+
+        <p:confirmDialog widgetVar="varConfirmEnviarJefeParaRevision" header="#{properties.value('cu_co_3_lbl_titulo_confirmacion_publicar')}" 
+                         message="#{properties.value('cu_pr_7_lbl_confirmacion_mensaje_enviar_informe_revisar')}" > 
+
+          <h:form id="idForm_varConfirmEnviarInformeRevision">
+
+            <p:outputPanel id="pgroupdialogconfirmDialogvarEnviar">
+              <div class="centrado">
+                <p:commandButton actionListener="#{cuPr7RegistrarAvanceInvestigacionFaces.enviarCompromiso}" 
+                                 value="#{properties.value('cu_co_3_lbl_btn_si_publicar')}" immediate="true"
+                                 oncomplete="varConfirmEnviarJefeParaRevision.hide();" />  
+                <p:commandButton value="#{properties.value('cu_co_3_lbl_btn_no_publicar')}" 
+                                 onclick="varConfirmEnviarJefeParaRevision.hide();" type="button" />       
+              </div>
+            </p:outputPanel>
+
+          </h:form>
+        </p:confirmDialog>
+
+      </ui:define>
+    </ui:composition>
+  </body>
+</html>

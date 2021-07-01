@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+  <body>
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+      <ui:define name="content">
+
+        <h:form id="form_revisar_compromiso_jefe_unidad" styleClass="site">
+          <div class="fixed-menu">
+            <div class="right-col">
+              <h2>
+                #{properties.value('cu_pr_24_lbl_titulo_compromiso_proy')}
+              </h2>
+            </div>
+          </div>       
+
+
+          <p:tabView id="tabViewGeneralgestiona_evalua_neces" activeIndex="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.idTabSeleccionado}">
+
+            <p:ajax event="tabChange" listener="#{cuPr24RevisarCompromisoEnviadosPorJefeUnidad.onTabChange}" update=":form_revisar_compromiso_jefe_unidad" />  
+
+            <p:tab id="idtab_include_listado_compromisos_enviados_jefe_unidad" title="#{properties.value('cu_pr_24_lbl_tab_1_listado_copromiso')}">
+
+              <ui:include src="include_listado_compromisos_enviados_jefe_unidad.xhtml" />
+
+            </p:tab>
+
+            <p:tab id="idtab_include_listado_unidades_no_se_han_presentado_compromisos" title="#{properties.value('cu_pr_24_lbl_tab_3_unidades_no_han_presentado')}">
+
+              <ui:include src="include_listado_unidades_no_se_han_presentado_compromisos.xhtml" />
+
+            </p:tab>
+
+          </p:tabView>
+
+          <br />
+          <br />
+          <p:separator styleClass="separadorBorder" /> 
+
+        </h:form>
+
+      </ui:define>
+    </ui:composition>
+  </body>
+</html>

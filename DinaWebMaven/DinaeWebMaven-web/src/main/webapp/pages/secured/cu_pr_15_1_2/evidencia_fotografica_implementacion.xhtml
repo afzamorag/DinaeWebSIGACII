@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"      
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"  
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui">
+
+  <h:outputLabel value="Actividad" styleClass="green negrilla" />
+  <br />
+  <c:forEach var="_evidencias"
+             items="#{cuPr15_1_2_AvanceImplemenacionFaces.listaActividadesPlanImplementacionEvidenciaFotografica}" >
+    <p:panel header="#{_evidencias.actividadesPlanImplementacion.actividad}" style="text-align:center"> 
+
+      <h:panelGrid columns="1" style="width:100%"> 
+
+        <p:graphicImage value="#{cuPr15_1_2_AvanceImplemenacionFaces.imageEvidencia}" width="200" height="200" >
+          <f:param name="rutaImagenEvidencia" value="#{_evidencias.evidenciaFotograficaFisico}" />
+        </p:graphicImage>
+
+      </h:panelGrid> 
+
+    </p:panel>  
+  </c:forEach>
+
+</html>

@@ -1,0 +1,237 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+  <h:form id="formViajesRelacionados">
+    <br />
+    <h:panelGrid id="panelgridViajesRelacionados" columns="2" style="width: 100%" 
+                 rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_nombre_investigador_viajes')}" 
+                       styleClass="gris negrilla" />
+      </h:panelGrid>
+      <h:selectOneMenu value="#{presupuestoImplemetacionProyectoFaces.idInvetigadorViaje}"
+                       id="selectInvestigadorViaje"
+                       styleClass="gris">  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{presupuestoImplemetacionProyectoFaces.listaInvestigadorViaje}" var="_inv" itemValue="#{_inv.idInvestigadorProyecto}" itemLabel="#{_inv.nombreCompleto}" />                
+      </h:selectOneMenu>
+
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_evento_viaje')}" 
+                       styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:panelGroup>
+        <p:inputTextarea value="#{presupuestoImplemetacionProyectoFaces.eventoViaje}"
+                         id="textAreaEventoViaje" styleClass="textareaMaximo"
+                         maxlength="250" counter="contadorEventoViaje"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         cols="100" rows="3" autoResize="false">
+          <f:validateLength minimum="0"  maximum="250" />                    
+        </p:inputTextarea>
+        <h:outputText id="contadorEventoViaje" styleClass="gris" />
+      </h:panelGroup>
+
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_departamento_origen')}" 
+                       styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:selectOneMenu value="#{presupuestoImplemetacionProyectoFaces.idDepartamentoOrigenViaje}" id="selectDepartamentoOrigen" styleClass="gris">  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{presupuestoImplemetacionProyectoFaces.listaDepartamentoOrigenViajeDto}" var="_dptoOrig" itemValue="#{_dptoOrig.idDepartamento}" itemLabel="#{_dptoOrig.descDepartamento}"/>
+        <p:ajax event="change" update="@this selectCiudadOrigen" 
+                listener="#{presupuestoImplemetacionProyectoFaces.cargarListaCiudadOrigenViaje}"/>
+      </h:selectOneMenu>
+
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_ciudad_origen')}" 
+                       styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:selectOneMenu value="#{presupuestoImplemetacionProyectoFaces.idCiudadOrigenViaje}"
+                       id="selectCiudadOrigen"
+                       styleClass="gris">
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{presupuestoImplemetacionProyectoFaces.listaCiudadOrigenViaje}" var="_ciudadOrigen" itemValue="#{_ciudadOrigen.codMunicipio}" itemLabel="#{_ciudadOrigen.descMunicipio}"/>                
+      </h:selectOneMenu>
+
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_departamento_destino')}" 
+                       styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:selectOneMenu value="#{presupuestoImplemetacionProyectoFaces.idDepartamentoDestinoViaje}" id="selectDepartamentoDestino" styleClass="gris">  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{presupuestoImplemetacionProyectoFaces.listaDepartamentoDestinoViaje}" var="_dptoDest" itemValue="#{_dptoDest.idDepartamento}" itemLabel="#{_dptoDest.descDepartamento}" />
+        <p:ajax event="change" update="@this selectCiudadDestino" 
+                listener="#{presupuestoImplemetacionProyectoFaces.cargarListaCiudadDestinoViaje}"/>
+      </h:selectOneMenu>
+
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_ciudad_destino')}" 
+                       styleClass="gris negrilla" />
+      </h:panelGrid>
+      <h:selectOneMenu value="#{presupuestoImplemetacionProyectoFaces.idCiudadDestinoViaje}"
+                       id="selectCiudadDestino" 
+                       styleClass="gris">  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{presupuestoImplemetacionProyectoFaces.listaCiudadDestinoViaje}" var="_ciudadDest" itemValue="#{_ciudadDest.codMunicipio}" itemLabel="#{_ciudadDest.descMunicipio}"/>                
+      </h:selectOneMenu>
+
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_costo_pasajes')}" 
+                       styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:inputText value="#{presupuestoImplemetacionProyectoFaces.costoPasajesViaje}"
+                   maxlength="18" id="inputCostoPasajes" onkeypress="return soloNumerosInpuText(event);"> 
+        <p:ajax event="blur" update="inputCostoPasajes" />
+        <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" maxFractionDigits="2" />
+      </h:inputText>
+
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_costo_viaticos')}" 
+                       styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:inputText value="#{presupuestoImplemetacionProyectoFaces.costoViaticosViaje}"
+                   maxlength="18" id="inputCostoViaticos" onkeypress="return soloNumerosInpuText(event);">  
+        <p:ajax event="blur" update="inputCostoViaticos" />
+        <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" maxFractionDigits="2" />
+      </h:inputText>
+
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_fuente_evento')}" 
+                       styleClass="gris negrilla" for="selectFuenteViaje"/>
+      </h:panelGrid>
+      <h:selectOneMenu value="#{presupuestoImplemetacionProyectoFaces.idFuenteProyectoViaje}" 
+                       id="selectFuenteViaje"
+                       styleClass="gris">  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{presupuestoImplemetacionProyectoFaces.listaFuentesProyectoItems}"/>
+      </h:selectOneMenu>
+    </h:panelGrid>
+    <br/>
+    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+    <div class="centrado">
+      <p:commandButton value="#{properties.value('cu_pr_24_lbl_btn_agregar_comentario_retroalimentacion')}" 
+                       rendered="#{!presupuestoImplemetacionProyectoFaces.esModificaViaje}"
+                       actionListener="#{presupuestoImplemetacionProyectoFaces.guardarTabViajes}" 
+                        process="@form"
+                       update="@form"/>
+
+      <p:commandButton value="#{properties.value('cu_iv_3_lbl_datatable_btn_modificar')}" 
+                       rendered="#{presupuestoImplemetacionProyectoFaces.esModificaViaje}"
+                       actionListener="#{presupuestoImplemetacionProyectoFaces.guardarTabViajes}" 
+                        process="@form"
+                       update="@form"/>
+      <p:commandButton value="#{properties.value('cu_tr_01_lbl_cancelar')}" 
+                       rendered="#{presupuestoImplemetacionProyectoFaces.esModificaViaje}"
+                       actionListener="#{presupuestoImplemetacionProyectoFaces.cancelarModificarViaje}" 
+                       process="@this"
+                       update="@form">
+      </p:commandButton>
+    </div>
+    <br/>
+    <div class="centrado">
+      <p:dataTable var="viaje" value="#{presupuestoImplemetacionProyectoFaces.listaViajesProyectoModel}"
+                   rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                   id="tablaViajesProyectos" selectionMode="single"
+                   emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                   selection="#{presupuestoImplemetacionProyectoFaces.viajesProyectoDto}"
+                   style="width: 100%;" paginator="true"
+                   resizableColumns="true" rowIndexVar="idFila"
+                   paginatorPosition="bottom"
+                   rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+        <p:ajax event="rowSelect" listener="#{presupuestoImplemetacionProyectoFaces.cargarDatosViajesProyecto}"   
+                update="@form"/>  
+        <p:ajax event="rowUnselect" listener="#{presupuestoImplemetacionProyectoFaces.noSeleccionViajeProyecto}" 
+                update="@form:tablaViajesProyectos"/>
+
+        <p:column headerText="#{properties.value('cu_pr_13_lbl_column_numero')}" width="15" style="color: white; font-size: 13px">
+          <h:outputText value="#{idFila + 1}" styleClass="gris" style="font-size: 13px" />
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_nombre_investigador_viajes')}" width="80" style="color: white; font-size: 13px">
+          <h:outputText value="#{viaje.nombreInvestigadoresProyecto}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+        </p:column>
+        <p:column headerText="#{properties.value('cu_iv_3_lbl_datatable_jefe_grado')}" width="110" style="color: white; font-size: 13px">
+          <h:outputText value="#{viaje.grado}" styleClass="gris" style="font-size: 13px"/>
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_evento_viaje')}" width="65" style="color: white; font-size: 13px">
+          <h:outputText value="#{viaje.evento}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_ciudad_origen')}" width="100" style="color: white; font-size: 13px">
+          <h:outputText value="#{viaje.nombreCiudadOrigen}" styleClass="gris" style="font-size: 13px" />
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_ciudad_destino')}" width="100" style="color: white; font-size: 13px">
+          <h:outputText value="#{viaje.nombreCiudadDestino}" styleClass="gris" style="font-size: 13px"/>
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_costo_pasajes')}" width="55" style="color: white; font-size: 13px">
+          <h:outputText value="#{viaje.costosPasajes}" styleClass="alineadoDerecha gris" style="font-size: 13px">                                                
+            <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" />
+          </h:outputText>  
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_costo_viaticos')}" width="55" style="color: white; font-size: 13px">
+          <h:outputText value="#{viaje.costosViaticos}" styleClass="alineadoDerecha gris" style="font-size: 13px">                                               
+            <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" />
+          </h:outputText>  
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_fuente_evento')}" width="60" style="color: white; font-size: 13px">
+          <h:outputText value="#{viaje.nombreFuenteProyecto}" styleClass="gris" style="font-size: 13px"/>
+        </p:column>
+        <p:column width="50" headerText="#{properties.value('cu_pr_19_lbl_tabla_acciones')}" style="color: white; font-size: 13px">
+
+          <div class="centrado">
+            <p:commandLink value="#{properties.value('cu_tr_01_lbl_btn_eliminar')}" 
+                           immediate="true"
+                           oncomplete="PF('varConfirmEliminarViaje').show()">  
+              <f:setPropertyActionListener value="#{viaje}" target="#{presupuestoImplemetacionProyectoFaces.viajesProyectoDto}" />  
+            </p:commandLink>
+          </div>
+
+        </p:column>
+        <f:facet name="footer">  
+          #{fn:length( presupuestoImplemetacionProyectoFaces.listaViajesProyectoDto )} #{properties.value('general_mensaje_footer_datatable_count')}
+        </f:facet>
+      </p:dataTable>
+    </div>
+    <p:confirmDialog widgetVar="varConfirmEliminarViaje" header="#{properties.value('cu_tr_01_lbl_titulo_confirmacion_titulo')}" 
+                     message="#{properties.value('cu_pr_5_lbl_titulo_confirmacion_mensaje_eliminar_viaje')}" > 
+
+      <h:form id="idFormEliminarViaje">
+
+        <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmEliminarViaje">
+          <div class="centrado">
+            <p:commandButton actionListener="#{presupuestoImplemetacionProyectoFaces.eliminarViajeRelacionado}" 
+                             value="#{properties.value('cu_tr_01_lbl_btn_confirma_si')}" immediate="true"
+                             oncomplete="varConfirmEliminarViaje.hide();"
+                             update=":tabView:formViajesRelacionados:tablaViajesProyectos" />  
+            <p:commandButton value="#{properties.value('cu_tr_01_lbl_btn_confirma_no')}" 
+                             onclick="varConfirmEliminarViaje.hide();" type="button" />       
+          </div>
+        </p:outputPanel>
+
+      </h:form>
+    </p:confirmDialog>
+  </h:form>
+</html>
+

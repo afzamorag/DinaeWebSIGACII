@@ -1,0 +1,189 @@
+Insert into CONSTANTES (ID_CONSTANTES,TIPO,CODIGO,VALOR) values ('141','INFORME_AVANCE_FINAL_TIPO_PRODUCTO','Artículo en revista','Artículo en revista');
+Insert into CONSTANTES (ID_CONSTANTES,TIPO,CODIGO,VALOR) values ('142','INFORME_AVANCE_FINAL_TIPO_PRODUCTO','Prototipo','Prototipo');
+Insert into CONSTANTES (ID_CONSTANTES,TIPO,CODIGO,VALOR) values ('143','INFORME_AVANCE_FINAL_TIPO_PRODUCTO','Cartilla','Cartilla');
+Insert into CONSTANTES (ID_CONSTANTES,TIPO,CODIGO,VALOR) values ('144','INFORME_AVANCE_FINAL_TIPO_PRODUCTO','Manual','Manual');
+Insert into CONSTANTES (ID_CONSTANTES,TIPO,CODIGO,VALOR) values ('145','INFORME_AVANCE_FINAL_TIPO_PRODUCTO','Protocolo','Protocolo');
+Insert into CONSTANTES (ID_CONSTANTES,TIPO,CODIGO,VALOR) values ('146','INFORME_AVANCE_FINAL_TIPO_PRODUCTO','Otro','Otro');
+
+--SE MODIFICA POR EL CU TA 01
+ALTER TABLE PROYECTO MODIFY ID_PERIODO NUMBER NULL;
+
+DROP TABLE SEMILLEROS_IMPLEMENTACION CASCADE CONSTRAINTS;
+CREATE TABLE SEMILLEROS_IMPLEMENTACION
+  (
+    ID_SEMILLERO_IMPLEMETACION NUMBER NOT NULL ,
+    ID_SEMILLERO_INVESTIGACION NUMBER NOT NULL,
+    ID_IMPLEMENTACION_PROY     NUMBER NOT NULL ,
+    FECHA_REGISTRO TIMESTAMP,
+    ID_USUARIO_ROL NUMBER NOT NULL ,
+    USUARIO        VARCHAR2(50),
+    MAQUINA        VARCHAR2(50),
+    CONSTRAINT SEMILLEROS_IMPLEMENTACION_PK PRIMARY KEY (ID_SEMILLERO_IMPLEMETACION),
+    CONSTRAINT SEMI_IMPL_PROY_FK FOREIGN KEY (ID_IMPLEMENTACION_PROY) REFERENCES IMPLEMENTACIONES_PROYECTO (ID_IMPLEMENTACION_PROY),
+	CONSTRAINT SEMI_IMPL_USUARIOROL_FK FOREIGN KEY (ID_USUARIO_ROL) REFERENCES USUARIO_ROL (ID_USUARIO_ROL)
+  );
+
+ CREATE SEQUENCE SEC_SEMILLEROS_IMPLEMENTACION
+  INCREMENT by 1
+  MINVALUE 1
+;
+
+DROP TABLE PERSONAL_IMPLEMENTACION CASCADE CONSTRAINTS;
+  CREATE TABLE PERSONAL_IMPLEMENTACION
+  (
+    ID_PERSONAL_IMPLEMENTACION NUMBER NOT NULL ,
+    IDENTIFICACION             VARCHAR2(50),
+    ID_IMPLEMENTACION_PROY     NUMBER NOT NULL ,
+    GRADO                      VARCHAR2(20),
+    ID_UNIDAD_POLICIAL         NUMBER NOT NULL,
+    FECHA_REGISTRO TIMESTAMP,
+    ID_USUARIO_ROL NUMBER NOT NULL,
+    USUARIO        VARCHAR2(50),
+    MAQUINA        VARCHAR2(50),
+    CONSTRAINT PERSONAL_IMPLEMENTACION_PK PRIMARY KEY (ID_PERSONAL_IMPLEMENTACION),
+    CONSTRAINT PERS_IMPLE_PROY_FK FOREIGN KEY (ID_IMPLEMENTACION_PROY) REFERENCES IMPLEMENTACIONES_PROYECTO (ID_IMPLEMENTACION_PROY) ,
+	CONSTRAINT PERS_IMPL_USUARIOROL_FK FOREIGN KEY (ID_USUARIO_ROL) REFERENCES USUARIO_ROL (ID_USUARIO_ROL),
+	CONSTRAINT PERS_IMPLE_UNIDAD_POL_FK FOREIGN KEY (ID_UNIDAD_POLICIAL) REFERENCES UNIDAD_POLICIAL (ID_UNIDAD_POLICIAL) 
+  );
+  
+ CREATE SEQUENCE SEC_PERSONAL_IMPLEMENTACION
+  INCREMENT by 1
+  MINVALUE 1
+;
+
+CREATE TABLE ENSAYO_CRITICO
+  (
+    ID_ENSAYO_CRITICO     NUMBER NOT NULL ,
+    ID_PERIODO            NUMBER NOT NULL ,
+    TITULO_ENSAYO         VARCHAR2(512) NOT NULL ,
+    RESUMEN_ENSAYO        VARCHAR2(4000) NOT NULL ,
+    PALABRAS_CLAVE_ENSAYO VARCHAR2(256) NOT NULL ,
+    ABSTRACT_ENSAYO       VARCHAR2(4000) NOT NULL ,
+    KEYWORDS_ENSAYO       VARCHAR2(256) NOT NULL ,
+    INTRODUCCION_ENSAYO   VARCHAR2(4000) NOT NULL ,
+    DESARROLLO_ENSAYO BLOB NOT NULL ,
+    NOMBRE_ARCHIVO          VARCHAR2(100) NOT NULL ,
+    NOMBRE_ARCHIVO_ORIGINAL VARCHAR2(100) NOT NULL ,
+    CONCLUSIONES_ENSAYO     VARCHAR2(4000) NOT NULL ,
+    PROPUESTA_ENSAYO        VARCHAR2(4000) NOT NULL ,
+    BIBLIOGRAFIA_ENSAYO     VARCHAR2(4000) NOT NULL ,
+    FECHA_CREACION          DATE NOT NULL ,
+    FECHA_MODIFICACION      DATE ,
+    NOMBRE_MAQUINA          VARCHAR2(50) NOT NULL ,
+    ID_USUARIO_ROL          NUMBER NOT NULL ,
+    CONSTRAINT ENSAYO_CRITICO_PK PRIMARY KEY ( ID_ENSAYO_CRITICO ) ENABLE
+  );
+ALTER TABLE ENSAYO_CRITICO ADD CONSTRAINT ENSAYO_CRITICO_PERIODO_FK FOREIGN KEY ( ID_PERIODO ) REFERENCES PERIODO ( ID_PERIODO ) ON
+DELETE CASCADE ENABLE;
+ALTER TABLE ENSAYO_CRITICO ADD CONSTRAINT ENSAYO_CRITICO_USER_FK FOREIGN KEY ( ID_USUARIO_ROL ) REFERENCES USUARIO_ROL ( ID_USUARIO_ROL ) ON
+DELETE CASCADE ENABLE;
+
+
+ALTER TABLE ENSAYO_CRITICO
+DROP CONSTRAINT ENSAYO_CRITICO_USER_FK;
+ALTER TABLE ENSAYO_CRITICO ADD (ID_USUARIO_ROL_MODIFCA NUMBER );
+ALTER TABLE ENSAYO_CRITICO RENAME COLUMN ID_USUARIO_ROL TO ID_USUARIO_ROL_CREACION;
+ALTER TABLE ENSAYO_CRITICO ADD CONSTRAINT ENSAYO_CRITICO_USER_M_FK FOREIGN KEY ( ID_USUARIO_ROL_MODIFCA ) REFERENCES USUARIO_ROL ( ID_USUARIO_ROL ) ON
+DELETE CASCADE ENABLE;
+ALTER TABLE ENSAYO_CRITICO ADD CONSTRAINT ENSAYO_CRITICO_USER_FK FOREIGN KEY ( ID_USUARIO_ROL_CREACION ) REFERENCES USUARIO_ROL ( ID_USUARIO_ROL ) ON
+DELETE CASCADE ENABLE;
+
+ CREATE SEQUENCE SEC_ENSAYO_CRITICO
+  INCREMENT by 1
+  MINVALUE 1
+;
+
+ALTER TABLE ENSAYO_CRITICO ADD (ESTADO_ENSAYO NUMBER NOT NULL);
+ALTER TABLE ENSAYO_CRITICO ADD CONSTRAINT ENSAYO_CRITICO_CONSTANTE_FK FOREIGN KEY ( ESTADO_ENSAYO ) REFERENCES CONSTANTES ( ID_CONSTANTES ) ON
+DELETE CASCADE ENABLE;
+
+ALTER TABLE SEMILLERO_INVESTIGACION ADD FECHA_REGISTRO TIMESTAMP NULL;
+ALTER TABLE SEMILLERO_INVESTIGACION ADD OBJETIVO_GENERAL VARCHAR2(512);
+ALTER TABLE SEMILLERO_INVESTIGACION ADD OBJETIVO_ESPECIFICO VARCHAR2(512);
+ALTER TABLE SEMILLERO_INVESTIGACION ADD METODOLOGIA_TRABAJO VARCHAR2(512);
+ALTER TABLE SEMILLERO_INVESTIGACION ADD PRODUCTO_O_RESULTADO VARCHAR2(512);
+ALTER TABLE SEMILLERO_INVESTIGACION ADD PERTENECE_RED_SEMILL CHAR(1);
+ALTER TABLE SEMILLERO_INVESTIGACION ADD NOMBRE_RED_NODO_PERTENECE VARCHAR2(512);
+ALTER TABLE SEMILLERO_INVESTIGACION ADD FECHA_INICIO TIMESTAMP;
+ALTER TABLE SEMILLERO_INVESTIGACION ADD FECHA_FIN TIMESTAMP;
+ALTER TABLE SEMILLERO_INVESTIGACION ADD JEFEUNIDAD_GRADO VARCHAR2(50);
+ALTER TABLE SEMILLERO_INVESTIGACION ADD JEFEUNIDAD_NOMBRES VARCHAR2(100);
+ALTER TABLE SEMILLERO_INVESTIGACION ADD JEFEUNIDAD_APELLIDOS VARCHAR2(100);
+ALTER TABLE SEMILLERO_INVESTIGACION ADD JEFEUNIDAD_NOMBRE_COMPLETO VARCHAR2(200);
+ALTER TABLE SEMILLERO_INVESTIGACION ADD JEFEUNIDAD_ID_UNIDAD NUMBER;
+ALTER TABLE SEMILLERO_INVESTIGACION ADD JEFEUNIDAD_CORREO VARCHAR2(100);
+ALTER TABLE SEMILLERO_INVESTIGACION ADD JEFEUNIDAD_TELEFONO VARCHAR2(50);
+ALTER TABLE SEMILLERO_INVESTIGACION ADD JEFEUNIDAD_IDENTIFICACION VARCHAR2(50);
+ALTER TABLE SEMILLERO_INVESTIGACION ADD JEFEUNIDAD_CARGO VARCHAR2(100);
+
+ALTER TABLE SEMILLERO_INVESTIGACION ADD CONSTRAINTS SEMI_INVEST_UNIDAD_POL_FK FOREIGN KEY (JEFEUNIDAD_ID_UNIDAD) REFERENCES UNIDAD_POLICIAL (ID_UNIDAD_POLICIAL)
+
+Insert into OPCION_MENU (ID_OPCION_MENU,NOMBRE,TIPO_ACCESO,ACCION,ID_OPCION_MENU2,ORDEN,TITULO) values ('24','Registrar Semilleros','PRIVADO','BEAN:#{cuIv3GestionarSemillerosInvestigacionFaces.initReturnCU}','4','2','Registrar Semilleros');
+Insert into ROL_OPCION_MENU (ID_ROL_OPCION_MENU,ID_ROL,ID_OPCION_MENU) values ('30','17','4');
+Insert into ROL_OPCION_MENU (ID_ROL_OPCION_MENU,ID_ROL,ID_OPCION_MENU) values ('31','17','24');
+
+ALTER TABLE TEMA ADD TOOLTIP VARCHAR2(512);
+
+UPDATE TEMA SET TOOLTIP='Defina con claridad el problema o la necesidad a resolver con la ejecución del proyecto, con énfasis en la situación actual y en la situación esperada, una vez se lleve a cabo el proyecto.' WHERE ID_TEMA = 1;
+UPDATE TEMA SET TOOLTIP='Presente las motivaciones y la importancia del proyecto y los impactos institucionales que tendrá la ejecución del mismo, colocando el énfasis en las soluciones que aportará el proyecto y en los problemas que continuarán, si no se lleva a cabo el mismo. Cuando sea del caso, defina la trascendencia institucional o social del proyecto y concrete los beneficiarios, así como la viabilidad del proyecto, es decir, si cuenta con los recursos para realizarlo.' WHERE ID_TEMA = 2;
+UPDATE TEMA SET TOOLTIP='Mediante consultas a expertos en el tema o a través de bibliografía, Internet, grupos de investigación y otros medios, presente una breve descripción del estado del arte que demuestre que en la ejecución del proyecto se aprovechará el conocimiento o las tecnologías disponibles. Ponga especial atención a los avances que sobre el tema ha logrado la Institución Policial.' WHERE ID_TEMA = 3;
+UPDATE TEMA SET TOOLTIP='Plantee de manera concreta el Objetivo General y los objetivos específicos con los cuales se alcanzará la solución al problema o necesidad formulada.' WHERE ID_TEMA = 4;
+UPDATE TEMA SET TOOLTIP='Establezca las fases metodológicas y las respectivas actividades que adelantará para conseguir los objetivos expuestos, mediante el diseño metodológico, la búsqueda, selección, acopio, sistematización y organización de la información, así como los instrumentos de recolección de la misma información. Cuando sea necesario y conveniente, acompañe esta metodología con elementos y materiales como videos, fotos, planos y otros que ayuden a visualizar la intencionalidad del proyecto.' WHERE ID_TEMA = 5;
+UPDATE TEMA SET TOOLTIP='A partir de los objetivos específicos, presente los resultados finales alcanzables al final del período del proyecto, es decir, los productos, procesos o servicios. A fin de que sean verificables, convierta estos resultados, también, en metas, cuando esto sea posible. En este punto sea realista: ni demasiadas promesas que no se van a cumplir, ni simplificaciones que demeriten el alcance del proyecto.' WHERE ID_TEMA = 6;
+UPDATE TEMA SET TOOLTIP='Posibilidades comerciales o económicas reales para la institución a través del proyecto.' WHERE ID_TEMA = 7;
+UPDATE TEMA SET TOOLTIP='Activos o elementos susceptibles de propiedad intelectual como resultado del proyecto.' WHERE ID_TEMA = 8;
+UPDATE TEMA SET TOOLTIP='Elabore un detallado cronograma de actividades por semanas y meses, que se corresponda tanto con los objetivos como con la metodología a seguir. Tenga presente los resultados a alcanzar.' WHERE ID_TEMA = 9;
+UPDATE TEMA SET TOOLTIP='Defina los indicadores de gestión (internos y aplicables durante la ejecución del proyecto), así como los indicadores de impacto o de resultado (externos y aplicables al final del proyecto). Se trata de mostrar la forma como cambiará la situación del problema desde el comienzo del proyecto hasta el final.' WHERE ID_TEMA = 10;
+UPDATE TEMA SET TOOLTIP='Prevea las formas de hacer visible a la Institución Policial y a la opinión pública en general, los resultados e impactos del proyecto. Pueden ser publicaciones, videos, demostraciones, participación en eventos nacionales e internacionales y otros.' WHERE ID_TEMA = 11;
+
+Insert into CONSTANTES (ID_CONSTANTES,TIPO,CODIGO,VALOR) values (186,'TIPO_INVESTIGADOR_TRABAJO_GRADO','Investigador principal','Investigador principal');
+Insert into CONSTANTES (ID_CONSTANTES,TIPO,CODIGO,VALOR) values (187,'TIPO_INVESTIGADOR_TRABAJO_GRADO','Co-investigador','Co-investigador');
+Insert into CONSTANTES (ID_CONSTANTES,TIPO,CODIGO,VALOR) values (188,'TIPO_INVESTIGADOR_TRABAJO_GRADO','Asesor metodológico','Asesor metodológico');
+Insert into CONSTANTES (ID_CONSTANTES,TIPO,CODIGO,VALOR) values (189,'TIPO_INVESTIGADOR_TRABAJO_GRADO','Asesor temático','Asesor temático');
+
+Insert into CONSTANTES (ID_CONSTANTES,TIPO,CODIGO,VALOR) values (190,'TIPO_VINCULACION_TRABAJO_GRADO','Uniformado','Uniformado');
+Insert into CONSTANTES (ID_CONSTANTES,TIPO,CODIGO,VALOR) values (191,'TIPO_VINCULACION_TRABAJO_GRADO','No Uniformado','No Uniformado');
+Insert into CONSTANTES (ID_CONSTANTES,TIPO,CODIGO,VALOR) values (192,'TIPO_VINCULACION_TRABAJO_GRADO','Contrato','Contrato');
+Insert into CONSTANTES (ID_CONSTANTES,TIPO,CODIGO,VALOR) values (193,'TIPO_VINCULACION_TRABAJO_GRADO','Externo','Externo');
+
+Insert into CONSTANTES (ID_CONSTANTES,TIPO,CODIGO,VALOR) values (194,'TIPO_INVESTIGADOR_PROY_GRADO','Investigador','Investigador');
+Insert into CONSTANTES (ID_CONSTANTES,TIPO,CODIGO,VALOR) values (195,'TIPO_INVESTIGADOR_PROY_GRADO','Asesor','Asesor');
+
+Insert into CONSTANTES (ID_CONSTANTES,TIPO,CODIGO,VALOR) values (196,'TIPO_ESTADO_ENSAYO_CRITICO','En elaboración','En elaboración');
+Insert into CONSTANTES (ID_CONSTANTES,TIPO,CODIGO,VALOR) values (197,'TIPO_ESTADO_ENSAYO_CRITICO','Recibido','Recibido');
+Insert into CONSTANTES (ID_CONSTANTES,TIPO,CODIGO,VALOR) values (198,'TIPO_ESTADO_ENSAYO_CRITICO','Leido','Leido');
+Insert into CONSTANTES (ID_CONSTANTES,TIPO,CODIGO,VALOR) values (199,'TIPO_ESTADO_ENSAYO_CRITICO','Evaluado','Evaluado');
+Insert into CONSTANTES (ID_CONSTANTES,TIPO,CODIGO,VALOR) values (200,'TIPO_ESTADO_ENSAYO_CRITICO','No aprobado en la Unidad','No aprobado en la Unidad');
+Insert into CONSTANTES (ID_CONSTANTES,TIPO,CODIGO,VALOR) values (201,'TIPO_ESTADO_ENSAYO_CRITICO','Enviado a VICIN','Enviado a VICIN');
+Insert into CONSTANTES (ID_CONSTANTES,TIPO,CODIGO,VALOR) values (202,'TIPO_ESTADO_ENSAYO_CRITICO','Leido VICIN','Leido VICIN');
+Insert into CONSTANTES (ID_CONSTANTES,TIPO,CODIGO,VALOR) values (203,'TIPO_ESTADO_ENSAYO_CRITICO','Evaluado VICIN','Evaluado VICIN');
+Insert into CONSTANTES (ID_CONSTANTES,TIPO,CODIGO,VALOR) values (204,'TIPO_ESTADO_ENSAYO_CRITICO','Ganador','Ganador');
+Insert into CONSTANTES (ID_CONSTANTES,TIPO,CODIGO,VALOR) values (205,'TIPO_ESTADO_ENSAYO_CRITICO','No aprobado','No aprobado');
+
+
+ALTER TABLE INVESTIGADORES_PROYECTO ADD ID_TIPO_INVESTIGADOR NUMBER;
+ALTER TABLE INVESTIGADORES_PROYECTO ADD CONSTRAINTS INVES_PROY_CONSTANTE_FK FOREIGN KEY (ID_TIPO_INVESTIGADOR) REFERENCES CONSTANTES (ID_CONSTANTES);
+
+UPDATE OPCION_MENU SET TIPO_ACCESO='PRIVADO' WHERE ID_OPCION_MENU = 5;
+
+
+Insert into OPCION_MENU (ID_OPCION_MENU,NOMBRE,TIPO_ACCESO,ACCION,ID_OPCION_MENU2,ORDEN,TITULO) values ('20','Registrar  investigador','PRIVADO','BEAN:#{cuIv01GestionarInvestigadoresFaces.initReturnCU}','4','5','Permite la creación y modificación de la información de investigadores que se encuentran vinculados con la VICIN');
+Insert into OPCION_MENU (ID_OPCION_MENU,NOMBRE,TIPO_ACCESO,ACCION,ID_OPCION_MENU2,ORDEN,TITULO) values ('21','Registrar/Actualizar Trabajos de Grado','PRIVADO','BEAN:#{cuTr01IngresarModificarTrabajoDeGradoFaces.initReturnCU}','5','1','Ingresa o modifica trabajos de grado');
+Insert into OPCION_MENU (ID_OPCION_MENU,NOMBRE,TIPO_ACCESO,ACCION,ID_OPCION_MENU2,ORDEN,TITULO) values ('22','Registrar propuestas para convocatoria de ensayo critico','PUBLICO','BEAN:#{cuCo7ConvocatoriasEnsayoCriticoFaces.initReturnCU}','2','3','Consultar  las convocatorias abiertas y presentar propuestas dentro de una convocatoria de ensayo critico');
+
+--Agregar la opcion de menu trabajos de grado
+INSERT INTO ROL_OPCION_MENU (ID_ROL_OPCION_MENU, ID_ROL, ID_OPCION_MENU) VALUES ('21', '28', '5');
+
+--Asignar la opcion de submenu al id_rol 28
+INSERT INTO ROL_OPCION_MENU (ID_ROL_OPCION_MENU, ID_ROL, ID_OPCION_MENU) VALUES ('22', '28', '21');
+
+	
+--Datos de prueba para programas
+--INSERT INTO PROGRAMAS (ID_PROGRAMA, NOMBRE, ACTIVO, FECHA_REGISTRO, ID_USUARIO_ROL, ID_UNIDAD_POLICIAL) VALUES ('1', 'Programa de Prueba 1 para trabajos de grado', 'Y', TO_DATE('2013-12-16 00:00:00', 'YYYY-MM-DD HH24:MI:SS'), '26', '2');
+--INSERT INTO PROGRAMAS (ID_PROGRAMA, NOMBRE, ACTIVO, FECHA_REGISTRO, ID_USUARIO_ROL, ID_UNIDAD_POLICIAL) VALUES ('2', 'Programa de Prueba 2 para trabajos de grado', 'Y', TO_DATE('2013-12-16 00:00:00', 'YYYY-MM-DD HH24:MI:SS'), '26', '2');
+
+
+Insert into OPCION_MENU (ID_OPCION_MENU,NOMBRE,TIPO_ACCESO,ACCION,ID_OPCION_MENU2,ORDEN,TITULO) values ('23','Consultar proyectos investigacion','PRIVADO','BEAN:#{cuPr08ConsultarTrabajosYProyectos.initReturnCU}','3','3','Consultar proyectos investigacion');
+Insert into ROL_OPCION_MENU (ID_ROL_OPCION_MENU,ID_ROL,ID_OPCION_MENU) values ('20','23','23');
+
+Insert into OPCION_MENU (ID_OPCION_MENU,NOMBRE,TIPO_ACCESO,ACCION,ID_OPCION_MENU2,ORDEN,TITULO) values ('24','Registrar Semilleros','PRIVADO','BEAN:#{cuIv3GestionarSemillerosInvestigacionFaces.initReturnCU}','4','2','Registrar Semilleros');

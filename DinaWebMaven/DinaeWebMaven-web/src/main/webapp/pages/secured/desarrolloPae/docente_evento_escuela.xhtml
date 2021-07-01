@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    <h:form
+        id="frmDocente"
+        prependId="false">
+        <p:growl id="msgsDocente" showDetail="true"/>
+        <h:outputText 
+            value="#{bundle['siedueventoescuela.docente.title']}: #{sieduEventoEscuelaController.selected.eveeCapa.carrera.descripcion}"
+            styleClass="negrilla"/>
+        <p:separator />
+        <p:panel
+            rendered="#{sieduEventoEscuelaController.renderButtom}">
+            <p:panelGrid
+                id="pnlListDocente"
+                layout="grid" 
+                columns="4"
+                columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" 
+                styleClass="ui-panelgrid-blank"> 
+                <p:outputLabel              
+                    for="nroDocumentoDocente"
+                    value="#{bundle['siedueventoescuela.docente.identificacion']}"/>
+                <h:panelGroup>
+                    <p:inputText 
+                        id="nroDocumentoDocente"
+                        required="true"
+                        value="#{sieduDocenteEventoController.identificacion}"/>
+                    <p:message
+                        for="nroDocumentoDocente"/>
+                </h:panelGroup>
+                <p:outputLabel
+                    for="lstaDocenteFecha"
+                    value="#{bundle['siedueventoescuela.docente.fecha']}"/>
+                <h:panelGroup>
+                    <p:calendar 
+                        id="lstaDocenteFecha" 
+                        pattern="#{bundle['pattern.default.date']}"
+                        value="#{sieduDocenteEventoController.selected.doceFechaTema}"            
+                        label="#{bundle['siedueventoescuela.docente.fecha']}"
+                        readonlyInput="true"
+                        required="true"
+                        mindate="#{sieduEventoEscuelaController.selected.eveeFechaini}"
+                        maxdate="#{sieduEventoEscuelaController.fechaMax}"
+                        >
+                    </p:calendar>
+                    <p:message
+                        for="lstaDocenteTema"/>
+                </h:panelGroup>
+                <p:outputLabel
+                    for="lstaDocenteTema"
+                    value="#{bundle['siedueventoescuela.docente.tema']}"/>
+                <h:panelGroup>
+                    <p:selectOneMenu
+                        id="lstaDocenteTema"
+                        required="true"
+                        value="#{sieduDocenteEventoController.temaId}"
+                        filter="true"
+                        filterMatchMode="contains"
+                        style="font-size: smaller">
+                        <p:ajax 
+                            process ="@this"
+                            update="lstDocenteSubtema"
+                            listener="#{sieduDocenteEventoController.findTemasByEventoTemaPapa(sieduDocenteEventoController.temaId)}"/>
+                        <f:selectItem 
+                            noSelectionOption="true"/>
+                        <f:selectItems 
+                            value="#{sieduDocenteEventoController.temas}" 
+                            var="tema" 
+                            itemLabel="#{tema.temaDescri}" 
+                            itemValue="#{tema.id}"/>
+                    </p:selectOneMenu>
+                    <p:message
+                        for="lstaDocenteTema"/>
+                </h:panelGroup>
+                <p:outputLabel
+                    for="lstDocenteSubtema"
+                    value="#{bundle['siedueventoescuela.docente.subtema']}"/>
+                <h:panelGroup>        
+                    <p:selectOneMenu
+                        id="lstDocenteSubtema"
+                        value="#{sieduDocenteEventoController.subtemaId}"
+                        required="true"            
+                        filter="true"
+                        filterMatchMode="contains"
+                        style="font-size: smaller">
+                        <f:selectItem 
+                            noSelectionOption="true"/>
+                        <f:selectItems 
+                            value="#{sieduDocenteEventoController.findTemasByEventoTemaPapa(sieduDocenteEventoController.temaId)}"
+                            var="subtema" 
+                            itemLabel="#{subtema.temaDescri}" 
+                            itemValue="#{subtema.id}"/>
+                    </p:selectOneMenu>
+                    <p:message
+                        for="lstDocenteSubtema"/>
+                </h:panelGroup>
+            </p:panelGrid>
+            <f:facet
+                name="footer">
+                <p:panelGrid
+                    columns="1"
+                    layout="grid" 
+                    columnClasses="ui-grid-col-2" 
+                    styleClass="ui-panelgrid-blank">                            
+                    <p:commandButton 
+                        id="btnCreateDocente"
+                        value="#{bundle['commons.btn.add']}"
+                        title="#{bundle['commons.btn.add']}"
+                        icon="ui-icon-plus"
+                        actionListener="#{sieduDocenteEventoController.onSave()}"
+                        update=":tvDatos:frmDocente :tvDatos:form"  
+                        process="@form"/>            
+                </p:panelGrid>
+            </f:facet>
+        </p:panel>
+    </h:form>
+    <p:separator/>
+    <h:form id="form">
+        <p:growl id="msgs" showDetail="true"/>
+        <p:dataTable 
+            id="dtListDocente"
+            value="#{sieduDocenteEventoController.list}" 
+            var="record"
+            selection="#{sieduDocenteEventoController.selected}"            
+            style="margin-bottom:20px; font-size: smaller"
+            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+            rowsPerPageTemplate="10,50,100"
+            paginator="true"
+            rowIndexVar="index">
+            <f:facet name="header">
+                Docentes
+            </f:facet>
+            <p:column 
+                headerText="Nro."
+                style="text-align: center; width: 4%">
+                <h:outputText 
+                    value="#{index + 1}"/>
+            </p:column>
+            <p:column 
+                headerText="#{bundle['siedueventoescuela.docente.identificacion']}"
+                style="text-align: center; width: 9%">
+                <h:outputText 
+                    value="#{record.docePers.persNroid}"/>
+            </p:column>
+            <p:column 
+                headerText="#{bundle['siedueventoescuela.docente.nombre']}"
+                sortBy="#{record.docePers.persNombres} #{record.docePers.persApellidos}"
+                style="width: 22%">
+                <h:outputText 
+                    value="#{record.docePers.persNombres} #{record.docePers.persApellidos}"/>
+            </p:column>
+            <p:column  
+                headerText="#{bundle['siedueventoescuela.docente.tema']}"
+                style="text-align: justify"> 
+                <h:outputText 
+                    value="#{record.doceTema.temaTemaPadre.temaDescri}"/> 
+            </p:column>      
+            <p:column 
+                headerText="#{bundle['siedueventoescuela.docente.subtema']}"
+                style="text-align: justify">              
+                <h:outputText 
+                    value="#{record.doceTema.temaDescri}"/> 
+            </p:column>          
+            <p:column 
+                headerText="#{bundle['siedueventoescuela.docente.hora']}"
+                style="text-align: center; width: 5%">              
+                <h:outputText 
+                    value="#{record.doceTema.temaHoras}"/> 
+            </p:column>
+            <p:column 
+                headerText="#{bundle['siedueventoescuela.docente.fecha.tbl']}"
+                style="text-align: center; width: 8%">              
+                <h:outputText 
+                    value="#{record.doceFechaTema}">
+                    <f:convertDateTime 
+                        type="date" 
+                        pattern="#{bundle['pattern.default.date']}"/>
+                </h:outputText>
+            </p:column>
+            <p:column 
+                headerText="#{bundle['commons.lbl.delete']}"
+                rendered="#{sieduEventoEscuelaController.renderButtom}"
+                style="text-align: center; width: 6%">
+                <h:panelGroup>
+                    <p:commandLink 
+                        value="#{bundle['commons.btn.remove']}" 
+                        title="#{bundle['commons.btn.remove']}" 
+                        action="#{sieduDocenteEventoController.onDelete()}"
+                        immediate="true"
+                        update="tvDatos:form:dtListDocente">
+                        <f:setPropertyActionListener 
+                            value="#{record}" 
+                            target="#{sieduDocenteEventoController.selected}"/>
+                        <p:confirm 
+                            header="#{bundle['commons.cfmdlg.header']}" 
+                            message="#{bundle['commons.cfmdlg.remove.message']}" 
+                            icon="ui-icon-alert" />
+                    </p:commandLink>
+                </h:panelGroup>
+            </p:column>
+        </p:dataTable>
+    </h:form>
+</ui:composition>

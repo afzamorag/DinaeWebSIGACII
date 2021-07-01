@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+  <h:body>
+    <div class="body">
+      <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+        <ui:define name="content">
+          <div class="fixed-menu">                        
+            <div class="right-col">
+              <h2 style="font: verdana;">
+                #{properties.value('cu_pr_09_lbl_subtitulo_detalle_proyectos_de_investigacion')}
+              </h2>
+            </div>
+          </div>
+
+          <br/>
+          <br/>
+          <div width="100%">
+            <h:form id="idcu_pr_09_form_consultar_trabajos_y_proyectos" >
+              <br />
+              <h:panelGroup id="idcu_pr_09_pgroup_detalle_trabajos_de_grado_y_proyectos">
+                <h:panelGrid id="idcu_pr_09_pgrid_detalle_trabajos_de_grado_y_proyectos" columns="2" style="width: 100%" 
+                             rowClasses="filaParPanelGridPar,filaParPanelGridImPar">
+
+                  <h:outputLabel value="#{properties.value('cu_pr_9_lbl_subtitulo_titulo_pro')}" styleClass="gris negrilla"/>
+                  <p:inputTextarea value="#{cuPr09ConsultarProyectosDeInvestigacion.propuestaSeleccionada.tituloPropuesto}"  
+                                   rows="3" autoResize="false" cols="100" readonly="true"            
+                                   styleClass="textareaMaximo">
+                  </p:inputTextarea>
+
+                  <h:outputLabel value="#{properties.value('cu_pr_9_lbl_subtitulo_resumen_pro')}" styleClass="gris negrilla"/>
+                  <p:inputTextarea value="#{cuPr09ConsultarProyectosDeInvestigacion.reseniaInvetigacion.resumenPalabras}"  
+                                   rows="3" autoResize="false" cols="100" readonly="true"
+                                   styleClass="textareaMaximo">
+                  </p:inputTextarea>    
+
+                  <h:outputLabel value="#{properties.value('cu_pr_9_lbl_subtitulo_clave_pro')}" styleClass="gris negrilla"/>
+                  <p:inputTextarea value="#{cuPr09ConsultarProyectosDeInvestigacion.reseniaInvetigacion.palabrasClave}"  
+                                   rows="3" autoResize="false" cols="100" readonly="true"
+                                   styleClass="textareaMaximo">
+                  </p:inputTextarea>
+
+                  <h:outputLabel value="#{properties.value('cu_pr_9_lbl_subtitulo_abstract_pro')}" styleClass="gris negrilla"/>
+                  <p:inputTextarea value="#{cuPr09ConsultarProyectosDeInvestigacion.reseniaInvetigacion.abstract1}"  
+                                   rows="3" autoResize="false" cols="100" readonly="true"
+                                   styleClass="textareaMaximo">
+                  </p:inputTextarea>
+
+                  <h:outputLabel value="#{properties.value('cu_pr_9_lbl_subtitulo_keywords_pro')}" styleClass="gris negrilla"/>
+                  <p:inputTextarea value="#{cuPr09ConsultarProyectosDeInvestigacion.reseniaInvetigacion.keywords}"  
+                                   rows="3" autoResize="false" cols="100"  readonly="true"
+                                   styleClass="textareaMaximo">
+                  </p:inputTextarea>
+
+                  <h:outputLabel value="#{properties.value('cu_pr_9_lbl_subtitulo_conclusion_pro')}" styleClass="gris negrilla"/>
+                  <p:inputTextarea value="#{cuPr09ConsultarProyectosDeInvestigacion.reseniaInvetigacion.conclusion}"  
+                                   rows="3" autoResize="false" cols="100"  readonly="true"
+                                   styleClass="textareaMaximo">
+                  </p:inputTextarea>
+
+                  <h:outputLabel value="#{properties.value('cu_pr_9_lbl_subtitulo_recomendaciones_pro')}" styleClass="gris negrilla"/>
+                  <p:inputTextarea value="#{cuPr09ConsultarProyectosDeInvestigacion.reseniaInvetigacion.recomendaciones}"  
+                                   rows="3" autoResize="false" cols="100"  readonly="true"
+                                   styleClass="textareaMaximo">
+                  </p:inputTextarea>
+
+                  <h:outputLabel value="#{properties.value('cu_pr_9_lbl_subtitulo_fechaInicio_pro')}" styleClass="gris negrilla"/>
+                  <h:outputLabel value="#{cuPr09ConsultarProyectosDeInvestigacion.propuestaSeleccionada.fechaEstimadaInicio}" styleClass="gris">
+                    <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+                  </h:outputLabel>
+
+                  <h:outputLabel value="#{properties.value('cu_pr_9_lbl_subtitulo_fechaFin_pro')}" styleClass="gris negrilla"/>
+                  <h:outputLabel value="#{cuPr09ConsultarProyectosDeInvestigacion.propuestaSeleccionada.fechaEstimadaFinalizacion}" styleClass="gris">
+                    <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+                  </h:outputLabel>
+
+
+                </h:panelGrid>
+                <br />
+                <p:commandLink ajax="false" immediate="true" value="Generar formato">
+                  <p:fileDownload value="#{cuPr09ConsultarProyectosDeInvestigacion.generarResumen}" />
+                </p:commandLink>
+              </h:panelGroup>
+              <br/>                          
+              <div class="centrado">
+                <p:commandButton value="#{properties.value('cu_pr_09_lbl_btn_regresar')}" 
+                                 action="#{cuPr09ConsultarProyectosDeInvestigacion.regresar}" 
+                                 update="@form"/>
+
+
+              </div>       
+
+
+
+            </h:form>
+          </div>
+        </ui:define>
+      </ui:composition>
+    </div>
+  </h:body>
+</html>

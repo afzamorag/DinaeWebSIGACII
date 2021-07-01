@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+  <h:form id="formOtrasInvestigaciones" >
+    <br/>
+    <p:dataTable id="tablaOtrasInvestigaciones" value="#{cuIv02ConsultarInvestigadores.listaOtrasInvestigaciones}"
+                 var="investigacion" rowIndexVar="idFila" 
+                 paginator="true" paginatorPosition="bottom"
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}"
+                 resizableColumns="true" rowKey="#{investigacion.idInvestigacionDesarrollada}">
+
+      <p:column width="30" headerText="No." >
+        <h:outputLabel value="#{idFila + 1}" styleClass="gris"/>
+      </p:column>
+      <p:column headerText="Título de la investigación" >
+        <h:outputText value="#{investigacion.tituloInvestigacion}" styleClass="gris"/>
+      </p:column>
+      <p:column headerText="Resumen" >
+        <h:outputText value="#{investigacion.resumen}" styleClass="gris"/>
+      </p:column>
+      <p:column headerText="Institución" >
+        <h:outputText value="#{investigacion.institucion}" styleClass="gris"/>
+      </p:column>
+      <p:column headerText="Fecha de inicio" >
+        <h:outputText value="#{investigacion.fechaInicio}" styleClass="gris">
+          <f:convertDateTime pattern="dd/MM/yyyy" type="date"/>
+        </h:outputText>
+      </p:column>
+      <p:column headerText="Fecha de fin" >
+        <h:outputText value="#{investigacion.fechaFin}" styleClass="gris">
+          <f:convertDateTime pattern="dd/MM/yyyy" type="date"/>
+        </h:outputText>
+      </p:column>
+    </p:dataTable>
+
+
+  </h:form>
+</html>
+

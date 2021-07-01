@@ -1,0 +1,216 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/plantillaPrincipal.xhtml">
+
+    <ui:define name="content" >
+        <p:panel 
+            id="pageContainer" 
+            styleClass="ui-fluid" >
+            <h:form 
+                id="frmList" 
+                prependId="false">
+                <h:outputText 
+                    value="#{bundle['evaluacion.parametro.titulo']}"/>
+                <p:separator />
+                <p:panel>
+                    <p:panelGrid 
+                        id="pgFiltro" 
+                        layout="grid" 
+                        columns="2"
+                        columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+                        styleClass="ui-panelgrid-blank">
+                        <!-- tipo parametro -->
+                        <p:outputLabel 
+                            for="somTipo"
+                            value="#{bundle['evaluacion.parametro.tipo']}" />
+                        <h:panelGroup>
+                            <p:selectOneMenu 
+                                id="somTipo"
+                                value="#{parametroEvaluacionController.tipo}" 
+                                required="true" 
+                                converter="dominioConverter">
+                                <p:ajax 
+                                    process="@this" />
+                                <f:selectItem 
+                                    value="#{appController.noSelection}" />
+                                <f:selectItems
+                                    value="#{parametroEvaluacionController.tiposParametros}"
+                                    var="tipo" 
+                                    itemLabel="#{tipo.nombre}" 
+                                    itemValue="#{tipo}" />
+                            </p:selectOneMenu>
+                            <p:message 
+                                for="somTipo" />
+                        </h:panelGroup>
+                    </p:panelGrid>
+                    <f:facet 
+                        name="footer">
+                        <p:panelGrid 
+                            columns="2" 
+                            layout="grid"
+                            columnClasses="ui-grid-col-2,ui-grid-col-2"
+                            styleClass="ui-panelgrid-blank">
+                            <p:commandButton 
+                                id="btnAdd" 
+                                value="#{bundle['commons.btn.add']}"
+                                rendered="#{parametroEvaluacionController.validaRol}"
+                                title="#{bundle['commons.btn.add']}" 
+                                icon="ui-icon-document"
+                                action="#{parametroEvaluacionController.agregarParametro()}"  
+                                oncomplete="if (args &amp;&amp; !args.validationFailed){PF('dlgAddPrm').show();}" 
+                                update="pgFiltro, formPopup"/>
+                            <p:commandButton 
+                                id="btnSearch"
+                                value="#{bundle['commons.btn.find']}"
+                                title="#{bundle['commons.btn.find']}" icon="ui-icon-search"
+                                actionListener="#{parametroEvaluacionController.buscarParametrosEvaluacion()}"
+                                process="@this pgFiltro" update="pgFiltro, dtList" />
+                        </p:panelGrid>
+                    </f:facet>
+                </p:panel>
+                <p:dataTable 
+                    id="dtList"
+                    value="#{parametroEvaluacionController.parametrosEvaluacion}"
+                    var="record" 
+                    paginator="true" 
+                    rows="10"
+                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                    rowsPerPageTemplate="10,50,100" 
+                    reflow="true">
+                    <p:column 
+                        headerText="#{bundle['commons.lbl.opciones']}"
+                        style="text-align: center">
+                        <h:panelGroup>
+                            <p:commandLink 
+                                value="#{bundle['commons.btn.remove']}"
+                                title="#{bundle['commons.btn.remove']}"
+                                action="#{parametroEvaluacionController.eliminarParametroEvaluacion()}"
+                                update="dtList">
+                                <f:setPropertyActionListener 
+                                    value="#{record}"
+                                    target="#{parametroEvaluacionController.selected}" />
+                                <p:confirm 
+                                    header="#{bundle['commons.cfmdlg.header']}"
+                                    message="#{bundle['commons.cfmdlg.remove.message']}"
+                                    icon="ui-icon-alert" />
+                            </p:commandLink>
+                        </h:panelGroup>
+                    </p:column>
+                    <p:column 
+                        headerText="#{bundle['evaluacion.parametro.tipo']}"
+                        sortBy="#{record.tipo.nombre}" 
+                        filterBy="#{record.tipo.nombre}" 
+                        filterMatchMode="contains">
+                        <h:outputText 
+                            value="#{record.tipo.nombre}" />
+                    </p:column>
+                    <p:column
+                        headerText="#{bundle['evaluacion.parametro.descripcion']}"
+                        sortBy="#{record.descripcion}" 
+                        filterBy="#{record.descripcion}" 
+                        filterMatchMode="contains">
+                        <h:outputText 
+                            value="#{record.descripcion}" />
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </p:panel>
+        <p:dialog 
+            id="formPopup"
+            minWidth="800" 
+            fitViewport="true" 
+            responsive="true" 
+            width="800"
+            widgetVar="dlgAddPrm"
+            resizable="false" 
+            modal="true" 
+            showHeader="true">
+            <p:panel 
+                id="dialogContainer" 
+                styleClass="ui-fluid" >
+                <h:form 
+                    id="frmAdd" 
+                    prependId="false">
+                    <div 
+                        class="message">
+                        <p:inputText 
+                            id="messagesDialog" 
+                            type="hidden">                    
+                        </p:inputText>
+                        <p:message 
+                            for="messagesDialog" 
+                            display="text"
+                            showDetail="true" 
+                            showSummary="false"/>
+                    </div>
+                    <h:outputText 
+                        value="#{bundle['evaluacion.parametro.add.titulo']}"/>
+                    <p:separator />
+                    <p:panel >
+                        <p:panelGrid 
+                            id="pgFieldset" 
+                            layout="grid" 
+                            columns="2"
+                            columnClasses="ui-grid-col-2,ui-grid-col-4"
+                            styleClass="ui-panelgrid-blank">
+                            <!-- tipo parametro -->
+                            <p:outputLabel 
+                                for="somTipo2"
+                                value="#{bundle['evaluacion.parametro.tipo']}" />
+                            <h:panelGroup>
+                                <h:outputText 
+                                    id="somTipo2" 
+                                    value="#{parametroEvaluacionController.tipo.nombre}" />
+                                <p:message 
+                                    for="somTipo2" />
+                            </h:panelGroup>
+                            <!-- descripción -->
+                            <p:outputLabel 
+                                for="itDescripcion"
+                                value="#{bundle['evaluacion.parametro.descripcion']}" />
+                            <h:panelGroup>
+                                <p:inputText 
+                                    id="itDescripcion"
+                                    value="#{parametroEvaluacionController.selected.descripcion}"
+                                    required="true" 
+                                    size="30" />
+                                <p:message 
+                                    for="itDescripcion"  />
+                            </h:panelGroup>
+                        </p:panelGrid>
+                        <p:panelGrid 
+                            columns="2" 
+                            layout="grid"
+                            columnClasses="ui-grid-col-2,ui-grid-col-2"
+                            styleClass="ui-panelgrid-blank">
+                            <p:commandButton 
+                                id="btnAdd2"
+                                value="#{bundle['commons.btn.save']}" 
+                                update="frmAdd, frmList"
+                                title="#{bundle['commons.btn.save']}" 
+                                icon="ui-icon-disk"
+                                action="#{parametroEvaluacionController.guardarParametro()}" 
+                                oncomplete="if (args &amp;&amp; !args.validationFailed &amp;&amp; args.saved){PF('dlgAddPrm').hide();}" >
+                                <p:confirm 
+                                    header="#{bundle['commons.cfmdlg.header']}" 
+                                    message="#{bundle['commons.cfmdlg.save.message']}" 
+                                    icon="ui-icon-alert"  >
+                                </p:confirm>
+                            </p:commandButton>
+                            <p:commandButton 
+                                value="#{bundle['commons.btn.back']}"
+                                title="#{bundle['commons.btn.back']}" 
+                                icon="icon-reply-all"
+                                onclick="PF('dlgAddPrm').hide();" />
+                        </p:panelGrid>
+                    </p:panel>
+                </h:form>
+            </p:panel>
+        </p:dialog>
+    </ui:define>
+</ui:composition>

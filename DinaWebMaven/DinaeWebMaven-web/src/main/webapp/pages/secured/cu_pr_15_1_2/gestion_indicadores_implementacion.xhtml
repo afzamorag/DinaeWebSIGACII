@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"      
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+
+  <h:outputLabel value="#{properties.value('cu_pr_1_lbl_otros_indicadores')}" styleClass="green negrilla" />    
+  <br />
+  <h:panelGroup rendered="#{cuPr15_1_2_AvanceImplemenacionFaces.mostrarBtnAgregarIndicadorOtro}">
+
+    <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" id="pgformularioDetalleIndicador"
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaLabel_70_porciento">
+
+      <h:outputLabel value="#{cuPr15_1_2_AvanceImplemenacionFaces.indicadoresPlanTrabajoSeleccionado.indicadoresPlanTrabajo.nombreIndicador}" />
+
+      <h:panelGrid columns="1" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar"
+                   columnClasses="panelGridColumnaLabel_50_porciento,panelGridColumnaLabel_50_porciento">
+
+        <h:panelGrid columns="4">
+          <h:outputLabel value="#{cuPr15_1_2_AvanceImplemenacionFaces.indicadoresPlanTrabajoSeleccionado.indicadoresPlanTrabajo.nombreNumerador}" />
+          <p:spacer width="80" height="10" />
+          <h:outputLabel for="idcu_pr_7_lbl_valor_del_dato_denominador" value="#{properties.value('cu_pr_7_lbl_valor_del_dato')}" styleClass="gris negrilla" />
+          <p:inputText onkeypress="return soloNumerosInpuText(event);" 
+                       size="10" maxlength="12" required="true" id="idcu_pr_7_lbl_valor_del_dato_denominador"
+                       value="#{cuPr15_1_2_AvanceImplemenacionFaces.indicadoresPlanTrabajoSeleccionado.valorNumerador}" /> 
+        </h:panelGrid>
+
+        <p:separator styleClass="separadorBorder" /> 
+
+        <h:panelGrid columns="4">
+          <h:outputLabel value="#{cuPr15_1_2_AvanceImplemenacionFaces.indicadoresPlanTrabajoSeleccionado.indicadoresPlanTrabajo.nombreDenominador}" />
+          <p:spacer width="80" height="10" />
+          <h:outputLabel for="idcu_pr_7_lbl_valor_del_dato_numerador" value="#{properties.value('cu_pr_7_lbl_valor_del_dato')}" styleClass="gris negrilla" />
+          <p:inputText onkeypress="return soloNumerosInpuText(event);" 
+                       size="10" maxlength="12" required="true" id="idcu_pr_7_lbl_valor_del_dato_numerador"
+                       value="#{cuPr15_1_2_AvanceImplemenacionFaces.indicadoresPlanTrabajoSeleccionado.valorDenominador}" />  
+        </h:panelGrid>
+      </h:panelGrid>
+
+
+    </h:panelGrid>
+
+    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+    <div class="centrado">
+
+      <p:commandButton immediate="true" value="#{properties.value('cu_pr_7_lbl_btn_cancelar_indicador_in')}"                          
+                       action="#{cuPr15_1_2_AvanceImplemenacionFaces.cancelarIndicador}"
+                       update="@form" />
+
+      <p:commandButton value="#{properties.value('cu_pr_7_lbl_btn_guardar_indicador_in')}"                             
+                       action="#{cuPr15_1_2_AvanceImplemenacionFaces.guardarIndicador}"
+                       process="@this
+                       ,:form_informacion_general_implementacion:tabViewAvanceImplementacion:idcu_pr_7_lbl_valor_del_dato_denominador
+                       ,:form_informacion_general_implementacion:tabViewAvanceImplementacion:idcu_pr_7_lbl_valor_del_dato_numerador"
+                       update="@form" />
+
+    </div>
+  </h:panelGroup>
+  <br />
+  <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+               var="_indicador"  id="dtcargarListaIndicadoresProyectoOtros"
+               value="#{cuPr15_1_2_AvanceImplemenacionFaces.listaIndicadoresPlanTrabajoOtros}" 
+               paginatorPosition="bottom" styleClass="tabla" rowIndexVar="idFila"
+               rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+               resizableColumns="true"
+               disabledSelection="#{cuPr15_1_2_AvanceImplemenacionFaces.accesoSoloConsulta}"
+               selectionMode="single"
+               selection="#{cuPr15_1_2_AvanceImplemenacionFaces.indicadoresPlanTrabajoSeleccionado}" 
+               rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true"  >
+
+    <p:ajax event="rowSelect" listener="#{cuPr15_1_2_AvanceImplemenacionFaces.seleccionarIndicadorProyecto}" update="@form" />  
+    <p:ajax event="rowUnselect" listener="#{cuPr15_1_2_AvanceImplemenacionFaces.noSeleccionarIndicadorProyecto}" />  
+
+    <p:column width="3" headerText="#{properties.value('cu_pr_1_lbl_datatable_num')}"> 
+      #{idFila + 1}
+    </p:column>  
+
+    <p:column width="100" headerText="#{properties.value('cu_pr_1_lbl_datatable_nombre_del_indicador')}">  
+      #{_indicador.indicadoresPlanTrabajo.nombreIndicador}
+    </p:column>
+
+    <p:column width="200" headerText="#{properties.value('cu_pr_1_lbl_datatable_descripcion_del_indicador')}">  
+      <h:panelGroup>
+        #{_indicador.indicadoresPlanTrabajo.nombreNumerador} = #{_indicador.valorNumerador}
+        <p:separator styleClass="separadorBorder" /> 
+        #{_indicador.indicadoresPlanTrabajo.nombreDenominador} = #{_indicador.valorDenominador}
+      </h:panelGroup>
+    </p:column> 
+
+    <p:column width="40" headerText="#{properties.value('cu_pr_7_lbl_valor_datatable')}">  
+      #{_indicador.valorOperacionSinDecimalToString}%
+    </p:column>
+
+    <f:facet name="footer">  
+      #{cuPr15_1_2_AvanceImplemenacionFaces.listaIndicadoresPlanTrabajoOtros.numeroRegistro} #{properties.value('general_mensaje_footer_datatable_count')}
+    </f:facet>
+
+  </p:dataTable> 
+
+
+</html>

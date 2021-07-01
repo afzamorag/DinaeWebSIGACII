@@ -1,0 +1,187 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+  <h:form id="formEventosRelacionados">
+    <br />
+    <h:panelGrid id="panelgridEventosRelacionados" columns="2" style="width: 100%" 
+                 rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_column_titulo_evento')}" styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:panelGroup>
+        <p:inputTextarea value="#{presupuestoImplemetacionProyectoFaces.tituloEvento}"
+                         id="textAreaTituloEvento" styleClass="textareaMaximo"
+                         maxlength="256" counter="contadorTituloEvento"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         cols="100" rows="3" autoResize="false">
+          <f:validateLength minimum="0"  maximum="256" />                    
+        </p:inputTextarea>
+        <h:outputText id="contadorTituloEvento" styleClass="gris" />
+      </h:panelGroup>
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_column_objetivo_evento')}" styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:panelGroup>
+        <p:inputTextarea value="#{presupuestoImplemetacionProyectoFaces.objetivoEvento}"
+                         id="textAreaObjetivo" styleClass="textareaMaximo"
+                         maxlength="512" counter="contadorObjetivoEvento"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         cols="100" rows="3" autoResize="false">
+          <f:validateLength minimum="0"  maximum="512" />
+        </p:inputTextarea>
+        <h:outputText id="contadorObjetivoEvento" styleClass="gris" />
+      </h:panelGroup>
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_departamento_evento')}" styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:selectOneMenu value="#{presupuestoImplemetacionProyectoFaces.departamentoEvento}" id="selectDeptoEvento" styleClass="gris">  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{presupuestoImplemetacionProyectoFaces.departamentosList}" var="_dept" itemValue="#{_dept.idDepartamento}" itemLabel="#{_dept.descDepartamento}"/>
+        <p:ajax event="change" update="@this selectCiudadesEvento" 
+                listener="#{presupuestoImplemetacionProyectoFaces.cargarCiudadesDepartamento}"/>
+      </h:selectOneMenu>
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_column_ciudad_evento')}" styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:selectOneMenu value="#{presupuestoImplemetacionProyectoFaces.ciudadEvento}" id="selectCiudadesEvento" styleClass="gris">  
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{presupuestoImplemetacionProyectoFaces.listaCiudadesDepartamento}" var="_mpio" itemValue="#{_mpio.codMunicipio}" itemLabel="#{_mpio.descMunicipio}" />
+      </h:selectOneMenu>
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_fuente_evento')}" styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:selectOneMenu value="#{presupuestoImplemetacionProyectoFaces.fuenteEvento}" id="selectFuenteEvento" styleClass="gris" >
+        <f:selectItem itemLabel="-- Seleccione --" itemValue="-1" />
+        <f:selectItems value="#{presupuestoImplemetacionProyectoFaces.listaFuentesProyectoItem}"/>
+      </h:selectOneMenu>
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_costo_evento')}" styleClass="gris negrilla"/>
+      </h:panelGrid>
+      <h:inputText value="#{presupuestoImplemetacionProyectoFaces.costoEvento}" onkeypress="return soloNumerosInpuText(event);"
+                   maxlength="18" id="inputCostoEvento" >
+        <p:ajax event="blur" update="inputCostoEvento" />
+        <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" maxFractionDigits="2" />
+      </h:inputText>
+
+      <h:panelGrid columns="2">
+        <h:outputLabel value="*" style="color: red; font-weight: bold" />
+        <h:outputLabel value="#{properties.value('cu_pr_5_lbl_tipos_gasto_evento')}" styleClass="gris negrilla" style="width: 25%;"/>
+      </h:panelGrid>
+      <p:selectManyCheckbox  value="#{presupuestoImplemetacionProyectoFaces.tipoGastoEvento}" >
+        <f:selectItems value="#{presupuestoImplemetacionProyectoFaces.listaTipoGastoEvento}"/>
+      </p:selectManyCheckbox >
+    </h:panelGrid>
+    <br/>
+    <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+    <div class="centrado">
+      <p:commandButton value="#{properties.value('cu_pr_24_lbl_btn_agregar_comentario_retroalimentacion')}"
+                       actionListener="#{presupuestoImplemetacionProyectoFaces.guardarTabEventos}"
+                       rendered="#{!presupuestoImplemetacionProyectoFaces.esModificaEvento}"
+                        process="@form"
+                       update="@form"/>
+
+      <p:commandButton value="#{properties.value('cu_iv_3_lbl_datatable_btn_modificar')}"
+                       actionListener="#{presupuestoImplemetacionProyectoFaces.guardarTabEventos}"
+                       rendered="#{presupuestoImplemetacionProyectoFaces.esModificaEvento}"
+                        process="@form"
+                       update="@form"/>
+
+      <p:commandButton value="#{properties.value('cu_tr_01_lbl_cancelar')}" 
+                       actionListener="#{presupuestoImplemetacionProyectoFaces.cancelarModificarEvento}"
+                       rendered="#{presupuestoImplemetacionProyectoFaces.esModificaEvento}"
+                       process="@this"
+                       update="@form"/>  
+
+    </div>
+    <br/>
+    <div class="centrado">
+      <p:dataTable var="evento" value="#{presupuestoImplemetacionProyectoFaces.listaEventosProyectoModel}"
+                   rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" 
+                   id="tablaEventoProyectos" selectionMode="single"
+                   emptyMessage="#{properties.value('general_mensaje_no_records_found')}"
+                   selection="#{presupuestoImplemetacionProyectoFaces.eventoProyectoDto}"
+                   style="width: 100%;" paginator="true"
+                   resizableColumns="true" rowIndexVar="idFila"
+                   paginatorPosition="bottom"
+                   rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}">
+        <p:ajax event="rowSelect" listener="#{presupuestoImplemetacionProyectoFaces.cargarDatosEventoProyecto}"   
+                update="@form"/>  
+        <p:ajax event="rowUnselect" listener="#{presupuestoImplemetacionProyectoFaces.noSeleccionEventoProyecto}" 
+                update="@form:tablaEventoProyectos"/>  
+        <p:column headerText="#{properties.value('cu_pr_13_lbl_column_numero')}" width="25" style="color: white; font-size: 13px">
+          <h:outputText value="#{idFila + 1}" styleClass="gris" style="font-size: 13px"/>
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_column_titulo_evento')}" style="color: white; font-size: 13px">
+          <h:outputText value="#{evento.tituloEvento}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_column_objetivo_evento')}" style="color: white; font-size: 13px">
+          <h:outputText value="#{evento.objetivoEvento}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_column_ciudad_evento')}" width="100" style="color: white; font-size: 13px">
+          <h:outputText value="#{evento.nombreCiudad}" styleClass="gris" style="font-size: 13px"/>
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_tipos_gasto_evento')}" width="90" style="color: white; font-size: 13px">
+          <h:outputText value="#{evento.tipoGastoEvento}" styleClass="alineadoIzquierda gris" style="font-size: 13px"/>
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_column_costo_evento')}" width="75" style="color: white; font-size: 13px">
+          <h:outputText value="#{evento.costo}" styleClass="alineadoDerecha gris" style="font-size: 13px">                  
+            <f:convertNumber pattern="#{properties.value('general_formato_valor_cifra_sin_decimal')}" />
+          </h:outputText>           
+        </p:column>
+        <p:column headerText="#{properties.value('cu_pr_5_lbl_column_fuente_financiera')}" width="75" style="color: white; font-size: 13px">
+          <h:outputText value="#{evento.nombreFuenteProyecto}" styleClass="gris" style="font-size: 13px"/>
+        </p:column>
+        <p:column width="80" headerText="#{properties.value('cu_pr_19_lbl_tabla_acciones')}" style="color: white; font-size: 13px">
+
+          <div class="centrado">
+            <p:commandLink value="#{properties.value('cu_tr_01_lbl_btn_eliminar')}" 
+                           immediate="true"
+                           oncomplete="PF('varConfirmEliminarEvento').show()"
+                           style="font-size: 13px">  
+              <f:setPropertyActionListener value="#{evento}" target="#{presupuestoImplemetacionProyectoFaces.eventoProyectoDto}" />  
+            </p:commandLink>
+          </div>
+
+        </p:column>
+        <f:facet name="footer">  
+          #{fn:length( presupuestoImplemetacionProyectoFaces.listaEventosProyectoDto )} #{properties.value('general_mensaje_footer_datatable_count')}
+        </f:facet>
+      </p:dataTable>
+    </div>
+    <p:confirmDialog widgetVar="varConfirmEliminarEvento" header="#{properties.value('cu_tr_01_lbl_titulo_confirmacion_titulo')}" 
+                     message="#{properties.value('cu_pr_5_lbl_titulo_confirmacion_mensaje_eliminar_evento')}" > 
+
+      <h:form id="idFormEliminarEquipo">
+
+        <p:outputPanel id="pgroupdialogconfirmDialogvarConfirmEliminarEvento">
+          <div class="centrado">
+            <p:commandButton actionListener="#{presupuestoImplemetacionProyectoFaces.eliminarEventoProyecto}" 
+                             value="#{properties.value('cu_tr_01_lbl_btn_confirma_si')}" immediate="true"
+                             oncomplete="varConfirmEliminarEvento.hide();"
+                             update=":tabView:formEventosRelacionados:tablaEventoProyectos" />  
+            <p:commandButton value="#{properties.value('cu_tr_01_lbl_btn_confirma_no')}" 
+                             onclick="varConfirmEliminarEvento.hide();" type="button" />       
+          </div>
+        </p:outputPanel>
+
+      </h:form>
+    </p:confirmDialog>
+  </h:form>
+</html>
+

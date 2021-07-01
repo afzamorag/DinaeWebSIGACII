@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jdbc-data-source xmlns="http://xmlns.oracle.com/weblogic/jdbc-data-source">
+  <name>final_test2</name>
+  <jdbc-driver-params>
+    <url>jdbc:oracle:thin:@localhost:1521:XE</url>
+    <driver-name>oracle.jdbc.OracleDriver</driver-name>
+    <properties>
+      <property>
+        <name>user</name>
+        <value>dinae1_2iteracion_final_test2</value>
+      </property>
+      <property>
+        <name>password</name>
+        <value/>
+      </property>
+    </properties>
+  </jdbc-driver-params>
+  <jdbc-data-source-params>
+    <jndi-name>final_test2</jndi-name>
+  </jdbc-data-source-params>
+</jdbc-data-source>

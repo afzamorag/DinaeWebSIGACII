@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+  <h:form id="formEvaluacionTrabajoDeGrado" >
+    <br />
+    <h:panelGroup id="id_cu_tr_01_panel_evaluacion_trabajo_de_grado">
+
+      <br/>   
+
+      <h:panelGrid columns="2">
+
+        <h:outputLabel for="idFechaSustentacionTrabajoDeGrado" value="#{properties.value('cu_tr_01_lbl_fecha_sustentacion_trabajo_de_grado')}" 
+                       styleClass="gris negrilla" />
+        <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es"                         
+                    yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                    navigator="true" showOn="button" styleClass="gris" value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.fechaSustentacionTrabajoDeGrado}" 
+                    id="idFechaSustentacionTrabajoDeGrado" required="true"
+                    disabled="#{cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura or cuTr01IngresarModificarTrabajoDeGradoFaces.modoInvestigadorPrincipal}">                
+        </p:calendar>
+
+        <h:outputLabel for="idNotaDeTrabajoDeGrado" value="#{properties.value('cu_tr_01_lbl_nota_de_trabajo')}" styleClass="gris negrilla"/>            
+        <p:inputText id="idNotaDeTrabajoDeGrado" 
+                     required="true"                         
+                     value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.notaTrabajoDeGrado}"
+                     title="Nota separada por , y no por ."                         
+                     disabled="#{cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura or cuTr01IngresarModificarTrabajoDeGradoFaces.modoInvestigadorPrincipal}">
+          <f:convertNumber maxIntegerDigits="2" minIntegerDigits="1" minFractionDigits="2" maxFractionDigits="2"/>
+
+          <p:ajax event="blur" 
+                  listener="#{cuTr01IngresarModificarTrabajoDeGradoFaces.calcularNotaFinalTrabajoDeGrado}" 
+                  update="idNotaFinalTrabajoDeGrado,idNotaDeTrabajoDeGrado" />
+        </p:inputText>
+
+        <h:outputLabel for="idNotaSustentacionTrabajoDeGrado" value="#{properties.value('cu_tr_01_lbl_nota_sustentacion_de_trabajo')}" styleClass="gris negrilla"/>            
+        <p:inputText id="idNotaSustentacionTrabajoDeGrado" 
+                     required="true"                         
+                     value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.notaSustentacionTrabajoDeGrado}"
+                     title="Nota separada por , y no por ."                         
+                     disabled="#{cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura or cuTr01IngresarModificarTrabajoDeGradoFaces.modoInvestigadorPrincipal}">
+          <f:convertNumber maxIntegerDigits="2" minIntegerDigits="1" minFractionDigits="2" maxFractionDigits="2"/>
+
+          <p:ajax event="blur" 
+                  listener="#{cuTr01IngresarModificarTrabajoDeGradoFaces.calcularNotaFinalTrabajoDeGrado}" 
+                  update="idNotaFinalTrabajoDeGrado,idNotaSustentacionTrabajoDeGrado" />
+        </p:inputText>
+
+        <h:outputLabel for="idNotaFinalTrabajoDeGrado" value="#{properties.value('cu_tr_01_lbl_nota_final_de_trabajo')}" styleClass="gris negrilla"/>            
+        <p:inputText id="idNotaFinalTrabajoDeGrado" 
+                     readonly="true"
+                     value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.notaFinalTrabajoDeGrado}">
+          <f:convertNumber maxIntegerDigits="2" minIntegerDigits="1" minFractionDigits="2" maxFractionDigits="2"/>
+        </p:inputText>
+
+      </h:panelGrid>
+      <br/>
+      <br/>
+      <h:outputLabel value="#{properties.value('cu_tr_01_lbl_evaluadores')}" 
+                     styleClass="gris negrilla" />
+      <br/>
+      <br/>
+
+      <h:panelGrid columns="4">
+
+        <h:outputLabel for="idcu_tr_01_numero_identificacion_evaluador" value="#{properties.value('cu_tr_01_lbl_sub_titulo_numero_identificacion')}" styleClass="gris negrilla"/>
+
+        <p:inputText id="idcu_tr_01_numero_identificacion_evaluador" 
+                     required="true" 
+                     value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.identificacionFuncionarioEvaluador}"
+                     disabled="#{cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura or cuTr01IngresarModificarTrabajoDeGradoFaces.modoInvestigadorPrincipal}">                
+        </p:inputText>
+
+        <p:commandButton id="idcu_tr_01_btn_buscar_funcionario_evaluador" 
+                         value="#{properties.value('cu_tr_01_lbl_boton_buscar')}"
+                         actionListener="#{cuTr01IngresarModificarTrabajoDeGradoFaces.obtenerDatosFuncionarioEvaluador}" 
+                         update="idcu_tr_01_funcionario_evaluador_consultado"
+                         disabled="#{cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura or cuTr01IngresarModificarTrabajoDeGradoFaces.modoInvestigadorPrincipal}"
+                         process="@this,idcu_tr_01_numero_identificacion_evaluador,idcu_tr_01_pg_ciuad_evaluador">
+        </p:commandButton>
+
+        <h:panelGroup id="idcu_tr_01_pg_ciuad_evaluador">
+          <p:outputLabel for="idcu_tr_01_lbl_de_ciudad_evaluador" 
+                         value="#{properties.value('cu_tr_01_lbl_de_ciudad')}" 
+                         styleClass="gris negrilla"
+                         rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.vistaFuncionarioEvaluador != null}"/>
+
+          <p:outputLabel id="idcu_tr_01_lbl_de_ciudad_evaluador" 
+                         value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.ciudadFuncionarioEvaluador}"
+                         rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.vistaFuncionarioEvaluador != null}"/>                 
+        </h:panelGroup>
+
+
+
+      </h:panelGrid>
+
+
+      <h:panelGroup id="idcu_tr_01_funcionario_evaluador_consultado">
+        <h:panelGrid columns="4" style="width: 100%" 
+                     rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                     rendered="#{cuTr01IngresarModificarTrabajoDeGradoFaces.vistaFuncionarioEvaluador != null}">
+
+          <h:outputLabel value="#{properties.value('cu_tr_0_lbl_sub_titulo_grado')}" styleClass="gris negrilla" />
+          <h:outputLabel value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.vistaFuncionarioEvaluador.grado}" styleClass="gris" />
+
+          <h:outputLabel value="#{properties.value('cu_tr_01_lbl_sub_titulo_nom_y_appellido')}" styleClass="gris negrilla"  />
+          <h:outputLabel value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.vistaFuncionarioEvaluador.nombreCompleto}" styleClass="gris" />
+
+          <h:outputLabel value="#{properties.value('cu_tr_01_lbl_sub_titulo_correo')}" styleClass="gris negrilla" />
+          <h:outputLabel value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.vistaFuncionarioEvaluador.correo}" styleClass="gris" />
+
+          <h:outputLabel value="#{properties.value('cu_tr_01_lbl_sub_titulo_cargo')}" styleClass="gris negrilla" />
+          <h:outputLabel value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.vistaFuncionarioEvaluador.cargo}" styleClass="gris" />
+
+        </h:panelGrid>
+
+        <br />
+        <br />
+        <div class="centrado">
+          <p:commandButton id="idcu_tr_01_boton_asociar_evaluador" value="#{properties.value('cu_tr_01_lbl_boton_asociar_evaluador')}"
+                           actionListener="#{cuTr01IngresarModificarTrabajoDeGradoFaces.asociarEvaluadorTrabajoDeGrado}"
+                           immediate="true"
+                           disabled="#{cuTr01IngresarModificarTrabajoDeGradoFaces.modoSoloLectura or cuTr01IngresarModificarTrabajoDeGradoFaces.modoInvestigadorPrincipal}"
+                           update="@form">
+          </p:commandButton>
+        </div>
+        <br />
+        <br />
+
+      </h:panelGroup>
+
+    </h:panelGroup>
+
+    <br />
+    <br />        
+    <p:dataTable id="id_cu_tr_01_data_table_evaluadores" var="_evaluadores"
+                 emptyMessage="#{properties.value('general_mensaje_no_records_found')}" 
+                 value="#{cuTr01IngresarModificarTrabajoDeGradoFaces.listaEvaluadoresTrabajoDeGrado}" 
+                 rowStyleClass="#{idFilaInves % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rowIndexVar="idFilaEval" paginatorPosition="bottom" 
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true">
+
+      <p:column headerText="#{properties.value('cu_tr_0_lbl_tabla_evaluadores_identificacion')}">  
+        <h:outputLabel value="#{_evaluadores.identificacion}" />  
+      </p:column> 
+      <p:column headerText="#{properties.value('cu_tr_0_lbl_tabla_evaluadores_grado')}">  
+        <h:outputLabel value="#{_evaluadores.grado}"  />  
+      </p:column>
+      <p:column headerText="#{properties.value('cu_tr_0_lbl_tabla_evaluadores_nombre_completo')}">  
+        <h:outputLabel value="#{_evaluadores.nombreCompleto}"  />  
+      </p:column>
+      <p:column headerText="#{properties.value('cu_tr_0_lbl_tabla_evaluadores_correo')}">  
+        <h:outputLabel value="#{_evaluadores.correo}"  />  
+      </p:column>
+      <p:column headerText="#{properties.value('cu_tr_0_lbl_tabla_evaluadores_telefono')}">  
+        <h:outputLabel value="#{_evaluadores.telefono}"  />  
+      </p:column>            
+
+      <f:facet name="footer">  
+        #{fn:length( cuTr01IngresarModificarTrabajoDeGradoFaces.listaEvaluadoresTrabajoDeGrado )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+    </p:dataTable>
+
+    <h:panelGroup id="idcu_tr_01_pgroup_include_accion_botones_abajo_evaluacion">
+      <ui:include src="include_accion_botones_abajo_trabajo_de_grado.xhtml" />
+    </h:panelGroup>
+
+  </h:form>
+
+
+</html>

@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <h:outputLabel value="#{properties.value('cu_ne_6_lbl_propuesta_necesidades_inves')}" styleClass="gris negrilla" /><br /><br />
+  <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+               columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+    <h:outputLabel value="#{properties.value('cu_ne_6_lbl_periodo')}" styleClass="gris negrilla" />
+    <h:outputLabel value="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.periodoSeleccionado.anio}" styleClass="gris" />        
+
+    <h:outputLabel value="#{properties.value('cu_ne_6_lbl_descripcion')}" styleClass="gris negrilla" />
+    <h:outputLabel styleClass="gris" value="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.periodoSeleccionado.descripcion}" /> 
+
+  </h:panelGrid> 
+
+  <br />
+  <h:outputLabel value="#{properties.value('cu_ne_6_lbl_unidad_policial')}" styleClass="gris negrilla" />
+  <h:selectOneMenu styleClass="include_listado_propuesta" id="idListaSelectItemUnidadPoli" class="gris" 
+                   value="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.unidadPolicialSeleccionada}" >  
+    <f:selectItem itemLabel="--Todos--" itemValue="" />  
+    <f:selectItems value="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.listaItemLineaUnidadPolicial}" var="_item" />  
+    <p:ajax update="idDataTablePropuestas" listener="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.handleUnidadPolicialSeleccionadaChange}" />  
+  </h:selectOneMenu>
+
+  <br /><br />
+
+  <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}"  
+               id="idDataTablePropuestas" var="_propuesta" paginatorPosition="bottom" 
+               rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true" 
+               value="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.listaPropuestaNecesidadModel}" 
+               rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+               resizableColumns="true"
+               selectionMode="single" selection="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.propuestaNecesidadSeleccionada}" 
+               rowIndexVar="idFila">
+
+    <p:ajax event="rowSelect" update=":idForm_cu_ne_6_gestiona_evaluar_propuestas_necesidades" listener="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.enviarPropuestaNecesidadSeleccionada}"/>  
+    <p:ajax event="rowUnselect" listener="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.noSeleccionPropuestaNecesidadSeleccionada}" update=":idForm_cu_ne_6_gestiona_evaluar_propuestas_necesidades"/>  
+
+    <p:column width="30" headerText="#{properties.value('cu_ne_6_lbl_numero')}">  
+      #{idFila + 1}
+    </p:column>  
+
+    <p:column width="150" headerText="#{properties.value('cu_ne_6_lbl_unidad_policial')}" >  
+      #{_propuesta.unidadPolicialReponsableEjecutora.siglaFisica} - #{_propuesta.unidadPolicialReponsableEjecutora.nombre}
+    </p:column> 
+
+    <p:column width="100" headerText="#{properties.value('cu_ne_6_lbl_concecutivo')}">  
+      <h:outputLabel rendered="#{_propuesta.concecutivo != null and _propuesta.concecutivo > 0}" value="#{_propuesta.concecutivo} de #{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.periodoSeleccionado.cantidad}" />  
+    </p:column>  
+
+    <p:column headerText="#{properties.value('cu_ne_6_lbl_tema_propuesto')}">
+      #{_propuesta.tema}
+    </p:column>
+
+    <p:column width="90" headerText="#{properties.value('cu_ne_6_lbl_fecha_presenta')}">
+      <h:outputLabel value="#{_propuesta.fechaEnvio}">
+        <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" />
+      </h:outputLabel>    
+    </p:column>
+
+    <p:column width="100" headerText="#{properties.value('cu_ne_6_lbl_estado')}">
+      #{_propuesta.constantes.valor}
+    </p:column>
+
+    <f:facet name="footer">  
+      #{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.numeroRegistroDataTable} #{properties.value('general_mensaje_footer_datatable_count')}
+    </f:facet>
+  </p:dataTable>
+
+  <div style="float: right">
+    <p:commandLink value="#{properties.value('cu_ne_6_lbl_consultar_banco_nece')}" 
+                   action="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.consultarBancoNecesidad}" 
+                   update="idDataTablePropuestas" />
+  </div>
+
+  <br /><br />
+
+  <h:outputLabel value="#{properties.value('cu_ne_6_lbl_compromisos')}" styleClass="green negrilla" />  
+  <h:panelGrid columns="2" style="width: 100%" columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+    <p:commandLink value="#{properties.value('cu_ne_6_lbl_agregar_modificar_compromiso')}"
+                   action="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.agregarCompromiso}" />
+
+    <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}"  id="idDataTableCompromisos" var="_compromiso" 
+                 value="#{cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.listaCompromisoPeriodo}" 
+                 rowIndexVar="idFila" resizableColumns="true"
+                 styleClass="tabla" paginatorPosition="bottom" 
+                 rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                 rows="#{properties.value('general_mensaje_filas_datatable_pagina')}" paginator="true" >
+
+      <p:column width="30" headerText="#{properties.value('cu_pr_23_lbl_numero')}">  
+        <h:outputLabel value="#{idFila + 1}" />  
+      </p:column>  
+
+      <p:column headerText="#{properties.value('cu_pr_23_lbl_nombre_compromiso')}">  
+        <h:outputLabel value="#{_compromiso.nombreCompromisoNumeroIncrementa}" />  
+      </p:column> 
+
+      <p:column width="100" headerText="#{properties.value('cu_pr_23_lbl_fecha_limite')}">
+        <h:outputLabel value="#{_compromiso.fecha}">
+          <f:convertDateTime pattern="#{properties.value('general_formato_fecha')}" locale="es_CO" />
+        </h:outputLabel>    
+      </p:column>
+
+      <f:facet name="footer">  
+        #{fn:length( cuNe6EvaluarPropuestasNecesidadesInvestigacionFaces.listaCompromisoPeriodo )} #{properties.value('general_mensaje_footer_datatable_count')}
+      </f:facet>
+
+    </p:dataTable> 
+
+  </h:panelGrid>
+
+</html>

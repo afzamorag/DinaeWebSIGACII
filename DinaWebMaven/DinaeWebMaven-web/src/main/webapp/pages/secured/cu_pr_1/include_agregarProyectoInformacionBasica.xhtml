@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+  <h:form id="formInformacionBasicaDelProyecto" >
+
+    <br />
+    <h:outputLabel value="#{properties.value('cu_pr_1_lbl_porravo_ingrese_datos_info_basica')}" styleClass="green" />
+
+    <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                 columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento">
+
+      <h:outputLabel value="#{properties.value('cu_pr_1_lbl_info_basica_subtitulo_tema')}" styleClass="gris negrilla" 
+                     for="idcu_pr_1_lbl_info_basica_subtitulo_tema" />
+      <h:panelGrid columns="1" style="width: 100%">
+        <p:inputTextarea value="#{cuPr1ProyectoFaces.proyectoSeleccionado.tema}"  
+                         id="idcu_pr_1_lbl_info_basica_subtitulo_tema"
+                         maxlength="512" counter="contadorTemaProyecto" 
+                         required="true" autoResize="false" rows="3"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         styleClass="textareaMaximo">
+          <f:validateLength minimum="1"  maximum="512" />
+        </p:inputTextarea>
+        <h:outputText id="contadorTemaProyecto" styleClass="gris" />
+      </h:panelGrid>
+
+      <h:outputLabel for="idcu_pr_1_lbl_info_basica_subtitulo_titulo_propuesto" value="#{properties.value('cu_pr_1_lbl_info_basica_subtitulo_titulo_propuesto')}" styleClass="gris negrilla" />
+      <h:panelGrid columns="1" style="width: 100%">
+        <p:inputTextarea value="#{cuPr1ProyectoFaces.proyectoSeleccionado.tituloPropuesto}"  
+                         id="idcu_pr_1_lbl_info_basica_subtitulo_titulo_propuesto"
+                         maxlength="512" counter="contadorTituloProyecto" 
+                         required="true" autoResize="false" rows="3"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         styleClass="textareaMaximo">
+          <f:validateLength minimum="1"  maximum="512" />
+        </p:inputTextarea>
+        <h:outputText id="contadorTituloProyecto" styleClass="gris" />
+      </h:panelGrid>
+
+      <h:outputLabel for="idListaSelectItemArea" value="#{properties.value('cu_pr_1_lbl_info_basica_subtitulo_area')}:"   styleClass="gris negrilla" />
+      <h:selectOneMenu styleClass="gris" id="idListaSelectItemArea" required="true" value="#{cuPr1ProyectoFaces.areaCienciaTecnologiaSeleccionada}" >  
+        <f:selectItem itemLabel="--Select--" itemValue="" />  
+        <f:selectItems value="#{cuPr1ProyectoFaces.listaAreaCienciaTecnologiaItem}" var="_item" /> 
+        <p:ajax update="listaLineaSelectItems" listener="#{cuPr1ProyectoFaces.handleAreaCienciaTecnologiaSeleccionadaChange()}" />
+      </h:selectOneMenu>
+
+      <h:outputLabel for="listaLineaSelectItems" value="#{properties.value('cu_pr_1_lbl_info_basica_subtitulo_linea')}:"   styleClass="gris negrilla" />
+      <h:selectOneMenu styleClass="gris" id="listaLineaSelectItems" required="true" value="#{cuPr1ProyectoFaces.idLineaSeleccionada}">
+        <f:selectItem itemLabel="--Select--" itemValue="" />  
+        <f:selectItems value="#{cuPr1ProyectoFaces.listaLineaItem}"  />  
+      </h:selectOneMenu> 
+
+
+      <h:outputLabel for="funcionProyecto" value="#{properties.value('cu_pr_1_lbl_info_basica_subtitulo_funcion_proy')}" styleClass="gris negrilla" />
+      <h:panelGrid columns="1" style="width: 100%">
+        <p:inputTextarea id="funcionProyecto" value="#{cuPr1ProyectoFaces.proyectoSeleccionado.funcionProyecto}" 
+                         maxlength="512" counter="contadorFuncionProyecto" required="true" autoResize="false" rows="3"
+                         counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}"
+                         styleClass="textareaMaximo">
+          <f:validateLength  maximum="512" />
+        </p:inputTextarea>
+        <h:outputText id="contadorFuncionProyecto" styleClass="gris" />
+      </h:panelGrid>
+
+      <h:outputLabel rendered="#{cuPr1ProyectoFaces.mostrarFechaEstimadaInicioProyecto}" for="fInicio" value="#{properties.value('cu_pr_1_lbl_info_basica_subtitulo_fecha_inicio')}" 
+                     styleClass="gris negrilla" />
+      <p:calendar rendered="#{cuPr1ProyectoFaces.mostrarFechaEstimadaInicioProyecto}" pattern="#{properties.value('general_formato_fecha')}" locale="es" 
+                  yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                  navigator="true" showOn="button" styleClass="gris" value="#{cuPr1ProyectoFaces.proyectoSeleccionado.fechaEstimadaInicio}" 
+                  id="fInicio" required="true" />    
+
+      <h:outputLabel rendered="#{cuPr1ProyectoFaces.mostrarFechaEstimadaFinProyecto}" for="fFin" value="#{properties.value('cu_pr_1_lbl_info_basica_subtitulo_fecha_fin')}" 
+                     styleClass="gris negrilla" />            
+      <p:calendar rendered="#{cuPr1ProyectoFaces.mostrarFechaEstimadaFinProyecto}" pattern="#{properties.value('general_formato_fecha')}" locale="es" 
+                  yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                  navigator="true" showOn="button" styleClass="gris" 
+                  value="#{cuPr1ProyectoFaces.proyectoSeleccionado.fechaEstimadaFinalizacion}" 
+                  id="fFin" required="true" />    
+
+      <h:outputLabel rendered="#{cuPr1ProyectoFaces.mostrarFechaEstimadaInicioProyecto and cuPr1ProyectoFaces.mostrarFechaEstimadaFinProyecto}" for="idDuracioMesesSelectItems" 
+                     value="#{properties.value('cu_pr_1_lbl_info_basica_subtitulo_duracion_pro')}" 
+                     styleClass="gris negrilla" />
+      <h:panelGrid rendered="#{cuPr1ProyectoFaces.mostrarFechaEstimadaInicioProyecto and cuPr1ProyectoFaces.mostrarFechaEstimadaFinProyecto}"  columns="2" style="width: 100%">
+        <h:inputText id="idDuracioMesesSelectItems" readonly="true" value="X" styleClass="gris" />
+        <h:outputLabel value=" #{properties.value('cu_pr_1_lbl_info_basica_subtitulo_meses')}" styleClass="gris" />
+      </h:panelGrid>
+
+      <h:outputLabel for="faprobacomite" value="#{properties.value('cu_pr_1_lbl_info_basica_subtitulo_fecha_apro_comite')}" 
+                     styleClass="gris negrilla"
+                     rendered="#{cuPr1ProyectoFaces.proyectoNoMigrado}" />            
+      <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es"
+                  yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" 
+                  showButtonPanel="true" navigator="true" showOn="button"
+                  rendered="#{cuPr1ProyectoFaces.proyectoNoMigrado}"
+                  value="#{cuPr1ProyectoFaces.proyectoSeleccionado.fechaAprobacionComite}" 
+                  id="faprobacomite" required="true" />    
+
+      <h:outputLabel for="numacta_infocomite" value="#{properties.value('cu_pr_1_lbl_info_basica_subtitulo_num_acta_aproba_com')}" 
+                     styleClass="gris negrilla" 
+                     rendered="#{cuPr1ProyectoFaces.proyectoNoMigrado}"/> 
+      <p:inputText value="#{cuPr1ProyectoFaces.proyectoSeleccionado.nroActaAprobacionComite}" id="numacta_infocomite" 
+                   required="true" maxlength="20" size="30" 
+                   rendered="#{cuPr1ProyectoFaces.proyectoNoMigrado}"/>
+
+    </h:panelGrid>
+
+    <br />
+    <p:commandLink value="Registrar Presupuesto" rendered="#{!cuPr1ProyectoFaces.esNuevoProyecto}" 
+                   immediate="true" action="#{cuPr1ProyectoFaces.registrarPresupuesto}" />
+    <br /><br />
+    <p:commandLink value="Generar versión" rendered="#{cuPr1ProyectoFaces.proyectoNoMigrado}" action="#{cuPr1ProyectoFaces.crearVersionProyecto}" />                
+
+    <ui:include src="include_accion_botones_abajo_info_basica_proyecto.xhtml" />
+
+  </h:form>
+</html>

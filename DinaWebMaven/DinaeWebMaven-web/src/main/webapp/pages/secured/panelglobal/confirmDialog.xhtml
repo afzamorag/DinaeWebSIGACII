@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+
+    <p:confirmDialog closable="true" closeOnEscape="true" message="#{confirmDialogFaces.mensaje}"
+                     header="#{confirmDialogFaces.titulo}" 
+                     widgetVar="wvConformacionDialogo" width="500" height="200" id="idConformacionDialogoGeneral">
+
+      <h:form id="idForm_confirmDialog">
+
+        <p:outputPanel id="pgroupdialogconfirmDialog">
+          <div class="centrado">
+            <p:commandButton value="#{confirmDialogFaces.lblBtnContinuar}" 
+                             styleClass="button" 
+                             action="#{confirmDialogFaces.continuarConfirmacionDialogoEvento}"
+                             immediate="true" oncomplete="wvConformacionDialogo.hide();" />  
+            <p:commandButton value="#{confirmDialogFaces.lblBtnCancelar}" 
+                             styleClass="button" 
+                             action="#{confirmDialogFaces.cancelarConfirmacionDialogoEvento}"
+                             immediate="true" oncomplete="wvConformacionDialogo.hide();" />
+            <br />
+            <br />
+          </div>
+
+        </p:outputPanel>
+
+      </h:form>
+
+    </p:confirmDialog>
+
+  </body>
+</html>

@@ -1,0 +1,186 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+  <body>
+
+    <ui:composition template="../../../templates/plantillaPrincipal.xhtml">
+      <ui:define name="content">
+
+        <h:form id="idForm_cu_co_1_include_registra_convocatoria">
+
+          <div class="fixed-menu">
+            <div class="right-col">
+              <h2>
+                #{properties.value('cu_co_1_lbl_detalle_convocatoria_panel')}
+              </h2>
+            </div>
+          </div>
+
+          <h:panelGroup id="pgDetalleGlobalConvocatoria">
+
+            <h:panelGrid columns="2" style="width: 100%" rowClasses="filaParPanelGridPar,filaParPanelGridImPar" 
+                         columnClasses="panelGridColumnaLabel_30_porciento,panelGridColumnaValor_70_porciento" >
+
+              <h:outputLabel styleClass="gris negrilla" value="#{properties.value('cu_co_1_lbl_tipo_convocatoria')}" 
+                             for="id_cu_co_1_lbl_tipo_convocatoria" />
+              <p:selectOneRadio styleClass="gris" required="true"                                               
+                                disabled="#{cuCo1GestionarConvocatoriasFaces.puedeEditarCamposConvocatoria}"
+                                id="id_cu_co_1_lbl_tipo_convocatoria" 
+                                value="#{cuCo1GestionarConvocatoriasFaces.idTipoConvocatoriaSeleccionada}">  
+                <f:selectItems value="#{cuCo1GestionarConvocatoriasFaces.listaTipoConvocatoriaItem}" />  
+              </p:selectOneRadio>  
+
+              <h:outputLabel rendered="#{cuCo1GestionarConvocatoriasFaces.concecutivoConvocatoria != null}" 
+                             styleClass="gris negrilla" 
+                             value="#{properties.value('cu_co_1_lbl_num_concecutivo_convocatoria')}" 
+                             for="id_cu_co_1_lbl_num_concecutivo_convocatoria" />
+              <p:inputText rendered="#{cuCo1GestionarConvocatoriasFaces.concecutivoConvocatoria != null}" 
+                           required="true" styleClass="textPequenio"                                         
+                           readonly="#{cuCo1GestionarConvocatoriasFaces.puedeEditarCamposConvocatoria}"
+                           value="#{cuCo1GestionarConvocatoriasFaces.concecutivoConvocatoria}" 
+                           id="id_cu_co_1_lbl_num_concecutivo_convocatoria" />                            
+
+              <h:outputLabel styleClass="gris negrilla" value="#{properties.value('cu_co_1_lbl_nombre_convocatoria')}" 
+                             for="id_cu_co_1_lbl_nombre_convocatoria" />
+              <h:panelGrid columns="1">
+                <p:inputTextarea value="#{cuCo1GestionarConvocatoriasFaces.convocatoriaSeleccionada.nombreConvocatorio}" 
+                                 maxlength="255" required="true" counter="contadorNombreCovocatoria" 
+                                 readonly="#{cuCo1GestionarConvocatoriasFaces.puedeEditarCamposConvocatoria}"                                               
+                                 counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}" autoResize="false"
+                                 styleClass="textareaMaximo"  title="Máximo 255 caracteres"
+                                 cols="100" rows="2" id="id_cu_co_1_lbl_nombre_convocatoria" >                                    
+                </p:inputTextarea>
+                <h:outputText id="contadorNombreCovocatoria" styleClass="gris" />
+              </h:panelGrid>
+
+
+              <h:outputLabel styleClass="gris negrilla" value="#{properties.value('cu_co_1_lbl_descripcion_convocatoria')}" 
+                             for="id_cu_co_1_lbl_descripcion_convocatoria" />
+              <h:panelGrid columns="1">
+                <p:inputTextarea value="#{cuCo1GestionarConvocatoriasFaces.convocatoriaSeleccionada.descripcion}" 
+                                 maxlength="512" required="true" counter="contadorTema" 
+                                 readonly="#{cuCo1GestionarConvocatoriasFaces.puedeEditarCamposConvocatoria}"                                                 
+                                 counterTemplate="{0} #{properties.value('general_mensaje_input_text_area_caract_restantes')}" autoResize="false"
+                                 styleClass="textareaMaximo"  title="Máximo 512 caracteres"
+                                 cols="100" rows="3" id="id_cu_co_1_lbl_descripcion_convocatoria" >                                    
+                </p:inputTextarea>
+                <h:outputText id="contadorTema" styleClass="gris" />
+              </h:panelGrid>
+
+              <h:outputLabel styleClass="gris negrilla" value="#{properties.value('cu_co_1_lbl_periodo_apertura_convocatoria')}" />
+              <h:panelGrid columns="4">
+                <h:outputLabel styleClass="gris negrilla" value="#{properties.value('cu_co_1_lbl_fecha_inicio')}" 
+                               for="id_cu_co_1_lbl_fecha_inicio" />
+                <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es" 
+                            yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                            navigator="true" required="true" value="#{cuCo1GestionarConvocatoriasFaces.convocatoriaSeleccionada.fechaInicio}" 
+                            id="id_cu_co_1_lbl_fecha_inicio" showOn="button"                                            
+                            readonly="#{cuCo1GestionarConvocatoriasFaces.puedeEditarCamposConvocatoria}"/> 
+
+                <h:outputLabel styleClass="gris negrilla" value="#{properties.value('cu_co_1_lbl_fecha_fin')}" 
+                               for="id_cu_co_1_lbl_fecha_fin" />
+                <p:calendar pattern="#{properties.value('general_formato_fecha')}" locale="es" 
+                            yearRange="#{properties.value('general_calendar_rango_anio_fecha')}" showButtonPanel="true" 
+                            navigator="true" required="true" value="#{cuCo1GestionarConvocatoriasFaces.convocatoriaSeleccionada.fechaFin}" 
+                            id="id_cu_co_1_lbl_fecha_fin" showOn="button" 
+                            disabled="#{!cuCo1GestionarConvocatoriasFaces.puedeSoloFechaFin}"/> 
+
+              </h:panelGrid>
+
+              <h:outputLabel value="#{properties.value('cu_co_1_lbl_condiciones_convocataria')}" 
+                             styleClass="gris negrilla" for="idhandleFileUpload" />
+              <h:panelGrid columns="1">
+                <p:commandLink ajax="false" immediate="true" id="idCommanLinkDescargaArchivo" 
+                               rendered="#{cuCo1GestionarConvocatoriasFaces.mostrarLinkDescargaArchivo}">
+                  <h:outputLabel value="#{cuCo1GestionarConvocatoriasFaces.convocatoriaSeleccionada.nombreArchivo}" />
+                  <p:fileDownload value="#{cuCo1GestionarConvocatoriasFaces.downloadContentProperty}" />
+                </p:commandLink>
+                <h:outputLabel id="idNombreArchivoCargado" styleClass="green" rendered="#{!cuCo1GestionarConvocatoriasFaces.mostrarLinkDescargaArchivo}" 
+                               value="#{cuCo1GestionarConvocatoriasFaces.nombreArchivoSubido}" />
+                <p:fileUpload dragDropSupport="true" fileUploadListener="#{cuCo1GestionarConvocatoriasFaces.handleFileUpload}" 
+                              fileLimit="1" label="#{properties.value('cu_co_1_lbl_examinar')}" update="idNombreArchivoCargado idCommanLinkDescargaArchivo"
+                              multiple="false" fileLimitMessage="#{properties.value('cu_co_1_lbl_mensaje_maximo_numero_archivo')}"
+                              uploadLabel="#{properties.value('cu_co_1_lbl_subiendo')}" 
+                              invalidFileMessage="#{properties.value('cu_co_1_lbl_archivo_invalido')}"
+                              invalidSizeMessage="#{properties.value('cu_co_1_lbl_tamanio_invalido_archivo')}" 
+                              allowTypes="#{properties.value('cu_co_1_lbl_formatos_archivos_soportados')}"
+                              disabled="#{cuCo1GestionarConvocatoriasFaces.puedeEditarCamposConvocatoria}"
+                              id="idhandleFileUpload" required="true"
+                              mode="advanced" auto="false" cancelLabel="#{properties.value('cu_co_1_lbl_cancelar')}"  />
+              </h:panelGrid>
+
+
+              <h:outputLabel value="Unidad policial: "  styleClass="gris negrilla"  />
+              <p:dataTable emptyMessage="#{properties.value('general_mensaje_no_records_found')}"  
+                           var="_unidad" value="#{cuCo1GestionarConvocatoriasFaces.listaUnidadesPolicialesDTOperiodo}" 
+                           rowIndexVar="idFila"
+                           id="idDTlistaUnidadesPolicialesDTOperiodo"
+                           paginator="true" 
+                           rowStyleClass="#{idFila % 2 == 0 ? 'filaParDataTable' : 'filaParDataTable'}"
+                           paginatorPosition="bottom" styleClass="tabla"
+                           resizableColumns="true"
+                           rows="#{properties.value('general_mensaje_filas_datatable_pagina')}">
+
+                <p:column width="30" headerText="#{properties.value('cu_ne_1_lbl_lista_periodo_n')}">                         
+                  <h:outputText value="#{idFila+1}" />
+                </p:column> 
+                <p:column headerText="Nombre">                         
+                  <h:outputText value="#{_unidad.siglaFisicaYnombreUnidad}" />
+                </p:column> 
+                <p:column headerText="Correo"> 
+                  <h:outputText value="#{_unidad.mail}" />
+                </p:column> 
+                <p:column width="100" headerText="Tipo">                         
+                  <h:outputText value="#{_unidad.nombreTipoUnidad}" />
+                </p:column> 
+                <p:column width="50" headerText=" - ">
+                  <p:selectBooleanCheckbox value="#{_unidad.seleccionado}">
+                    <p:ajax event="change" update="idDTlistaUnidadesPolicialesDTOperiodo" />
+                  </p:selectBooleanCheckbox>
+                </p:column> 
+                <f:facet name="footer">
+                  <h:panelGroup>
+                    <h:outputText value="Registros seleccionados: #{cuCo1GestionarConvocatoriasFaces.contadorUnidadesSeleccionadas}"/>
+                  </h:panelGroup>                        
+                </f:facet>
+              </p:dataTable>
+            </h:panelGrid>
+
+          </h:panelGroup>
+
+          <br />
+          <br />
+          <h:outputLabel value="#{properties.value('general_mensaje_campos_requeridos')}" styleClass="red tamanioText11px" />
+          <p:separator styleClass="separadorBorder" /> 
+          <div class="centrado">
+
+            <p:commandButton value="#{properties.value('cu_co_1_lbl_btn_regresar')}" 
+                             action="#{navigationFaces.redirectCuCo1AgregarConvocatoriasRedirect}" 
+                             immediate="true" />
+
+            <p:commandButton value="#{properties.value('cu_co_1_lbl_btn_guardar')}" 
+                             update=":idForm_cu_co_1_include_registra_convocatoria"
+                             rendered="#{!cuCo1GestionarConvocatoriasFaces.puedeEditarCamposConvocatoria}"
+                             action="#{cuCo1GestionarConvocatoriasFaces.guardarConvocatoria}" />
+
+            <p:commandButton value="#{properties.value('cu_co_1_lbl_btn_publicar')}"
+                             update=":idForm_cu_co_1_include_registra_convocatoria"
+                             rendered="#{cuCo1GestionarConvocatoriasFaces.mostrarBotonPublicar or cuCo1GestionarConvocatoriasFaces.puedeSoloFechaFin}"
+                             action="#{cuCo1GestionarConvocatoriasFaces.publicarConvocatoria}" />
+
+          </div>
+
+
+        </h:form>
+
+      </ui:define>
+
+    </ui:composition>
+
+  </body>
+</html>
