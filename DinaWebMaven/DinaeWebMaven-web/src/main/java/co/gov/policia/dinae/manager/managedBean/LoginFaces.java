@@ -655,6 +655,7 @@ public class LoginFaces extends JSFUtils implements Serializable {
         perfilUsuarioDTO.getListaPaginasAccesos().add("/pages/secured/desarrolloPae/capacitacion_funcionario.xhtml?faces-redirect=true");
         perfilUsuarioDTO.getListaPaginasAccesos().add("/pages/secured/consultas/consulta_horas_docente.xhtml?faces-redirect=true");
         perfilUsuarioDTO.getListaPaginasAccesos().add("/pages/secured/desarrolloPae/horas_docente.xhtml?faces-redirect=true");
+        perfilUsuarioDTO.getListaPaginasAccesos().add("/pages/secured/desarrolloPae/reporte_general_capacitacion.xhtml?faces-redirect=true");
         //Evaluacion
         perfilUsuarioDTO.getListaPaginasAccesos().add("/pages/secured/evaluacion/buscarEvaluacion.xhtml");
         perfilUsuarioDTO.getListaPaginasAccesos().add("/pages/secured/evaluacion/detalleEvaluacion.xhtml");
@@ -683,6 +684,7 @@ public class LoginFaces extends JSFUtils implements Serializable {
         perfilUsuarioDTO.getListaPaginasAccesos().add("/pages/secured/pae/formaciones.xhtml");
         perfilUsuarioDTO.getListaPaginasAccesos().add("/pages/secured/personalexterno/personalexterno.xhtml");
         perfilUsuarioDTO.getListaPaginasAccesos().add("/pages/secured/desarrolloPae/horas_docente.xhtml?faces-redirect=true");
+        perfilUsuarioDTO.getListaPaginasAccesos().add("/pages/secured/desarrolloPae/reporte_general_capacitacion.xhtml?faces-redirect=true");
     }
 
     private void urlParametrizarProgramasEducacionContinua() {
@@ -712,6 +714,7 @@ public class LoginFaces extends JSFUtils implements Serializable {
         perfilUsuarioDTO.getListaPaginasAccesos().add("/pages/secured/desarrolloPae/avance_desarrollo_pae.xhtml?faces-redirect=true");
         perfilUsuarioDTO.getListaPaginasAccesos().add("/pages/secured/desarrolloPae/capacitacion_funcionario.xhtml?faces-redirect=true");
         perfilUsuarioDTO.getListaPaginasAccesos().add("/pages/secured/desarrolloPae/horas_docente.xhtml?faces-redirect=true");
+        perfilUsuarioDTO.getListaPaginasAccesos().add("/pages/secured/desarrolloPae/reporte_general_capacitacion.xhtml?faces-redirect=true");
     }
 
     private void urlSeguimientoEstrategia() {
@@ -724,6 +727,7 @@ public class LoginFaces extends JSFUtils implements Serializable {
         perfilUsuarioDTO.getListaPaginasAccesos().add("/pages/secured/desarrolloPae/avance_desarrollo_pae.xhtml?faces-redirect=true");
         perfilUsuarioDTO.getListaPaginasAccesos().add("/pages/secured/desarrolloPae/capacitacion_funcionario.xhtml?faces-redirect=true");
         perfilUsuarioDTO.getListaPaginasAccesos().add("/pages/secured/desarrolloPae/horas_docente.xhtml?faces-redirect=true");
+        perfilUsuarioDTO.getListaPaginasAccesos().add("/pages/secured/desarrolloPae/reporte_general_capacitacion.xhtml?faces-redirect=true");
     }
 
     private void urlCuAPruebasFaces() {

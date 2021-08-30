@@ -943,5 +943,15 @@ public class NavigationFaces extends JSFUtils implements Serializable {
     public String redirectHorasDocenteCapacitacion() {
         return "/pages/secured/desarrolloPae/horas_docente.xhtml?faces-redirect=true";
     }
+    
+    public String redirectCuReporteGeneralCapacitacionImplRedirect() {
+        return "/pages/secured/desarrolloPae/reporte_general_capacitacion.xhtml?faces-redirect=true";
+        
+    }
+
+    public void redirectFacesReporteGeneralCapacitacion() throws IOException {
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        FacesContext.getCurrentInstance().getExternalContext().redirect(request.getContextPath().concat(request.getServletPath()).concat(redirectCuReporteGeneralCapacitacionImplRedirect()));
+    }
 
 }

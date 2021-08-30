@@ -55,7 +55,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import co.gov.policia.dinae.moodle.MoodleCapacitacion;
 import co.gov.policia.dinae.siedu.constantes.ModalidadEnum;
-import co.gov.policia.dinae.siedu.modelo.SieduDatosEmpleadoDTO;
 
 /**
  * description
@@ -66,7 +65,6 @@ import co.gov.policia.dinae.siedu.modelo.SieduDatosEmpleadoDTO;
  */
 import co.gov.policia.dinae.siedu.modelo.SieduDocenteEvento;
 import co.gov.policia.dinae.siedu.modelo.SieduEvaluacionEvento;
-import co.gov.policia.dinae.siedu.modelo.SieduPersona;
 import co.gov.policia.dinae.siedu.servicios.EvaluacionService;
 import co.gov.policia.dinae.siedu.servicios.LogMoodleSendDataService;
 import co.gov.policia.dinae.siedu.servicios.LogMoodleSendHttpService;
@@ -132,6 +130,7 @@ public class SieduEventoEscuelaController extends AbstractController {
     private boolean editable;
     private NavEnum optionNavEnum;
     private UnidadDependencia escuela;
+    private List<UnidadDependencia> escuelas;
     private Long nivelAcademico = -1L;
     private Carreras1 carreras;
     private EventoEscuelaFiltro eventoEscuelaFiltro;
@@ -188,6 +187,7 @@ public class SieduEventoEscuelaController extends AbstractController {
         evento = new SieduEvento();
         loadVigencias();
         loadModalidad();
+        loadEscuelas();
         loadNivelesAcademicos();
         municipios();
         loadRecursos();
@@ -254,6 +254,17 @@ public class SieduEventoEscuelaController extends AbstractController {
             setList(service.findAll());
         } catch (Exception ex) {
             LOG.error("metodo: loadList() ->> mensaje: {}", ex.getMessage());
+            addErrorMessage(getPropertyFromBundle("commons.msg.error.read.list.summary"), getPropertyFromBundle("commons.msg.error.read.list.detail"));
+        }
+    }
+
+    private void loadEscuelas() {
+        LOG.trace("metodo: loadEscuelas()");
+        try {
+            setEscuelas(this.serviceAPP.consultarEscuelasVigentes());
+            this.escuelas.add(this.unidadDependencia.getUnidadDependenciaById(23536L));
+        } catch (Exception ex) {
+            LOG.error("metodo: loadEscuelas() ->> mensaje: {}", ex.getMessage());
             addErrorMessage(getPropertyFromBundle("commons.msg.error.read.list.summary"), getPropertyFromBundle("commons.msg.error.read.list.detail"));
         }
     }
@@ -500,7 +511,6 @@ public class SieduEventoEscuelaController extends AbstractController {
         }
         return dd = df2.format(d);
     }*/
-
     public void municipios() {
         LOG.trace("method: municipios()");
         try {
@@ -814,7 +824,7 @@ public class SieduEventoEscuelaController extends AbstractController {
                             this.selected.setEveeNroDias(null);
                             this.selected.setEveePpto(null);
                             this.selected.setLugarGeografico(null);
-                            this.selected.setEveeUdeUdepe(null);                            
+                            this.selected.setEveeUdeUdepe(null);
                             this.service.update(selected);
                         } else {
                             addErrorMessage(getPropertyFromBundle("siedueventoescuela.msg.error.clear.evaluacionesNotEmpty"), getPropertyFromBundle("commons.msg.error.read.list.detail"));
@@ -1166,6 +1176,14 @@ public class SieduEventoEscuelaController extends AbstractController {
 
     public void setMoodleMigrate(MoodleCapacitacion moodleMigrate) {
         this.moodleMigrate = moodleMigrate;
+    }
+
+    public List<UnidadDependencia> getEscuelas() {
+        return escuelas;
+    }
+
+    public void setEscuelas(List<UnidadDependencia> escuelas) {
+        this.escuelas = escuelas;
     }
 
 }

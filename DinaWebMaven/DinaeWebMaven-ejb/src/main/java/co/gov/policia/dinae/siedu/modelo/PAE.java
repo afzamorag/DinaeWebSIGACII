@@ -163,8 +163,7 @@ public class PAE implements Serializable {
 
   /**
    * @return the creaUsuario
-   */
-  @XmlTransient
+   */  
   public String getCreaUsuario() {
     return creaUsuario;
   }
@@ -178,8 +177,7 @@ public class PAE implements Serializable {
 
   /**
    * @return the creaFecha
-   */
-  @XmlTransient
+   */ 
   public Date getCreaFecha() {
     return creaFecha;
   }
@@ -193,8 +191,7 @@ public class PAE implements Serializable {
 
   /**
    * @return the creaMaquina
-   */
-  @XmlTransient
+   */  
   public String getCreaMaquina() {
     return creaMaquina;
   }
@@ -209,7 +206,6 @@ public class PAE implements Serializable {
   /**
    * @return the creaIP
    */
-  @XmlTransient
   public String getCreaIP() {
     return creaIP;
   }
@@ -224,7 +220,6 @@ public class PAE implements Serializable {
   /**
    * @return the modUsuario
    */
-  @XmlTransient
   public String getModUsuario() {
     return modUsuario;
   }

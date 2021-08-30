@@ -1,6 +1,7 @@
 package co.gov.policia.dinae.modelo;
 
 import java.io.Serializable;
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,6 +21,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "USUARIO_UNIDAD_POLICIAL")
+@Cacheable(false)
 @NamedQueries({
   @NamedQuery(name = "UsuarioUnidadPolicial.findAll", query = "SELECT u FROM UsuarioUnidadPolicial u"),
   @NamedQuery(name = "UsuarioUnidadPolicial.findUsusarioUnidadPolicialPorIdentificacion", query = "SELECT u FROM UsuarioUnidadPolicial u WHERE u.identificadorUsuario = :identificacion"),
